@@ -8,13 +8,14 @@ evalInContext = (js, context) ->
   (-> eval js).call context
 
 module.exports = class CaffeineMc extends BaseObject
-  @version: "0.0.1"
+  @package: _package = require "caffeine-mc/package.json"
+  @version: _package.version
 
   @oneLineMetaCompiledSectionRegExp:   /^(?:\s*\n|)###<>([^\n]*)(?:\n((?:.|\n)*)|$)/
   @multiLineMetaCompiledSectionRegExp: /^(?:\s*\n|)###<\s*\n((?:.|\n)*)\n###>(?:\n((?:.|\n)*)|$)/
 
   @compile: (code, options = {})->
-    new Caffeine().compile code, options
+    new CaffeineMc().compile code, options
 
   @getter "compiler metaCompiler"
   @setter "metaCompiler",
@@ -62,7 +63,6 @@ module.exports = class CaffeineMc extends BaseObject
         write originalFileNameWith(extension), output
   ###
   compile: (code, options = {})->
-    # log "Caffeine.compile", code: code, options: options
 
     if match = @matchMetaCompileBlock code
       {metaCode, code} = match
@@ -72,8 +72,8 @@ module.exports = class CaffeineMc extends BaseObject
       @compiler.compile code, options
 
   matchMetaCompileBlock: (code) ->
-    if match = code.match(Caffeine.multiLineMetaCompiledSectionRegExp) ||
-        code.match(Caffeine.oneLineMetaCompiledSectionRegExp)
+    if match = code.match(CaffeineMc.multiLineMetaCompiledSectionRegExp) ||
+        code.match(CaffeineMc.oneLineMetaCompiledSectionRegExp)
       [_, metaCode, code] = match
       metaCode: metaCode
       code: code || ""
