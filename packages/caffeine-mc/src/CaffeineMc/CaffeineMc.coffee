@@ -8,6 +8,7 @@ evalInContext = (js, context) ->
   (-> eval js).call context
 
 module.exports = class CaffeineMc extends BaseObject
+  @fileExtensions: ["caf", "caffeine"]
   @package: _package = require "caffeine-mc/package.json"
   @version: _package.version
 
@@ -63,6 +64,7 @@ module.exports = class CaffeineMc extends BaseObject
         write originalFileNameWith(extension), output
   ###
   compile: (code, options = {})->
+    code = code.toString()
 
     if match = @matchMetaCompileBlock code
       {metaCode, code} = match

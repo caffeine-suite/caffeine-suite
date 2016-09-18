@@ -3,5 +3,5 @@
 
 module.exports = require './namespace'
 .addModules
-  CoffeeScript: require './coffee_script'
-  JavaScript:   require './java_script'  
+  CoffeeScript: require './CoffeeScript'
+  JavaScript:   require './JavaScript'
