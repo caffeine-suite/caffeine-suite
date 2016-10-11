@@ -45,9 +45,10 @@ do -> console.log "Hello from CoffeeScript!"
 
 #### custom.caf
 ```coffeescript
-|CoffeeScript:
+|CoffeeScript
   ###
-  - Because of '|CoffeeScript:' above, this whole block is interpeted as CoffeeScript.
+  - Because of '|CoffeeScript' above, this whole block and the rest of the file
+    is interpeted as CoffeeScript.
   - Everything to the end of this indented block runs at compile-time!
   - this/@ is set to the current CaffeineMc instance.
   - A new CaffeineMc instance is created for every .caf/.caffeine file compiled.
