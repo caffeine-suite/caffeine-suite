@@ -4,7 +4,7 @@ Select, configure and extend your to-JavaScript compiler, with arbitrary code, o
 
 ### Examples
 
-JavaScriptExample.caf
+`myFileName1.caf`
 ```javascript
 |javascript
 
@@ -12,7 +12,7 @@ JavaScriptExample.caf
 (function(){console.log("Hello from JavaScript!")})()
 ```
 
-CoffeeScriptExample.caf
+`myFileName2.caf`
 ```coffeescript
 |coffee-script
 
