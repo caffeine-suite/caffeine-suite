@@ -41,3 +41,30 @@ require('caffeine-mc/examples/javascript')
 # this is CoffeeScript
 do -> console.log "Hello from CoffeeScript!"
 ```
+
+##### myCustomCompiler.caf
+```coffeescript
+|CoffeeScript:
+  {Parser} = require 'babel-bridge'
+  {compactFlatten} = require 'art-foundation'
+
+  class MyParser extends Parser
+    @rule
+      root:
+        pattern: 'word+ _?'
+        node: toJs: -> (w.toWord() for w in @words).join ', '
+
+      word:
+        pattern: '_? wordRegExp'
+        node: toWord: -> @wordRegExp.toString()
+
+      wordRegExp: /[^\s]+/
+      _: /\s+/
+
+  @compiler = compile: (source) ->
+    myParser = new MyParser
+    root = myParser.parse source
+    compiled: js: "module.exports = '#{root.toJs()}'"
+
+this is how it should work!
+```
