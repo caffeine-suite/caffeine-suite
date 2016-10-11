@@ -52,8 +52,7 @@ do -> console.log "Hello from CoffeeScript!"
   # set @compile to an object with a compile function
   # to define your own custom complier
   @compiler = compile: (source) ->
-    words = w source
-    strings = for word in words
+    strings = for word in w source
       "'#{upperCamelCase word}'"
 
     log compiled: js:  "module.exports = [\n  #{strings.join ",\n  "}\n];"
