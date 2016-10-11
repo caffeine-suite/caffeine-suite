@@ -1,0 +1,4 @@
+|JavaScript
+
+// this is JavaScript
+(function(){console.log("Hello from JavaScript!")})()

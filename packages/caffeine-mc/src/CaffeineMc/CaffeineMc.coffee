@@ -1,7 +1,7 @@
 Foundation = require "art-foundation"
 Compilers = require './compilers'
 
-{present, isFunction, log, isString, BaseObject, lowerCamelCase} = Foundation
+{present, isFunction, log, isString, BaseObject, lowerCamelCase, upperCamelCase, merge} = Foundation
 
 evalInContext = (js, context) ->
   # Return the results of the in-line anonymous function we .call with the passed context
@@ -56,8 +56,8 @@ module.exports = class CaffeineMc extends BaseObject
   constructor: ->
     super
     @_metaCompiler = @
-    @_compiler = new Compilers.CoffeeScript
-    @compilers = javaScript: compile: (source) -> source
+    @_compiler = Compilers.CoffeeScript
+    @compilers = merge Compilers.modules
 
   normalizeCompilerResult = (result) ->
     if isString result
@@ -130,7 +130,10 @@ module.exports = class CaffeineMc extends BaseObject
 
   getCompiler: (compilerName) ->
     return @compiler unless present compilerName
-    lcCompilerName = lowerCamelCase compilerName
-    out = @compilers[lcCompilerName] ||= require log "require", compilerName
-    throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{lcCompilerName})" unless isFunction out.compile
+    ucCompilerName = upperCamelCase compilerName
+    log
+      ucCompilerName: ucCompilerName
+      compilers: Object.keys @compilers
+    out = @compilers[ucCompilerName] ||= require compilerName
+    throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName})" unless isFunction out.compile
     out

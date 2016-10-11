@@ -1,4 +1,4 @@
 module.exports = class JavaScriptWrapper
 
-  compile: (sourceCode, options) ->
+  @compile: (sourceCode, options) ->
     compiled: js: sourceCode

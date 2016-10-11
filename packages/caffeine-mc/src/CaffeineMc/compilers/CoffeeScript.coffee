@@ -4,7 +4,7 @@ CoffeeScript = require 'coffee-script'
 
 module.exports = class CoffeeScriptWrapper
 
-  compile: (sourceCode, options) ->
+  @compile: (sourceCode, options) ->
     out = CoffeeScript.compile sourceCode, options
     if isString out
       compiled: js: out

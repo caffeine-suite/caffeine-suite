@@ -1,0 +1,4 @@
+|CoffeeScript
+
+# this is CoffeeScript
+do -> console.log "Hello from CoffeeScript!"
