@@ -16,12 +16,13 @@ Select, configure and extend your to-JavaScript compiler, with arbitrary code, o
 npm install caffeine-mc
 ```
 
-### Example use in Node
+### Examples in Node
 
-```
+```javascript
 require('caffeine-mc/register')
 require('caffeine-mc/examples/coffeescript')
 require('caffeine-mc/examples/javascript')
+require('caffeine-mc/examples/custom')
 ```
 
 ### Examples
