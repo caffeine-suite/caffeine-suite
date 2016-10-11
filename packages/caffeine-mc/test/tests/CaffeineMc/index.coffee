@@ -3,4 +3,5 @@
 
 module.exports = require './namespace'
 .addModules
-  MetaCompiler: require './meta_compiler'
+  CaffeineMcParser: require './CaffeineMcParser'
+  MetaCompiler:     require './MetaCompiler'    

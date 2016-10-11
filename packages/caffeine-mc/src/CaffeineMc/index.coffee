@@ -4,5 +4,6 @@
 module.exports = require './namespace'
 .includeInNamespace require './CaffeineMc'
 .addModules
-  Register: require './Register'
+  CaffeineMcParser: require './CaffeineMcParser'
+  Register:         require './Register'        
 require './compilers'

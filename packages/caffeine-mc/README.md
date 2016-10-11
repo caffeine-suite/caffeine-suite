@@ -20,12 +20,12 @@ npm install caffeine-mc
 
 ```javascript
 require('caffeine-mc/register')
-require('caffeine-mc/examples/coffeescript')
 require('caffeine-mc/examples/javascript')
+require('caffeine-mc/examples/coffeescript')
 require('caffeine-mc/examples/custom')
 ```
 
-### Examples
+### CaffeineMc/Examples
 
 #### javascript.caf
 ```javascript
@@ -46,12 +46,20 @@ do -> console.log "Hello from CoffeeScript!"
 #### custom.caf
 ```coffeescript
 |CoffeeScript:
-  # this runs at compile-time!
-  # require whatever you want!
+  ###
+  - Because of '|CoffeeScript:' above, this whole block is interpeted as CoffeeScript.
+  - Everything to the end of this indented block runs at compile-time!
+  - this/@ is set to the current CaffeineMc instance.
+  - A new CaffeineMc instance is created for every .caf/.caffeine file compiled.
+  ###
+
+  # Require whatever you want!
   {upperCamelCase, w, log} = require 'art-foundation'
 
-  # set @compile to an object with a compile function
-  # to define your own custom complier
+  ###
+  Set @compile to an object with a compile function
+  to define your own custom complier.
+  ###
   @compiler = compile: (source) ->
     strings = for word in w source
       "'#{upperCamelCase word}'"
