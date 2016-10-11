@@ -26,7 +26,7 @@ require('caffeine-mc/examples/javascript')
 
 ### Examples
 
-##### myFileName1.caf
+#### javascript.caf
 ```javascript
 |JavaScript
 
@@ -34,7 +34,7 @@ require('caffeine-mc/examples/javascript')
 (function(){console.log("Hello from JavaScript!")})()
 ```
 
-##### myFileName2.caf
+#### coffeescript.caf
 ```coffeescript
 |CoffeeScript
 
@@ -42,29 +42,21 @@ require('caffeine-mc/examples/javascript')
 do -> console.log "Hello from CoffeeScript!"
 ```
 
-##### myCustomCompiler.caf
+#### custom.caf
 ```coffeescript
 |CoffeeScript:
-  {Parser} = require 'babel-bridge'
-  {compactFlatten} = require 'art-foundation'
+  # this runs at compile-time!
+  # require whatever you want!
+  {upperCamelCase, w, log} = require 'art-foundation'
 
-  class MyParser extends Parser
-    @rule
-      root:
-        pattern: 'word+ _?'
-        node: toJs: -> (w.toWord() for w in @words).join ', '
-
-      word:
-        pattern: '_? wordRegExp'
-        node: toWord: -> @wordRegExp.toString()
-
-      wordRegExp: /[^\s]+/
-      _: /\s+/
-
+  # set @compile to an object with a compile function
+  # to define your own custom complier
   @compiler = compile: (source) ->
-    myParser = new MyParser
-    root = myParser.parse source
-    compiled: js: "module.exports = '#{root.toJs()}'"
+    words = w source
+    strings = for word in words
+      "'#{upperCamelCase word}'"
 
-this is how it should work!
+    log compiled: js:  "module.exports = [\n  #{strings.join ",\n  "}\n];"
+
+This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
 ```

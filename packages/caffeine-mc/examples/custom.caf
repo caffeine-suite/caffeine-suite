@@ -1,0 +1,15 @@
+|CoffeeScript:
+  # this runs at compile-time!
+  # require whatever you want!
+  {upperCamelCase, w, log} = require 'art-foundation'
+
+  # set @compile to an object with a compile function
+  # to define your own custom complier
+  @compiler = compile: (source) ->
+    words = w source
+    strings = for word in words
+      "'#{upperCamelCase word}'"
+
+    log compiled: js:  "module.exports = [\n  #{strings.join ",\n  "}\n];"
+
+This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
