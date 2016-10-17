@@ -1,5 +1,8 @@
 Foundation = require 'art-foundation'
-CoffeeScript = require 'coffee-script'
+
+# _require causes webpack to overlook this - meaning node will handle this require
+_require = eval "require"
+CoffeeScript = _require 'coffee-script'
 {isString} = Foundation
 
 module.exports = class CoffeeScriptWrapper

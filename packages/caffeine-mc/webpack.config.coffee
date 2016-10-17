@@ -6,10 +6,10 @@ module.exports = (require "art-foundation/configure_webpack")
     dependencies:
       "art-foundation": "git://github.com/Imikimi-LLC/art-foundation.git"
       "babel-bridge":   "git@github.com:shanebdavis/babel-bridge-js.git"
-      "colors":         "^1.1.2"
       "fs-promise":     "^0.5.0"
-      "glob":           "^7.0.3"
-      "nomnom":         "^1.8.1"
+      colors:           "^1.1.2"
+      glob:             "^7.0.3"
+      commander:        '^2.9.0'
 
     scripts:
       test: "neptune-namespaces -r test/tests/ -r src/*;mocha -u tdd --compilers coffee:coffee-script/register"

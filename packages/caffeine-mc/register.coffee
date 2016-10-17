@@ -1,7 +1,7 @@
-CaffeineMc    = require './CaffeineMc'
+CaffeineMc    = require 'src/CaffeineMc'
 Fs            = require "fs"
 
-{log} = require 'art-foundation'
+{log} = global?.Neptune.Art.Foundation || require 'art-foundation/dist'
 
 # Load and run a CoffeeScript file for Node, stripping any `BOM`s.
 loadFile = (module, filename) ->

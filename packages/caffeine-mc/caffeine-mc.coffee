@@ -1,28 +1,38 @@
 colors = require "colors"
 glob = require "glob"
-fsp = require "fs-promise"
-fs = require 'fs'
-NomNom = require "nomnom"
-Foundation = require 'art-foundation'
-CaffeineMc = require 'caffeine-mc'
+fsp = require 'fs-promise'
+path = require 'path'
+
+# Preload pre-compiled art-foundation for dramatically faster load-times...
+require 'art-foundation/dist'
 
 {version} = require './package.json'
-{log, Promise} = Foundation
+commander = require "commander"
+.version version
+.usage('[options] <input files and directories>')
+.option '-o, --output <directory>', "where to write output files"
+.on "--help", ->
+  console.log """
+    An output directory is required if more than one input file is specified.
+    """
+.parse process.argv
 
-opts = NomNom
-.option 'compile',
-  abbr: 'c'
-  flag: true
-  help: 'compile and write all output files'
-.help """
-  caffeine-mc version: #{version}
-  """
-.nocolors()
-.parse()
+{output} = commander
+if !output and commander.args.length == 1
+  [filename] = commander.args
+  unless fsp.statSync(filename).isDirectory()
+    output = path.dirname filename
 
-if opts.compile
+if commander.args.length > 0 && output
+  {log, Promise} = require 'art-foundation'
+  log input: commander.args, output: output
+  CaffeineMc = require 'caffeine-mc'
+  log "caffeine-mc loaded"
   serializer = new Promise.Serializer
-  for file in opts._
+
+  readCount = 0
+  writeCount = 0
+  for file in commander.args
     do (file) ->
       serializer.then ->
         fsp.exists file
@@ -33,10 +43,21 @@ if opts.compile
             throw new Error "file not found: #{file}"
         .then (contents) ->
           contents = contents.toString()
-          log compiling: contents.green
+          # log compiling: contents.green
           out = CaffeineMc.compile contents
-          log output: out
+          readCount++
+          promises = for extension, text of out.compiled
+            basename = path.basename file, path.extname file
+            log write: outputFilename = path.join output, "#{basename}.#{extension}"
+            writeCount++
+            fsp.writeFile outputFilename, text
+          Promise.all promises
+
+  serializer.then ->
+    log success:
+      filesRead: readCount
+      filesWritten: writeCount
   serializer.catch (e) ->
     log "#{"error".red}: #{e.toString()}"
 else
-  log "See --help for options."
+  commander.outputHelp()
