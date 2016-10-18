@@ -4,7 +4,7 @@ fsp = require 'fs-promise'
 path = require 'path'
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
-require 'art-foundation/dist'
+require 'art-foundation'
 
 {version} = require './package.json'
 commander = require "commander"
@@ -52,12 +52,15 @@ if commander.args.length > 0 && output
             writeCount++
             fsp.writeFile outputFilename, text
           Promise.all promises
+        .catch (e) ->
+          log.error "error compiling: #{file}"
+          throw e
 
   serializer.then ->
     log success:
       filesRead: readCount
       filesWritten: writeCount
   serializer.catch (e) ->
-    log "#{"error".red}: #{e.toString()}"
+    log "#{"error".red}: #{e.stack}"
 else
   commander.outputHelp()
