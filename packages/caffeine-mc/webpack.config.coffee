@@ -15,4 +15,4 @@ module.exports = (require "art-foundation/configure_webpack")
       test: "neptune-namespaces -r test/tests/ -r src/*;mocha -u tdd --compilers coffee:coffee-script/register"
 
     bin:
-      "caffeine-mc": "./caffeine-mc"
+      "caf": "./caf"

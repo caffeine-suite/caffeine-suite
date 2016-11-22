@@ -1,4 +1,4 @@
 #! /usr/bin/env node
 
 require('coffee-script/register');
-require('./caffeine-mc.coffee');
+require('./caf.coffee');
