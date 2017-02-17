@@ -5,24 +5,15 @@ Select, configure and extend your to-JavaScript compiler, with arbitrary code, o
 ### WHY?
 
 1. When you can change the compiler *programatically* on a per-file basis, languages can evolve arbitrailly without worrying about breaking existing code. This frees languages to evolve rapidly without constraints.
-2. I consider source-code a "view" into programs actual semantics. Just like other programs such as word-processors or spread sheets, you should be able to change your view on a per-file basis without affecting other files.
-3. You don't need to configure Node or Webpack or whatever packager/loader you are using for each new file-format you want to load. Configure it once with Caffeine-MC and then every file can specify it's 'loader' itself.
-4. Caffeine-MC reqlly starts to shine when you have a language which is designed to be extensible. For example...
-  * [CaffeineScript](https://github.com/shanebdavis/caffeine-script)!
+2. I consider source-code a "view" into a program's actual semantics. Just like  word-processors or spread sheets let you configure your view on a per-file basis, you should be able to change your code's view, its 'language,' on a per-file basis without affecting other files.
+3. You don't need to configure Node or Webpack or whatever packager/loader you are using for each new file-format you want to load. Just add the appropriate Caffeine-MC loader, and then every file can specify its 'loader' itself.
+4. Caffeine-MC really starts to shine when you have a language which is designed to be extensible. For example...
+  * [CaffeineScript](https://github.com/shanebdavis/caffeine-script)
 
 ### Install
 
 ```
 npm install caffeine-mc
-```
-
-### Examples in Node
-
-```javascript
-require('caffeine-mc/register')
-require('caffeine-mc/examples/javascript')
-require('caffeine-mc/examples/coffeescript')
-require('caffeine-mc/examples/custom')
 ```
 
 ### CaffeineMc/Examples
@@ -68,4 +59,49 @@ do -> console.log "Hello from CoffeeScript!"
     log compiled: js:  "module.exports = [\n  #{strings.join ",\n  "}\n];"
 
 This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
+```
+
+
+### Try in Node
+
+Npm-install `caffeine-mc`, run `node` and paste:
+
+```javascript
+require('caffeine-mc/register')
+require('caffeine-mc/examples/javascript')
+require('caffeine-mc/examples/coffeescript')
+require('caffeine-mc/examples/custom')
+```
+
+output:
+```javascrip
+> require('caffeine-mc/register')
+{}
+> require('caffeine-mc/examples/javascript')
+Hello from JavaScript!
+{}
+> require('caffeine-mc/examples/coffeescript')
+Hello from CoffeeScript!
+{}
+> require('caffeine-mc/examples/custom')
+compiled:
+  js:
+    """
+    module.exports = [
+      'This',
+      'Converts',
+      'MultiWordWords',
+      'NoMatterWhatTheyLookLike',
+      'To',
+      'UpperCamelCase'
+    ];
+    """
+
+[ 'This',
+  'Converts',
+  'MultiWordWords',
+  'NoMatterWhatTheyLookLike',
+  'To',
+  'UpperCamelCase' ]
+>
 ```
