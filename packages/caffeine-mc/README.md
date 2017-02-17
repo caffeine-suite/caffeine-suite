@@ -74,7 +74,7 @@ require('caffeine-mc/examples/custom')
 ```
 
 output:
-```javascrip
+```javascript
 > require('caffeine-mc/register')
 {}
 > require('caffeine-mc/examples/javascript')
