@@ -64,8 +64,13 @@ This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
 
 ### Try in Node
 
-Npm-install `caffeine-mc`, run `node` and paste:
+In your terminal:
+```
+npm install caffeine-mc
+node
+```
 
+Paste this in:
 ```javascript
 require('caffeine-mc/register')
 require('caffeine-mc/examples/javascript')
