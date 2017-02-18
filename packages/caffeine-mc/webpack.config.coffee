@@ -10,9 +10,10 @@ module.exports = (require "art-foundation/configure_webpack")
       colors:           "^1.1.2"
       glob:             "^7.0.3"
       commander:        '^2.9.0'
+      prettier:         '^0.18.0'
 
     scripts:
-      test: "neptune-namespaces -r test/tests/ -r src/*;mocha -u tdd --compilers coffee:coffee-script/register"
+      test: "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 
     bin:
       "caf": "./caf"

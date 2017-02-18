@@ -1,2 +1,2 @@
 require("coffee-script/register")
-require("./register")
+require("./register.coffee")

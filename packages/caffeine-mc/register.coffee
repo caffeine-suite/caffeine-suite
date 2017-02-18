@@ -1,4 +1,4 @@
-CaffeineMc    = require 'src/CaffeineMc'
+CaffeineMc    = require './src/CaffeineMc'
 Fs            = require "fs"
 
 {log} = global?.Neptune.Art.Foundation || require 'art-foundation/dist'

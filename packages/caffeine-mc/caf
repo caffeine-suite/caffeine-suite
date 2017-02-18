@@ -1,4 +1,61 @@
-#! /usr/bin/env node
+#!/usr/bin/env coffee
 
-require('coffee-script/register');
-require('./caf.coffee');
+colors = require "colors"
+glob = require "glob"
+fsp = require 'fs-promise'
+path = require 'path'
+
+# Preload pre-compiled art-foundation for dramatically faster load-times...
+{each} = require 'art-foundation'
+
+{version} = require './package.json'
+commander = require "commander"
+.version version
+.usage('[options] <input files and directories>')
+.option '-o, --output <directory>', "where to write output files"
+.option '-r, --run <file>', 'register the caffeine-mc loader and load the file'
+.option '-p, --prettier', 'apply "prettier" to any js output'
+.on "--help", ->
+  console.log """
+    An output directory is required if more than one input file is specified.
+    """
+.parse process.argv
+
+{output, run, prettier} = commander
+if run
+  require './register'
+  file = path.resolve if run.match /^(\/|\.)/
+    run
+  else
+    "./#{run}"
+
+  require file
+else
+  if !output and commander.args.length == 1
+    [filename] = commander.args
+    unless fsp.statSync(filename).isDirectory()
+      output = path.dirname filename
+
+  if commander.args.length > 0 && output
+    {log, Promise} = require 'art-foundation'
+    log input: commander.args, output: output
+    CaffeineMc = require 'caffeine-mc'
+    log "caffeine-mc loaded"
+    log "using prettier" if prettier
+    serializer = new Promise.Serializer
+
+    filesRead = 0
+    filesWritten = 0
+    each commander.args, (file) ->
+      serializer.then ->
+        CaffeineMc.Files.compileFile file, outputDirectory: output, prettier: prettier
+        .then ({readCount, writeCount}) ->
+          filesRead += readCount
+          filesWritten += writeCount
+
+    serializer.then ->
+      log success: {filesRead, filesWritten}
+    serializer.catch (e) ->
+      log "#{"error".red}: #{e.stack}"
+  else
+    commander.outputHelp()

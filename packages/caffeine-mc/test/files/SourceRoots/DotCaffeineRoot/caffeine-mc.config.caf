@@ -1,0 +1,8 @@
+|CoffeeScript
+  CaffeineMcTestHelper.log "caffeine-mc.config.caf loaded"
+  @compiler = (source) ->
+    source = JSON.stringify source.trim()
+    CaffeineMcTestHelper.log "caffeine-mc.config.caf custom compiler used on: #{source}"
+    "CaffeineMcTestHelper.log(#{source});"
+
+caffeine-mc.config.caf ran

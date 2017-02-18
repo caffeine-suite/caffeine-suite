@@ -1,3 +1,6 @@
 require '../'
 require "art-foundation/testing"
-.run -> require './tests'
+.init
+  synchronous: true
+  defineTests: ->
+    require './tests'
