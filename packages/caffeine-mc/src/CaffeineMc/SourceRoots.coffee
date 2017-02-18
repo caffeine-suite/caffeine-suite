@@ -8,6 +8,20 @@ defineModule module, class SourceRoots extends BaseObject
   @classGetter "sourceRootIndicatorFiles knownSourceRoots caffeineInits",
     caffeineInitFileName: -> "caffeine-mc.config.caf"
 
+  evalCapturingModuleExports = (source) ->
+    # as of ES5, this should limit eval's access to only the global scope
+    globalContextEval = eval
+    global.__caffeineMcModule = {}
+    globalContextEval "
+      (function(module){
+        #{source}
+      })(__caffeineMcModule);
+      "
+
+    {exports} = global.__caffeineMcModule || {}
+    global.__caffeineMcModule = null
+    exports
+
   # OUT: promise.then (caffeineInit) ->
   #   caffeineInit is a js string or false
   @getCaffeineInit: (sourceRoot) =>
@@ -27,7 +41,7 @@ defineModule module, class SourceRoots extends BaseObject
 
             @caffeineInits[sourceRoot] =
               compiler: metacompiler.compiler
-              preCompileJsInitString: result.compiled.js
+              config: evalCapturingModuleExports result.compiled.js
         else
           # log CaffeineInit: noInit: {sourceFile, sourceRoot}
           false

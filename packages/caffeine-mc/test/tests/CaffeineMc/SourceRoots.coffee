@@ -20,9 +20,11 @@ defineModule module, suite: ->
       .then (sourceRoot) ->
         getCaffeineInit sourceRoot
       .then (caffeineInit) ->
-        assert.isString caffeineInit.preCompileJsInitString
-        assert.isFunction caffeineInit.compiler.compile
         assert.eq CaffeineMcTestHelper.testLog, [
           "caffeine-mc.config.caf loaded"
-          'caffeine-mc.config.caf custom compiler used on: "caffeine-mc.config.caf ran"'
+          'caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined'
+          "caffeine-mc.config.caf ran"
         ]
+
+        assert.eq caffeineInit.config, mySpecialConfig: "worked!"
+        assert.isFunction caffeineInit.compiler.compile

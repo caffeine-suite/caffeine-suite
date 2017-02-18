@@ -57,11 +57,13 @@ module.exports = class Metacompiler extends BaseObject
   normalizeCompilerResult = (result) ->
     if isString result
       compiled: js: result
+    else if isString result?.js
+      compiled: result
     else if isString result?.compiled?.js
       result
     else
       log.error normalizeCompilerResult: {result, @compiler}
-      throw new Error "CaffeineMc: expected @compiler result to either be a js-string or result.compiled.js to be a js-string."
+      throw new Error "CaffeineMc: expected @compiler result be: string, {js: string}, or {compiled: {js: string}}."
 
   ###
   IN:
@@ -82,8 +84,8 @@ module.exports = class Metacompiler extends BaseObject
   ###
   compile: (code, options = {}, caffeineInit)->
     if caffeineInit
-      {@compiler, preCompileJsInitString} = caffeineInit
-      evalInContext preCompileJsInitString, @ if preCompileJsInitString
+      {@compiler, config} = caffeineInit
+      options = merge config, options
 
     {compilerName, metaCode, code} = @_metaParser.parse code.toString()
 
