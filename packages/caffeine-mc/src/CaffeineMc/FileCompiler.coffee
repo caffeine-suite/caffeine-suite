@@ -36,7 +36,12 @@ defineModule module, class FileCompiler
             result.outputFiles.push outputFilename
 
             if prettier && extension == "js"
-              text = require("prettier").format text
+              try
+                text = require("prettier").format text
+              catch e
+                log e.message
+                return Promise.reject()
+
 
             if outputDirectory
               result.writeCount++
