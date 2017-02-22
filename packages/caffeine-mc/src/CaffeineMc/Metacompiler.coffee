@@ -39,10 +39,10 @@ module.exports = class Metacompiler extends BaseObject
     compiler: (arg) ->
       @_compiler = if isString arg
         @getCompiler arg
-      else if isFunction arg
-        compile: arg
       else if isFunction arg.compile
         arg
+      else if isFunction arg
+        compile: arg
       else
         log.error InavlidCompiler: arg
         throw new Error "CaffeineMc: @compiler must be a function or be an object with a .compile method."
@@ -54,7 +54,7 @@ module.exports = class Metacompiler extends BaseObject
     @_compiler = Compilers.CoffeeScript
     @compilers = merge Compilers.modules
 
-  normalizeCompilerResult = (result) ->
+  normalizeCompilerResult: (result) ->
     if isString result
       compiled: js: result
     else if isString result?.js
@@ -63,7 +63,7 @@ module.exports = class Metacompiler extends BaseObject
       result
     else
       log.error normalizeCompilerResult: {result, @compiler}
-      throw new Error "CaffeineMc: expected @compiler result be: string, {js: string}, or {compiled: {js: string}}."
+      throw new Error "CaffeineMc: expected @compiler result to be: (string), {js: string}, or {compiled: {js: string}}."
 
   ###
   IN:
@@ -92,8 +92,8 @@ module.exports = class Metacompiler extends BaseObject
     if compilerName
       @compiler = compilerName
 
-    normalizeCompilerResult if metaCode
-      result = normalizeCompilerResult @compiler.compile metaCode
+    @normalizeCompilerResult if metaCode
+      result = @normalizeCompilerResult @compiler.compile metaCode
       evalInContext result.compiled.js, @
       @compile code, options
     else

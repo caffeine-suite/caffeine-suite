@@ -8,11 +8,10 @@ defineModule module, class SourceRoots extends BaseObject
   @classGetter "sourceRootIndicatorFiles knownSourceRoots caffeineInits",
     caffeineInitFileName: -> "caffeine-mc.config.caf"
 
+  # TODO - capture and report syntax errors in source better
   evalCapturingModuleExports = (source) ->
-    # as of ES5, this should limit eval's access to only the global scope
-    globalContextEval = eval
     global.__caffeineMcModule = {}
-    globalContextEval "
+    eval "
       (function(module){
         #{source}
       })(__caffeineMcModule);

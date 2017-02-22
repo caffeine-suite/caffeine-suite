@@ -48,7 +48,7 @@ else
     filesWritten = 0
     each commander.args, (file) ->
       serializer.then ->
-        CaffeineMc.Files.compileFile file, outputDirectory: output, prettier: prettier
+        CaffeineMc.compileFile file, outputDirectory: output, prettier: prettier
         .then ({readCount, writeCount}) ->
           filesRead += readCount
           filesWritten += writeCount
@@ -56,6 +56,6 @@ else
     serializer.then ->
       log success: {filesRead, filesWritten}
     serializer.catch (e) ->
-      log "#{"error".red}: #{e.stack}"
+      log "#{"error".red}: #{e.stack}" if e
   else
     commander.outputHelp()
