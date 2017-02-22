@@ -1,1 +1,1 @@
-module.exports = require './source/CaffeineScript/Runtime'
+module.exports = require './sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime'

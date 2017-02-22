@@ -1,4 +1,6 @@
 {compactFlatten} = require './ArrayCompactFlatten'
+definingModule = null
+
 module.exports =
   in:  (a, b) -> a in b
   mod: (a, b) -> a %% b
@@ -15,10 +17,10 @@ module.exports =
 
   OUT: and object with one property per importName
   ###
-  import: import = (importNames, libs) ->
+  import: _import = (importNames, libs) ->
     out = {}
     libs = compactFlatten libs
-    for importName in importNames.split /\s+/
+    for importName in importNames
       for lib in libs
         if (v = lib[importName])?
           out[importName] = v
@@ -33,8 +35,8 @@ module.exports =
   # returns true if a is false, null or undefined
   isFalse: isFalse = (a) -> a == false || !a?
 
-  isFunction:       isF = (a) -> typeof a is "function"
-  isInstance:       isI = (a) -> !isF(o) and _super.constructor == o.constructor
+  isFunction:           isFunction = (a) -> typeof a is "function"
+  isDirectPrototypeOf:  isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
 
   ###
   All about getSuper in ES6 land:
@@ -89,9 +91,10 @@ module.exports =
     else prototype
 
   ###
-  getSuper: getSuper = (o) ->
+  getSuper: (o) ->
+    throw new Error "getSuper expecting an object" unless (typeof o is "object") || (typeof o is "function")
     _super = Object.getPrototypeOf o
-    _super = Object.getPrototypeOf _super if isI o
+    _super = Object.getPrototypeOf _super if isDirectPrototypeOf o, _super
     _super
 
   ###
@@ -108,19 +111,19 @@ module.exports =
     outKlass.createWithPostCreate?(outKlass) ? outKlass
   ###
   defClass: (klass, init) ->
-    outKlass = init.call klass
+    outKlass = init?.call(klass) ? klass
     outKlass.createWithPostCreate?(outKlass) ? outKlass
 
-
-
-  definingModule = null
-  @getModuleBeingDefined: -> definingModule
+  #######################
+  # define modules
+  #######################
+  getModuleBeingDefined: -> definingModule
 
   ###
   IN:
     defineFunciton ||
   ###
-  @defMod: (_module, a) ->
+  defMod: (_module, a) ->
     lastModule = definingModule
     definingModule = _module
 
@@ -133,8 +136,7 @@ module.exports =
   #######################
   # short forms
   #######################
-  i:    import
+  i:    _import
   t:    isTrue
   f:    isFalse
-  isF:  isF
-  isI:  isI
+  isF:  isFunction
