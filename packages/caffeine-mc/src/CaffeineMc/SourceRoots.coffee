@@ -45,6 +45,23 @@ defineModule module, class SourceRoots extends BaseObject
           # log CaffeineInit: noInit: {sourceFile, sourceRoot}
           false
 
+  @getCaffeineInitSync: (sourceRoot) =>
+    throw new Error "no sourceRoot" unless sourceRoot
+    if (res = @caffeineInits[sourceRoot])?
+      res
+    else
+      if FsPromise.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
+        contents = FsPromise.readFileSync(sourceFile).toString()
+
+        metacompiler = new Metacompiler
+        result = metacompiler.compile contents, {sourceFile, sourceRoot}
+
+        @caffeineInits[sourceRoot] =
+          compiler: metacompiler.compiler
+          config: evalCapturingModuleExports result.compiled.js
+      else
+        false
+
   @findSourceRoot: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
     FsPromise.stat directory
     .then (stat) =>
@@ -55,6 +72,15 @@ defineModule module, class SourceRoots extends BaseObject
         @_findRootR directory, rootFiles
         .then (sourceRoot) =>
           @knownSourceRoots[directory] = sourceRoot || false
+
+  @findSourceRootSync: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
+    stat = FsPromise.statSync directory
+    directory = path.dirname directory unless stat.isDirectory()
+    if (ret = @knownSourceRoots[directory])?
+      ret
+    else
+      sourceRoot = @_findRootSyncR directory, rootFiles
+      @knownSourceRoots[directory] = sourceRoot || false
 
   ######################
   # PRIVATE
@@ -81,4 +107,14 @@ defineModule module, class SourceRoots extends BaseObject
         @_findRootR path.dirname(directory), rootFiles
       else
         null
+
+  @_findRootSyncR: (directory, rootFiles) ->
+    rootFileExistResults = array rootFiles, (file) ->
+      FsPromise.existsSync path.join directory, file
+    if find rootFileExistResults
+      directory
+    else if directory != "/" && present directory
+      @_findRootSyncR path.dirname(directory), rootFiles
+    else
+      null
 

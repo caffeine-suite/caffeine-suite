@@ -5,7 +5,7 @@ Fs            = require "fs"
 
 # Load and run a CoffeeScript file for Node, stripping any `BOM`s.
 loadFile = (module, filename) ->
-  answer = CaffeineMc.compile Fs.readFileSync filename
+  answer = CaffeineMc.compileFileSync filename
   {js} = answer.compiled
   module._compile js, filename
 

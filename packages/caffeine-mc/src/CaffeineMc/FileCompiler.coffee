@@ -2,9 +2,21 @@
 FsPromise = require 'fs-promise'
 path = require 'path'
 CaffeineMc = require './namespace'
-{getCaffeineInit, caffeineInitFileName, findSourceRoot} = require './SourceRoots'
+{
+  getCaffeineInit, caffeineInitFileName, findSourceRoot
+  getCaffeineInitSync, findSourceRootSync
+} = require './SourceRoots'
 
 defineModule module, class FileCompiler
+
+  @compileFileSync: (sourceFile, options = {}) ->
+    throw new Error "outputDirectory unsupported" if options.outputDirectory
+
+    caffeineInit = getCaffeineInitSync sourceRoot = findSourceRootSync sourceFile
+
+    source =  (FsPromise.readFileSync sourceFile).toString()
+
+    CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
 
   @compileFile: (sourceFile, options = {})->
     {outputDirectory, prettier} = options
@@ -25,10 +37,10 @@ defineModule module, class FileCompiler
       .then (caffeineInit) ->
 
         FsPromise.readFile sourceFile
-        .then (contents) ->
-          contents = contents.toString()
+        .then (source) ->
+          source = source.toString()
 
-          result.output = CaffeineMc.compile contents, merge(options, {sourceFile, sourceRoot}), caffeineInit
+          result.output = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
           result.readCount++
 
           Promise.all array result.output.compiled, (text, extension) ->
