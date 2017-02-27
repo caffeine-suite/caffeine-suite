@@ -7,6 +7,7 @@ module.exports =
   div: (a, b) -> a // b
   pow: (a, b) -> a ** b
   existsOr: (a, b) -> a ? b()
+  exists: (a) -> (a != null && a != undefined) || undefined
 
   ###
   Implements the 'import' function.
@@ -91,11 +92,21 @@ module.exports =
     else prototype
 
   ###
-  getSuper: (o) ->
+  getSuper: getSuper = (o) ->
     throw new Error "getSuper expecting an object" unless (typeof o is "object") || (typeof o is "function")
+
     _super = Object.getPrototypeOf o
-    _super = Object.getPrototypeOf _super if isDirectPrototypeOf o, _super
-    _super
+
+    out = if _super == Function.prototype && o.__super__
+      # CoffeeScript class-super
+      o.__super__.constructor
+    else if isDirectPrototypeOf o, _super
+    # Super of an instance is it's prototype's super
+      Object.getPrototypeOf _super
+    else
+      _super
+
+    out
 
   ###
   IN:
@@ -111,8 +122,8 @@ module.exports =
     outKlass.createWithPostCreate?(outKlass) ? outKlass
   ###
   defClass: (klass, init) ->
-    outKlass = init?.call(klass) ? klass
-    outKlass.createWithPostCreate?(outKlass) ? outKlass
+    init?.call klass, klass, getSuper(klass), getSuper klass.prototype
+    klass.createWithPostCreate?(klass) ? klass
 
   #######################
   # define modules
