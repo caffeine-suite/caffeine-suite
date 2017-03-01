@@ -1,5 +1,5 @@
-isNonNegativeInt = (x) -> (x | 0 == x) && x >= 0
-arrayIterableTest = (source) -> source && isNonNegativeInt source.length
+isNonNegativeInt = (x) -> ((x | 0) == x) && x >= 0
+arrayIterableTest = (source) -> source && isNonNegativeInt(source.length) && source.constructor != Object
 
 ###
 Notes:
