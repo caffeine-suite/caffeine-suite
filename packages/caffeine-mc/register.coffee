@@ -1,7 +1,10 @@
-CaffeineMc    = require './src/CaffeineMc'
-Fs            = require "fs"
+# webpack hack
+realRequire = eval 'require'
 
-{log} = global?.Neptune.Art.Foundation || require 'art-foundation/dist'
+CaffeineMc    = realRequire 'caffeine-mc'
+Fs            = realRequire "fs"
+
+{log} = global?.Neptune.Art.Foundation || realRequire 'art-foundation/dist'
 
 # Load and run a CoffeeScript file for Node, stripping any `BOM`s.
 loadFile = (module, filename) ->
@@ -9,8 +12,8 @@ loadFile = (module, filename) ->
   {js} = answer.compiled
   module._compile js, filename
 
-# If the installed version of Node supports `require.extensions`, register
+# If the installed version of Node supports `realRequire.extensions`, register
 # CoffeeScript as an extension.
-if require.extensions
+if realRequire.extensions
   for ext in CaffeineMc.fileExtensions
-    require.extensions[".#{ext}"] = loadFile
+    realRequire.extensions[".#{ext}"] = loadFile

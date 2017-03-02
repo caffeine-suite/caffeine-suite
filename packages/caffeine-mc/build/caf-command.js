@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 153);
+/******/ 	return __webpack_require__(__webpack_require__.s = 152);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -16208,16 +16208,166 @@ module.exports = require("detect-node");
 module.exports = require("prettier");
 
 /***/ }),
-/* 147 */,
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(88);
+var CaffeineMc, Promise, colors, commander, compile, displayError, e, each, escapeRegExp, file, fileToRun, filename, files, filesRead, filesWritten, formattedInspect, fsp, glob, log, output, path, prettier, realRequire, ref, serializer, verbose, version;
+
+colors = __webpack_require__(149);
+
+glob = __webpack_require__(151);
+
+fsp = __webpack_require__(44);
+
+path = __webpack_require__(45);
+
+realRequire = eval('require');
+
+CaffeineMc = __webpack_require__(88);
+
+version = CaffeineMc.version;
+
+commander = __webpack_require__(150).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-v, --verbose', 'show more output').on("--help", function() {
+  return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
+}).parse(process.argv);
+
+output = commander.output, compile = commander.compile, prettier = commander.prettier, verbose = commander.verbose;
+
+displayError = function(e) {
+  var escapeRegExp, log, ref;
+  ref = Neptune.Art.Foundation, log = ref.log, escapeRegExp = ref.escapeRegExp;
+  if (verbose) {
+    return log.error(e);
+  } else if (e.message.match(/parse|expect/i)) {
+    if (e) {
+      return log(e.message.replace(/<HERE>/, "<HERE>".red));
+    }
+  } else {
+    return log.error(e.stack.split("\n").slice(0, 30).join("\n").replace(new RegExp(escapeRegExp(process.cwd() + "/"), "g"), './').replace(new RegExp(escapeRegExp(path.dirname(process.cwd()) + "/"), "g"), '../'));
+  }
+};
+
+if (compile) {
+  files = commander.args;
+  ref = Neptune.Art.Foundation, log = ref.log, Promise = ref.Promise, formattedInspect = ref.formattedInspect, each = ref.each, escapeRegExp = ref.escapeRegExp;
+  if (!output && files.length === 1) {
+    filename = files[0];
+    if (!fsp.statSync(filename).isDirectory()) {
+      output = path.dirname(filename);
+    }
+  }
+  if (files.length > 0 && output) {
+    verbose && log({
+      compile: {
+        inputs: files.length === 1 ? files[0] : files,
+        output: output
+      }
+    });
+    if (verbose) {
+      log("caffeine-mc loaded");
+    }
+    if (verbose && prettier) {
+      log("using prettier");
+    }
+    serializer = new Promise.Serializer;
+    filesRead = 0;
+    filesWritten = 0;
+    each(files, function(file) {
+      return serializer.then(function() {
+        return CaffeineMc.compileFile(file, {
+          outputDirectory: output,
+          prettier: prettier
+        }).then(function(arg) {
+          var readCount, writeCount;
+          readCount = arg.readCount, writeCount = arg.writeCount;
+          if (verbose) {
+            log("compiled: " + file.green);
+          }
+          filesRead += readCount;
+          return filesWritten += writeCount;
+        });
+      });
+    });
+    serializer.then(function() {
+      return log({
+        success: {
+          filesRead: filesRead,
+          filesWritten: filesWritten
+        }
+      });
+    });
+    serializer["catch"](displayError);
+  } else {
+    commander.outputHelp();
+  }
+} else if (commander.args.length === 1) {
+  fileToRun = commander.args[0];
+  __webpack_require__(148);
+  file = path.resolve(fileToRun.match(/^(\/|\.)/) ? fileToRun : "./" + fileToRun);
+  try {
+    realRequire(file);
+  } catch (error) {
+    e = error;
+    displayError(e);
+  }
+} else {
+  commander.outputHelp();
+}
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports) {
+
+var CaffeineMc, Fs, ext, i, len, loadFile, log, realRequire, ref;
+
+realRequire = eval('require');
+
+CaffeineMc = realRequire('caffeine-mc');
+
+Fs = realRequire("fs");
+
+log = ((typeof global !== "undefined" && global !== null ? global.Neptune.Art.Foundation : void 0) || realRequire('art-foundation/dist')).log;
+
+loadFile = function(module, filename) {
+  var answer, js;
+  answer = CaffeineMc.compileFileSync(filename);
+  js = answer.compiled.js;
+  return module._compile(js, filename);
+};
+
+if (realRequire.extensions) {
+  ref = CaffeineMc.fileExtensions;
+  for (i = 0, len = ref.length; i < len; i++) {
+    ext = ref[i];
+    realRequire.extensions["." + ext] = loadFile;
+  }
+}
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports) {
+
+module.exports = require("colors");
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports) {
+
+module.exports = require("commander");
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports) {
+
+module.exports = require("glob");
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(147);
 
 
 /***/ })

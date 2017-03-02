@@ -1,5 +1,5 @@
 module.exports = (require "art-foundation/configure_webpack")
-  entries: "caffeine-mc"
+  entries: "caffeine-mc caf-command"
   target: "node"
   output: libraryTarget: "commonjs2"
   externals: [
@@ -13,6 +13,8 @@ module.exports = (require "art-foundation/configure_webpack")
     "graceful-fs"
     "fs-promise"
     "caffeine-mc"
+    "commander"
+    "glob"
   ]
 
   dirname: __dirname

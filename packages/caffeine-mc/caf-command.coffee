@@ -3,7 +3,10 @@ glob = require "glob"
 fsp = require 'fs-promise'
 path = require 'path'
 
-{CaffeineMc} = Neptune
+# webpack hack
+realRequire = eval 'require'
+
+CaffeineMc = require './caffeine-mc'
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
@@ -76,14 +79,14 @@ if compile
     commander.outputHelp()
 else if commander.args.length == 1
   [fileToRun] = commander.args
-  require './register'
+  require './register.coffee'
   file = path.resolve if fileToRun.match /^(\/|\.)/
     fileToRun
   else
     "./#{fileToRun}"
 
   try
-    require file
+    realRequire file
   catch e
     displayError e
 else
