@@ -7,6 +7,7 @@ path = require 'path'
 realRequire = eval 'require'
 
 CaffeineMc = require './caffeine-mc'
+{log, dashCase, escapeRegExp, present, isString} = Neptune.Art.Foundation
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
@@ -18,6 +19,7 @@ commander = require "commander"
 .option '-c, --compile', 'compile files'
 .option '-p, --prettier', 'apply "prettier" to any js output'
 .option '-v, --verbose', 'show more output'
+.option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
 .on "--help", ->
   console.log """
     An output directory is required if more than one input file is specified.
@@ -26,10 +28,9 @@ commander = require "commander"
     """
 .parse process.argv
 
-{output, compile, prettier, verbose} = commander
+{output, compile, prettier, verbose, versions} = commander
 
 displayError = (e) ->
-  {log, escapeRegExp} = Neptune.Art.Foundation
   if verbose
     log.error e
   else if e.message.match /parse|expect/i
@@ -89,5 +90,12 @@ else if commander.args.length == 1
     realRequire file
   catch e
     displayError e
+else if versions
+  if isString versions
+    compiler = realRequire dashCase versions
+    log
+      "#{versions}": compiler.version || compiler.VERSION
+  log
+    Neptune: Neptune.getVersions()
 else
   commander.outputHelp()
