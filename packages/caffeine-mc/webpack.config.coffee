@@ -12,6 +12,7 @@ module.exports = (require "art-foundation/configure_webpack")
     "fs-extra"
     "graceful-fs"
     "fs-promise"
+    "caffeine-mc"
   ]
 
   dirname: __dirname

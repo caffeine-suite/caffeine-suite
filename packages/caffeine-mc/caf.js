@@ -10,9 +10,9 @@
 
   path = require('path');
 
-  CaffeineMc = require('caffeine-mc');
+  CaffeineMc = Neptune.CaffeineMc;
 
-  version = require('./package.json').version;
+  version = CaffeineMc.version;
 
   commander = require("commander").version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-v, --verbose', 'show more output').on("--help", function() {
     return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");

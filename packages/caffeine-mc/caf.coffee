@@ -3,11 +3,11 @@ glob = require "glob"
 fsp = require 'fs-promise'
 path = require 'path'
 
-CaffeineMc = require 'caffeine-mc'
+{CaffeineMc} = Neptune
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
-{version} = require './package.json'
+{version} = CaffeineMc
 commander = require "commander"
 .version version
 .usage('[options] <input files and directories>')
