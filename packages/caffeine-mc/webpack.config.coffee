@@ -1,5 +1,19 @@
 module.exports = (require "art-foundation/configure_webpack")
-  entries: "index test"
+  entries: "caffeine-mc"
+  target: "node"
+  output: libraryTarget: "commonjs2"
+  externals: [
+    "colors"
+    "detect-node"
+    "bluebird/js/browser/bluebird.core"
+    "coffee-script"
+    "prettier"
+    "any-promise"
+    "fs-extra"
+    "graceful-fs"
+    "fs-promise"
+  ]
+
   dirname: __dirname
   package:
     description: 'Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.'

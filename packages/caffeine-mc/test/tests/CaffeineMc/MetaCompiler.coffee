@@ -2,9 +2,24 @@ CaffeineMc = require 'caffeine-mc'
 {log} = require "art-foundation"
 
 module.exports = suite:
-  coffeeScript: ->
+  javaScript: ->
     test "default to compiling with CoffeeScript", ->
-      assert.eq CaffeineMc.compile("1+2"), compiled: {js: "(function() {\n  1 + 2;\n\n}).call(this);\n"}
+      assert.eq CaffeineMc.compile("1+2"), compiled: {js: "1+2"}
+
+  coffeeScript: ->
+    test "|CoffeeScript", ->
+      assert.eq CaffeineMc.compile("""
+        |CoffeeScript
+        1+2
+      """), compiled: {js: "(function() {\n  1 + 2;\n\n}).call(this);\n"}
+
+    test "|coffee-script", ->
+      out = CaffeineMc.compile """
+        |coffee-script
+        global._temp = -> 123
+        """
+      eval out.compiled.js
+      assert.eq 123, global._temp()
 
   basic: ->
     test "single-line metaCompiler block", ->
@@ -18,7 +33,7 @@ module.exports = suite:
       self.__metaCompilerTest = 123
       out = CaffeineMc.compile """
         | self.__metaCompilerTest = 999
-        | @compiler = "JavaScript"
+        | this.compiler = "JavaScript"
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -29,7 +44,7 @@ module.exports = suite:
       out = CaffeineMc.compile """
         |
           self.__metaCompilerTest = 456
-          @compiler = "JavaScript"
+          this.compiler = "JavaScript"
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -40,7 +55,7 @@ module.exports = suite:
       out = CaffeineMc.compile """
         |
           self.__metaCompilerTest = 456
-          @compiler = "JavaScript"
+          this.compiler = "JavaScript"
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -48,16 +63,7 @@ module.exports = suite:
 
     test "custom compiler", ->
       out = CaffeineMc.compile """
-        | @compiler = compile: (source) -> compiled: js: "source: \#{source}"
+        | this.compiler = {compile: (source) => {return {compiled: {js: "source: " + source}}}}
         1+2
         """
       assert.eq out, compiled: js: "source: 1+2"
-
-    test "coffee-script compiler", ->
-      out = CaffeineMc.compile """
-        |coffee-script
-        global._temp = -> 123
-        """
-      eval out.compiled.js
-      assert.eq 123, global._temp()
-

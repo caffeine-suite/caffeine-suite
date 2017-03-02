@@ -11,11 +11,18 @@ defineModule module, class SourceRoots extends BaseObject
   # TODO - capture and report syntax errors in source better
   evalCapturingModuleExports = (source) ->
     global.__caffeineMcModule = {}
-    eval "
-      (function(module){
-        #{source}
-      })(__caffeineMcModule);
-      "
+    try
+      eval "
+        (function(module){
+          #{source}
+        })(__caffeineMcModule);
+        "
+    catch e
+      log.error "ERROR evalCapturingModuleExports":
+        source: source
+        error: e
+
+      throw e
 
     {exports} = global.__caffeineMcModule || {}
     global.__caffeineMcModule = null

@@ -31,7 +31,6 @@
   "name": "caffeine-mc",
   "scripts": {
     "build": "webpack --progress",
-    "nodeTest": "nn -s; mocha -u tdd --compilers coffee:coffee-script/register",
     "start": "webpack-dev-server --hot --inline --progress",
     "test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
   },

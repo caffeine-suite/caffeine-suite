@@ -3,7 +3,9 @@ Compilers = require './compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
 
-{present, isFunction, log, isString, BaseObject, lowerCamelCase, upperCamelCase, merge} = Foundation
+realRequire = eval 'require'
+
+{dashCase, formattedInspect, present, isFunction, log, isString, BaseObject, lowerCamelCase, upperCamelCase, merge} = Foundation
 
 evalInContext = (js, context) ->
   # Return the results of the in-line anonymous function we .call with the passed context
@@ -51,7 +53,7 @@ module.exports = class Metacompiler extends BaseObject
     super
     @_metaParser = new CaffeineMcParser
     @_metaCompiler = @
-    @_compiler = Compilers.CoffeeScript
+    @_compiler = Compilers.JavaScript
     @compilers = merge Compilers.modules
 
   normalizeCompilerResult: (result) ->
@@ -63,7 +65,7 @@ module.exports = class Metacompiler extends BaseObject
       result
     else
       log.error normalizeCompilerResult: {result, @compiler}
-      throw new Error "CaffeineMc: expected @compiler result to be: (string), {js: string}, or {compiled: {js: string}}."
+      throw new Error "CaffeineMc: expected @compiler result to be: (string), {js: string}, or {compiled: {js: string}}. Was: #{formattedInspect result}"
 
   ###
   IN:
@@ -102,6 +104,6 @@ module.exports = class Metacompiler extends BaseObject
   getCompiler: (compilerName) ->
     return @compiler unless present compilerName
     ucCompilerName = upperCamelCase compilerName
-    out = @compilers[ucCompilerName] ||= require compilerName
+    out = @compilers[ucCompilerName] ||= realRequire dashCase compilerName
     throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName})" unless isFunction out.compile
     out
