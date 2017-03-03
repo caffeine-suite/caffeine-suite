@@ -7,7 +7,7 @@ path = require 'path'
 realRequire = eval 'require'
 
 CaffeineMc = require './caffeine-mc'
-{log, dashCase, escapeRegExp, present, isString} = Neptune.Art.Foundation
+{log, dashCase, escapeRegExp, present, isString} = Neptune.Art.StandardLib
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
