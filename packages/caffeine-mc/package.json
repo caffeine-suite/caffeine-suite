@@ -4,11 +4,11 @@
     "caf": "./caf"
   },
   "dependencies": {
-    "art-foundation": "git://github.com/imikimi/art-foundation.git",
-    "babel-bridge": "git@github.com:shanebdavis/babel-bridge-js.git",
-    "bluebird": "^3.4.7",
+    "art-class-system": "^1.0.1",
+    "art-standard-lib": "^1.1.0",
+    "art-testbench": "^1.0.0",
+    "babel-bridge": "^1.0.0",
     "case-sensitive-paths-webpack-plugin": "^1.1.4",
-    "chai": "^3.5.0",
     "coffee-loader": "^0.7.2",
     "coffee-script": "^1.12.3",
     "colors": "^1.1.2",
@@ -17,14 +17,13 @@
     "fs-promise": "^0.5.0",
     "glob": "^7.0.3",
     "json-loader": "^0.5.4",
-    "mocha": "^3.2.0",
-    "neptune-namespaces": "^1.7.4",
+    "neptune-namespaces": "^1.9.1",
     "prettier": "^0.18.0",
     "script-loader": "^0.7.0",
-    "sourcemapped-stacktrace": "^1.1.5",
     "style-loader": "^0.13.1",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.3.0"
+    "webpack-dev-server": "^2.3.0",
+    "webpack-merge": "^3.0.0"
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "license": "ISC",

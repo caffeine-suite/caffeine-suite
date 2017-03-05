@@ -1,4 +1,4 @@
-require '../caffeine-mc'
+require '../'
 require "art-foundation/testing"
 .init
   synchronous: true

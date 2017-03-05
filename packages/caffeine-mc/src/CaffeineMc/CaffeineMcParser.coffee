@@ -1,7 +1,7 @@
-Foundation = require "art-foundation"
+{
+  present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge
+} = require 'art-standard-lib'
 BabelBridge = require 'babel-bridge'
-
-{present, isFunction, log, isString, BaseObject, lowerCamelCase, upperCamelCase, merge} = Foundation
 
 module.exports = class CaffeineMcParser extends BabelBridge.Parser
 

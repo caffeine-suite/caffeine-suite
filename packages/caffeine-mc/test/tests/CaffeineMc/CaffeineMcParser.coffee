@@ -1,5 +1,5 @@
 {CaffeineMcParser} = require 'caffeine-mc'
-{log} = Neptune.Art.Foundation
+{log} = Neptune.Art.StandardLib
 
 module.exports = suite:
   noMetaCode: ->

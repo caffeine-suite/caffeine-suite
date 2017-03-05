@@ -1,4 +1,4 @@
-{defineModule, array, log, merge, present, find, each, w} = require 'art-foundation'
+{defineModule, array, log, merge, present, find, each, w} = require 'art-standard-lib'
 FsPromise = require 'fs-promise'
 path = require 'path'
 CaffeineMc = require './namespace'

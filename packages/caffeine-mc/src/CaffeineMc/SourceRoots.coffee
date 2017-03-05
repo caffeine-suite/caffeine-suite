@@ -1,9 +1,10 @@
-{defineModule, array, log, merge, present, find, each, w, BaseObject} = require 'art-foundation'
+{defineModule, array, log, merge, present, find, each, w} = require 'art-standard-lib'
+{BaseClass} = require 'art-class-system'
 FsPromise = require 'fs-promise'
 path = require 'path'
 Metacompiler = require './Metacompiler'
 
-defineModule module, class SourceRoots extends BaseObject
+defineModule module, class SourceRoots extends BaseClass
 
   @classGetter "sourceRootIndicatorFiles knownSourceRoots caffeineInits",
     caffeineInitFileName: -> "caffeine-mc.config.caf"

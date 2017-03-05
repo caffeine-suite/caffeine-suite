@@ -6,8 +6,16 @@
 
   loaderUtils = require('loader-utils');
 
+
+  /*
+  TODO:
+  
+  - source maps
+  - doesn't load caffeine-mc.config.caf
+   */
+
   module.exports = function(source) {
-    var coffeeRequest, e, jsRequest, query, result;
+    var coffeeRequest, e, jsRequest, query, result, sourceMap;
     if (typeof this.cacheable === "function") {
       this.cacheable();
     }
@@ -20,9 +28,6 @@
         sourceFile: coffeeRequest,
         debug: this.debug
       });
-      console.log({
-        result: result
-      });
     } catch (error) {
       e = error;
       log.error({
@@ -30,7 +35,8 @@
       });
       throw e;
     }
-    return this.callback(null, result.compiled.js, null);
+    sourceMap = null;
+    return this.callback(null, result.compiled.js, sourceMap);
   };
 
   module.exports.seperable = true;

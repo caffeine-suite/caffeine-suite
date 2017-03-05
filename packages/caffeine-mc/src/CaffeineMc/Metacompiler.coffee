@@ -1,17 +1,17 @@
-Foundation = require "art-foundation"
 Compilers = require './compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
 
 realRequire = eval 'require'
 
-{dashCase, formattedInspect, present, isFunction, log, isString, BaseObject, lowerCamelCase, upperCamelCase, merge} = Foundation
+{dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge} = require 'art-standard-lib'
+{BaseClass} = require 'art-class-system'
 
 evalInContext = (js, context) ->
   # Return the results of the in-line anonymous function we .call with the passed context
   (-> eval js).call context
 
-module.exports = class Metacompiler extends BaseObject
+module.exports = class Metacompiler extends BaseClass
   @fileExtensions: ["caf", "caffeine"]
 
   @compile: (code, options = {}, caffeineInitJsString)=>
