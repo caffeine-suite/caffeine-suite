@@ -6,7 +6,7 @@ path = require 'path'
 # webpack hack
 realRequire = eval 'require'
 
-CaffeineMc = require './caffeine-mc'
+CaffeineMc = require './source/CaffeineMc'
 {log, dashCase, escapeRegExp, present, isString} = Neptune.Art.StandardLib
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...

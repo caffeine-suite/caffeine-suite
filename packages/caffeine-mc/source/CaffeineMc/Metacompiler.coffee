@@ -1,4 +1,4 @@
-Compilers = require './compilers'
+Compilers = require './Compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
 

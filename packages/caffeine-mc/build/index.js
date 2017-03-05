@@ -81,7 +81,7 @@ var BaseClass, CaffeineMcParser, Compilers, Metacompiler, dashCase, evalInContex
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-Compilers = __webpack_require__(6);
+Compilers = __webpack_require__(4);
 
 CaffeineMcParser = __webpack_require__(3);
 
@@ -319,6 +319,15 @@ module.exports = CaffeineMcParser = (function(superClass) {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(14).addModules({
+  JavaScript: __webpack_require__(13)
+});
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(module) {var CaffeineMc, FileCompiler, FsPromise, array, caffeineInitFileName, defineModule, each, find, findSourceRoot, findSourceRootSync, getCaffeineInit, getCaffeineInitSync, log, merge, path, present, ref, ref1, w;
 
 ref = __webpack_require__(0), defineModule = ref.defineModule, array = ref.array, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
@@ -329,7 +338,7 @@ path = __webpack_require__(10);
 
 CaffeineMc = __webpack_require__(2);
 
-ref1 = __webpack_require__(5), getCaffeineInit = ref1.getCaffeineInit, caffeineInitFileName = ref1.caffeineInitFileName, findSourceRoot = ref1.findSourceRoot, getCaffeineInitSync = ref1.getCaffeineInitSync, findSourceRootSync = ref1.findSourceRootSync;
+ref1 = __webpack_require__(6), getCaffeineInit = ref1.getCaffeineInit, caffeineInitFileName = ref1.caffeineInitFileName, findSourceRoot = ref1.findSourceRoot, getCaffeineInitSync = ref1.getCaffeineInitSync, findSourceRootSync = ref1.findSourceRootSync;
 
 defineModule(module, FileCompiler = (function() {
   function FileCompiler() {}
@@ -415,7 +424,7 @@ defineModule(module, FileCompiler = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var BaseClass, FsPromise, Metacompiler, SourceRoots, array, defineModule, each, find, log, merge, path, present, ref, w,
@@ -604,15 +613,6 @@ defineModule(module, SourceRoots = (function(superClass) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module)))
 
 /***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(14).addModules({
-  JavaScript: __webpack_require__(13)
-});
-
-
-/***/ }),
 /* 7 */
 /***/ (function(module, exports) {
 
@@ -672,7 +672,7 @@ module.exports = __webpack_require__(15);
 var _package;
 
 module.exports = [
-  __webpack_require__(1), __webpack_require__(4), {
+  __webpack_require__(1), __webpack_require__(5), {
     "package": _package = __webpack_require__(16),
     version: _package.version
   }
@@ -729,12 +729,12 @@ module.exports = CaffeineMc.Compilers || CaffeineMc.addNamespace('Compilers', Co
 
 module.exports = __webpack_require__(2).includeInNamespace(__webpack_require__(12)).addModules({
   CaffeineMcParser: __webpack_require__(3),
-  FileCompiler: __webpack_require__(4),
+  FileCompiler: __webpack_require__(5),
   Metacompiler: __webpack_require__(1),
-  SourceRoots: __webpack_require__(5)
+  SourceRoots: __webpack_require__(6)
 });
 
-__webpack_require__(6);
+__webpack_require__(4);
 
 
 /***/ }),
