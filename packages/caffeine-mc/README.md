@@ -62,7 +62,7 @@ Hello from CoffeeScript!
 
 #### Try with Babel
 
-Install Babel:
+Install:
 
 ```
 npm install babel-core
