@@ -1,25 +1,27 @@
 # Caffeine MC - a meta-compiler
 
+> With CaffeineMC, any language can change *arbitrarily* without breaking any existing code.
+
 Select, configure and extend your to-JavaScript compiler, with arbitrary code, with a per-project config file and on a per file from within the file itself.
 
 Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaScript, [CaffeineScript](http://coffeescript.org/) and [CaffeineScript](https://github.com/shanebdavis/caffeine-script) out of the box. An example below shows how easy it is to adapt to other compilers or transpilers like [Babel](https://babeljs.io/).
 
 ### What is a Meta-Compiler?
 
-It is a compiler for your compiler. Most the time Caffeine-MC is used to select and configure a compiler, but it can 'compile' (create) a brand new compiler, on a per-file basis. For example, see the custom.caf below.
+It is a compiler for your compiler. Caffeine-MC can 'compile' (create) a brand new compiler, on a file-by-file basis. Most the time, though, it is used to select and configure a compiler. For example, see the custom.caf below.
 
-### WHY?
+### Why Caffeine-MC?
 
-##### Unconstrained Language Evolution
+##### Reason 1: Accelerated Language Evolution
 When you can change the compiler *programmatically* on a per-file basis, languages can evolve arbitrarily without worrying about breaking existing code. This frees languages to evolve rapidly without constraints.
 
-##### Custom Source-code 'Views'
+##### Reason 2: Custom Source-code 'Views'
 Source-code is a "view" into a program's actual semantics. Just like  word-processors or spread sheets let you configure your view on a per-file basis, you should be able to change your code's view, its 'language,' on a per-file basis without affecting other files.
 
-##### Write a New, Fully-Enabled Language Fast
-You don't need to configure Node or Webpack or whatever packager/loader you are using for each new file-format you want to load. Just add the appropriate Caffeine-MC loader, and then every file can specify its 'loader' itself.
+##### Reason 3: Write a New, Fully-Enabled Language Fast
+Caffeine-MC provides a command-line tool, Node loader and Webpack loader so you don't have to. Just create a Caffeine-MC compatible compiler and you get all the standard compiler machinery for free.
 
-##### CaffeineMC + CaffeineScript
+##### Reason 4: CaffeineMC + CaffeineScript
 Caffeine-MC really starts to shine when you have a language which is designed to be extensible. [CaffeineScript](https://github.com/shanebdavis/caffeine-script) is a modular programming language designed to take maximum advantage of Caffeine-MC's per-project and per-file configurability.
 
 ### Install
