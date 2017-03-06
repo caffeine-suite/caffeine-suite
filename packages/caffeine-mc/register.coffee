@@ -17,3 +17,5 @@ loadFile = (module, filename) ->
 if realRequire.extensions
   for ext in CaffeineMc.fileExtensions
     realRequire.extensions[".#{ext}"] = loadFile
+
+module.exports = CaffeineMc

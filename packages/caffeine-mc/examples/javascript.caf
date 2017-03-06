@@ -1,4 +1,4 @@
 |JavaScript
 
 // this is JavaScript
-(function(){console.log("Hello from JavaScript!")})()
+module.exports = (function(){return "Hello from JavaScript!"})()

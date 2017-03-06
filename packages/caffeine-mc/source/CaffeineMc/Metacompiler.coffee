@@ -59,6 +59,8 @@ module.exports = class Metacompiler extends BaseClass
   normalizeCompilerResult: (result) ->
     if isString result
       compiled: js: result
+    else if isString result?.code
+      compiled: js: result.code
     else if isString result?.js
       compiled: result
     else if isString result?.compiled?.js

@@ -168,6 +168,12 @@ module.exports = Metacompiler = (function(superClass) {
           js: result
         }
       };
+    } else if (isString(result != null ? result.code : void 0)) {
+      return {
+        compiled: {
+          js: result.code
+        }
+      };
     } else if (isString(result != null ? result.js : void 0)) {
       return {
         compiled: result
@@ -776,7 +782,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.9.0"
+	"version": "1.9.1"
 };
 
 /***/ }),

@@ -7,7 +7,9 @@ path = require 'path'
 realRequire = eval 'require'
 
 CaffeineMc = require './source/CaffeineMc'
-{log, dashCase, escapeRegExp, present, isString} = Neptune.Art.StandardLib
+{log, dashCase, escapeRegExp, present, isString,
+Promise, formattedInspect, each, escapeRegExp
+} = Neptune.Art.StandardLib
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
@@ -48,7 +50,6 @@ displayError = (e) ->
 
 if compile
   files = commander.args
-  {log, Promise, formattedInspect, each, escapeRegExp} = Neptune.Art.Foundation
 
   if !output and files.length == 1
     [filename] = files

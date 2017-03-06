@@ -168,6 +168,12 @@ module.exports = Metacompiler = (function(superClass) {
           js: result
         }
       };
+    } else if (isString(result != null ? result.code : void 0)) {
+      return {
+        compiled: {
+          js: result.code
+        }
+      };
     } else if (isString(result != null ? result.js : void 0)) {
       return {
         compiled: result
@@ -662,7 +668,7 @@ module.exports = require("art-class-system");
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var CaffeineMc, Promise, colors, commander, compile, compiler, dashCase, displayError, e, each, escapeRegExp, file, fileToRun, filename, files, filesRead, filesWritten, formattedInspect, fsp, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, ref1, serializer, verbose, version, versions;
+var CaffeineMc, Promise, colors, commander, compile, compiler, dashCase, displayError, e, each, escapeRegExp, file, fileToRun, filename, files, filesRead, filesWritten, formattedInspect, fsp, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, serializer, verbose, version, versions;
 
 colors = __webpack_require__(19);
 
@@ -676,7 +682,7 @@ realRequire = eval('require');
 
 CaffeineMc = __webpack_require__(16);
 
-ref = Neptune.Art.StandardLib, log = ref.log, dashCase = ref.dashCase, escapeRegExp = ref.escapeRegExp, present = ref.present, isString = ref.isString;
+ref = Neptune.Art.StandardLib, log = ref.log, dashCase = ref.dashCase, escapeRegExp = ref.escapeRegExp, present = ref.present, isString = ref.isString, Promise = ref.Promise, formattedInspect = ref.formattedInspect, each = ref.each, escapeRegExp = ref.escapeRegExp;
 
 version = CaffeineMc.version;
 
@@ -700,7 +706,6 @@ displayError = function(e) {
 
 if (compile) {
   files = commander.args;
-  ref1 = Neptune.Art.Foundation, log = ref1.log, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
   if (!output && files.length === 1) {
     filename = files[0];
     if (!fsp.statSync(filename).isDirectory()) {
@@ -806,6 +811,8 @@ if (realRequire.extensions) {
     realRequire.extensions["." + ext] = loadFile;
   }
 }
+
+module.exports = CaffeineMc;
 
 
 /***/ }),
@@ -919,7 +926,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.9.0"
+	"version": "1.9.1"
 };
 
 /***/ }),

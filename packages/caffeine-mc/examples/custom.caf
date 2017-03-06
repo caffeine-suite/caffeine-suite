@@ -7,7 +7,7 @@
   ###
 
   # Require whatever you want!
-  {upperCamelCase, w, log} = require 'art-foundation'
+  {upperCamelCase, w, log} = require 'art-standard-lib'
 
   ###
   Set @compile to an object with a compile function
@@ -17,6 +17,6 @@
     strings = for word in w source
       "'#{upperCamelCase word}'"
 
-    log compiled: js:  "module.exports = [\n  #{strings.join ",\n  "}\n];"
+    "module.exports = [\n  #{strings.join ",\n  "}\n];"
 
 This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
