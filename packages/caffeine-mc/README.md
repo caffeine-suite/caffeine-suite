@@ -6,7 +6,7 @@ Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaSc
 
 ### What is a Meta-Compiler?
 
-It is a compiler for your compiler. Most the time Caffeine-MC is used to select and configure a compiler, but it can compile a brand new new compiler, on a per-file basis. See the custom.caf example below.
+It is a compiler for your compiler. Most the time Caffeine-MC is used to select and configure a compiler, but it can 'compile' (create) a brand new compiler, on a per-file basis. For example, see the custom.caf below.
 
 ### WHY?
 
