@@ -60,7 +60,7 @@ Hello from CoffeeScript!
   'UpperCamelCase' ]
 ```
 
-##### try Babel
+#### Try with Babel
 
 Install Babel:
 
