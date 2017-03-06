@@ -28,6 +28,69 @@ Caffeine-MC really starts to shine when you have a language which is designed to
 npm install caffeine-mc
 ```
 
+
+### Try
+
+In your shell:
+
+```
+npm install caffeine-mc
+node
+```
+
+In node:
+
+```javascript
+require('caffeine-mc/register')
+require('caffeine-mc/examples/javascript')
+require('caffeine-mc/examples/coffeescript')
+require('caffeine-mc/examples/custom')
+```
+
+output:
+
+```coffeescript
+> require('caffeine-mc/register')
+Neptune.CaffeineMc
+> require('caffeine-mc/examples/javascript')
+Hello from JavaScript!
+{}
+> require('caffeine-mc/examples/coffeescript')
+Hello from CoffeeScript!
+{}
+> require('caffeine-mc/examples/custom')
+[ 'This',
+  'Converts',
+  'MultiWordWords',
+  'NoMatterWhatTheyLookLike',
+  'To',
+  'UpperCamelCase' ]
+```
+
+##### try Babel
+
+In your shell:
+
+```
+npm install babel-core
+npm install babel-preset-es2015
+node
+
+In node:
+
+```javascript
+require('caffeine-mc/register')
+require('caffeine-mc/examples/babel')
+```
+
+output:
+```javascript
+> require('caffeine-mc/register')
+Neptune.CaffeineMc
+> require('caffeine-mc/examples/babel')
+'Hello from ES6 => ES5 curtesy of Babel.'
+```
+
 ### CaffeineMc/Examples
 
 #### javascript.caf
@@ -91,62 +154,4 @@ This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
 module.exports = class Foo {
   static bar() {return "Hello from ES6 => ES5 curtesy of Babel."}
 }.bar();
-```
-
-### Try in Node
-
-In your terminal:
-
-```
-npm install caffeine-mc
-node
-```
-
-Paste this in:
-
-```javascript
-require('caffeine-mc/register')
-require('caffeine-mc/examples/javascript')
-require('caffeine-mc/examples/coffeescript')
-require('caffeine-mc/examples/custom')
-```
-
-output:
-
-```coffeescript
-> require('caffeine-mc/register')
-Neptune.CaffeineMc
-> require('caffeine-mc/examples/javascript')
-Hello from JavaScript!
-{}
-> require('caffeine-mc/examples/coffeescript')
-Hello from CoffeeScript!
-{}
-> require('caffeine-mc/examples/custom')
-[ 'This',
-  'Converts',
-  'MultiWordWords',
-  'NoMatterWhatTheyLookLike',
-  'To',
-  'UpperCamelCase' ]
-```
-
-##### try Babel
-
-At your shell prompt, paste:
-
-```
-npm install babel-core
-npm install babel-preset-es2015
-node
-require('caffeine-mc/register')
-require('caffeine-mc/examples/babel')
-```
-
-output:
-```javascript
-> require('caffeine-mc/register')
-Neptune.CaffeineMc
-> require('caffeine-mc/examples/babel')
-'Hello from ES6 => ES5 curtesy of Babel.'
 ```
