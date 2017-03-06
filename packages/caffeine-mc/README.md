@@ -31,13 +31,6 @@ npm install caffeine-mc
 
 ### Try
 
-In your shell:
-
-```
-npm install caffeine-mc
-node
-```
-
 In node:
 
 ```javascript
@@ -69,12 +62,12 @@ Hello from CoffeeScript!
 
 ##### try Babel
 
-In your shell:
+Install key Babel NPMs:
 
 ```
 npm install babel-core
 npm install babel-preset-es2015
-node
+```
 
 In node:
 
