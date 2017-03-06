@@ -2,7 +2,7 @@
 
 Select, configure and extend your to-JavaScript compiler, with arbitrary code, with a per-project config file and on a per file from within the file itself.
 
-Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaScript, [CaffeineScript](http://coffeescript.org/) and [CaffeineScript](https://github.com/shanebdavis/caffeine-script) out of the box. An example below shows how easy it is to adapted to new compilers or transpilers, like [Babel](https://babeljs.io/).
+Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaScript, [CaffeineScript](http://coffeescript.org/) and [CaffeineScript](https://github.com/shanebdavis/caffeine-script) out of the box. An example below shows how easy it is to adapt to other compilers or transpilers like [Babel](https://babeljs.io/).
 
 ### What is a Meta-Compiler?
 
