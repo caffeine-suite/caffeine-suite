@@ -20,6 +20,7 @@ commander = require "commander"
 .option '-o, --output <directory>', "where to write output files"
 .option '-c, --compile', 'compile files'
 .option '-p, --prettier', 'apply "prettier" to any js output'
+.option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
 .option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
 .on "--help", ->
@@ -75,6 +76,11 @@ if compile
           filesWritten += writeCount
 
     serializer.then ->
+      if commander.debug
+        log DEBUG:
+          loadedModules: Object.keys realRequire('module')._cache
+          registeredLoaders: Object.keys realRequire.extensions
+
       log success: {filesRead, filesWritten}
     serializer.catch displayError
   else
@@ -100,3 +106,4 @@ else if versions
     Neptune: Neptune.getVersions()
 else
   commander.outputHelp()
+

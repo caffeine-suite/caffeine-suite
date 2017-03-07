@@ -668,7 +668,7 @@ module.exports = require("path");
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(15);
+module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(15);
 
 
 /***/ }),
@@ -782,7 +782,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.9.1"
+	"version": "1.10.0"
 };
 
 /***/ }),

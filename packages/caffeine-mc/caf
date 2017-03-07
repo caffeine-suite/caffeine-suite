@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-// require('./build/caf-command.js');
-require('coffee-script/register')
-require('./caf-command')
+require('./build/caf-command.js');
+// require('coffee-script/register')
+// require('./caf-command')

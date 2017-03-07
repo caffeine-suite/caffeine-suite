@@ -686,7 +686,7 @@ ref = Neptune.Art.StandardLib, log = ref.log, dashCase = ref.dashCase, escapeReg
 
 version = CaffeineMc.version;
 
-commander = __webpack_require__(20).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(20).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -745,6 +745,14 @@ if (compile) {
       });
     });
     serializer.then(function() {
+      if (commander.debug) {
+        log({
+          DEBUG: {
+            loadedModules: Object.keys(realRequire('module')._cache),
+            registeredLoaders: Object.keys(realRequire.extensions)
+          }
+        });
+      }
       return log({
         success: {
           filesRead: filesRead,
@@ -926,7 +934,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.9.1"
+	"version": "1.10.0"
 };
 
 /***/ }),
