@@ -3,6 +3,8 @@ glob = require "glob"
 fsp = require 'fs-promise'
 path = require 'path'
 
+require 'coffee-script/register'
+
 # webpack hack
 realRequire = eval 'require'
 

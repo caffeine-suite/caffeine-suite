@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -252,7 +252,7 @@ var CaffeineMc, Neptune,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-Neptune = __webpack_require__(22);
+Neptune = __webpack_require__(23);
 
 module.exports = Neptune.CaffeineMc || Neptune.addNamespace('CaffeineMc', CaffeineMc = (function(superClass) {
   extend(CaffeineMc, superClass);
@@ -410,7 +410,7 @@ defineModule(module, FileCompiler = (function() {
             result.outputFiles.push(outputFilename);
             if (prettier && extension === "js") {
               try {
-                text = __webpack_require__(23).format(text);
+                text = __webpack_require__(24).format(text);
               } catch (error) {
                 e = error;
                 log(e.message);
@@ -670,13 +670,15 @@ module.exports = require("art-class-system");
 
 var CaffeineMc, Promise, colors, commander, compile, compiler, dashCase, displayError, e, each, escapeRegExp, file, fileToRun, filename, files, filesRead, filesWritten, formattedInspect, fsp, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, serializer, verbose, version, versions;
 
-colors = __webpack_require__(19);
+colors = __webpack_require__(20);
 
-glob = __webpack_require__(21);
+glob = __webpack_require__(22);
 
 fsp = __webpack_require__(3);
 
 path = __webpack_require__(4);
+
+__webpack_require__(19);
 
 realRequire = eval('require');
 
@@ -686,7 +688,7 @@ ref = Neptune.Art.StandardLib, log = ref.log, dashCase = ref.dashCase, escapeReg
 
 version = CaffeineMc.version;
 
-commander = __webpack_require__(20).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(21).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -947,34 +949,40 @@ module.exports = require("babel-bridge");
 /* 19 */
 /***/ (function(module, exports) {
 
-module.exports = require("colors");
+module.exports = require("coffee-script/register");
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = require("commander");
+module.exports = require("colors");
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("glob");
+module.exports = require("commander");
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("neptune-namespaces");
+module.exports = require("glob");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = require("prettier");
+module.exports = require("neptune-namespaces");
 
 /***/ }),
 /* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("prettier");
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(11);

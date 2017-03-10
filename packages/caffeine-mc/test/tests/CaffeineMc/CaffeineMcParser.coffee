@@ -44,6 +44,13 @@ module.exports = suite:
       assert.eq compilerName, "AwesomeScript"
       assert.eq code, ""
 
+    test "|AwesomeScript/SubAwesome", ->
+      parser = new CaffeineMcParser
+      {metaCode, compilerName, code} = parser.parse "|AwesomeScript/SubAwesome"
+      assert.eq !!metaCode, false
+      assert.eq compilerName, "AwesomeScript/SubAwesome"
+      assert.eq code, ""
+
     test "| meta code", ->
       parser = new CaffeineMcParser
       {metaCode, compilerName, code} = parser.parse "| meta code"

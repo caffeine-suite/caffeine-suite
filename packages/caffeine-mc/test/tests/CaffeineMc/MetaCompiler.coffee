@@ -21,6 +21,13 @@ module.exports = suite:
       eval out.compiled.js
       assert.eq 123, global._temp()
 
+  testCompiler: ->
+    test "|TestCompiler", ->
+      assert.eq CaffeineMc.compile("""
+        |TestCompiler
+        alpha+beta
+      """), compiled: js: "AlphaBeta"
+
   basic: ->
     test "single-line metaCompiler block", ->
       out = CaffeineMc.compile """

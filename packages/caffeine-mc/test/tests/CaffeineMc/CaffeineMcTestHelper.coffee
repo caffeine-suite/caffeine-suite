@@ -9,7 +9,6 @@ global.CaffeineMcTestHelper = class CaffeineMcTestHelper extends BaseObject
     Neptune.CaffeineMc.SourceRoots._resetSourceRoots()
     @testLog = []
 
-  @testFiles: [
-    path.join process.cwd(), "test", "files", "SourceRoots", "DotCaffeineRoot", "a.caf"
-    path.join process.cwd(), "test", "files", "SourceRoots", "DotCaffeineRoot", "subdir", "b.caf"
-  ]
+  @testFiles:
+    alpha:  path.join process.cwd(), "test", "files", "SourceRoots", "DotCaffeineRoot", "HurlockAlpha.caf"
+    beta:   path.join process.cwd(), "test", "files", "SourceRoots", "DotCaffeineRoot", "SubAwesome", "BetaRelease.caf"

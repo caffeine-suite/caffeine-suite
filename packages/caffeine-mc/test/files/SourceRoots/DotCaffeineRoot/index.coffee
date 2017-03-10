@@ -3,6 +3,6 @@
 
 module.exports = require './namespace'
 .addModules
-  A:                require './a'                 
   CaffeineMcConfig: require './caffeine-mc.config'
-require './subdir'
+  HurlockAlpha:     require './HurlockAlpha'      
+require './SubAwesome'

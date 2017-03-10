@@ -1,6 +1,7 @@
 Compilers = require './Compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
+CaffeineMc = require './namespace'
 
 realRequire = eval 'require'
 
