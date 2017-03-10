@@ -264,15 +264,15 @@ module.exports = Metacompiler = (function(superClass) {
   };
 
   Metacompiler.prototype.getCompiler = function(compilerName, options) {
-    var base, compiler, out, path;
+    var absolutePath, base, compiler, out;
     if (!present(compilerName)) {
       return this.compiler;
     }
     if (compiler = Compilers[upperCamelCase(compilerName)]) {
       return compiler;
     }
-    path = CaffeineMc.findModuleSync(compilerName, options).path;
-    out = (base = this.compilers)[path] || (base[path] = realRequire(path));
+    absolutePath = CaffeineMc.findModuleSync(compilerName, options).absolutePath;
+    out = (base = this.compilers)[absolutePath] || (base[absolutePath] = realRequire(absolutePath));
     if (!isFunction(out.compile)) {
       throw new Error("CaffeineMc: compiler not found for: " + compilerName + " (normalized: " + ucCompilerName + ")");
     }
@@ -689,17 +689,17 @@ defineModule(module, ModuleResolver = (function() {
   normalizeName = upperCamelCase;
 
   ModuleResolver.getNpmPackageName = function(moduleName) {
-    var name, normalizedModuleName, path;
+    var absolutePath, name, normalizedModuleName;
     normalizedModuleName = upperCamelCase(moduleName);
-    path = Path.dirname(realRequire.resolve(name = dashCase(normalizedModuleName)));
+    absolutePath = Path.dirname(realRequire.resolve(name = dashCase(normalizedModuleName)));
     return {
       requireString: name,
-      path: path
+      absolutePath: absolutePath
     };
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var base, i, len, matchingName, mod, path, ref1, ref2, requireString, rest, sub;
+    var absolutePath, base, i, len, matchingName, mod, ref1, ref2, requireString, rest, sub;
     ref1 = (function() {
       var i, len, ref1, results;
       ref1 = moduleName.split("/");
@@ -711,15 +711,15 @@ defineModule(module, ModuleResolver = (function() {
       return results;
     })(), base = ref1[0], rest = 2 <= ref1.length ? slice.call(ref1, 1) : [];
     base = normalizeName(base);
-    ref2 = ModuleResolver._findModuleBaseSync(base, options), requireString = ref2.requireString, path = ref2.path;
+    ref2 = ModuleResolver._findModuleBaseSync(base, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
     for (i = 0, len = rest.length; i < len; i++) {
       sub = rest[i];
-      if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, path)) {
-        path = Path.join(path, matchingName);
+      if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath)) {
+        absolutePath = Path.join(absolutePath, matchingName);
         requireString = requireString + "/" + matchingName;
       } else {
         throw new ErrorWithInfo("Could not find pathed module", {
-          lookingIn: path,
+          lookingIn: absolutePath,
           require: requireString,
           lookingFor: sub,
           normalized: normalizeName(sub)
@@ -728,7 +728,7 @@ defineModule(module, ModuleResolver = (function() {
     }
     return {
       requireString: requireString,
-      path: path
+      absolutePath: absolutePath
     };
   };
 
@@ -737,20 +737,22 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver._findModuleBaseSync = function(moduleName, options) {
-    var directory, matchingName, normalizedModuleName, path, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
+    var absolutePath, directory, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
     normalizedModuleName = upperCamelCase(moduleName);
     if (options) {
       sourceFile = options.sourceFile, sourceDir = options.sourceDir, sourceFiles = options.sourceFiles, sourceRoot = options.sourceRoot;
     }
+    sourceFile || (sourceFile = sourceFiles != null ? sourceFiles[0] : void 0);
     if (sourceFile || sourceDir) {
       directory = sourceDir || (sourceDir = Path.resolve(Path.dirname(sourceFile)));
       sourceRoot || (sourceRoot = findSourceRootSync(sourceDir));
+      sourceRoot = Path.resolve(sourceRoot);
     }
-    path = null;
+    absolutePath = null;
     shouldContinue = present(sourceRoot);
     while (shouldContinue) {
       if (matchingName = ModuleResolver._matchingNameInDirectorySync(normalizedModuleName, directory)) {
-        path = Path.join(directory, matchingName);
+        absolutePath = Path.join(directory, matchingName);
         shouldContinue = false;
       } else if (directory === sourceRoot) {
         shouldContinue = false;
@@ -758,14 +760,21 @@ defineModule(module, ModuleResolver = (function() {
         directory = Path.dirname(directory);
       }
     }
-    if (path) {
-      requireString = Path.relative(sourceDir, path);
+    if (absolutePath) {
+      requireString = Path.relative(sourceDir, absolutePath);
+      switch (requireString) {
+        case "..":
+          requireString = "../../" + (Path.basename(absolutePath));
+          break;
+        case ".":
+          requireString = "../" + (Path.basename(absolutePath));
+      }
       if (!requireString.match(/^\./)) {
         requireString = "./" + requireString;
       }
       return {
         requireString: requireString,
-        path: path
+        absolutePath: absolutePath
       };
     } else {
       return ModuleResolver.getNpmPackageName(normalizedModuleName);
@@ -1078,7 +1087,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.12.0"
+	"version": "1.12.1"
 };
 
 /***/ }),
