@@ -12,27 +12,27 @@ defineModule module, class ModuleResolver
 
   @getNpmPackageName: (moduleName) ->
     normalizedModuleName = upperCamelCase moduleName
-    path = Path.dirname realRequire.resolve name = dashCase normalizedModuleName
-    {requireString: name, path: path}
+    absolutePath = Path.dirname realRequire.resolve name = dashCase normalizedModuleName
+    {requireString: name, absolutePath: absolutePath}
 
   @findModuleSync: (moduleName, options) =>
     [base, rest...] = for mod in moduleName.split "/"
       normalizeName mod
 
     base = normalizeName base
-    {requireString, path} = @_findModuleBaseSync base, options
+    {requireString, absolutePath} = @_findModuleBaseSync base, options
     for sub in rest
-      if matchingName = @_matchingNameInDirectorySync sub, path
-        path          = Path.join path, matchingName
+      if matchingName = @_matchingNameInDirectorySync sub, absolutePath
+        absolutePath          = Path.join absolutePath, matchingName
         requireString = "#{requireString}/#{matchingName}"
       else
         throw new ErrorWithInfo "Could not find pathed module",
-          lookingIn: path
+          lookingIn: absolutePath
           require: requireString
           lookingFor: sub
           normalized: normalizeName sub
 
-    {requireString, path}
+    {requireString, absolutePath}
 
   @findModule: (moduleName, options) =>
     Promise.resolve @findModuleSync moduleName, options
@@ -41,16 +41,18 @@ defineModule module, class ModuleResolver
     normalizedModuleName = upperCamelCase moduleName
 
     {sourceFile, sourceDir, sourceFiles, sourceRoot} = options if options
+    sourceFile ||= sourceFiles?[0]
 
     if sourceFile || sourceDir
       directory = sourceDir ||= Path.resolve Path.dirname sourceFile
       sourceRoot ||= findSourceRootSync sourceDir
+      sourceRoot = Path.resolve sourceRoot
 
-    path = null
+    absolutePath = null
     shouldContinue = present sourceRoot
     while shouldContinue
       if matchingName = @_matchingNameInDirectorySync normalizedModuleName, directory
-        path = Path.join directory, matchingName
+        absolutePath = Path.join directory, matchingName
         shouldContinue = false
 
       else if directory == sourceRoot
@@ -59,10 +61,13 @@ defineModule module, class ModuleResolver
       else
         directory = Path.dirname directory
 
-    if path
-      requireString = Path.relative sourceDir, path
+    if absolutePath
+      requireString = Path.relative sourceDir, absolutePath
+      switch requireString
+        when ".." then requireString = "../../#{Path.basename absolutePath}"
+        when "."  then requireString = "../#{Path.basename absolutePath}"
       requireString = "./#{requireString}" unless requireString.match /^\./
-      {requireString, path}
+      {requireString, absolutePath}
     else
       @getNpmPackageName normalizedModuleName
 

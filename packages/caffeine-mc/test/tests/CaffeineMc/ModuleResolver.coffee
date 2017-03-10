@@ -1,5 +1,4 @@
 {defineModule, log, each} = require 'art-foundation'
-path = require 'path'
 
 {findModule} = Neptune.CaffeineMc
 
@@ -10,27 +9,27 @@ defineModule module, suite:
       CaffeineMcTestHelper.reset()
 
     each CaffeineMcTestHelper.testFiles, (file) ->
-      test "'sub-awesome' in #{path.basename(file)}", ->
+      test "'sub-awesome' in #{absolutePath.basename(file)}", ->
         findModule "hurlock-alpha", sourceFile: file
-        .then ({requireString, path}) ->
+        .then ({requireString, absolutePath}) ->
           assert.match requireString, /\..*HurlockAlpha/, "requireString"
-          assert.match path, /\/.*\/HurlockAlpha/, "path"
+          assert.match absolutePath, /\/.*\/HurlockAlpha/, "absolutePath"
 
     each CaffeineMcTestHelper.testFiles, (file) ->
-      test "'sub-awesome/betaRelease' in #{path.basename(file)}", ->
+      test "'sub-awesome/betaRelease' in #{absolutePath.basename(file)}", ->
         findModule "sub-awesome/betaRelease", sourceFile: file
-        .then ({requireString, path}) ->
+        .then ({requireString, absolutePath}) ->
           assert.match requireString, /\..*\/BetaRelease$/, "requireString"
-          assert.match path, /\/.*\/SubAwesome\/BetaRelease$/, "path"
+          assert.match absolutePath, /\/.*\/SubAwesome\/BetaRelease$/, "absolutePath"
 
     test "npm module", ->
       findModule "ArtStandardLib", sourceDir: "."
-      .then ({requireString, path}) ->
+      .then ({requireString, absolutePath}) ->
         assert.eq requireString, "art-standard-lib"
-        assert.match path, /art-standard-lib$/
+        assert.match absolutePath, /art-standard-lib$/
 
     test "pathed npm module", ->
       findModule "ArtStandardLib/types", sourceDir: "."
-      .then ({requireString, path}) ->
+      .then ({requireString, absolutePath}) ->
         assert.eq requireString, "art-standard-lib/Types"
-        assert.match path, /art-standard-lib\/Types$/
+        assert.match absolutePath, /art-standard-lib\/Types$/
