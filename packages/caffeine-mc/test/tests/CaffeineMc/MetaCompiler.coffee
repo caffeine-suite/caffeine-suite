@@ -22,11 +22,30 @@ module.exports = suite:
       assert.eq 123, global._temp()
 
   testCompiler: ->
-    test "|TestCompiler", ->
+    test "|CaffeineMc/Test/TestCompiler", ->
       assert.eq CaffeineMc.compile("""
-        |TestCompiler
+        |CaffeineMc/Test/TestCompiler
         alpha+beta
       """), compiled: js: "AlphaBeta"
+
+    test "|Test/TestCompiler", ->
+      assert.eq CaffeineMc.compile(
+        """
+        |Test/TestCompiler
+        alpha+beta
+        """
+        sourceDir: __dirname
+      ), compiled: js: "AlphaBeta"
+
+
+    test "|TestCompiler", ->
+      assert.eq CaffeineMc.compile(
+        """
+        |TestCompiler
+        alpha+beta
+        """
+        sourceDir: __dirname
+      ), compiled: js: "AlphaBeta"
 
   basic: ->
     test "single-line metaCompiler block", ->

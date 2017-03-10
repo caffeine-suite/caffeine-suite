@@ -1,10 +1,10 @@
 # webpack hack
 realRequire = eval 'require'
 
-CaffeineMc    = realRequire 'caffeine-mc'
+CaffeineMc    = realRequire './'
 Fs            = realRequire "fs"
 
-{log} = global?.Neptune.Art.Foundation || realRequire 'art-foundation/dist'
+{log} = require 'art-standard-lib'
 
 # Load and run a CoffeeScript file for Node, stripping any `BOM`s.
 loadFile = (module, filename) ->

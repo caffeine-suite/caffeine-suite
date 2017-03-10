@@ -39,9 +39,9 @@ module.exports = class Metacompiler extends BaseClass
         object with at least:
           compiled: js: evalable-js-string
     ###
-    compiler: (arg) ->
+    compiler: (arg, options) ->
       @_compiler = if isString arg
-        @getCompiler arg
+        @getCompiler arg, options
       else if isFunction arg.compile
         arg
       else if isFunction arg
@@ -55,7 +55,7 @@ module.exports = class Metacompiler extends BaseClass
     @_metaParser = new CaffeineMcParser
     @_metaCompiler = @
     @_compiler = Compilers.JavaScript
-    @compilers = merge Compilers.modules
+    @compilers = {}
 
   normalizeCompilerResult: (result) ->
     if isString result
@@ -76,7 +76,8 @@ module.exports = class Metacompiler extends BaseClass
     options:
       sourceMap: t/f
       inlineMap: t/f
-      filename:
+      sourceFile:
+      sourceDir:
 
   OUT: (an object)
     compiled: extension => output map
@@ -95,7 +96,7 @@ module.exports = class Metacompiler extends BaseClass
     {compilerName, metaCode, code} = @_metaParser.parse code.toString()
 
     if compilerName
-      @compiler = compilerName
+      @setCompiler compilerName, options
 
     @normalizeCompilerResult if metaCode
       result = @normalizeCompilerResult @compiler.compile metaCode
@@ -104,9 +105,11 @@ module.exports = class Metacompiler extends BaseClass
     else
       @compiler.compile code, options
 
-  getCompiler: (compilerName) ->
+  getCompiler: (compilerName, options) ->
     return @compiler unless present compilerName
-    ucCompilerName = upperCamelCase compilerName
-    out = @compilers[ucCompilerName] ||= realRequire dashCase compilerName
+    return compiler if compiler = Compilers[upperCamelCase compilerName]
+
+    {path} = CaffeineMc.findModuleSync compilerName, options
+    out = @compilers[path] ||= realRequire path
     throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName})" unless isFunction out.compile
     out
