@@ -1,4 +1,4 @@
-{compactFlatten} = require './ArrayCompactFlatten'
+{compactFlatten, isPlainArray} = require './ArrayCompactFlatten'
 definingModule = null
 
 module.exports =
@@ -38,6 +38,23 @@ module.exports =
 
   isFunction:           isFunction = (a) -> typeof a is "function"
   isDirectPrototypeOf:  isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
+
+  toString: (a) ->
+    if isPlainArray(a)
+      a.join ''
+    else if a?
+      a.toString()
+    else ''
+
+  gt:   (a, b) -> if typeof a == "number" and typeof b == "number" then a > b else a.gt b
+  lt:   (a, b) -> if typeof a == "number" and typeof b == "number" then a < b else a.lt b
+  lte:  (a, b) -> if typeof a == "number" and typeof b == "number" then a <= b else a.lte b
+  gte:  (a, b) -> if typeof a == "number" and typeof b == "number" then a >= b else a.gte b
+
+  add:   (a, b) -> if (typeof a == "number" and typeof b == "number") || (typeof a == "string" and typeof b == "string") then a + b else a.add b
+  sub:   (a, b) -> if typeof a == "number" and typeof b == "number" then a - b else a.sub b
+  mul:   (a, b) -> if typeof a == "number" and typeof b == "number" then a * b else a.mul b
+  div:   (a, b) -> if typeof a == "number" and typeof b == "number" then a / b else a.div b
 
   ###
   All about getSuper in ES6 land:

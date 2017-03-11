@@ -39,6 +39,7 @@ keepAll = -> true
 keepUnlessNullOrUndefined = (a) -> a != null && a != undefined
 
 module.exports = class ArrayCompactFlatten
+  @isPlainArray: isPlainArray
 
   @compact: (array, keepTester = keepUnlessNullOrUndefined) ->
     for a in array
