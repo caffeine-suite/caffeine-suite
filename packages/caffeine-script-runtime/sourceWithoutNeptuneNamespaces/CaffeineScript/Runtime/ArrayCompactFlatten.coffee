@@ -5,7 +5,10 @@ isArguments = (o) ->
   (typeof o.callee is "function") &&
   (typeof o.length is "number")
 
-isPlainArray = Array.isArray || (o) => o.constructor == Array
+# https://jsperf.com/is-array-sbd
+# correct: Array.isArray
+# 3x-8x faster: (o) => o.constructor == Array
+isPlainArray = (o) => o? && o.constructor == Array
 
 isArrayOrArguments = (o) ->
   o && (isPlainArray(o) || isArguments o)
@@ -39,6 +42,14 @@ keepAll = -> true
 keepUnlessNullOrUndefined = (a) -> a != null && a != undefined
 
 module.exports = class ArrayCompactFlatten
+  # cross-iFrame friendly
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf
+  #   valid in IE9+, so I think we can safely use it.
+  # PERF: https://jsperf.com/is-plain-object
+  #   iFrame-friendly test: null == Object.getPrototypeOf Object.getPrototypeOf v
+  #   10-70x faster: v.constructor == Object
+  # @isPlainObject: isPlainObject = (v) -> v? && v.constructor == Object
+
   @isPlainArray: isPlainArray
 
   @compact: (array, keepTester = keepUnlessNullOrUndefined) ->

@@ -1,4 +1,4 @@
-{compactFlatten, isPlainArray} = require './ArrayCompactFlatten'
+{compactFlatten, isPlainArray, isPlainObject} = require './ArrayCompactFlatten'
 definingModule = null
 
 module.exports =
@@ -40,10 +40,13 @@ module.exports =
   isDirectPrototypeOf:  isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
 
   toString: (a) ->
-    if isPlainArray(a)
-      a.join ''
-    else if a?
-      a.toString()
+    if a?
+      if isPlainArray a
+        a.join ''
+      else if isFunction a?.toString
+        a.toString()
+      else
+
     else ''
 
   gt:   (a, b) -> if typeof a == "number" and typeof b == "number" then a > b else a.gt b

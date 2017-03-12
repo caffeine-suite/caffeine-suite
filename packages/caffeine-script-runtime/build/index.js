@@ -79,9 +79,9 @@ isArguments = function(o) {
   return o && (typeof o.callee === "function") && (typeof o.length === "number");
 };
 
-isPlainArray = Array.isArray || (function(_this) {
+isPlainArray = (function(_this) {
   return function(o) {
-    return o.constructor === Array;
+    return (o != null) && o.constructor === Array;
   };
 })(this);
 
@@ -141,6 +141,8 @@ keepUnlessNullOrUndefined = function(a) {
 
 module.exports = ArrayCompactFlatten = (function() {
   function ArrayCompactFlatten() {}
+
+  ArrayCompactFlatten.isPlainArray = isPlainArray;
 
   ArrayCompactFlatten.compact = function(array, keepTester) {
     var a, i, len;
@@ -359,11 +361,11 @@ module.exports = {
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _import, compactFlatten, definingModule, getSuper, isDirectPrototypeOf, isFalse, isFunction, isTrue,
+var _import, compactFlatten, definingModule, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
-compactFlatten = __webpack_require__(0).compactFlatten;
+ref = __webpack_require__(0), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
 
 definingModule = null;
 
@@ -423,6 +425,75 @@ module.exports = {
   },
   isDirectPrototypeOf: isDirectPrototypeOf = function(o, prototype) {
     return !isFunction(o) && prototype.constructor === o.constructor;
+  },
+  toString: function(a) {
+    if (a != null) {
+      if (isPlainArray(a)) {
+        return a.join('');
+      } else if (isFunction(a != null ? a.toString : void 0)) {
+        return a.toString();
+      } else {
+
+      }
+    } else {
+      return '';
+    }
+  },
+  gt: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a > b;
+    } else {
+      return a.gt(b);
+    }
+  },
+  lt: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a < b;
+    } else {
+      return a.lt(b);
+    }
+  },
+  lte: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a <= b;
+    } else {
+      return a.lte(b);
+    }
+  },
+  gte: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a >= b;
+    } else {
+      return a.gte(b);
+    }
+  },
+  add: function(a, b) {
+    if ((typeof a === "number" && typeof b === "number") || (typeof a === "string" && typeof b === "string")) {
+      return a + b;
+    } else {
+      return a.add(b);
+    }
+  },
+  sub: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a - b;
+    } else {
+      return a.sub(b);
+    }
+  },
+  mul: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a * b;
+    } else {
+      return a.mul(b);
+    }
+  },
+  div: function(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+      return a / b;
+    } else {
+      return a.div(b);
+    }
   },
 
   /*
@@ -501,11 +572,11 @@ module.exports = {
     outKlass.createWithPostCreate?(outKlass) ? outKlass
    */
   defClass: function(klass, init) {
-    var ref;
+    var ref1;
     if (init != null) {
       init.call(klass, klass, getSuper(klass), getSuper(klass.prototype));
     }
-    return (ref = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref : klass;
+    return (ref1 = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref1 : klass;
   },
   getModuleBeingDefined: function() {
     return definingModule;

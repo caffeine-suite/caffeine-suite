@@ -5,3 +5,4 @@ module.exports = require './namespace'
 .addModules
   Iteration: require './Iteration'
   Super:     require './Super'    
+  ToString:  require './ToString' 
