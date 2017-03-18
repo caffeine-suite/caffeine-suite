@@ -847,7 +847,7 @@ output = commander.output, compile = commander.compile, prettier = commander.pre
 displayError = function(e) {
   if (verbose) {
     return log.error(e);
-  } else if (e.message.match(/parse|expect/i)) {
+  } else if ((e.location != null) || (e.sourceFile != null) || e.message.match(/parse|expect/i)) {
     if (e) {
       return log(e.message.replace(/<HERE>/, "<HERE>".red));
     }
