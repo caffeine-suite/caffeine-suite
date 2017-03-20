@@ -691,7 +691,15 @@ defineModule(module, ModuleResolver = (function() {
   ModuleResolver.getNpmPackageName = function(moduleName) {
     var absolutePath, name, normalizedModuleName;
     normalizedModuleName = upperCamelCase(moduleName);
-    absolutePath = Path.dirname(realRequire.resolve(name = dashCase(normalizedModuleName)));
+    try {
+      absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleName)));
+    } catch (error) {
+      try {
+        absolutePath = Path.dirname(realRequire.resolve(name = moduleName));
+      } catch (error) {
+        throw new Error("Could not find module: " + moduleName + " or " + (dashCase(moduleName)));
+      }
+    }
     return {
       requireString: name,
       absolutePath: absolutePath
@@ -699,19 +707,18 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var absolutePath, base, i, len, matchingName, mod, ref1, ref2, requireString, rest, sub;
+    var absolutePath, base, denormalizedBase, i, len, matchingName, mod, ref1, ref2, requireString, rest, sub;
     ref1 = (function() {
-      var i, len, ref1, results;
-      ref1 = moduleName.split("/");
+      var i, len, ref1, ref2, results;
+      ref2 = (ref1 = moduleName.split("/"), denormalizedBase = ref1[0], ref1);
       results = [];
-      for (i = 0, len = ref1.length; i < len; i++) {
-        mod = ref1[i];
+      for (i = 0, len = ref2.length; i < len; i++) {
+        mod = ref2[i];
         results.push(normalizeName(mod));
       }
       return results;
     })(), base = ref1[0], rest = 2 <= ref1.length ? slice.call(ref1, 1) : [];
-    base = normalizeName(base);
-    ref2 = ModuleResolver._findModuleBaseSync(base, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
+    ref2 = ModuleResolver._findModuleBaseSync(denormalizedBase, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
     for (i = 0, len = rest.length; i < len; i++) {
       sub = rest[i];
       if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath)) {
@@ -777,7 +784,7 @@ defineModule(module, ModuleResolver = (function() {
         absolutePath: absolutePath
       };
     } else {
-      return ModuleResolver.getNpmPackageName(normalizedModuleName);
+      return ModuleResolver.getNpmPackageName(moduleName);
     }
   };
 
@@ -933,7 +940,7 @@ module.exports = {
 		"start": "webpack-dev-server --hot --inline --progress",
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
 	},
-	"version": "1.12.1"
+	"version": "1.13.0"
 };
 
 /***/ }),
