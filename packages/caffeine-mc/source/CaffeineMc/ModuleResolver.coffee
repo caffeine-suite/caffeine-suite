@@ -12,15 +12,20 @@ defineModule module, class ModuleResolver
 
   @getNpmPackageName: (moduleName) ->
     normalizedModuleName = upperCamelCase moduleName
-    absolutePath = Path.dirname realRequire.resolve name = dashCase normalizedModuleName
+    try
+      absolutePath = Path.dirname realRequire.resolve name = dashCase moduleName
+    catch
+      try
+        absolutePath = Path.dirname realRequire.resolve name = moduleName
+      catch
+        throw new Error "Could not find module: #{moduleName} or #{dashCase moduleName}"
     {requireString: name, absolutePath: absolutePath}
 
   @findModuleSync: (moduleName, options) =>
-    [base, rest...] = for mod in moduleName.split "/"
+    [base, rest...] = for mod in [denormalizedBase] = moduleName.split "/"
       normalizeName mod
 
-    base = normalizeName base
-    {requireString, absolutePath} = @_findModuleBaseSync base, options
+    {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, options
     for sub in rest
       if matchingName = @_matchingNameInDirectorySync sub, absolutePath
         absolutePath          = Path.join absolutePath, matchingName
@@ -69,7 +74,7 @@ defineModule module, class ModuleResolver
       requireString = "./#{requireString}" unless requireString.match /^\./
       {requireString, absolutePath}
     else
-      @getNpmPackageName normalizedModuleName
+      @getNpmPackageName moduleName
 
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory) ->
