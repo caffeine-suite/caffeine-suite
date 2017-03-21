@@ -5,6 +5,7 @@ module.exports = require './namespace'
 .includeInNamespace require './CaffeineMc'
 .addModules
   CaffeineMcParser: require './CaffeineMcParser'
+  CafRepl:          require './CafRepl'         
   FileCompiler:     require './FileCompiler'    
   Metacompiler:     require './Metacompiler'    
   ModuleResolver:   require './ModuleResolver'  

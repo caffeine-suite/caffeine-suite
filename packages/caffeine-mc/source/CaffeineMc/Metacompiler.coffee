@@ -1,16 +1,14 @@
 Compilers = require './Compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
-CaffeineMc = require './namespace'
+{evalInContext} = CaffeineMc = require './namespace'
 
 realRequire = eval 'require'
 
 {dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
-evalInContext = (js, context) ->
-  # Return the results of the in-line anonymous function we .call with the passed context
-  (-> eval js).call context
+
 
 module.exports = class Metacompiler extends BaseClass
   @fileExtensions: ["caf", "caffeine"]
@@ -105,10 +103,14 @@ module.exports = class Metacompiler extends BaseClass
     else
       @compiler.compile code, options
 
+  @getter
+    compilerName: -> @compiler.getClassName?() || @compiler.getName?() || @_compilerName || 'unknown-compiler'
+
   getCompiler: (compilerName, options) ->
     return @compiler unless present compilerName
     return compiler if compiler = Compilers[upperCamelCase compilerName]
 
+    @_compilerName = compilerName;
     {absolutePath} = CaffeineMc.findModuleSync compilerName, options
     out = @compilers[absolutePath] ||= realRequire absolutePath
     throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName})" unless isFunction out.compile

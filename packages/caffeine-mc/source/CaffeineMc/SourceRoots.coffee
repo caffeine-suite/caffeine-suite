@@ -31,27 +31,28 @@ defineModule module, class SourceRoots extends BaseClass
 
   # OUT: promise.then (caffeineInit) ->
   #   caffeineInit is a js string or false
-  @getCaffeineInit: (sourceRoot) =>
+  @getCaffeineInit: (sourceRoot = process.cwd()) =>
     # log getCaffeineInit: {sourceRoot}
     if (res = @caffeineInits[sourceRoot])?
       Promise.resolve res
     else
       FsPromise.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
       .then (exists) =>
-        if exists
+        contentsPromise = if exists
           FsPromise.readFile sourceFile
           .then (contents) =>
             contents = contents.toString()
-            # log CaffeineInit: compile: {sourceFile, sourceRoot, contents}
-            metacompiler = new Metacompiler
-            result = metacompiler.compile contents, {sourceFile, sourceRoot}
-
-            @caffeineInits[sourceRoot] =
-              compiler: metacompiler.compiler
-              config: evalCapturingModuleExports result.compiled.js
         else
-          # log CaffeineInit: noInit: {sourceFile, sourceRoot}
-          false
+          Promise.resolve false
+
+        contentsPromise.then (contents) =>
+          metacompiler = new Metacompiler
+          @caffeineInits[sourceRoot] =
+            compiler: metacompiler
+            config: if result = contents && metacompiler.compile contents, {sourceFile, sourceRoot}
+                evalCapturingModuleExports result.compiled.js
+              else
+                {}
 
   @getCaffeineInitSync: (sourceRoot) =>
     throw new Error "no sourceRoot" unless sourceRoot

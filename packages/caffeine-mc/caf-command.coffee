@@ -8,14 +8,13 @@ require 'coffee-script/register'
 # webpack hack
 realRequire = eval 'require'
 
-CaffeineMc = require './source/CaffeineMc'
+{version, displayError, CafRepl} = CaffeineMc = require './source/CaffeineMc'
 {log, dashCase, escapeRegExp, present, isString,
 Promise, formattedInspect, each, escapeRegExp
 } = Neptune.Art.StandardLib
 
 # Preload pre-compiled art-foundation for dramatically faster load-times...
 
-{version} = CaffeineMc
 commander = require "commander"
 .version version
 .usage('[options] <input files and directories>')
@@ -33,23 +32,10 @@ commander = require "commander"
     """
 .parse process.argv
 
-{output, compile, prettier, verbose, versions} = commander
-
 displayError = (e) ->
-  if verbose
-    log.error e
-  else if e.location? || e.sourceFile? || e.message.match /parse|expect/i
-    log e.message.replace /<HERE>/, "<HERE>".red if e
-  else
-    log.error(
-      e.stack
-      .split  "\n"
-      .slice  0, 30
-      .join   "\n"
-      .replace new RegExp(escapeRegExp(process.cwd() + "/"), "g"), './'
-      .replace new RegExp(escapeRegExp(path.dirname(process.cwd()) + "/"), "g"), '../'
-    )
+  CaffeineMc.displayError e, commander
 
+{output, compile, prettier, verbose, versions} = commander
 
 if compile
   files = commander.args
@@ -107,5 +93,6 @@ else if versions
   log
     Neptune: Neptune.getVersions()
 else
-  commander.outputHelp()
+  CafRepl.start()
+  # commander.outputHelp()
 
