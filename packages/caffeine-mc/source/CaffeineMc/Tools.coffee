@@ -10,6 +10,9 @@ defineModule module, class Tools
     else
       vm.runInContext js, context, filename
 
+  @evalInContext: (js, context) ->
+    (-> eval js).call context
+
   @displayError: (e, options = {}) ->
     {verbose} = options
     if verbose

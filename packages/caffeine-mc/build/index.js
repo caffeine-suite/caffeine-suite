@@ -470,7 +470,7 @@ module.exports = Metacompiler = (function(superClass) {
     if (compilerName) {
       this._lastMetacompilerResult = this.setCompiler(compilerName, options);
     }
-    return this.normalizeCompilerResult(metaCode ? (result = this.normalizeCompilerResult(this.compiler.compile(metaCode)), this._lastMetacompilerResult = CaffeineMc.runInContext(result.compiled.js, this), this.compile(code, options)) : this.compiler.compile(code, options));
+    return this.normalizeCompilerResult(metaCode ? (result = this.normalizeCompilerResult(this.compiler.compile(metaCode)), this._lastMetacompilerResult = CaffeineMc.evalInContext(result.compiled.js, this), this.compile(code, options)) : this.compiler.compile(code, options));
   };
 
   Metacompiler.getter({
@@ -573,8 +573,8 @@ module.exports = CaffeineMcParser = (function(superClass) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(16).addModules({
-  JavaScript: __webpack_require__(15)
+module.exports = __webpack_require__(17).addModules({
+  JavaScript: __webpack_require__(16)
 });
 
 
@@ -832,11 +832,63 @@ defineModule(module, ModuleResolver = (function() {
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(module) {var Tools, defineModule, escapeRegExp, log, path, ref, vm;
+
+ref = __webpack_require__(0), log = ref.log, escapeRegExp = ref.escapeRegExp, defineModule = ref.defineModule;
+
+path = __webpack_require__(3);
+
+vm = __webpack_require__(24);
+
+defineModule(module, Tools = (function() {
+  function Tools() {}
+
+  Tools.runInContext = function(js, context, filename) {
+    if (context === global) {
+      return vm.runInThisContext(js, filename);
+    } else {
+      return vm.runInContext(js, context, filename);
+    }
+  };
+
+  Tools.evalInContext = function(js, context) {
+    return (function() {
+      return eval(js);
+    }).call(context);
+  };
+
+  Tools.displayError = function(e, options) {
+    var verbose;
+    if (options == null) {
+      options = {};
+    }
+    verbose = options.verbose;
+    if (verbose) {
+      return log.error(e);
+    } else if ((e.location != null) || (e.sourceFile != null) || e.message.match(/parse|expect/i)) {
+      if (e) {
+        return log(e.message.replace(/<HERE>/, "<HERE>".red));
+      }
+    } else {
+      return log.error(e.stack.split("\n").slice(0, 30).join("\n").replace(new RegExp(escapeRegExp(process.cwd() + "/"), "g"), './').replace(new RegExp(escapeRegExp(path.dirname(process.cwd()) + "/"), "g"), '../'));
+    }
+  };
+
+  return Tools;
+
+})());
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
 module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(18);
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
@@ -1064,14 +1116,14 @@ defineModule(module, CafRepl = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = [__webpack_require__(5), __webpack_require__(10), __webpack_require__(11), __webpack_require__(17)];
+module.exports = [__webpack_require__(5), __webpack_require__(10), __webpack_require__(11), __webpack_require__(12)];
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var JavaScript,
@@ -1099,7 +1151,7 @@ module.exports = JavaScript = (function(superClass) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var CaffeineMc, Compilers,
@@ -1121,62 +1173,17 @@ module.exports = CaffeineMc.Compilers || CaffeineMc.addNamespace('Compilers', Co
 
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(module) {var Tools, defineModule, escapeRegExp, log, path, ref, vm;
-
-ref = __webpack_require__(0), log = ref.log, escapeRegExp = ref.escapeRegExp, defineModule = ref.defineModule;
-
-path = __webpack_require__(3);
-
-vm = __webpack_require__(24);
-
-defineModule(module, Tools = (function() {
-  function Tools() {}
-
-  Tools.runInContext = function(js, context, filename) {
-    if (context === global) {
-      return vm.runInThisContext(js, filename);
-    } else {
-      return vm.runInContext(js, context, filename);
-    }
-  };
-
-  Tools.displayError = function(e, options) {
-    var verbose;
-    if (options == null) {
-      options = {};
-    }
-    verbose = options.verbose;
-    if (verbose) {
-      return log.error(e);
-    } else if ((e.location != null) || (e.sourceFile != null) || e.message.match(/parse|expect/i)) {
-      if (e) {
-        return log(e.message.replace(/<HERE>/, "<HERE>".red));
-      }
-    } else {
-      return log.error(e.stack.split("\n").slice(0, 30).join("\n").replace(new RegExp(escapeRegExp(process.cwd() + "/"), "g"), './').replace(new RegExp(escapeRegExp(path.dirname(process.cwd()) + "/"), "g"), '../'));
-    }
-  };
-
-  return Tools;
-
-})());
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(1).includeInNamespace(__webpack_require__(14)).addModules({
+module.exports = __webpack_require__(1).includeInNamespace(__webpack_require__(15)).addModules({
   CaffeineMcParser: __webpack_require__(8),
-  CafRepl: __webpack_require__(13),
+  CafRepl: __webpack_require__(14),
   FileCompiler: __webpack_require__(10),
   Metacompiler: __webpack_require__(5),
   ModuleResolver: __webpack_require__(11),
-  SourceRoots: __webpack_require__(4)
+  SourceRoots: __webpack_require__(4),
+  Tools: __webpack_require__(12)
 });
 
 __webpack_require__(9);
@@ -1222,7 +1229,7 @@ module.exports = require("vm");
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(12);
+module.exports = __webpack_require__(13);
 
 
 /***/ })

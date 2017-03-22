@@ -99,7 +99,7 @@ module.exports = class Metacompiler extends BaseClass
 
     @normalizeCompilerResult if metaCode
       result = @normalizeCompilerResult @compiler.compile metaCode
-      @_lastMetacompilerResult = CaffeineMc.runInContext result.compiled.js, @
+      @_lastMetacompilerResult = CaffeineMc.evalInContext result.compiled.js, @
       @compile code, options
     else
       @compiler.compile code, options
