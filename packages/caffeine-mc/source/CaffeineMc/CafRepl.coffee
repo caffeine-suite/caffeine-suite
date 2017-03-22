@@ -44,6 +44,9 @@ defineModule module, class CafRepl
 
         eval: (command, context, filename, callback) =>
           try
+            if command.trim() == ''
+              return callback()
+
             lastOutput = out = formattedInspect(
               @replEval command, context, filename
               color: true
