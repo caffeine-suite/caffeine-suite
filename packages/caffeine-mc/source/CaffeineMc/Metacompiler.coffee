@@ -1,7 +1,7 @@
 Compilers = require './Compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
-{evalInContext} = CaffeineMc = require './namespace'
+CaffeineMc = require './namespace'
 
 realRequire = eval 'require'
 
@@ -16,7 +16,8 @@ module.exports = class Metacompiler extends BaseClass
   @compile: (code, options = {}, caffeineInitJsString)=>
     new @().compile code, options, caffeineInitJsString
 
-  @getter "compiler"
+  @getter "compiler lastMetacompilerResult",
+    current: -> @compiler
   @setter
     ###
     IN:
@@ -94,11 +95,11 @@ module.exports = class Metacompiler extends BaseClass
     {compilerName, metaCode, code} = @_metaParser.parse code.toString()
 
     if compilerName
-      @setCompiler compilerName, options
+      @_lastMetacompilerResult = @setCompiler compilerName, options
 
     @normalizeCompilerResult if metaCode
       result = @normalizeCompilerResult @compiler.compile metaCode
-      evalInContext result.compiled.js, @
+      @_lastMetacompilerResult = CaffeineMc.runInContext result.compiled.js, @
       @compile code, options
     else
       @compiler.compile code, options

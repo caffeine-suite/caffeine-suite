@@ -1,3 +1,6 @@
+# enable multi-context type-support (slower, but other wise the same)
+global.ArtStandardLibMultipleContextTypeSupport = true
+
 colors = require "colors"
 glob = require "glob"
 fsp = require 'fs-promise'
