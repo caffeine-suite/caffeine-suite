@@ -482,6 +482,9 @@ module.exports = Metacompiler = (function(superClass) {
 
   Metacompiler.prototype.getCompiler = function(compilerName, options) {
     var absolutePath, base, compiler, out;
+    if (compilerName.toLocaleLowerCase() === "javascript") {
+      compilerName = "JavaScript";
+    }
     if (!present(compilerName)) {
       return this.compiler;
     }
@@ -951,6 +954,9 @@ defineModule(module, CafRepl = (function() {
           "eval": function(command, context, filename, callback) {
             var e, finalOut, lines, out;
             try {
+              if (command.trim() === '') {
+                return callback();
+              }
               lastOutput = out = formattedInspect(_this.replEval(command, context, filename), {
                 color: true
               });

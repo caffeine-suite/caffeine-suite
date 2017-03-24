@@ -108,6 +108,9 @@ module.exports = class Metacompiler extends BaseClass
     compilerName: -> @compiler.getClassName?() || @compiler.getName?() || @_compilerName || 'unknown-compiler'
 
   getCompiler: (compilerName, options) ->
+    if compilerName.toLocaleLowerCase() == "javascript"
+      compilerName = "JavaScript"
+
     return @compiler unless present compilerName
     return compiler if compiler = Compilers[upperCamelCase compilerName]
 
