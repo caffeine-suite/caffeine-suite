@@ -1,10 +1,15 @@
-# Caffeine MC - a meta-compiler
+![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-mc/CaffeineMcLogo.png)
+# Caffeinated Language Evolution
 
-> With CaffeineMC, any language can change *arbitrarily* without breaking any existing code.
+With CaffeineMC, any language can change *arbitrarily* without breaking existing code. You can select, configure and extend any to-JavaScript compiler, with arbitrary code per project and per file.
 
-Select, configure and extend your to-JavaScript compiler, with arbitrary code, with a per-project config file and on a per file from within the file itself.
+### [CaffeineMC Wiki](https://github.com/shanebdavis/caffeine-mc/wiki)
 
-Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaScript, [CaffeineScript](http://coffeescript.org/) and [CaffeineScript](https://github.com/shanebdavis/caffeine-script) out of the box. An example below shows how easy it is to adapt to other compilers or transpilers like [Babel](https://babeljs.io/).
+Go to the [Wiki](https://github.com/shanebdavis/caffeine-mc/wiki) for documentation and more.
+
+### Compatibility
+
+Caffeine-MC can work with any to-JavaScript compiler. It works with plain JavaScript, [CoffeeScript](http://coffeescript.org/) and [CaffeineScript](https://github.com/shanebdavis/caffeine-script) out of the box. An example below shows how easy it is to adapt to other compilers or transpilers like [Babel](https://babeljs.io/).
 
 ### What is a Meta-Compiler?
 
