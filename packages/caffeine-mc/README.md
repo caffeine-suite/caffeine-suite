@@ -1,7 +1,7 @@
 ![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-mc/CaffeineMcLogo.png)
 # Caffeinated Language Evolution
 
-With CaffeineMC, any language can change *arbitrarily* without breaking existing code. You can select, configure and extend any to-JavaScript compiler, with arbitrary code per project and per file.
+With CaffeineMC, any language can change *arbitrarily* without breaking existing code. You can select, configure and extend any to-JavaScript compiler, with arbitrary code, on a per-project or per-file basis.
 
 ### [CaffeineMC Wiki](https://github.com/shanebdavis/caffeine-mc/wiki)
 
@@ -17,17 +17,17 @@ It is a compiler for your compiler. Caffeine-MC can 'compile' (create) a brand n
 
 ### Why Caffeine-MC?
 
-##### Reason 1: Accelerated Language Evolution
+#### Reason 1: Accelerated Language Evolution
 When you can change the compiler *programmatically* on a per-file basis, languages can evolve arbitrarily without worrying about breaking existing code. This frees languages to evolve rapidly without constraints.
 
-##### Reason 2: Custom Source-code 'Views'
+#### Reason 2: Custom Source-code 'Views'
 Source-code is a "view" into a program's actual semantics. Just like  word-processors or spread sheets let you configure your view on a per-file basis, you should be able to change your code's view, its 'language,' on a per-file basis without affecting other files.
 
-##### Reason 3: Write a New, Fully-Enabled Language Fast
-Caffeine-MC provides a command-line tool, Node loader and Webpack loader so you don't have to. Just create a Caffeine-MC compatible compiler and you get all the standard compiler machinery for free.
+#### Reason 3: Write a New, Fully-Enabled Languages Fast
+Focus on writing your language instead of building all the boiler-plate tools need to make it useful. Caffeine-MC's command-line tool, REPL, Node-loader and Webpack-loader works for all Caffeine-MC enabled languages. Just create a Caffeine-MC compatible compiler and you get all the standard compiler machinery for free.
 
-##### Reason 4: CaffeineMC + CaffeineScript
-Caffeine-MC really starts to shine when you have a language which is designed to be extensible. [CaffeineScript](https://github.com/shanebdavis/caffeine-script) is a modular programming language designed to take maximum advantage of Caffeine-MC's per-project and per-file configurability.
+#### Reason 4: CaffeineMC + CaffeineScript
+Caffeine-MC really starts to shine when you have a language which is designed to be extensible. [CaffeineScript](https://github.com/shanebdavis/caffeine-script) is a modular programming language designed to take maximum advantage of Caffeine-MC's per-project and per-file configurability. (modular-CaffeineScript is coming soon)
 
 ### Install
 
@@ -37,6 +37,9 @@ npm install caffeine-mc
 
 
 ### Try
+
+* [view source in wiki](https://github.com/shanebdavis/caffeine-mc/wiki/Examples)
+* [view source in git](https://github.com/shanebdavis/caffeine-mc/tree/master/examples)
 
 In node:
 
@@ -84,74 +87,10 @@ require('caffeine-mc/examples/babel')
 ```
 
 output:
+
 ```javascript
 > require('caffeine-mc/register')
 Neptune.CaffeineMc
 > require('caffeine-mc/examples/babel')
 'Hello from ES6 => ES5 curtesy of Babel.'
-```
-
-### CaffeineMc/Examples
-
-#### javascript.caf
-```javascript
-|JavaScript
-
-// this is JavaScript
-(function(){console.log("Hello from JavaScript!")})()
-```
-
-#### coffeescript.caf
-```coffeescript
-|CoffeeScript
-
-# this is CoffeeScript
-do -> console.log "Hello from CoffeeScript!"
-```
-
-#### custom.caf
-```coffeescript
-|CoffeeScript
-  ###
-  - Because of '|CoffeeScript' above, this whole block and the rest of the file
-    is interpreted as CoffeeScript.
-  - Everything to the end of this indented block runs at compile-time!
-  - this/@ is set to the current CaffeineMc instance.
-  - A new CaffeineMc instance is created for every .caf/.caffeine file compiled.
-  ###
-
-  # Require whatever you want!
-  {upperCamelCase, w, log} = require 'art-standard-lib'
-
-  ###
-  Set @compile to an object with a compile function
-  to define your own custom complier.
-  ###
-  @compiler = compile: (source) ->
-    strings = for word in w source
-      "'#{upperCamelCase word}'"
-
-    "module.exports = [\n  #{strings.join ",\n  "}\n];"
-
-This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase
-```
-
-#### babel.caf
-```JavaScript
-|
-  var
-    Babel   = require('babel-core'),
-    es2015  = require('babel-preset-es2015');
-
-  this.compiler = class BabelWrapper {
-    static compile(source) {
-      return Babel.transform(source, {
-        presets: [es2015]
-      });
-    }
-  };
-
-module.exports = class Foo {
-  static bar() {return "Hello from ES6 => ES5 curtesy of Babel."}
-}.bar();
 ```
