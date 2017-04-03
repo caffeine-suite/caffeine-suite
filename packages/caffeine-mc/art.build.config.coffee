@@ -5,7 +5,7 @@ module.exports =
       with arbitrary code, on a per file bases from within the file."
 
     dependencies:
-      "babel-bridge":   "^1.0.0"
+      "babel-bridge":   "^1.10.0"
       "fs-promise":     "^0.5.0"
       colors:           "^1.1.2"
       glob:             "^7.0.3"
