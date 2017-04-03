@@ -608,8 +608,9 @@ defineModule(module, FileCompiler = (function() {
     if (options.outputDirectory) {
       throw new Error("outputDirectory unsupported");
     }
+    source = options.source;
     caffeineInit = getCaffeineInitSync(sourceRoot = findSourceRootSync(sourceFile));
-    source = (FsPromise.readFileSync(sourceFile)).toString();
+    source || (source = (FsPromise.readFileSync(sourceFile)).toString());
     return CaffeineMc.compile(source, merge(options, {
       sourceFile: sourceFile,
       sourceRoot: sourceRoot
@@ -617,11 +618,11 @@ defineModule(module, FileCompiler = (function() {
   };
 
   FileCompiler.compileFile = function(sourceFile, options) {
-    var outputDirectory, prettier;
+    var outputDirectory, prettier, source;
     if (options == null) {
       options = {};
     }
-    outputDirectory = options.outputDirectory, prettier = options.prettier;
+    outputDirectory = options.outputDirectory, prettier = options.prettier, source = options.source;
     return findSourceRoot(sourceFile).then(function(sourceRoot) {
       var result;
       result = {
@@ -636,7 +637,9 @@ defineModule(module, FileCompiler = (function() {
         }
         return getCaffeineInit(sourceRoot);
       }).then(function(caffeineInit) {
-        return FsPromise.readFile(sourceFile).then(function(source) {
+        var p;
+        p = source ? Promise.resolve(source) : FsPromise.readFile(sourceFile);
+        return p.then(function(source) {
           source = source.toString();
           result.output = CaffeineMc.compile(source, merge(options, {
             sourceFile: sourceFile,

@@ -12,14 +12,16 @@ defineModule module, class FileCompiler
   @compileFileSync: (sourceFile, options = {}) ->
     throw new Error "outputDirectory unsupported" if options.outputDirectory
 
+    {source} = options
+
     caffeineInit = getCaffeineInitSync sourceRoot = findSourceRootSync sourceFile
 
-    source =  (FsPromise.readFileSync sourceFile).toString()
+    source ||= (FsPromise.readFileSync sourceFile).toString()
 
     CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
 
   @compileFile: (sourceFile, options = {})->
-    {outputDirectory, prettier} = options
+    {outputDirectory, prettier, source} = options
     findSourceRoot sourceFile
     .then (sourceRoot) ->
 
@@ -36,8 +38,12 @@ defineModule module, class FileCompiler
 
       .then (caffeineInit) ->
 
-        FsPromise.readFile sourceFile
-        .then (source) ->
+        p = if source
+          Promise.resolve source
+        else
+          FsPromise.readFile sourceFile
+
+        p.then (source) ->
           source = source.toString()
 
           result.output = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit

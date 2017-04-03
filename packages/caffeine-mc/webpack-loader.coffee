@@ -1,24 +1,18 @@
 CaffeineMc = require './index'
 loaderUtils = require 'loader-utils'
+{log} = require 'art-standard-lib'
 
-###
-TODO:
-
-- source maps
-- doesn't load caffeine-mc.config.caf
-###
+# TODO: - source maps
 
 module.exports = (source) ->
   @cacheable?()
 
-  coffeeRequest = loaderUtils.getRemainingRequest this
-  jsRequest = loaderUtils.getCurrentRequest @
+  sourceFile = loaderUtils.getRemainingRequest @
+  fullRequest = loaderUtils.getCurrentRequest @
   query = loaderUtils.parseQuery @query
   try
-    result = CaffeineMc.compile source,
-      literate: query.literate
-      sourceFile: coffeeRequest
-      debug: @debug
+    result = CaffeineMc.FileCompiler.compileFileSync sourceFile, {source, @debug}
+
   catch e
     log.error "CaffeineMc error": e
     throw e
