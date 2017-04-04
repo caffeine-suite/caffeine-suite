@@ -1,1 +1,1 @@
-module.exports = require("./source/CaffeineMc");
+module.exports = require("./build");
