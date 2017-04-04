@@ -937,7 +937,8 @@ defineModule(module, CafRepl = (function() {
   CafRepl.start = function(parser) {
     return getCaffeineInit().then((function(_this) {
       return function(init) {
-        var config, lastOutput;
+        var compileOnlyMode, config, lastOutput;
+        compileOnlyMode = false;
         lastOutput = null;
         _this.compiler = init.compiler, config = init.config;
         _this.cafRepl = repl.start({
@@ -970,7 +971,7 @@ defineModule(module, CafRepl = (function() {
               if (command.trim() === '') {
                 return callback();
               }
-              lastOutput = out = formattedInspect(_this.replEval(command, context, filename), {
+              lastOutput = out = compileOnlyMode ? _this.compileCommand(command, filename) : formattedInspect(_this.replEval(command, context, filename), {
                 color: true
               });
               finalOut = ((lines = out.split("\n")).slice(0, maxOutputLines)).join("\n");
@@ -1004,13 +1005,27 @@ defineModule(module, CafRepl = (function() {
             return _this.cafRepl.displayPrompt();
           }
         });
-        return _this.addCommand({
+        _this.addCommand({
           name: "last",
           help: "CaffeineMC: Show the last output value in its entirety.",
           action: function() {
             _this.cafRepl.outputStream.write("" + lastOutput);
             _this.cafRepl.outputStream.write("\n");
             return _this.cafRepl.displayPrompt();
+          }
+        });
+        _this.addCommand({
+          name: "compile",
+          help: "just compile each line and show its generated JavaScript (opposite of: .evaluate)",
+          action: function() {
+            return compileOnlyMode = true;
+          }
+        });
+        return _this.addCommand({
+          name: "evaluate",
+          help: "evaluate each line (opposite of: .compile)",
+          action: function() {
+            return compileOnlyMode = false;
           }
         });
       };
@@ -1025,6 +1040,16 @@ defineModule(module, CafRepl = (function() {
     return ("caf-mc:" + this.compiler.compilerName + "> ").gray;
   };
 
+  CafRepl.compileCommand = function(command, filename) {
+    var js;
+    command = command.trim();
+    js = this.compiler.compile(command, {
+      bare: true,
+      sourceFile: filename
+    }).compiled.js;
+    return js;
+  };
+
   CafRepl.replEval = function(command, context, filename) {
     var e, error, js, result;
     if (context == null) {
@@ -1032,11 +1057,7 @@ defineModule(module, CafRepl = (function() {
     }
     result = error = null;
     try {
-      command = command.trim();
-      js = this.compiler.compile(command, {
-        bare: true,
-        sourceFile: filename
-      }).compiled.js;
+      js = this.compileCommand(command, filename);
       try {
         result = command.match(/^\|/) ? this.compiler.lastMetacompilerResult : runInContext(js, context);
         this.cafRepl.setPrompt(this.getPrompt());

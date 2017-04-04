@@ -17,6 +17,7 @@ defineModule module, class CafRepl
   @start: (parser) ->
     getCaffeineInit()
     .then (init) =>
+      compileOnlyMode = false
       lastOutput = null
       {@compiler, config} = init
 
@@ -47,10 +48,13 @@ defineModule module, class CafRepl
             if command.trim() == ''
               return callback()
 
-            lastOutput = out = formattedInspect(
-              @replEval command, context, filename
-              color: true
-            )
+            lastOutput = out = if compileOnlyMode
+              @compileCommand command, filename
+            else
+              formattedInspect(
+                @replEval command, context, filename
+                color: true
+              )
             finalOut = ((lines = out.split("\n")).slice 0, maxOutputLines).join "\n"
             finalOut = finalOut.slice 0, maxOutputCharacters if finalOut.length > maxOutputCharacters
 
@@ -84,6 +88,15 @@ defineModule module, class CafRepl
           @cafRepl.outputStream.write "\n"
           @cafRepl.displayPrompt()
 
+      @addCommand
+        name: "compile"
+        help: "just compile each line and show its generated JavaScript (opposite of: .evaluate)"
+        action: => compileOnlyMode = true
+
+      @addCommand
+        name: "evaluate"
+        help: "evaluate each line (opposite of: .compile)"
+        action: => compileOnlyMode = false
 
     .catch (error) ->
       log.error replError: error
@@ -93,12 +106,15 @@ defineModule module, class CafRepl
   ##################
   @getPrompt: -> "caf-mc:#{@compiler.compilerName}> ".gray
 
+  @compileCommand: (command, filename) ->
+    command = command.trim()
+    {compiled:{js}} = @compiler.compile command, bare: true, sourceFile: filename
+    js
+
   @replEval: (command, context = @cafRepl.context, filename) ->
     result = error = null
     try
-      command = command.trim()
-
-      {compiled:{js}} = @compiler.compile command, bare: true, sourceFile: filename
+      js = @compileCommand command, filename
 
       try
         result = if command.match /^\|/
