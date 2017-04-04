@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 30);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,7 +87,7 @@ var CaffeineMc, Neptune,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-Neptune = __webpack_require__(20);
+Neptune = __webpack_require__(24);
 
 module.exports = Neptune.CaffeineMc || Neptune.addNamespace('CaffeineMc', CaffeineMc = (function(superClass) {
   extend(CaffeineMc, superClass);
@@ -527,7 +527,7 @@ var BabelBridge, CaffeineMcParser, isFunction, isString, log, lowerCamelCase, me
 
 ref = __webpack_require__(0), present = ref.present, isFunction = ref.isFunction, log = ref.log, isString = ref.isString, lowerCamelCase = ref.lowerCamelCase, upperCamelCase = ref.upperCamelCase, merge = ref.merge;
 
-BabelBridge = __webpack_require__(18);
+BabelBridge = __webpack_require__(20);
 
 module.exports = CaffeineMcParser = (function(superClass) {
   extend(CaffeineMcParser, superClass);
@@ -576,8 +576,8 @@ module.exports = CaffeineMcParser = (function(superClass) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(17).addModules({
-  JavaScript: __webpack_require__(16)
+module.exports = __webpack_require__(18).addModules({
+  JavaScript: __webpack_require__(17)
 });
 
 
@@ -652,7 +652,7 @@ defineModule(module, FileCompiler = (function() {
             result.outputFiles.push(outputFilename);
             if (prettier && extension === "js") {
               try {
-                text = __webpack_require__(21).format(text);
+                text = __webpack_require__(13).format(text);
               } catch (error) {
                 e = error;
                 log(e.message);
@@ -844,7 +844,7 @@ ref = __webpack_require__(0), log = ref.log, escapeRegExp = ref.escapeRegExp, de
 
 path = __webpack_require__(1);
 
-vm = __webpack_require__(23);
+vm = __webpack_require__(26);
 
 defineModule(module, Tools = (function() {
   function Tools() {}
@@ -888,11 +888,17 @@ defineModule(module, Tools = (function() {
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports) {
+
+module.exports = require("prettier");
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2).includeInNamespace(__webpack_require__(15)).addModules({
+module.exports = __webpack_require__(2).includeInNamespace(__webpack_require__(16)).addModules({
   CaffeineMcParser: __webpack_require__(8),
-  CafRepl: __webpack_require__(14),
+  CafRepl: __webpack_require__(15),
   FileCompiler: __webpack_require__(10),
   Metacompiler: __webpack_require__(6),
   ModuleResolver: __webpack_require__(11),
@@ -904,10 +910,10 @@ __webpack_require__(9);
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
+/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
 
 ref = __webpack_require__(0), formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
 
@@ -915,11 +921,11 @@ getCaffeineInit = __webpack_require__(4).getCaffeineInit;
 
 ref1 = CaffeineMc = __webpack_require__(2), runInContext = ref1.runInContext, displayError = ref1.displayError;
 
-repl = __webpack_require__(22);
+repl = __webpack_require__(25);
 
 path = __webpack_require__(1);
 
-fs = __webpack_require__(19);
+fs = __webpack_require__(23);
 
 if (process.env.HOME) {
   historyFile = path.join(process.env.HOME, '.caffeine-mc-history');
@@ -931,14 +937,17 @@ maxOutputLines = 20;
 
 maxOutputCharacters = maxOutputLines * 80;
 
+highlight = __webpack_require__(19).highlight;
+
 defineModule(module, CafRepl = (function() {
   function CafRepl() {}
 
   CafRepl.start = function(parser) {
     return getCaffeineInit().then((function(_this) {
       return function(init) {
-        var compileOnlyMode, config, lastOutput;
-        compileOnlyMode = false;
+        var config, evaluateMode, lastOutput, showSource;
+        showSource = false;
+        evaluateMode = true;
         lastOutput = null;
         _this.compiler = init.compiler, config = init.config;
         _this.cafRepl = repl.start({
@@ -971,9 +980,17 @@ defineModule(module, CafRepl = (function() {
               if (command.trim() === '') {
                 return callback();
               }
-              lastOutput = out = compileOnlyMode ? _this.compileCommand(command, filename) : formattedInspect(_this.replEval(command, context, filename), {
+              if (showSource || !evaluateMode) {
+                _this.cafRepl.outputStream.write("Source:\n".grey);
+                _this.cafRepl.outputStream.write(highlight(_this.compileCommand(command, filename)));
+                _this.cafRepl.outputStream.write("\n\n");
+              }
+              lastOutput = out = evaluateMode ? (showSource ? _this.cafRepl.outputStream.write("Evaluate...\n".grey) : void 0, formattedInspect(_this.replEval(command, context, filename), {
                 color: true
-              });
+              })) : "evaluation off (.evaluate to turn back on)".grey;
+              if (showSource && evaluateMode) {
+                _this.cafRepl.outputStream.write("\nOut:\n".grey);
+              }
               finalOut = ((lines = out.split("\n")).slice(0, maxOutputLines)).join("\n");
               if (finalOut.length > maxOutputCharacters) {
                 finalOut = finalOut.slice(0, maxOutputCharacters);
@@ -1015,17 +1032,21 @@ defineModule(module, CafRepl = (function() {
           }
         });
         _this.addCommand({
-          name: "compile",
-          help: "just compile each line and show its generated JavaScript (opposite of: .evaluate)",
+          name: "evaluate",
+          help: "toggle evaluate command",
           action: function() {
-            return compileOnlyMode = true;
+            evaluateMode = !evaluateMode;
+            _this.cafRepl.outputStream.write("Evaluate Mode is " + (evaluateMode ? 'On' : 'Off') + "\n");
+            return _this.cafRepl.displayPrompt();
           }
         });
         return _this.addCommand({
-          name: "evaluate",
-          help: "evaluate each line (opposite of: .compile)",
+          name: "source",
+          help: "toggle show-source",
           action: function() {
-            return compileOnlyMode = false;
+            showSource = !showSource;
+            _this.cafRepl.outputStream.write("Show-Source Mode is " + (showSource ? 'On' : 'Off') + "\n");
+            return _this.cafRepl.displayPrompt();
           }
         });
       };
@@ -1041,13 +1062,18 @@ defineModule(module, CafRepl = (function() {
   };
 
   CafRepl.compileCommand = function(command, filename) {
-    var js;
+    var e, js;
     command = command.trim();
     js = this.compiler.compile(command, {
       bare: true,
       sourceFile: filename
     }).compiled.js;
-    return js;
+    try {
+      return __webpack_require__(13).format(js);
+    } catch (error1) {
+      e = error1;
+      return displayError(e);
+    }
   };
 
   CafRepl.replEval = function(command, context, filename) {
@@ -1156,14 +1182,14 @@ defineModule(module, CafRepl = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = [__webpack_require__(6), __webpack_require__(10), __webpack_require__(11), __webpack_require__(12)];
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var JavaScript,
@@ -1191,7 +1217,7 @@ module.exports = JavaScript = (function(superClass) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var CaffeineMc, Compilers,
@@ -1213,52 +1239,126 @@ module.exports = CaffeineMc.Compilers || CaffeineMc.addNamespace('Compilers', Co
 
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-bridge");
-
-/***/ }),
 /* 19 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("fs");
+module.exports = {
+  highlight: function(js) {
+    var cardinal, chalk, functionDeclarationColor, itentifierColor, keywordColor, normalizeChalkColor, operatorColor, options;
+    chalk = __webpack_require__(22);
+    cardinal = __webpack_require__(21);
+    normalizeChalkColor = function(clk) {
+      return function(str) {
+        return clk(str);
+      };
+    };
+    keywordColor = normalizeChalkColor(chalk.yellow);
+    operatorColor = normalizeChalkColor(chalk.magenta);
+    functionDeclarationColor = normalizeChalkColor(chalk.blue);
+    itentifierColor = normalizeChalkColor(chalk.black);
+    options = {
+      linenos: true,
+      theme: {
+        Identifier: {
+          'undefined': keywordColor,
+          'null': keywordColor,
+          _default: function(s, info) {
+            var nextToken, prevToken;
+            prevToken = info.tokens[info.tokenIndex - 1];
+            nextToken = info.tokens[info.tokenIndex + 1];
+            if ((nextToken != null ? nextToken.type : void 0) === 'Punctuator' && (nextToken != null ? nextToken.value : void 0) === '(' && (prevToken != null ? prevToken.type : void 0) === 'Keyword' && (prevToken != null ? prevToken.value : void 0) === 'function') {
+              return functionDeclarationColor(s);
+            } else if ((nextToken != null ? nextToken.value : void 0) === ":") {
+              return functionDeclarationColor(s);
+            } else {
+              return itentifierColor(s);
+            }
+          }
+        },
+        Line: {
+          _default: normalizeChalkColor(chalk.grey)
+        },
+        Block: {
+          _default: normalizeChalkColor(chalk.grey)
+        },
+        Boolean: {
+          _default: keywordColor
+        },
+        Null: {
+          _default: keywordColor
+        },
+        Numeric: {
+          _default: normalizeChalkColor(chalk.red)
+        },
+        String: {
+          _default: normalizeChalkColor(chalk.green)
+        },
+        Keyword: {
+          _default: keywordColor
+        },
+        Punctuator: {
+          _default: operatorColor
+        }
+      }
+    };
+    return cardinal.highlight(js, options);
+  }
+};
+
 
 /***/ }),
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = require("neptune-namespaces");
+module.exports = require("babel-bridge");
 
 /***/ }),
 /* 21 */
 /***/ (function(module, exports) {
 
-module.exports = require("prettier");
+module.exports = require("cardinal");
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("repl");
+module.exports = require("chalk");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
+module.exports = require("fs");
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports) {
+
+module.exports = require("neptune-namespaces");
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("repl");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
 module.exports = require("vm");
 
 /***/ }),
-/* 24 */,
-/* 25 */,
-/* 26 */,
 /* 27 */,
 /* 28 */,
 /* 29 */,
-/* 30 */
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(13);
+module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(14);
 
 
 /***/ })

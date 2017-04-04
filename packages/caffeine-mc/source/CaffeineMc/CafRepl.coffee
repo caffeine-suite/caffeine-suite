@@ -13,11 +13,14 @@ historyMaxInputSize = 10240
 maxOutputLines = 20
 maxOutputCharacters = maxOutputLines * 80
 
+{highlight} = require './Highlight'
+
 defineModule module, class CafRepl
   @start: (parser) ->
     getCaffeineInit()
     .then (init) =>
-      compileOnlyMode = false
+      showSource = false
+      evaluateMode = true
       lastOutput = null
       {@compiler, config} = init
 
@@ -48,13 +51,23 @@ defineModule module, class CafRepl
             if command.trim() == ''
               return callback()
 
-            lastOutput = out = if compileOnlyMode
-              @compileCommand command, filename
-            else
+            if showSource || !evaluateMode
+              @cafRepl.outputStream.write "Source:\n".grey
+              @cafRepl.outputStream.write highlight @compileCommand command, filename
+              @cafRepl.outputStream.write "\n\n"
+
+
+            lastOutput = out = if evaluateMode
+              @cafRepl.outputStream.write "Evaluate...\n".grey if showSource
               formattedInspect(
                 @replEval command, context, filename
                 color: true
               )
+            else
+              "evaluation off (.evaluate to turn back on)".grey
+
+            @cafRepl.outputStream.write "\nOut:\n".grey if showSource && evaluateMode
+
             finalOut = ((lines = out.split("\n")).slice 0, maxOutputLines).join "\n"
             finalOut = finalOut.slice 0, maxOutputCharacters if finalOut.length > maxOutputCharacters
 
@@ -89,14 +102,20 @@ defineModule module, class CafRepl
           @cafRepl.displayPrompt()
 
       @addCommand
-        name: "compile"
-        help: "just compile each line and show its generated JavaScript (opposite of: .evaluate)"
-        action: => compileOnlyMode = true
+        name: "evaluate"
+        help: "toggle evaluate command"
+        action: =>
+          evaluateMode = !evaluateMode
+          @cafRepl.outputStream.write "Evaluate Mode is #{if evaluateMode then 'On' else 'Off'}\n"
+          @cafRepl.displayPrompt()
 
       @addCommand
-        name: "evaluate"
-        help: "evaluate each line (opposite of: .compile)"
-        action: => compileOnlyMode = false
+        name: "source"
+        help: "toggle show-source"
+        action: =>
+          showSource = !showSource
+          @cafRepl.outputStream.write "Show-Source Mode is #{if showSource then 'On' else 'Off'}\n"
+          @cafRepl.displayPrompt()
 
     .catch (error) ->
       log.error replError: error
@@ -109,7 +128,10 @@ defineModule module, class CafRepl
   @compileCommand: (command, filename) ->
     command = command.trim()
     {compiled:{js}} = @compiler.compile command, bare: true, sourceFile: filename
-    js
+    try
+      require("prettier").format js
+    catch e
+      displayError e
 
   @replEval: (command, context = @cafRepl.context, filename) ->
     result = error = null

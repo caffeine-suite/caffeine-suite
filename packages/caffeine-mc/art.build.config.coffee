@@ -11,6 +11,8 @@ module.exports =
       glob:             "^7.0.3"
       commander:        '^2.9.0'
       prettier:         '^0.18.0'
+      cardinal:         '^1.0.0'
+      chalk:            "^1.1.3"
 
     scripts:
       test: "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"
