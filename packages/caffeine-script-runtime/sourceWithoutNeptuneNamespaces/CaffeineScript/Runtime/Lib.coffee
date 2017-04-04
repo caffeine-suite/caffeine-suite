@@ -1,5 +1,5 @@
 {compactFlatten, isPlainArray, isPlainObject} = require './ArrayCompactFlatten'
-definingModule = null
+global.__definingModule = null
 
 module.exports =
   in:  (a, b) -> a in b
@@ -148,19 +148,19 @@ module.exports =
   #######################
   # define modules
   #######################
-  getModuleBeingDefined: -> definingModule
+  getModuleBeingDefined: -> global.__definingModule
 
   ###
   IN:
     defineFunciton ||
   ###
   defMod: (_module, a) ->
-    lastModule = definingModule
-    definingModule = _module
+    lastModule = global.__definingModule
+    global.__definingModule = _module
 
     result = _module.exports = a()
 
-    definingModule = lastModule
+    global.__definingModule = lastModule
 
     result
 
