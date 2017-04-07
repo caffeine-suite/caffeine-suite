@@ -8,8 +8,6 @@ module.exports = (source) ->
   @cacheable?()
 
   sourceFile = loaderUtils.getRemainingRequest @
-  fullRequest = loaderUtils.getCurrentRequest @
-  query = loaderUtils.parseQuery @query
   try
     result = CaffeineMc.FileCompiler.compileFileSync sourceFile, {source, @debug}
 

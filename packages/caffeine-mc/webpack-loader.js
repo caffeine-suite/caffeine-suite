@@ -9,13 +9,11 @@
   log = require('art-standard-lib').log;
 
   module.exports = function(source) {
-    var e, fullRequest, query, result, sourceFile, sourceMap;
+    var e, result, sourceFile, sourceMap;
     if (typeof this.cacheable === "function") {
       this.cacheable();
     }
     sourceFile = loaderUtils.getRemainingRequest(this);
-    fullRequest = loaderUtils.getCurrentRequest(this);
-    query = loaderUtils.parseQuery(this.query);
     try {
       result = CaffeineMc.FileCompiler.compileFileSync(sourceFile, {
         source: source,
