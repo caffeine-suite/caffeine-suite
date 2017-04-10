@@ -18,7 +18,10 @@ defineModule module, class FileCompiler
 
     source ||= (FsPromise.readFileSync sourceFile).toString()
 
-    CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
+    out = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
+    if options.prettier && out.compiled.js
+      out.compiled.js = require("prettier").format out.compiled.js
+    out
 
   @compileFile: (sourceFile, options = {})->
     {outputDirectory, prettier, source} = options

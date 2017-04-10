@@ -9,7 +9,7 @@ module.exports = (source) ->
 
   sourceFile = loaderUtils.getRemainingRequest @
   try
-    result = CaffeineMc.FileCompiler.compileFileSync sourceFile, {source, @debug}
+    result = CaffeineMc.FileCompiler.compileFileSync sourceFile, {source, @debug, prettier: true}
 
   catch e
     log.error "CaffeineMc error": e
