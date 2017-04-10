@@ -14,6 +14,7 @@ defineModule module, class Tools
     (-> eval js).call context
 
   @displayError: (e, options = {}) ->
+    return unless e
     {verbose} = options
     if verbose
       log.error e

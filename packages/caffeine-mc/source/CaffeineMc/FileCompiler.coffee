@@ -66,7 +66,7 @@ defineModule module, class FileCompiler
               outputFilename = path.join outputDirectory, "#{basename}.#{extension}"
               FsPromise.writeFile outputFilename, text
             else
-              Promise.resolve()
+              Promise.resolve text
 
       .then -> result
       .catch (e) ->

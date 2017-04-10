@@ -85,7 +85,11 @@ else if commander.args.length == 1
     "./#{fileToRun}"
 
   try
-    realRequire file
+    CaffeineMc.compileFile file, color: true
+    .then ({output}) ->
+      {js} = output.compiled
+      eval js
+    .catch (e) -> displayError e
   catch e
     displayError e
 else if versions

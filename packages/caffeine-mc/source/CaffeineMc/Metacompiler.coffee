@@ -116,6 +116,9 @@ module.exports = class Metacompiler extends BaseClass
 
     @_compilerName = compilerName;
     {absolutePath} = CaffeineMc.findModuleSync compilerName, options
-    out = @compilers[absolutePath] ||= realRequire absolutePath
-    throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName})" unless isFunction out.compile
+    try
+      out = @compilers[absolutePath] ||= realRequire absolutePath
+      throw new Error unless isFunction out.compile
+    catch
+      throw new Error "CaffeineMc: compiler not found for: #{compilerName} (normalized: #{ucCompilerName}, require: #{absolutePath})"
     out
