@@ -499,9 +499,13 @@ module.exports = Metacompiler = (function(superClass) {
     }
     this._compilerName = compilerName;
     absolutePath = CaffeineMc.findModuleSync(compilerName, options).absolutePath;
-    out = (base = this.compilers)[absolutePath] || (base[absolutePath] = realRequire(absolutePath));
-    if (!isFunction(out.compile)) {
-      throw new Error("CaffeineMc: compiler not found for: " + compilerName + " (normalized: " + ucCompilerName + ")");
+    try {
+      out = (base = this.compilers)[absolutePath] || (base[absolutePath] = realRequire(absolutePath));
+      if (!isFunction(out.compile)) {
+        throw new Error;
+      }
+    } catch (error) {
+      throw new Error("CaffeineMc: compiler not found for: " + compilerName + " (normalized: " + ucCompilerName + ", require: " + absolutePath + ")");
     }
     return out;
   };
@@ -576,8 +580,8 @@ module.exports = CaffeineMcParser = (function(superClass) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(18).addModules({
-  JavaScript: __webpack_require__(17)
+module.exports = __webpack_require__(19).addModules({
+  JavaScript: __webpack_require__(18)
 });
 
 
@@ -652,7 +656,7 @@ defineModule(module, FileCompiler = (function() {
             result.outputFiles.push(outputFilename);
             if (prettier && extension === "js") {
               try {
-                text = __webpack_require__(13).format(text);
+                text = __webpack_require__(14).format(text);
               } catch (error) {
                 e = error;
                 log(e.message);
@@ -664,7 +668,7 @@ defineModule(module, FileCompiler = (function() {
               outputFilename = path.join(outputDirectory, basename + "." + extension);
               return FsPromise.writeFile(outputFilename, text);
             } else {
-              return Promise.resolve();
+              return Promise.resolve(text);
             }
           }));
         });
@@ -685,6 +689,74 @@ defineModule(module, FileCompiler = (function() {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  highlight: function(js) {
+    var cardinal, chalk, functionDeclarationColor, itentifierColor, keywordColor, normalizeChalkColor, operatorColor, options;
+    chalk = __webpack_require__(22);
+    cardinal = __webpack_require__(21);
+    normalizeChalkColor = function(clk) {
+      return function(str) {
+        return clk(str);
+      };
+    };
+    keywordColor = normalizeChalkColor(chalk.yellow);
+    operatorColor = normalizeChalkColor(chalk.magenta);
+    functionDeclarationColor = normalizeChalkColor(chalk.blue);
+    itentifierColor = normalizeChalkColor(chalk.black);
+    options = {
+      linenos: true,
+      theme: {
+        Identifier: {
+          'undefined': keywordColor,
+          'null': keywordColor,
+          _default: function(s, info) {
+            var nextToken, prevToken;
+            prevToken = info.tokens[info.tokenIndex - 1];
+            nextToken = info.tokens[info.tokenIndex + 1];
+            if ((nextToken != null ? nextToken.type : void 0) === 'Punctuator' && (nextToken != null ? nextToken.value : void 0) === '(' && (prevToken != null ? prevToken.type : void 0) === 'Keyword' && (prevToken != null ? prevToken.value : void 0) === 'function') {
+              return functionDeclarationColor(s);
+            } else if ((nextToken != null ? nextToken.value : void 0) === ":") {
+              return functionDeclarationColor(s);
+            } else {
+              return itentifierColor(s);
+            }
+          }
+        },
+        Line: {
+          _default: normalizeChalkColor(chalk.grey)
+        },
+        Block: {
+          _default: normalizeChalkColor(chalk.grey)
+        },
+        Boolean: {
+          _default: keywordColor
+        },
+        Null: {
+          _default: keywordColor
+        },
+        Numeric: {
+          _default: normalizeChalkColor(chalk.red)
+        },
+        String: {
+          _default: normalizeChalkColor(chalk.green)
+        },
+        Keyword: {
+          _default: keywordColor
+        },
+        Punctuator: {
+          _default: operatorColor
+        }
+      }
+    };
+    return cardinal.highlight(js, options);
+  }
+};
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, FsPromise, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, present, realRequire, ref, upperCamelCase, w,
@@ -835,7 +907,7 @@ defineModule(module, ModuleResolver = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var Tools, defineModule, escapeRegExp, log, path, ref, vm;
@@ -868,6 +940,9 @@ defineModule(module, Tools = (function() {
     if (options == null) {
       options = {};
     }
+    if (!e) {
+      return;
+    }
     verbose = options.verbose;
     if (verbose) {
       return log.error(e);
@@ -887,30 +962,31 @@ defineModule(module, Tools = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("prettier");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(2).includeInNamespace(__webpack_require__(16)).addModules({
+module.exports = __webpack_require__(2).includeInNamespace(__webpack_require__(17)).addModules({
   CaffeineMcParser: __webpack_require__(8),
-  CafRepl: __webpack_require__(15),
+  CafRepl: __webpack_require__(16),
   FileCompiler: __webpack_require__(10),
+  Highlight: __webpack_require__(11),
   Metacompiler: __webpack_require__(6),
-  ModuleResolver: __webpack_require__(11),
+  ModuleResolver: __webpack_require__(12),
   SourceRoots: __webpack_require__(4),
-  Tools: __webpack_require__(12)
+  Tools: __webpack_require__(13)
 });
 
 __webpack_require__(9);
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
@@ -937,7 +1013,7 @@ maxOutputLines = 20;
 
 maxOutputCharacters = maxOutputLines * 80;
 
-highlight = __webpack_require__(19).highlight;
+highlight = __webpack_require__(11).highlight;
 
 defineModule(module, CafRepl = (function() {
   function CafRepl() {}
@@ -1069,7 +1145,7 @@ defineModule(module, CafRepl = (function() {
       sourceFile: filename
     }).compiled.js;
     try {
-      return __webpack_require__(13).format(js);
+      return __webpack_require__(14).format(js);
     } catch (error1) {
       e = error1;
       return displayError(e);
@@ -1182,14 +1258,14 @@ defineModule(module, CafRepl = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = [__webpack_require__(6), __webpack_require__(10), __webpack_require__(11), __webpack_require__(12)];
+module.exports = [__webpack_require__(6), __webpack_require__(10), __webpack_require__(12), __webpack_require__(13)];
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var JavaScript,
@@ -1217,7 +1293,7 @@ module.exports = JavaScript = (function(superClass) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var CaffeineMc, Compilers,
@@ -1236,74 +1312,6 @@ module.exports = CaffeineMc.Compilers || CaffeineMc.addNamespace('Compilers', Co
   return Compilers;
 
 })(Neptune.Base));
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-  highlight: function(js) {
-    var cardinal, chalk, functionDeclarationColor, itentifierColor, keywordColor, normalizeChalkColor, operatorColor, options;
-    chalk = __webpack_require__(22);
-    cardinal = __webpack_require__(21);
-    normalizeChalkColor = function(clk) {
-      return function(str) {
-        return clk(str);
-      };
-    };
-    keywordColor = normalizeChalkColor(chalk.yellow);
-    operatorColor = normalizeChalkColor(chalk.magenta);
-    functionDeclarationColor = normalizeChalkColor(chalk.blue);
-    itentifierColor = normalizeChalkColor(chalk.black);
-    options = {
-      linenos: true,
-      theme: {
-        Identifier: {
-          'undefined': keywordColor,
-          'null': keywordColor,
-          _default: function(s, info) {
-            var nextToken, prevToken;
-            prevToken = info.tokens[info.tokenIndex - 1];
-            nextToken = info.tokens[info.tokenIndex + 1];
-            if ((nextToken != null ? nextToken.type : void 0) === 'Punctuator' && (nextToken != null ? nextToken.value : void 0) === '(' && (prevToken != null ? prevToken.type : void 0) === 'Keyword' && (prevToken != null ? prevToken.value : void 0) === 'function') {
-              return functionDeclarationColor(s);
-            } else if ((nextToken != null ? nextToken.value : void 0) === ":") {
-              return functionDeclarationColor(s);
-            } else {
-              return itentifierColor(s);
-            }
-          }
-        },
-        Line: {
-          _default: normalizeChalkColor(chalk.grey)
-        },
-        Block: {
-          _default: normalizeChalkColor(chalk.grey)
-        },
-        Boolean: {
-          _default: keywordColor
-        },
-        Null: {
-          _default: keywordColor
-        },
-        Numeric: {
-          _default: normalizeChalkColor(chalk.red)
-        },
-        String: {
-          _default: normalizeChalkColor(chalk.green)
-        },
-        Keyword: {
-          _default: keywordColor
-        },
-        Punctuator: {
-          _default: operatorColor
-        }
-      }
-    };
-    return cardinal.highlight(js, options);
-  }
-};
 
 
 /***/ }),
@@ -1358,7 +1366,7 @@ module.exports = require("vm");
 /* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(14);
+module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(15);
 
 
 /***/ })
