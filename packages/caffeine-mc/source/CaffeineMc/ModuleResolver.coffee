@@ -51,7 +51,7 @@ defineModule module, class ModuleResolver
     if sourceFile || sourceDir
       directory = sourceDir ||= Path.resolve Path.dirname sourceFile
       sourceRoot ||= findSourceRootSync sourceDir
-      sourceRoot = sourceRoot ? Path.resolve sourceRoot
+      sourceRoot = sourceRoot && Path.resolve sourceRoot
 
     absolutePath = null
     shouldContinue = present sourceRoot
