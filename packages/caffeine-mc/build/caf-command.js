@@ -854,7 +854,7 @@ defineModule(module, ModuleResolver = (function() {
     if (sourceFile || sourceDir) {
       directory = sourceDir || (sourceDir = Path.resolve(Path.dirname(sourceFile)));
       sourceRoot || (sourceRoot = findSourceRootSync(sourceDir));
-      sourceRoot = Path.resolve(sourceRoot);
+      sourceRoot = sourceRoot != null ? sourceRoot : Path.resolve(sourceRoot);
     }
     absolutePath = null;
     shouldContinue = present(sourceRoot);
