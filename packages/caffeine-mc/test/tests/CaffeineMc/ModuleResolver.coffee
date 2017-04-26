@@ -9,14 +9,14 @@ defineModule module, suite:
       CaffeineMcTestHelper.reset()
 
     each CaffeineMcTestHelper.testFiles, (file) ->
-      test "'sub-awesome' in #{absolutePath.basename(file)}", ->
+      test "'sub-awesome' in absolutePath.basename('#{file}')", ->
         findModule "hurlock-alpha", sourceFile: file
         .then ({requireString, absolutePath}) ->
           assert.match requireString, /\..*HurlockAlpha/, "requireString"
           assert.match absolutePath, /\/.*\/HurlockAlpha/, "absolutePath"
 
     each CaffeineMcTestHelper.testFiles, (file) ->
-      test "'sub-awesome/betaRelease' in #{absolutePath.basename(file)}", ->
+      test "'sub-awesome/betaRelease' in absolutePath.basename('#{file}')", ->
         findModule "sub-awesome/betaRelease", sourceFile: file
         .then ({requireString, absolutePath}) ->
           assert.match requireString, /\..*\/BetaRelease$/, "requireString"

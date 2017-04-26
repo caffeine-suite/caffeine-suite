@@ -11,7 +11,13 @@ defineModule module, class Tools
       vm.runInContext js, context, filename
 
   @evalInContext: (js, context) ->
-    (-> eval js).call context
+    try
+      (-> eval js).call context
+    catch e
+      console.error "<---> evalInContext: error: js:"
+      console.error js
+      console.error "<--->"
+      throw e
 
   @displayError: (e, options = {}) ->
     return unless e

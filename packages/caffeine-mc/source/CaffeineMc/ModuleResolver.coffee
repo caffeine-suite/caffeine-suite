@@ -23,9 +23,11 @@ defineModule module, class ModuleResolver
 
   @findModuleSync: (moduleName, options) =>
     [base, rest...] = for mod in [denormalizedBase] = moduleName.split "/"
-      normalizeName mod
+      out = normalizeName mod
+      out
 
     {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, options
+
     for sub in rest
       if matchingName = @_matchingNameInDirectorySync sub, absolutePath
         absolutePath          = Path.join absolutePath, matchingName
@@ -49,7 +51,7 @@ defineModule module, class ModuleResolver
     sourceFile ||= sourceFiles?[0]
 
     if sourceFile || sourceDir
-      directory = sourceDir ||= Path.resolve Path.dirname sourceFile
+      directory = sourceDir = Path.resolve sourceDir || Path.dirname sourceFile
       sourceRoot ||= findSourceRootSync sourceDir
       sourceRoot = sourceRoot && Path.resolve sourceRoot
 

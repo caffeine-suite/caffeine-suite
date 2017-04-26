@@ -53,7 +53,7 @@ module.exports = class Metacompiler extends BaseClass
     super
     @_metaParser = new CaffeineMcParser
     @_metaCompiler = @
-    @_compiler = Compilers.JavaScript
+    @_compiler = require 'caffeine-script' #Compilers.JavaScript
     @compilers = {}
 
   normalizeCompilerResult: (result) ->

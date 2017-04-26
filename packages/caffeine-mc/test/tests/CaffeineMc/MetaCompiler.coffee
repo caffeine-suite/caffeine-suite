@@ -2,9 +2,10 @@ CaffeineMc = require 'caffeine-mc'
 {log} = require "art-foundation"
 
 module.exports = suite:
-  javaScript: ->
+  default: ->
     test "default to compiling with CoffeeScript", ->
-      assert.eq CaffeineMc.compile("1+2"), compiled: {js: "1+2"}
+
+      assert.match CaffeineMc.compile("1+2").compiled.js, "Caf.defMod"
 
   coffeeScript: ->
     test "|CoffeeScript", ->
@@ -59,7 +60,7 @@ module.exports = suite:
       self.__metaCompilerTest = 123
       out = CaffeineMc.compile """
         | self.__metaCompilerTest = 999
-        | this.compiler = "JavaScript"
+        | @compiler = :JavaScript
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -70,7 +71,7 @@ module.exports = suite:
       out = CaffeineMc.compile """
         |
           self.__metaCompilerTest = 456
-          this.compiler = "JavaScript"
+          @compiler = :JavaScript
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -81,7 +82,7 @@ module.exports = suite:
       out = CaffeineMc.compile """
         |
           self.__metaCompilerTest = 456
-          this.compiler = "JavaScript"
+          @compiler = :JavaScript
         1+2
         """
       assert.eq out, compiled:  js: "1+2"
@@ -89,7 +90,7 @@ module.exports = suite:
 
     test "custom compiler", ->
       out = CaffeineMc.compile """
-        | this.compiler = {compile: (source) => {return {compiled: {js: "source: " + source}}}}
+        | @compiler = compile: (source) => compiled: js: "" source: \#{source}
         1+2
         """
       assert.eq out, compiled: js: "source: 1+2"
