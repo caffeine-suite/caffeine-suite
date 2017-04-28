@@ -14,6 +14,7 @@ module.exports =
       cardinal:           '^1.0.0'
       chalk:              "^1.1.3"
       "caffeine-script":  "^0.41.3"
+      farmhash:           "^1.2.1"
 
     scripts:
       test: "nn -s;mocha -u tdd --compilers coffee:coffee-script/register"

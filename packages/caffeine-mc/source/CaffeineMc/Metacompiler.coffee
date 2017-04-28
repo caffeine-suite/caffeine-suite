@@ -112,7 +112,7 @@ module.exports = class Metacompiler extends BaseClass
       compilerName = "JavaScript"
 
     return @compiler unless present compilerName
-    return compiler if compiler = Compilers[upperCamelCase compilerName]
+    return compiler if compiler = Compilers[ucCompilerName = upperCamelCase compilerName]
 
     @_compilerName = compilerName;
     {absolutePath} = CaffeineMc.findModuleSync compilerName, options

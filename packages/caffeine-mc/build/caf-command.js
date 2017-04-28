@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 37);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,7 +87,7 @@ var CaffeineMc, Neptune,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-Neptune = __webpack_require__(25);
+Neptune = __webpack_require__(27);
 
 module.exports = Neptune.CaffeineMc || Neptune.addNamespace('CaffeineMc', CaffeineMc = (function(superClass) {
   extend(CaffeineMc, superClass);
@@ -100,7 +100,7 @@ module.exports = Neptune.CaffeineMc || Neptune.addNamespace('CaffeineMc', Caffei
 
 })(Neptune.Base));
 
-__webpack_require__(11);
+__webpack_require__(12);
 
 
 /***/ }),
@@ -141,13 +141,13 @@ module.exports = function(module) {
 
 ref = __webpack_require__(0), defineModule = ref.defineModule, array = ref.array, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
 
-BaseClass = __webpack_require__(7).BaseClass;
+BaseClass = __webpack_require__(5).BaseClass;
 
-FsPromise = __webpack_require__(5);
+FsPromise = __webpack_require__(6);
 
 path = __webpack_require__(1);
 
-Metacompiler = __webpack_require__(6);
+Metacompiler = __webpack_require__(7);
 
 defineModule(module, SourceRoots = (function(superClass) {
   var defaultSourceRootIndicatorFiles, evalCapturingModuleExports;
@@ -325,19 +325,25 @@ defineModule(module, SourceRoots = (function(superClass) {
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs-promise");
+module.exports = require("art-class-system");
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs-promise");
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var BaseClass, CaffeineMc, CaffeineMcParser, Compilers, Metacompiler, dashCase, formattedInspect, isFunction, isString, log, lowerCamelCase, merge, present, realRequire, ref, upperCamelCase,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-Compilers = __webpack_require__(10);
+Compilers = __webpack_require__(11);
 
-CaffeineMcParser = __webpack_require__(9);
+CaffeineMcParser = __webpack_require__(10);
 
 CaffeineMc = __webpack_require__(2);
 
@@ -345,7 +351,7 @@ realRequire = eval('require');
 
 ref = __webpack_require__(0), dashCase = ref.dashCase, formattedInspect = ref.formattedInspect, present = ref.present, isFunction = ref.isFunction, log = ref.log, isString = ref.isString, lowerCamelCase = ref.lowerCamelCase, upperCamelCase = ref.upperCamelCase, merge = ref.merge;
 
-BaseClass = __webpack_require__(7).BaseClass;
+BaseClass = __webpack_require__(5).BaseClass;
 
 module.exports = Metacompiler = (function(superClass) {
   extend(Metacompiler, superClass);
@@ -410,7 +416,7 @@ module.exports = Metacompiler = (function(superClass) {
     Metacompiler.__super__.constructor.apply(this, arguments);
     this._metaParser = new CaffeineMcParser;
     this._metaCompiler = this;
-    this._compiler = __webpack_require__(21);
+    this._compiler = __webpack_require__(23);
     this.compilers = {};
   }
 
@@ -489,14 +495,14 @@ module.exports = Metacompiler = (function(superClass) {
   });
 
   Metacompiler.prototype.getCompiler = function(compilerName, options) {
-    var absolutePath, base, compiler, out;
+    var absolutePath, base, compiler, out, ucCompilerName;
     if (compilerName.toLocaleLowerCase() === "javascript") {
       compilerName = "JavaScript";
     }
     if (!present(compilerName)) {
       return this.compiler;
     }
-    if (compiler = Compilers[upperCamelCase(compilerName)]) {
+    if (compiler = Compilers[ucCompilerName = upperCamelCase(compilerName)]) {
       return compiler;
     }
     this._compilerName = compilerName;
@@ -518,12 +524,6 @@ module.exports = Metacompiler = (function(superClass) {
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = require("art-class-system");
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports) {
 
@@ -533,13 +533,34 @@ module.exports = require("prettier");
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = __webpack_require__(2);
+
+module.exports.includeInNamespace(__webpack_require__(19)).addModules({
+  CaffeineMcParser: __webpack_require__(10),
+  CafRepl: __webpack_require__(18),
+  CompileCache: __webpack_require__(20),
+  FileCompiler: __webpack_require__(13),
+  Highlight: __webpack_require__(14),
+  Metacompiler: __webpack_require__(7),
+  ModuleResolver: __webpack_require__(15),
+  SourceRoots: __webpack_require__(4),
+  Tools: __webpack_require__(16)
+});
+
+__webpack_require__(11);
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var BabelBridge, CaffeineMcParser, isFunction, isString, log, lowerCamelCase, merge, present, ref, upperCamelCase,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
 ref = __webpack_require__(0), present = ref.present, isFunction = ref.isFunction, log = ref.log, isString = ref.isString, lowerCamelCase = ref.lowerCamelCase, upperCamelCase = ref.upperCamelCase, merge = ref.merge;
 
-BabelBridge = __webpack_require__(20);
+BabelBridge = __webpack_require__(22);
 
 module.exports = CaffeineMcParser = (function(superClass) {
   extend(CaffeineMcParser, superClass);
@@ -585,18 +606,18 @@ module.exports = CaffeineMcParser = (function(superClass) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(11);
+module.exports = __webpack_require__(12);
 
 module.exports.addModules({
-  JavaScript: __webpack_require__(19)
+  JavaScript: __webpack_require__(21)
 });
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var CaffeineMc, Compilers,
@@ -618,14 +639,14 @@ module.exports = CaffeineMc.Compilers || CaffeineMc.addNamespace('Compilers', Co
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var CaffeineMc, FileCompiler, FsPromise, array, caffeineInitFileName, defineModule, each, find, findSourceRoot, findSourceRootSync, getCaffeineInit, getCaffeineInitSync, log, merge, path, present, ref, ref1, w;
 
 ref = __webpack_require__(0), defineModule = ref.defineModule, array = ref.array, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
 
-FsPromise = __webpack_require__(5);
+FsPromise = __webpack_require__(6);
 
 path = __webpack_require__(1);
 
@@ -724,14 +745,14 @@ defineModule(module, FileCompiler = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
   highlight: function(js) {
     var cardinal, chalk, functionDeclarationColor, itentifierColor, keywordColor, normalizeChalkColor, operatorColor, options;
-    chalk = __webpack_require__(23);
-    cardinal = __webpack_require__(22);
+    chalk = __webpack_require__(25);
+    cardinal = __webpack_require__(24);
     normalizeChalkColor = function(clk) {
       return function(str) {
         return clk(str);
@@ -792,7 +813,7 @@ module.exports = {
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, FsPromise, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, present, realRequire, ref, upperCamelCase, w,
@@ -800,7 +821,7 @@ module.exports = {
 
 ref = __webpack_require__(0), defineModule = ref.defineModule, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
 
-FsPromise = __webpack_require__(5);
+FsPromise = __webpack_require__(6);
 
 Path = __webpack_require__(1);
 
@@ -944,7 +965,7 @@ defineModule(module, ModuleResolver = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var Tools, defineModule, escapeRegExp, log, path, ref, vm;
@@ -953,7 +974,7 @@ ref = __webpack_require__(0), log = ref.log, escapeRegExp = ref.escapeRegExp, de
 
 path = __webpack_require__(1);
 
-vm = __webpack_require__(27);
+vm = __webpack_require__(30);
 
 defineModule(module, Tools = (function() {
   function Tools() {}
@@ -1008,27 +1029,13 @@ defineModule(module, Tools = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 17 */
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(2);
-
-module.exports.includeInNamespace(__webpack_require__(18)).addModules({
-  CaffeineMcParser: __webpack_require__(9),
-  CafRepl: __webpack_require__(17),
-  FileCompiler: __webpack_require__(12),
-  Highlight: __webpack_require__(13),
-  Metacompiler: __webpack_require__(6),
-  ModuleResolver: __webpack_require__(14),
-  SourceRoots: __webpack_require__(4),
-  Tools: __webpack_require__(15)
-});
-
-__webpack_require__(10);
-
+module.exports = require("fs");
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
@@ -1039,11 +1046,11 @@ getCaffeineInit = __webpack_require__(4).getCaffeineInit;
 
 ref1 = CaffeineMc = __webpack_require__(2), runInContext = ref1.runInContext, displayError = ref1.displayError;
 
-repl = __webpack_require__(26);
+repl = __webpack_require__(29);
 
 path = __webpack_require__(1);
 
-fs = __webpack_require__(24);
+fs = __webpack_require__(17);
 
 if (process.env.HOME) {
   historyFile = path.join(process.env.HOME, '.caffeine-mc-history');
@@ -1055,7 +1062,7 @@ maxOutputLines = 20;
 
 maxOutputCharacters = maxOutputLines * 80;
 
-highlight = __webpack_require__(13).highlight;
+highlight = __webpack_require__(14).highlight;
 
 defineModule(module, CafRepl = (function() {
   function CafRepl() {}
@@ -1300,14 +1307,130 @@ defineModule(module, CafRepl = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = [__webpack_require__(6), __webpack_require__(12), __webpack_require__(14), __webpack_require__(15)];
+var CaffeineMc, realRequire;
+
+realRequire = eval('require');
+
+CaffeineMc = __webpack_require__(2);
+
+module.exports = [
+  __webpack_require__(7), __webpack_require__(13), __webpack_require__(15), __webpack_require__(16), {
+    register: function() {
+      var ext, i, len, ref;
+      if (realRequire.extensions) {
+        ref = CaffeineMc.fileExtensions;
+        for (i = 0, len = ref.length; i < len; i++) {
+          ext = ref[i];
+          realRequire.extensions["." + ext] = function(module, filename) {
+            var answer;
+            answer = CaffeineMc.compileFileSync(filename);
+            return module._compile(answer.compiled.js, filename);
+          };
+        }
+      }
+      return CaffeineMc;
+    }
+  }
+];
 
 
 /***/ }),
-/* 19 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {var BaseClass, CompileCache, defineModule, farmhash, formattedInspect, fs, isString, os, path, ref, upperCamelCase;
+
+ref = __webpack_require__(0), formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, isString = ref.isString, upperCamelCase = ref.upperCamelCase;
+
+BaseClass = __webpack_require__(5).BaseClass;
+
+fs = __webpack_require__(17);
+
+farmhash = __webpack_require__(26);
+
+os = __webpack_require__(28);
+
+path = __webpack_require__(1);
+
+defineModule(module, CompileCache = (function() {
+  function CompileCache() {}
+
+  CompileCache.getCompilerSignature = function(compiler) {
+    var name, version;
+    version = compiler.version;
+    if (isString(version) && (name = (typeof compiler.getName === "function" ? compiler.getName() : void 0) || compiler.name)) {
+      return name + "-" + version;
+    }
+  };
+
+  CompileCache.getFileName = function(arg) {
+    var basename, compiler, compilerSignature, hashed, source, sourceFile;
+    compiler = arg.compiler, compilerSignature = arg.compilerSignature, source = arg.source, sourceFile = arg.sourceFile;
+    compilerSignature || (compilerSignature = this.getCompilerSignature(compiler));
+    if (!(compilerSignature && sourceFile && source)) {
+      throw new Error("expecting compilerSignature, source and sourceFile: " + formattedInspect({
+        source: source,
+        sourceFile: sourceFile,
+        compilerSignature: compilerSignature
+      }));
+    }
+    hashed = farmhash.hash64(source);
+    basename = path.basename(sourceFile).split('.')[0];
+    return path.join(os.tmpDir(), "CaffineMcCompileCache_" + compilerSignature + "_" + (upperCamelCase(basename)) + "_" + hashed + ".json");
+  };
+
+  CompileCache.cache = function(arg) {
+    var cacheFileContents, compiled, compiler, compilerSignature, fileName, source, sourceFile;
+    compiler = arg.compiler, source = arg.source, sourceFile = arg.sourceFile, compiled = arg.compiled;
+    if (compilerSignature = this.getCompilerSignature(compiler)) {
+      fileName = this.getFileName({
+        compilerSignature: compilerSignature,
+        source: source,
+        sourceFile: sourceFile
+      });
+      cacheFileContents = JSON.stringify({
+        source: source,
+        compiled: compiled
+      });
+      fs.writeSync(fileName, cacheFileContents);
+      return true;
+    }
+  };
+
+  CompileCache.fetch = function(arg) {
+    var cacheFileContents, compiler, compilerSignature, fileName, parsedContents, source, sourceFile;
+    compiler = arg.compiler, source = arg.source, sourceFile = arg.sourceFile;
+    if (compilerSignature = this.getCompilerSignature(compiler)) {
+      fileName = this.getFileName({
+        compilerSignature: compilerSignature,
+        source: source,
+        sourceFile: sourceFile
+      });
+      if (fs.existsSync(fileName)) {
+        cacheFileContents = fs.readSync(fileName);
+        return parsedContents = (function() {
+          try {
+            JSON.parse(cacheFileContents);
+            return parsedContents.source === source && compiled;
+          } catch (error) {
+            return null;
+          }
+        })();
+      }
+    }
+  };
+
+  return CompileCache;
+
+})());
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)(module)))
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var JavaScript,
@@ -1331,138 +1454,126 @@ module.exports = JavaScript = (function(superClass) {
 
   return JavaScript;
 
-})(__webpack_require__(7).BaseClass);
+})(__webpack_require__(5).BaseClass);
 
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = require("babel-bridge");
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = require("caffeine-script");
 
 /***/ }),
 /* 22 */
 /***/ (function(module, exports) {
 
-module.exports = require("cardinal");
+module.exports = require("babel-bridge");
 
 /***/ }),
 /* 23 */
 /***/ (function(module, exports) {
 
-module.exports = require("chalk");
+module.exports = require("caffeine-script");
 
 /***/ }),
 /* 24 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
+module.exports = require("cardinal");
 
 /***/ }),
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = require("neptune-namespaces");
+module.exports = require("chalk");
 
 /***/ }),
 /* 26 */
 /***/ (function(module, exports) {
 
-module.exports = require("repl");
+module.exports = require("farmhash");
 
 /***/ }),
 /* 27 */
 /***/ (function(module, exports) {
 
-module.exports = require("vm");
+module.exports = require("neptune-namespaces");
 
 /***/ }),
 /* 28 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var CaffeineMc, Fs, ext, i, len, loadFile, log, realRequire, ref;
-
-realRequire = eval('require');
-
-CaffeineMc = realRequire('./');
-
-Fs = realRequire("fs");
-
-log = __webpack_require__(0).log;
-
-loadFile = function(module, filename) {
-  var answer, js;
-  answer = CaffeineMc.compileFileSync(filename);
-  js = answer.compiled.js;
-  return module._compile(js, filename);
-};
-
-if (realRequire.extensions) {
-  ref = CaffeineMc.fileExtensions;
-  for (i = 0, len = ref.length; i < len; i++) {
-    ext = ref[i];
-    realRequire.extensions["." + ext] = loadFile;
-  }
-}
-
-module.exports = CaffeineMc;
-
+module.exports = require("os");
 
 /***/ }),
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = require("coffee-script/register");
+module.exports = require("repl");
 
 /***/ }),
 /* 30 */
 /***/ (function(module, exports) {
 
-module.exports = require("colors");
+module.exports = require("vm");
 
 /***/ }),
 /* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (typeof Neptune !== "undefined" && Neptune !== null ? Neptune.CaffeineMc : void 0) || __webpack_require__(9);
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(31).register();
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports) {
+
+module.exports = require("coffee-script/register");
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports) {
+
+module.exports = require("colors");
+
+/***/ }),
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("commander");
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = require("glob");
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var CafRepl, CaffeineMc, Promise, colors, commander, compile, compiler, dashCase, displayError, e, each, escapeRegExp, file, fileToRun, filename, files, filesRead, filesWritten, formattedInspect, fsp, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, ref1, serializer, verbose, version, versions;
 
 global.ArtStandardLibMultipleContextTypeSupport = true;
 
-colors = __webpack_require__(30);
+colors = __webpack_require__(34);
 
-glob = __webpack_require__(32);
+glob = __webpack_require__(36);
 
-fsp = __webpack_require__(5);
+fsp = __webpack_require__(6);
 
 path = __webpack_require__(1);
 
-__webpack_require__(29);
+__webpack_require__(33);
 
 realRequire = eval('require');
 
-ref = CaffeineMc = __webpack_require__(16), version = ref.version, displayError = ref.displayError, CafRepl = ref.CafRepl;
+ref = CaffeineMc = __webpack_require__(9), version = ref.version, displayError = ref.displayError, CafRepl = ref.CafRepl;
 
 ref1 = Neptune.Art.StandardLib, log = ref1.log, dashCase = ref1.dashCase, escapeRegExp = ref1.escapeRegExp, present = ref1.present, isString = ref1.isString, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
 
-commander = __webpack_require__(31).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(35).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -1534,7 +1645,7 @@ if (compile) {
   }
 } else if (commander.args.length === 1) {
   fileToRun = commander.args[0];
-  __webpack_require__(28);
+  __webpack_require__(32);
   file = path.resolve(fileToRun.match(/^(\/|\.)/) ? fileToRun : "./" + fileToRun);
   try {
     CaffeineMc.compileFile(file, {

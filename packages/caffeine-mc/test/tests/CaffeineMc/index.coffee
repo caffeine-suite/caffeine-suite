@@ -6,6 +6,7 @@ module.exports
 .addModules
   CaffeineMcParser:     require './CaffeineMcParser'    
   CaffeineMcTestHelper: require './CaffeineMcTestHelper'
+  CompileCache:         require './CompileCache'        
   FileCompiler:         require './FileCompiler'        
   Metacompiler:         require './Metacompiler'        
   ModuleResolver:       require './ModuleResolver'      
