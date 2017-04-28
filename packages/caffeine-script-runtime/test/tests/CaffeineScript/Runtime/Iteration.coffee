@@ -1,4 +1,4 @@
-{defineModule, log} = require "art-foundation"
+{defineModule, log} = require "art-standard-lib"
 Caf = Neptune.CaffeinScript.Runtime
 
 defineModule module, suite: ->

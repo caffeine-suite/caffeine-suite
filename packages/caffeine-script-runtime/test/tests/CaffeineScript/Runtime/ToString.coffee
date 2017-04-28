@@ -1,4 +1,4 @@
-{defineModule, log, inspect} = require "art-foundation"
+{defineModule, log, inspect} = require "art-standard-lib"
 Caf = Neptune.CaffeinScript.Runtime
 
 testToString = (input, out) ->
