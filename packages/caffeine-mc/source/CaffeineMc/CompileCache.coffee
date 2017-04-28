@@ -1,9 +1,9 @@
-{formattedInspect, defineModule, isString, upperCamelCase} = require 'art-standard-lib'
+{formattedInspect, defineModule, isString, upperCamelCase, randomBase62Character} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
 fs = require 'fs'
 
-farmhash = require 'farmhash'
+crypto = require 'crypto'
 os = require 'os'
 path = require 'path'
 
@@ -21,7 +21,8 @@ defineModule module, class CompileCache
         source: source
         sourceFile: sourceFile
         compilerSignature: compilerSignature
-    hashed = farmhash.hash64 source
+
+    hashed = crypto.createHmac('sha256', "no need for a real secret").update(source).digest('base64').split("=")[0].replace /[\/+=]/g, "_"
     [basename] = path.basename(sourceFile).split '.'
     path.join os.tmpDir(), "CaffineMcCompileCache_#{compilerSignature}_#{upperCamelCase basename}_#{hashed}.json"
 
