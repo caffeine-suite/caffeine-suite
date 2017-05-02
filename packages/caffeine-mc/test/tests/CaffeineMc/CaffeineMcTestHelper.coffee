@@ -1,4 +1,4 @@
-{BaseObject} = require 'art-foundation'
+{BaseObject} = require 'art-class-system'
 path = require 'path'
 
 global.CaffeineMcTestHelper = class CaffeineMcTestHelper extends BaseObject

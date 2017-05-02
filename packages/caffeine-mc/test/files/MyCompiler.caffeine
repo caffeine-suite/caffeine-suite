@@ -1,6 +1,6 @@
 |coffee-script:
   {Parser} = require 'babel-bridge'
-  {compactFlatten} = require 'art-foundation'
+  {compactFlatten} = require 'art-standard-lib'
 
   class MyParser extends Parser
     @rule

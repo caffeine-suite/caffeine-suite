@@ -1,5 +1,5 @@
 CaffeineMc = require 'caffeine-mc'
-{log} = require "art-foundation"
+{log} = require "art-standard-lib"
 
 module.exports = suite:
   default: ->

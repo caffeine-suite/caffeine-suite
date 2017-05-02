@@ -1,7 +1,7 @@
 |CoffeeScript
   CoffeeScript = require 'coffee-script'
   path = require 'path'
-  {formattedInspect} = require 'art-foundation'
+  {formattedInspect} = require 'art-standard-lib'
   CaffeineMcTestHelper.log "caffeine-mc.config.caf loaded"
 
   @compiler = (source, options) ->

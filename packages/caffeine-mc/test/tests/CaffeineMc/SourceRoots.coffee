@@ -1,4 +1,4 @@
-{defineModule, log, each} = require 'art-foundation'
+{defineModule, log, each} = require 'art-standard-lib'
 path = require 'path'
 
 {getCaffeineInit, findSourceRoot, _resetSourceRoots} = Neptune.CaffeineMc.SourceRoots
