@@ -12,6 +12,7 @@ module.exports
   Highlight:        require './Highlight'       
   Metacompiler:     require './Metacompiler'    
   ModuleResolver:   require './ModuleResolver'  
+  Register:         require './Register'        
   SourceRoots:      require './SourceRoots'     
   Tools:            require './Tools'           
 require './Compilers'

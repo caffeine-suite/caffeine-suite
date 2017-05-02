@@ -79,6 +79,7 @@ if compile
 else if commander.args.length == 1
   [fileToRun] = commander.args
   require './register.coffee'
+  console.log "REGISTER CAF"
   file = path.resolve if fileToRun.match /^(\/|\.)/
     fileToRun
   else

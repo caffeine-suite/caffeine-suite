@@ -20,6 +20,7 @@ defineModule module, class Tools
       throw e
 
   @displayError: (e, options = {}) ->
+    require 'colors'
     return unless e
     {verbose} = options
     if verbose
