@@ -13,7 +13,6 @@ module.exports =
       prettier:           '^0.18.0'
       cardinal:           '^1.0.0'
       chalk:              "^1.1.3"
-      "caffeine-script":  "^0.41.3"
       "glob-promise":     "^3.1.0"
 
     scripts:
