@@ -188,11 +188,42 @@ module.exports = ArrayCompactFlatten = (function() {
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(4);
+var k, out, ref, ref1, ref2, v;
+
+module.exports = out = {};
+
+ref = __webpack_require__(0);
+for (k in ref) {
+  v = ref[k];
+  out[k] = v;
+}
+
+ref1 = __webpack_require__(3);
+for (k in ref1) {
+  v = ref1[k];
+  out[k] = v;
+}
+
+ref2 = __webpack_require__(4);
+for (k in ref2) {
+  v = ref2[k];
+  out[k] = v;
+}
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+g = typeof window !== "undefined" && window !== null ? window : typeof self !== "undefined" && self !== null ? self : global;
+
+g.global = g;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 var arrayIterableTest, each, extendedEach, isNonNegativeInt;
@@ -358,16 +389,18 @@ module.exports = {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _import, compactFlatten, definingModule, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref,
+var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
 ref = __webpack_require__(0), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
 
-definingModule = null;
+__webpack_require__(2);
+
+global.__definingModule = null;
 
 module.exports = {
   "in": function(a, b) {
@@ -579,7 +612,7 @@ module.exports = {
     return (ref1 = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref1 : klass;
   },
   getModuleBeingDefined: function() {
-    return definingModule;
+    return global.__definingModule;
   },
 
   /*
@@ -588,10 +621,10 @@ module.exports = {
    */
   defMod: function(_module, a) {
     var lastModule, result;
-    lastModule = definingModule;
-    definingModule = _module;
+    lastModule = global.__definingModule;
+    global.__definingModule = _module;
     result = _module.exports = a();
-    definingModule = lastModule;
+    global.__definingModule = lastModule;
     return result;
   },
   i: _import,
@@ -599,33 +632,6 @@ module.exports = {
   f: isFalse,
   isF: isFunction
 };
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var k, out, ref, ref1, ref2, v;
-
-module.exports = out = {};
-
-ref = __webpack_require__(0);
-for (k in ref) {
-  v = ref[k];
-  out[k] = v;
-}
-
-ref1 = __webpack_require__(2);
-for (k in ref1) {
-  v = ref1[k];
-  out[k] = v;
-}
-
-ref2 = __webpack_require__(3);
-for (k in ref2) {
-  v = ref2[k];
-  out[k] = v;
-}
 
 
 /***/ }),
