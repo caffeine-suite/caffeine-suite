@@ -1,4 +1,5 @@
 {compactFlatten, isPlainArray, isPlainObject} = require './ArrayCompactFlatten'
+require './Global'
 global.__definingModule = null
 
 module.exports =
