@@ -1716,7 +1716,9 @@ compileDirectory = function(dirname) {
 
 if (reset) {
   CompileCache.reset();
-} else if (compile) {
+}
+
+if (compile) {
   files = commander.args;
   if (files.length > 0) {
     verbose && log({
