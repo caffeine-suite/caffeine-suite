@@ -18,13 +18,10 @@ defineModule module, class FileCompiler
 
     source ||= (fs.readFileSync sourceFile).toString()
 
-    out = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
-    if options.prettier && out.compiled.js
-      out.compiled.js = require("prettier").format out.compiled.js
-    out
+    CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
 
   @compileFile: (sourceFile, options = {})->
-    {outputDirectory, prettier, source} = options
+    {outputDirectory, source} = options
     findSourceRoot sourceFile
     .then (sourceRoot) ->
 
@@ -39,7 +36,7 @@ defineModule module, class FileCompiler
         throw new Error "sourceFile not found: #{sourceFile}" unless exists
         getCaffeineInit sourceRoot
 
-      .then (caffeineInit) ->
+      .then ({compiler, config}) ->
 
         p = if source
           Promise.resolve source
@@ -49,20 +46,12 @@ defineModule module, class FileCompiler
         p.then (source) ->
           source = source.toString()
 
-          result.output = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
+          result.output = compiler.compile source, merge config, options, {sourceFile, sourceRoot}
           result.readCount++
 
           Promise.all array result.output.compiled, (text, extension) ->
             basename = path.basename sourceFile, path.extname sourceFile
             result.outputFiles.push outputFilename
-
-            if prettier && extension == "js"
-              try
-                text = require("prettier").format text
-              catch e
-                log e.message
-                return Promise.reject()
-
 
             if outputDirectory
               result.writeCount++

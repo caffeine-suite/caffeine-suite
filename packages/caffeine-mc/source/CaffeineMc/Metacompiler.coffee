@@ -16,8 +16,8 @@ realRequire = eval 'require'
 module.exports = class Metacompiler extends BaseClass
   @fileExtensions: ["caf", "caffeine"]
 
-  @compile: (code, options = {}, caffeineInitJsString)=>
-    new @().compile code, options, caffeineInitJsString
+  @compile: (code, options = {})=>
+    new @().compile code, options
 
   @getter "compiler lastMetacompilerResult",
     current: -> @compiler
@@ -91,11 +91,7 @@ module.exports = class Metacompiler extends BaseClass
       for extension, output of compiled
         write originalFileNameWith(extension), output
   ###
-  compile: (code, options = {}, caffeineInit)->
-    if caffeineInit
-      {@compiler, config} = caffeineInit
-      options = merge config, options
-
+  compile: (code, options = {})->
     {compilerName, metaCode, code} = @_metaParser.parse code.toString()
 
     if compilerName
@@ -103,11 +99,13 @@ module.exports = class Metacompiler extends BaseClass
 
     if options.cache && (version = @compiler.version) && (name = @compiler.getName?())
       options = objectWithout options, "cache"
-      if cachedCompile = CompileCache.fetch(cacheInfo =
-            compiler:   {name, version}
-            source:     code
-            sourceFile: options.sourceFile
-          )
+      cacheInfo =
+        compiler:   {name, version}
+        source:     code
+        sourceFile: options.sourceFile
+      cacheInfo.prettier = true if options.prettier
+
+      if cachedCompile = CompileCache.fetch cacheInfo
         cachedCompile
       else
         CompileCache.cache merge cacheInfo, @_compileInternal metaCode, code, options
@@ -116,12 +114,22 @@ module.exports = class Metacompiler extends BaseClass
 
   _compileInternal: (metaCode, code, options) ->
 
-    @normalizeCompilerResult if metaCode
+    out = @normalizeCompilerResult if metaCode
       result = @normalizeCompilerResult @compiler.compile metaCode
       @_lastMetacompilerResult = CaffeineMc.evalInContext result.compiled.js, @
       @compile code, options
     else
       @compiler.compile code, options
+
+    if options.prettier
+      try
+        if out.compiled.js?
+          out.compiled.js = require("prettier").format out.compiled.js
+        out.prettier = true
+      catch e
+        log e.message
+        throw e
+    out
 
   @getter
     compilerName: -> @compiler.getClassName?() || @compiler.getName?() || @_compilerName || 'unknown-compiler'

@@ -11,7 +11,7 @@ require 'coffee-script/register'
 # webpack hack
 realRequire = eval 'require'
 
-{version, displayError, CafRepl} = CaffeineMc = require './source/CaffeineMc'
+{version, displayError, CafRepl, CompileCache} = CaffeineMc = require './source/CaffeineMc'
 {log, dashCase, escapeRegExp, present, isString,
 Promise, formattedInspect, each, escapeRegExp
 } = Neptune.Art.StandardLib
@@ -27,6 +27,7 @@ commander = require "commander"
 .option '-p, --prettier', 'apply "prettier" to any js output'
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
+.option '-r, --reset', 'reset cache'
 .option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
 .on "--help", ->
   console.log """
@@ -39,7 +40,7 @@ commander = require "commander"
 displayError = (e) ->
   CaffeineMc.displayError e, commander
 
-{output, compile, prettier, verbose, versions, cache} = commander
+{reset, output, compile, prettier, verbose, versions, cache} = commander
 
 fileCounts =
   read: 0
@@ -86,10 +87,12 @@ compileDirectory = (dirname) ->
     serializer
     # log compileDirectory: {list}
 
+if reset
+  CompileCache.reset()
 #################
 # COMPILE FILES
 #################
-if compile
+else if compile
   files = commander.args
 
   # if !output and files.length == 1
@@ -111,7 +114,7 @@ if compile
         if fs.statSync(filename).isDirectory()
           compileDirectory filename
         else
-          compileFile filename, fileCounts
+          compileFile filename
 
     serializer.then ->
       if commander.debug
