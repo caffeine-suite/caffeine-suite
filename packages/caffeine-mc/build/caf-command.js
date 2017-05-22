@@ -1671,7 +1671,7 @@ if (compile) {
       output = path.dirname(filename);
     }
   }
-  if (files.length > 0 && output) {
+  if (files.length > 0) {
     verbose && log({
       compile: {
         inputs: files.length === 1 ? files[0] : files,
@@ -1694,7 +1694,7 @@ if (compile) {
     each(files, function(file) {
       return serializer.then(function() {
         return CaffeineMc.compileFile(file, {
-          outputDirectory: output,
+          outputDirectory: output || path.dirname(file),
           prettier: prettier,
           cache: cache
         }).then(function(arg) {
