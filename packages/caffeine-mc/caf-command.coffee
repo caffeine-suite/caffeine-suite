@@ -41,6 +41,9 @@ displayError = (e) ->
 
 {output, compile, prettier, verbose, versions, cache} = commander
 
+#################
+# COMPILE FILES
+#################
 if compile
   files = commander.args
 
@@ -49,7 +52,7 @@ if compile
     unless fsp.statSync(filename).isDirectory()
       output = path.dirname filename
 
-  if files.length > 0 && output
+  if files.length > 0 #&& output
     verbose && log compile:
       inputs: if files.length == 1 then files[0] else files
       output: output
@@ -65,7 +68,11 @@ if compile
 
     each files, (file) ->
       serializer.then ->
-        CaffeineMc.compileFile file, {outputDirectory: output, prettier, cache}
+        CaffeineMc.compileFile(file, {
+          outputDirectory: output || path.dirname file
+          prettier
+          cache
+        })
         .then ({readCount, writeCount, output}) ->
 
           if output.fromCache
@@ -92,6 +99,10 @@ if compile
     serializer.catch displayError
   else
     commander.outputHelp()
+
+#################
+# RUN FILE
+#################
 else if commander.args.length == 1
   [fileToRun] = commander.args
   require './register.coffee'
@@ -116,6 +127,10 @@ else if versions
       "#{versions}": compiler.version || compiler.VERSION
   log
     Neptune: Neptune.getVersions()
+
+#################
+# START REPL
+#################
 else
   CafRepl.start()
   # commander.outputHelp()
