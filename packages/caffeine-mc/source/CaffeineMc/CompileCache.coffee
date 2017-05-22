@@ -1,4 +1,4 @@
-{array, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character} = require 'art-standard-lib'
+{array, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 require 'colors'
 
@@ -34,7 +34,8 @@ defineModule module, class CompileCache extends BaseClass
     [basename] = path.basename(sourceFile).split '.'
     "#{@compileCacheFilePathRoot}_#{compilerSignature}_#{upperCamelCase basename}_#{hashed}.json"
 
-  @cache: ({compiler, source, sourceFile, compiled}) ->
+  @cache: (compileResultAndInfo) ->
+    {compiler, source, sourceFile, compiled} = compileResultAndInfo
     if compilerSignature = @getCompilerSignature compiler
       fileName = @getFileName {compilerSignature, source, sourceFile}
       cacheFileContents = JSON.stringify {
@@ -42,7 +43,8 @@ defineModule module, class CompileCache extends BaseClass
         compiled
       }
       fs.writeFileSync fileName, cacheFileContents
-      true
+
+    compileResultAndInfo
 
   @fetch: ({compiler, source, sourceFile}) ->
     if compilerSignature = @getCompilerSignature compiler
@@ -51,7 +53,7 @@ defineModule module, class CompileCache extends BaseClass
         cacheFileContents = fs.readFileSync fileName
         parsedContents = try JSON.parse cacheFileContents
         if parsedContents?.source == source
-          parsedContents.compiled
+          merge parsedContents, fromCache: true
 
   @reset: ->
     glob @compileCacheFilePathRoot + "*"

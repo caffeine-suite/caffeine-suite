@@ -21,4 +21,4 @@ module.exports = suite: ->
   test "cache", ->
     CompileCache.cache fakeInfo
 
-    assert.eq fakeInfo.compiled, CompileCache.fetch objectWithout fakeInfo, "compiled"
+    assert.eq fakeInfo.compiled, CompileCache.fetch(objectWithout fakeInfo, "compiled").compiled

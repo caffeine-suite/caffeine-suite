@@ -23,6 +23,7 @@ commander = require "commander"
 .usage('[options] <input files and directories>')
 .option '-o, --output <directory>', "where to write output files"
 .option '-c, --compile', 'compile files'
+.option '-C, --cache', 'cache compiled files'
 .option '-p, --prettier', 'apply "prettier" to any js output'
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
@@ -38,7 +39,7 @@ commander = require "commander"
 displayError = (e) ->
   CaffeineMc.displayError e, commander
 
-{output, compile, prettier, verbose, versions} = commander
+{output, compile, prettier, verbose, versions, cache} = commander
 
 if compile
   files = commander.args
@@ -60,7 +61,7 @@ if compile
     filesWritten = 0
     each files, (file) ->
       serializer.then ->
-        CaffeineMc.compileFile file, outputDirectory: output, prettier: prettier
+        CaffeineMc.compileFile file, {outputDirectory: output, prettier, cache}
         .then ({readCount, writeCount}) ->
           log "compiled: #{file.green}" if verbose
           filesRead += readCount
@@ -86,7 +87,7 @@ else if commander.args.length == 1
     "./#{fileToRun}"
 
   try
-    CaffeineMc.compileFile file, color: true
+    CaffeineMc.compileFile file, {color: true, cache}
     .then ({output}) ->
       {js} = output.compiled
       eval js

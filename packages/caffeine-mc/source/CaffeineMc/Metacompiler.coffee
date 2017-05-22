@@ -2,10 +2,13 @@ Compilers = require './Compilers'
 
 CaffeineMcParser = require './CaffeineMcParser'
 CaffeineMc = require './namespace'
+CompileCache = require './CompileCache'
 
 realRequire = eval 'require'
 
-{dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge} = require 'art-standard-lib'
+{ dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge
+  objectWithout
+} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
 
@@ -18,6 +21,7 @@ module.exports = class Metacompiler extends BaseClass
 
   @getter "compiler lastMetacompilerResult",
     current: -> @compiler
+
   @setter
     ###
     IN:
@@ -96,6 +100,21 @@ module.exports = class Metacompiler extends BaseClass
 
     if compilerName
       @_lastMetacompilerResult = @setCompiler compilerName, options
+
+    if options.cache && (version = @compiler.version) && (name = @compiler.getName?())
+      options = objectWithout options, "cache"
+      if cachedCompile = CompileCache.fetch(cacheInfo =
+            compiler:   {name, version}
+            source:     code
+            sourceFile: options.sourceFile
+          )
+        cachedCompile
+      else
+        CompileCache.cache merge cacheInfo, @_compileInternal metaCode, code, options
+    else
+      @_compileInternal metaCode, code, options
+
+  _compileInternal: (metaCode, code, options) ->
 
     @normalizeCompilerResult if metaCode
       result = @normalizeCompilerResult @compiler.compile metaCode
