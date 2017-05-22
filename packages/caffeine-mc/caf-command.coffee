@@ -57,15 +57,30 @@ if compile
     log "using prettier" if verbose && prettier
     serializer = new Promise.Serializer
 
-    filesRead = 0
-    filesWritten = 0
+    fileCounts =
+      read: 0
+      written: 0
+      compiled: 0
+      fromCache: 0
+
     each files, (file) ->
       serializer.then ->
         CaffeineMc.compileFile file, {outputDirectory: output, prettier, cache}
-        .then ({readCount, writeCount}) ->
-          log "compiled: #{file.green}" if verbose
-          filesRead += readCount
-          filesWritten += writeCount
+        .then ({readCount, writeCount, output}) ->
+
+          if output.fromCache
+            fileCounts.fromCache += readCount
+          else
+            fileCounts.compiled += readCount
+
+          if verbose
+            if output.fromCache
+              log "cached: #{file.grey}"
+            else
+              log "compiled: #{file.green}"
+
+          fileCounts.read += readCount
+          fileCounts.written += writeCount
 
     serializer.then ->
       if commander.debug
@@ -73,7 +88,7 @@ if compile
           loadedModules: Object.keys realRequire('module')._cache
           registeredLoaders: Object.keys realRequire.extensions
 
-      log success: {filesRead, filesWritten}
+      log success: {fileCounts}
     serializer.catch displayError
   else
     commander.outputHelp()
