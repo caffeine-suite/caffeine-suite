@@ -2,8 +2,8 @@
 global.ArtStandardLibMultipleContextTypeSupport = true
 
 colors = require "colors"
-glob = require "glob"
-fsp = require 'fs-promise'
+glob = require "glob-promise"
+fs = require 'fs-extra'
 path = require 'path'
 
 require 'coffee-script/register'
@@ -41,16 +41,61 @@ displayError = (e) ->
 
 {output, compile, prettier, verbose, versions, cache} = commander
 
+fileCounts =
+  read: 0
+  written: 0
+  compiled: 0
+  fromCache: 0
+
+compileFile = (filename, outputDirectory) ->
+  CaffeineMc.compileFile(filename, {
+    outputDirectory: outputDirectory || output || path.dirname filename
+    prettier
+    cache
+  })
+  .then ({readCount, writeCount, output}) ->
+
+    if output.fromCache
+      fileCounts.fromCache += readCount
+    else
+      fileCounts.compiled += readCount
+
+    if verbose
+      if output.fromCache
+        log "cached: #{filename.grey}"
+      else
+        log "compiled: #{filename.green}"
+
+    fileCounts.read += readCount
+    fileCounts.written += writeCount
+
+compileDirectory = (dirname) ->
+  glob path.join dirname, "**", "*.caf"
+  .then (list) ->
+    serializer = new Promise.Serializer
+    each list, (filename) ->
+      relative = path.relative dirname, filename
+      if output
+        outputDirectory = path.join output, path.dirname relative
+
+      serializer
+      .then ->
+        Promise.then -> outputDirectory && fs.ensureDir outputDirectory
+        .then -> compileFile filename, outputDirectory
+
+    serializer
+    # log compileDirectory: {list}
+
 #################
 # COMPILE FILES
 #################
 if compile
   files = commander.args
 
-  if !output and files.length == 1
-    [filename] = files
-    unless fsp.statSync(filename).isDirectory()
-      output = path.dirname filename
+  # if !output and files.length == 1
+  #   [filename] = files
+  #   unless fs.statSync(filename).isDirectory()
+  #     output = path.dirname filename
 
   if files.length > 0 #&& output
     verbose && log compile:
@@ -60,34 +105,13 @@ if compile
     log "using prettier" if verbose && prettier
     serializer = new Promise.Serializer
 
-    fileCounts =
-      read: 0
-      written: 0
-      compiled: 0
-      fromCache: 0
 
-    each files, (file) ->
+    each files, (filename) ->
       serializer.then ->
-        CaffeineMc.compileFile(file, {
-          outputDirectory: output || path.dirname file
-          prettier
-          cache
-        })
-        .then ({readCount, writeCount, output}) ->
-
-          if output.fromCache
-            fileCounts.fromCache += readCount
-          else
-            fileCounts.compiled += readCount
-
-          if verbose
-            if output.fromCache
-              log "cached: #{file.grey}"
-            else
-              log "compiled: #{file.green}"
-
-          fileCounts.read += readCount
-          fileCounts.written += writeCount
+        if fs.statSync(filename).isDirectory()
+          compileDirectory filename
+        else
+          compileFile filename, fileCounts
 
     serializer.then ->
       if commander.debug
