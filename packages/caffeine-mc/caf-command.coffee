@@ -89,10 +89,11 @@ compileDirectory = (dirname) ->
 
 if reset
   CompileCache.reset()
+
 #################
 # COMPILE FILES
 #################
-else if compile
+if compile
   files = commander.args
 
   # if !output and files.length == 1
