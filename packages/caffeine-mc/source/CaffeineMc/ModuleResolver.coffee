@@ -1,5 +1,5 @@
 {defineModule, Promise, dashCase, upperCamelCase, ErrorWithInfo, log, merge, present, find, each, w} = require 'art-standard-lib'
-FsPromise = require 'fs-promise'
+fs = require 'fs-extra'
 Path = require 'path'
 
 realRequire = eval 'require'
@@ -81,7 +81,7 @@ defineModule module, class ModuleResolver
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory) ->
     matchingName = null
-    each (FsPromise.readdirSync directory), (name) ->
+    each (fs.readdirSync directory), (name) ->
       [basename] = name.split '.'
       if normalizedModuleName == normalizeName basename
         if matchingName && matchingName != basename

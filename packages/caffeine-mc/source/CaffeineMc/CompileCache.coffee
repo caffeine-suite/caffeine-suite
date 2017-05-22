@@ -2,7 +2,7 @@
 {BaseClass} = require 'art-class-system'
 require 'colors'
 
-fs = require 'fs-promise'
+fs = require 'fs-extra'
 glob = require 'glob-promise'
 
 crypto = require 'crypto'

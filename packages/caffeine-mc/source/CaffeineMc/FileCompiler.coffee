@@ -1,5 +1,5 @@
 {defineModule, array, log, merge, present, find, each, w} = require 'art-standard-lib'
-FsPromise = require 'fs-promise'
+fs = require 'fs-extra'
 path = require 'path'
 CaffeineMc = require './namespace'
 {
@@ -16,7 +16,7 @@ defineModule module, class FileCompiler
 
     caffeineInit = getCaffeineInitSync sourceRoot = findSourceRootSync sourceFile
 
-    source ||= (FsPromise.readFileSync sourceFile).toString()
+    source ||= (fs.readFileSync sourceFile).toString()
 
     out = CaffeineMc.compile source, merge(options, {sourceFile, sourceRoot}), caffeineInit
     if options.prettier && out.compiled.js
@@ -34,7 +34,7 @@ defineModule module, class FileCompiler
         outputFiles: []
         output: null
 
-      FsPromise.exists sourceFile
+      fs.exists sourceFile
       .then (exists) ->
         throw new Error "sourceFile not found: #{sourceFile}" unless exists
         getCaffeineInit sourceRoot
@@ -44,7 +44,7 @@ defineModule module, class FileCompiler
         p = if source
           Promise.resolve source
         else
-          FsPromise.readFile sourceFile
+          fs.readFile sourceFile
 
         p.then (source) ->
           source = source.toString()
@@ -67,7 +67,7 @@ defineModule module, class FileCompiler
             if outputDirectory
               result.writeCount++
               outputFilename = path.join outputDirectory, "#{basename}.#{extension}"
-              FsPromise.writeFile outputFilename, text
+              fs.writeFile outputFilename, text
             else
               Promise.resolve text
 

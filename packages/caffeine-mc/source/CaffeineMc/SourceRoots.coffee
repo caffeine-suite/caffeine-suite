@@ -1,6 +1,6 @@
 {defineModule, array, log, merge, present, find, each, w} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
-FsPromise = require 'fs-promise'
+fs = require 'fs-extra'
 path = require 'path'
 Metacompiler = require './Metacompiler'
 
@@ -36,10 +36,10 @@ defineModule module, class SourceRoots extends BaseClass
     if (res = @caffeineInits[sourceRoot])?
       Promise.resolve res
     else
-      FsPromise.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
+      fs.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
       .then (exists) =>
         contentsPromise = if exists
-          FsPromise.readFile sourceFile
+          fs.readFile sourceFile
           .then (contents) =>
             contents = contents.toString()
         else
@@ -59,8 +59,8 @@ defineModule module, class SourceRoots extends BaseClass
     if (res = @caffeineInits[sourceRoot])?
       res
     else
-      if FsPromise.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
-        contents = FsPromise.readFileSync(sourceFile).toString()
+      if fs.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
+        contents = fs.readFileSync(sourceFile).toString()
 
         metacompiler = new Metacompiler
         result = metacompiler.compile contents, {sourceFile, sourceRoot}
@@ -72,7 +72,7 @@ defineModule module, class SourceRoots extends BaseClass
         false
 
   @findSourceRoot: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
-    FsPromise.stat directory
+    fs.stat directory
     .then (stat) =>
       directory = path.dirname directory unless stat.isDirectory()
       if (ret = @knownSourceRoots[directory])?
@@ -83,7 +83,7 @@ defineModule module, class SourceRoots extends BaseClass
           @knownSourceRoots[directory] = sourceRoot || false
 
   @findSourceRootSync: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
-    stat = FsPromise.statSync directory
+    stat = fs.statSync directory
     directory = path.dirname directory unless stat.isDirectory()
     if (ret = @knownSourceRoots[directory])?
       ret
@@ -108,7 +108,7 @@ defineModule module, class SourceRoots extends BaseClass
 
   @_findRootR: (directory, rootFiles) ->
     Promise.all array rootFiles, (file) ->
-      FsPromise.exists path.join directory, file
+      fs.exists path.join directory, file
     .then (rootFileExistResults) =>
       if find rootFileExistResults
         directory
@@ -119,7 +119,7 @@ defineModule module, class SourceRoots extends BaseClass
 
   @_findRootSyncR: (directory, rootFiles) ->
     rootFileExistResults = array rootFiles, (file) ->
-      FsPromise.existsSync path.join directory, file
+      fs.existsSync path.join directory, file
     if find rootFileExistResults
       directory
     else if directory != "/" && present directory

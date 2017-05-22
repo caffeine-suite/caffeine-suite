@@ -6,7 +6,7 @@ module.exports =
 
     dependencies:
       "babel-bridge":     "^1.10.0"
-      "fs-promise":       "^0.5.0"
+      "fs-extra":         "^3.0.0"
       colors:             "^1.1.2"
       glob:               "^7.0.3"
       commander:          '^2.9.0'
