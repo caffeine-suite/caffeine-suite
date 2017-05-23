@@ -24,6 +24,10 @@ defineModule module, class CafRepl
       lastOutput = null
       {@compiler, config} = init
 
+      log "Welcome to the CaffeineMC console.".gray
+      log "For help: ".gray + ".help"
+      @_showCurrentCompiler()
+
       @cafRepl = repl.start
         prompt: @getPrompt()
 
@@ -144,6 +148,10 @@ defineModule module, class CafRepl
     catch e
       displayError e
 
+  @_showCurrentCompiler: ->
+    log "Your current compiler is: ".gray + @compiler.compilerName.green
+
+  lastCompiler = null
   @replEval: (command, context = @cafRepl.context, filename) ->
     result = error = null
     try
@@ -154,6 +162,9 @@ defineModule module, class CafRepl
           @compiler.lastMetacompilerResult
         else
           runInContext js, context
+        if lastCompiler != @compiler
+          @_showCurrentCompiler()
+          lastCompiler = @compiler
         @cafRepl.setPrompt @getPrompt()
 
       catch e
