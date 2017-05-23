@@ -1,6 +1,6 @@
 # Some code FROM: https://github.com/jashkenas/coffeescript/blob/master/src/repl.coffee
 
-{formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
+{objectKeyCount, isArray, isArrayUniversal, isPlainObjectUniversal, formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
 {getCaffeineInit} = require './SourceRoots'
 {runInContext, displayError} = CaffeineMc = require './namespace'
 
@@ -57,28 +57,39 @@ defineModule module, class CafRepl
               @cafRepl.outputStream.write "\n\n"
 
 
-            lastOutput = out = if evaluateMode
+            result = if evaluateMode
               @cafRepl.outputStream.write "Evaluate...\n".grey if showSource
-              formattedInspect(
-                @replEval command, context, filename
-                color: true
-              )
+              @replEval command, context, filename
             else
               "evaluation off (.evaluate to turn back on)".grey
+              undefined
 
-            @cafRepl.outputStream.write "\nOut:\n".grey if showSource && evaluateMode
+            log.resolvePromiseWrapper result, (toLog, label, wasResolved) =>
+              lastOutput = out = formattedInspect(
+                {"#{label}": toLog}
+                color: true
+              )
 
-            finalOut = ((lines = out.split("\n")).slice 0, maxOutputLines).join "\n"
-            finalOut = finalOut.slice 0, maxOutputCharacters if finalOut.length > maxOutputCharacters
+              @cafRepl.outputStream.write "\nOut:\n".grey if showSource && evaluateMode
 
-            log finalOut
-            if finalOut != out
-              log "output truncated".gray
-              if lines.length > maxOutputLines
-                log "  showing: #{maxOutputLines}/#{lines.length} lines".gray
-              else
-                log "  showing: #{finalOut.length}/#{lastOutput.length} characters".gray
-              log "  show all: .last".gray
+              finalOut = ((lines = out.split("\n")).slice 0, maxOutputLines).join "\n"
+              finalOut = finalOut.slice 0, maxOutputCharacters if finalOut.length > maxOutputCharacters
+
+              log "" if wasResolved
+              log finalOut
+              if finalOut != out
+                log "output truncated".gray
+                if isArray toLog
+                  log "  array: length: #{toLog.length}".gray
+                else if isPlainObjectUniversal toLog
+                  log "  object: keys: #{objectKeyCount toLog}".gray
+                if lines.length > maxOutputLines
+                  log "  showing: #{maxOutputLines}/#{lines.length} lines".gray
+                else
+                  log "  showing: #{finalOut.length}/#{lastOutput.length} characters".gray
+                log "  show all: .last".gray
+
+              @cafRepl.displayPrompt() if wasResolved
 
             callback()
           catch e
