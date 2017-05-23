@@ -1784,7 +1784,6 @@ if (compile) {
 } else if (commander.args.length === 1) {
   fileToRun = commander.args[0];
   __webpack_require__(35);
-  console.log("REGISTER CAF");
   file = path.resolve(fileToRun.match(/^(\/|\.)/) ? fileToRun : "./" + fileToRun);
   try {
     CaffeineMc.compileFile(file, {
