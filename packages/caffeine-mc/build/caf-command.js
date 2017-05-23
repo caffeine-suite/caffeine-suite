@@ -1237,9 +1237,9 @@ module.exports = require("glob-promise");
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, log, maxOutputCharacters, maxOutputLines, path, ref, ref1, repl, runInContext;
+/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, isArray, isArrayUniversal, isPlainObjectUniversal, log, maxOutputCharacters, maxOutputLines, objectKeyCount, path, ref, ref1, repl, runInContext;
 
-ref = __webpack_require__(0), formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
+ref = __webpack_require__(0), objectKeyCount = ref.objectKeyCount, isArray = ref.isArray, isArrayUniversal = ref.isArrayUniversal, isPlainObjectUniversal = ref.isPlainObjectUniversal, formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
 
 getCaffeineInit = __webpack_require__(5).getCaffeineInit;
 
@@ -1299,7 +1299,7 @@ defineModule(module, CafRepl = (function() {
             }
           },
           "eval": function(command, context, filename, callback) {
-            var e, finalOut, lines, out;
+            var e, result;
             try {
               if (command.trim() === '') {
                 return callback();
@@ -1309,26 +1309,45 @@ defineModule(module, CafRepl = (function() {
                 _this.cafRepl.outputStream.write(highlight(_this.compileCommand(command, filename)));
                 _this.cafRepl.outputStream.write("\n\n");
               }
-              lastOutput = out = evaluateMode ? (showSource ? _this.cafRepl.outputStream.write("Evaluate...\n".grey) : void 0, formattedInspect(_this.replEval(command, context, filename), {
-                color: true
-              })) : "evaluation off (.evaluate to turn back on)".grey;
-              if (showSource && evaluateMode) {
-                _this.cafRepl.outputStream.write("\nOut:\n".grey);
-              }
-              finalOut = ((lines = out.split("\n")).slice(0, maxOutputLines)).join("\n");
-              if (finalOut.length > maxOutputCharacters) {
-                finalOut = finalOut.slice(0, maxOutputCharacters);
-              }
-              log(finalOut);
-              if (finalOut !== out) {
-                log("output truncated".gray);
-                if (lines.length > maxOutputLines) {
-                  log(("  showing: " + maxOutputLines + "/" + lines.length + " lines").gray);
-                } else {
-                  log(("  showing: " + finalOut.length + "/" + lastOutput.length + " characters").gray);
+              result = evaluateMode ? (showSource ? _this.cafRepl.outputStream.write("Evaluate...\n".grey) : void 0, _this.replEval(command, context, filename)) : ("evaluation off (.evaluate to turn back on)".grey, void 0);
+              log.resolvePromiseWrapper(result, function(toLog, label, wasResolved) {
+                var finalOut, lines, obj, out;
+                lastOutput = out = formattedInspect((
+                  obj = {},
+                  obj["" + label] = toLog,
+                  obj
+                ), {
+                  color: true
+                });
+                if (showSource && evaluateMode) {
+                  _this.cafRepl.outputStream.write("\nOut:\n".grey);
                 }
-                log("  show all: .last".gray);
-              }
+                finalOut = ((lines = out.split("\n")).slice(0, maxOutputLines)).join("\n");
+                if (finalOut.length > maxOutputCharacters) {
+                  finalOut = finalOut.slice(0, maxOutputCharacters);
+                }
+                if (wasResolved) {
+                  log("");
+                }
+                log(finalOut);
+                if (finalOut !== out) {
+                  log("output truncated".gray);
+                  if (isArray(toLog)) {
+                    log(("  array: length: " + toLog.length).gray);
+                  } else if (isPlainObjectUniversal(toLog)) {
+                    log(("  object: keys: " + (objectKeyCount(toLog))).gray);
+                  }
+                  if (lines.length > maxOutputLines) {
+                    log(("  showing: " + maxOutputLines + "/" + lines.length + " lines").gray);
+                  } else {
+                    log(("  showing: " + finalOut.length + "/" + lastOutput.length + " characters").gray);
+                  }
+                  log("  show all: .last".gray);
+                }
+                if (wasResolved) {
+                  return _this.cafRepl.displayPrompt();
+                }
+              });
               return callback();
             } catch (error1) {
               e = error1;
