@@ -137,9 +137,7 @@ else if commander.args.length == 1
   [fileToRun] = commander.args
 
   CaffeineMc.register()
-  # realRequire path.join process.cwd(), fileToRun
   CaffeineMc.runFile fileToRun, {color: true, cache}
-  .catch displayError
 
 else if versions
   if isString versions

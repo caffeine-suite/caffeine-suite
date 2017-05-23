@@ -14,27 +14,42 @@ fileExists = (filename) ->
 
 defineModule module, class Run extends BaseClass
 
-  @findSourceFile: (sourceFile, options) ->
-    if fs.existsSync sourceFile
+  @_resolveSourceFile: (options) ->
+    {sourceFile, color} = options
+    merge options, sourceFile: if fs.existsSync sourceFile
       sourceFile
     else if (found = find realRequire.extensions, (v, k) -> fileExists "#{sourceFile}#{k}")
       found
     else
       e = new Error "No matching file found: #{formattedInspect {sourceFile, extensions: Object.keys(realRequire.extensions).join ' '}}"
-      e.stack = if options?.color then e.message.red else e.message
+      e.stack = if color then e.message.red else e.message
       throw e
 
   @runFile: (sourceFile, options) =>
-    sourceFile = @findSourceFile sourceFile, options
-    CaffeineMc.compileFile sourceFile, options
-    .then ({output}) => @runJs output.compiled.js, merge options, {sourceFile}
-    .catch (e) -> CaffeineMc.displayError e, options
+    @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
+    realRequire realRequire.main.filename
+
+    # CaffeineMc.compileFile sourceFile, options
+    # .then ({output}) =>
+    #   # @runJs output.compiled.js, merge options, {sourceFile}
+    # .catch (e) -> CaffeineMc.displayError e, options
 
   ###
   Do all the things NODE needs to make it look like
   we ran the file like "> node souceFile"
   ###
-  @runJs: (js, options = {}) ->
+  @runJs: (js, options = {}) =>
+    @setupNodeForRun options
+    {main} = realRequire
+
+    # interesting -
+    # run it this way and it shows the source-line if there an error
+    # setTimeout (-> main._compile js, main.filename), 0
+
+    # run it this way, and it doesn't:
+    main._compile js, main.filename
+
+  @setupNodeForRun: (options) ->
     {sourceFile} = options
     {main} = realRequire
 
@@ -46,7 +61,3 @@ defineModule module, class Run extends BaseClass
 
     # Get the correct node_module paths for sourceFile or the current directory
     main.paths = realRequire('module')._nodeModulePaths fs.realpathSync path.dirname sourceFile || "./anonymous"
-
-    # interesting - run it this way and it shows the source-line if there an error
-    # setTimeout (-> main._compile js, main.filename), 0
-    main._compile js, main.filename
