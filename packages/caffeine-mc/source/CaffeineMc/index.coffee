@@ -13,6 +13,7 @@ module.exports
   Metacompiler:     require './Metacompiler'    
   ModuleResolver:   require './ModuleResolver'  
   Register:         require './Register'        
+  Run:              require './Run'             
   SourceRoots:      require './SourceRoots'     
   Tools:            require './Tools'           
 require './Compilers'

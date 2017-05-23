@@ -3,6 +3,8 @@ path = require 'path'
 vm = require 'vm'
 
 defineModule module, class Tools
+  @fileExtensions: ["caf", "caffeine"]
+  @fileIsCaffeine: (filename) -> /\.caf|caffeine)$/.test filename
 
   @runInContext: (js, context, filename) ->
     if context == global

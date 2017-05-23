@@ -90,6 +90,8 @@ compileDirectory = (dirname) ->
 if reset
   CompileCache.reset()
 
+process.argv = [fs.realpathSync 'caf']
+
 #################
 # COMPILE FILES
 #################
@@ -133,20 +135,12 @@ if compile
 #################
 else if commander.args.length == 1
   [fileToRun] = commander.args
-  require './register.coffee'
-  file = path.resolve if fileToRun.match /^(\/|\.)/
-    fileToRun
-  else
-    "./#{fileToRun}"
 
-  try
-    CaffeineMc.compileFile file, {color: true, cache}
-    .then ({output}) ->
-      {js} = output.compiled
-      eval js
-    .catch (e) -> displayError e
-  catch e
-    displayError e
+  CaffeineMc.register()
+  # realRequire path.join process.cwd(), fileToRun
+  CaffeineMc.runFile fileToRun, {color: true, cache}
+  .catch displayError
+
 else if versions
   if isString versions
     compiler = realRequire dashCase versions

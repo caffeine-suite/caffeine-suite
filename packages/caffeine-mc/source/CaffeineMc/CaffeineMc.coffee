@@ -3,5 +3,6 @@ module.exports = [
   require './FileCompiler'
   require './ModuleResolver'
   require './Tools'
+  require './Run'
   require './Register'
 ]

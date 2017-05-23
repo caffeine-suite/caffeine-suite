@@ -66,7 +66,7 @@ defineModule module, class CafRepl
 
             log.resolvePromiseWrapper result, (toLog, label, wasResolved) =>
               lastOutput = out = formattedInspect(
-                {"#{label}": toLog}
+                if label then {"#{label}": toLog} else toLog
                 color: true
               )
 

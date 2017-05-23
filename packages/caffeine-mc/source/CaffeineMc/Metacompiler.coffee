@@ -11,11 +11,7 @@ realRequire = eval 'require'
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
-
-
 module.exports = class Metacompiler extends BaseClass
-  @fileExtensions: ["caf", "caffeine"]
-
   @compile: (code, options = {})=>
     new @().compile code, options
 
