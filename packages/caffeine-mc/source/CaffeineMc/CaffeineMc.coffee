@@ -5,4 +5,5 @@ module.exports = [
   require './Tools'
   require './Run'
   require './Register'
+  version: (require '../../package.json').version
 ]
