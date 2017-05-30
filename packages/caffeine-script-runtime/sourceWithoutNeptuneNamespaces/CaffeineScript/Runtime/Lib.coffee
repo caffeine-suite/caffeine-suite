@@ -27,6 +27,17 @@ module.exports =
         if (v = lib[importName])?
           out[importName] = v
           break
+      unless out[importName]?
+        importFrom = (for lib in libs
+          if lib == global
+            "global"
+          else if lib?
+            lib.namespacePath || lib.getName?() || "{#{Object.keys(lib).join ', '}}"
+          else
+            'null'
+        ).join '\n  '
+        console.warn "Caf.import WARNING: unable to find a non-null, non-undefined value for: #{importName}. \nimporting:\n  #{importNames.join '\n  '}\nfrom:\n  #{importFrom}"
+        console.log ((new Error).stack.split("\n").slice 0, 3).join "\n"
     out
 
   # CaffeineStyle truth (same as Ruby)
