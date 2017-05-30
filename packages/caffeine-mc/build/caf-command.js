@@ -1693,6 +1693,7 @@ module.exports = {
 		"art-testbench": "^1.10.3",
 		"babel-bridge": "^1.10.0",
 		"caffeine-script": "^0.44.5",
+		"caffeine-script-runtime": "^1.0.0",
 		"cardinal": "^1.0.0",
 		"case-sensitive-paths-webpack-plugin": "^1.1.4",
 		"chalk": "^1.1.3",
@@ -1723,7 +1724,7 @@ module.exports = {
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register",
 		"testInBrowser": "webpack-dev-server --progress"
 	},
-	"version": "2.4.2"
+	"version": "2.4.3"
 };
 
 /***/ }),
@@ -1890,7 +1891,7 @@ if (reset) {
   CompileCache.reset();
 }
 
-process.argv = [fs.realpathSync('caf')];
+process.argv = 'caf';
 
 if (compile) {
   files = commander.args;
