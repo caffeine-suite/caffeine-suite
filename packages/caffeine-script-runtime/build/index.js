@@ -432,7 +432,7 @@ module.exports = {
   OUT: and object with one property per importName
    */
   "import": _import = function(importNames, libs) {
-    var i, importName, j, len, len1, lib, out, v;
+    var i, importFrom, importName, j, len, len1, lib, out, v;
     out = {};
     libs = compactFlatten(libs);
     for (i = 0, len = importNames.length; i < len; i++) {
@@ -443,6 +443,25 @@ module.exports = {
           out[importName] = v;
           break;
         }
+      }
+      if (out[importName] == null) {
+        importFrom = ((function() {
+          var k, len2, results;
+          results = [];
+          for (k = 0, len2 = libs.length; k < len2; k++) {
+            lib = libs[k];
+            if (lib === global) {
+              results.push("global");
+            } else if (lib != null) {
+              results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
+            } else {
+              results.push('null');
+            }
+          }
+          return results;
+        })()).join('\n  ');
+        console.warn("Caf.import WARNING: unable to find a non-null, non-undefined value for: " + importName + ". \nimporting:\n  " + (importNames.join('\n  ')) + "\nfrom:\n  " + importFrom);
+        console.log(((new Error).stack.split("\n").slice(0, 3)).join("\n"));
       }
     }
     return out;
