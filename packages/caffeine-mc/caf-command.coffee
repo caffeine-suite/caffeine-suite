@@ -90,7 +90,7 @@ compileDirectory = (dirname) ->
 if reset
   CompileCache.reset()
 
-process.argv = [fs.realpathSync 'caf']
+process.argv = 'caf' # [fs.realpathSync 'caf']
 
 #################
 # COMPILE FILES
