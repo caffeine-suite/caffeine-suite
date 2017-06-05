@@ -10,6 +10,12 @@ module.exports =
   existsOr: (a, b) -> a ? b()
   exists: (a) -> (a != null && a != undefined) || undefined
 
+  is: (a, b) ->
+    if a? && b?
+      a.constructor == b
+    else
+      a == b
+
   ###
   Implements the 'import' function.
 
