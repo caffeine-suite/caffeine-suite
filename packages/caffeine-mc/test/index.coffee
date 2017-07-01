@@ -1,4 +1,4 @@
-require '../register.coffee'
+(require '..').register()
 require "art-testbench/testing"
 .init
   synchronous: true
