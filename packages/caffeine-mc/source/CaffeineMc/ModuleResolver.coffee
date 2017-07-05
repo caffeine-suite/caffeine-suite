@@ -1,4 +1,7 @@
-{defineModule, Promise, dashCase, upperCamelCase, ErrorWithInfo, log, merge, present, find, each, w} = require 'art-standard-lib'
+{
+  defineModule, peek, Promise, dashCase, upperCamelCase,
+  ErrorWithInfo, log, merge, present, find, each, w
+} = require 'art-standard-lib'
 fs = require 'fs-extra'
 Path = require 'path'
 
@@ -63,6 +66,8 @@ defineModule module, class ModuleResolver
         shouldContinue = false
 
       else if directory == sourceRoot
+        if getMatchingName normalizedModuleName, peek sourceRoot.split "/"
+          absolutePath = sourceRoot
         shouldContinue = false
 
       else
@@ -71,30 +76,38 @@ defineModule module, class ModuleResolver
     if absolutePath
       requireString = Path.relative sourceDir, absolutePath
       switch requireString
-        when ".." then requireString = "../../#{Path.basename absolutePath}"
-        when "."  then requireString = "../#{Path.basename absolutePath}"
+        when "..", "." then requireString = "#{requireString}/"
       requireString = "./#{requireString}" unless requireString.match /^\./
       {requireString, absolutePath}
     else
       @getNpmPackageName moduleName
 
+  @getMatchingName: getMatchingName = (normalizedModuleName, name) ->
+    if 0 == (normalName = normalizeName name).indexOf normalizedModuleName
+      foundLegalStop = false
+      offset = 0
+      for stop, i in stops = name.split '.'
+        offset += stop.length
+        if normalizedModuleName.length == offset
+          return stops.slice(0, i + 1).join '.'
+
+    false
+
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory) ->
     matchingName = null
     each (fs.readdirSync directory), (name) ->
-      [basename] = name.split '.'
-      if normalizedModuleName == normalizeName basename
-        if matchingName && matchingName != basename
+      if newMatchingName = getMatchingName normalizedModuleName, name
+        if matchingName && matchingName != newMatchingName
           throw new ErrorWithInfo """
             More than one matching module name with
-            a) different actual names (#{matchingName} != #{basename}) and
-            b) the same normalized name (#{normalizedModuleName})
+            a) different actual base-names (#{matchingName} != #{newMatchingName}) and
+            b) for the same normalized name (#{normalizedModuleName})
             """,
-            directory: directory
-            firstMatch: matchingName
-            secondMatch: name
+            directory:            directory
+            firstMatch:           matchingName
+            secondMatch:          newMatchingName
             normalizedModuleName: normalizedModuleName
 
-        # TODO: should return 'name' instead of basename if its a directory
-        matchingName = basename
+        matchingName = newMatchingName
     matchingName
