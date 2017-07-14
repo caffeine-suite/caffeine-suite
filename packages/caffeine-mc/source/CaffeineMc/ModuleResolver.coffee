@@ -66,7 +66,7 @@ defineModule module, class ModuleResolver
         shouldContinue = false
 
       else if directory == sourceRoot
-        if getMatchingName normalizedModuleName, peek sourceRoot.split "/"
+        if normalizedModuleName == normalizeName peek sourceRoot.split "/"
           absolutePath = sourceRoot
         shouldContinue = false
 
