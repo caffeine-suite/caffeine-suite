@@ -939,10 +939,10 @@ module.exports = {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, fs, log, merge, present, realRequire, ref, upperCamelCase, w,
+/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, fs, log, merge, peek, present, realRequire, ref, upperCamelCase, w,
   slice = [].slice;
 
-ref = __webpack_require__(0), defineModule = ref.defineModule, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
+ref = __webpack_require__(0), defineModule = ref.defineModule, peek = ref.peek, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
 
 fs = __webpack_require__(4);
 
@@ -953,7 +953,7 @@ realRequire = eval('require');
 findSourceRootSync = __webpack_require__(6).findSourceRootSync;
 
 defineModule(module, ModuleResolver = (function() {
-  var normalizeName;
+  var getMatchingName, normalizeName;
 
   function ModuleResolver() {}
 
@@ -978,21 +978,21 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var absolutePath, base, denormalizedBase, i, len, matchingName, mod, out, ref1, ref2, requireString, rest, sub;
+    var absolutePath, base, denormalizedBase, j, len, matchingName, mod, out, ref1, ref2, requireString, rest, sub;
     ref1 = (function() {
-      var i, len, ref1, ref2, results;
+      var j, len, ref1, ref2, results;
       ref2 = (ref1 = moduleName.split("/"), denormalizedBase = ref1[0], ref1);
       results = [];
-      for (i = 0, len = ref2.length; i < len; i++) {
-        mod = ref2[i];
+      for (j = 0, len = ref2.length; j < len; j++) {
+        mod = ref2[j];
         out = normalizeName(mod);
         results.push(out);
       }
       return results;
     })(), base = ref1[0], rest = 2 <= ref1.length ? slice.call(ref1, 1) : [];
     ref2 = ModuleResolver._findModuleBaseSync(denormalizedBase, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
-    for (i = 0, len = rest.length; i < len; i++) {
-      sub = rest[i];
+    for (j = 0, len = rest.length; j < len; j++) {
+      sub = rest[j];
       if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath)) {
         absolutePath = Path.join(absolutePath, matchingName);
         requireString = requireString + "/" + matchingName;
@@ -1034,6 +1034,9 @@ defineModule(module, ModuleResolver = (function() {
         absolutePath = Path.join(directory, matchingName);
         shouldContinue = false;
       } else if (directory === sourceRoot) {
+        if (normalizedModuleName === normalizeName(peek(sourceRoot.split("/")))) {
+          absolutePath = sourceRoot;
+        }
         shouldContinue = false;
       } else {
         directory = Path.dirname(directory);
@@ -1043,10 +1046,8 @@ defineModule(module, ModuleResolver = (function() {
       requireString = Path.relative(sourceDir, absolutePath);
       switch (requireString) {
         case "..":
-          requireString = "../../" + (Path.basename(absolutePath));
-          break;
         case ".":
-          requireString = "../" + (Path.basename(absolutePath));
+          requireString = requireString + "/";
       }
       if (!requireString.match(/^\./)) {
         requireString = "./" + requireString;
@@ -1060,22 +1061,38 @@ defineModule(module, ModuleResolver = (function() {
     }
   };
 
+  ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name) {
+    var foundLegalStop, i, j, len, normalName, offset, ref1, stop, stops;
+    if (0 === (normalName = normalizeName(name)).indexOf(normalizedModuleName)) {
+      foundLegalStop = false;
+      offset = 0;
+      ref1 = stops = name.split('.');
+      for (i = j = 0, len = ref1.length; j < len; i = ++j) {
+        stop = ref1[i];
+        offset += stop.length;
+        if (normalizedModuleName.length === offset) {
+          return stops.slice(0, i + 1).join('.');
+        }
+      }
+    }
+    return false;
+  };
+
   ModuleResolver._matchingNameInDirectorySync = function(normalizedModuleName, directory) {
     var matchingName;
     matchingName = null;
     each(fs.readdirSync(directory), function(name) {
-      var basename;
-      basename = name.split('.')[0];
-      if (normalizedModuleName === normalizeName(basename)) {
-        if (matchingName && matchingName !== basename) {
-          throw new ErrorWithInfo("More than one matching module name with\na) different actual names (" + matchingName + " != " + basename + ") and\nb) the same normalized name (" + normalizedModuleName + ")", {
+      var newMatchingName;
+      if (newMatchingName = getMatchingName(normalizedModuleName, name)) {
+        if (matchingName && matchingName !== newMatchingName) {
+          throw new ErrorWithInfo("More than one matching module name with\na) different actual base-names (" + matchingName + " != " + newMatchingName + ") and\nb) for the same normalized name (" + normalizedModuleName + ")", {
             directory: directory,
             firstMatch: matchingName,
-            secondMatch: name,
+            secondMatch: newMatchingName,
             normalizedModuleName: normalizedModuleName
           });
         }
-        return matchingName = basename;
+        return matchingName = newMatchingName;
       }
     });
     return matchingName;
@@ -1723,7 +1740,7 @@ module.exports = {
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register",
 		"testInBrowser": "webpack-dev-server --progress"
 	},
-	"version": "2.4.6"
+	"version": "2.4.7"
 };
 
 /***/ }),
