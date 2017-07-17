@@ -22,7 +22,8 @@ defineModule module, class ModuleResolver
         absolutePath = Path.dirname realRequire.resolve name = moduleName
       catch
         throw new Error "Could not find module: #{moduleName} or #{dashCase moduleName}"
-    {requireString: name, absolutePath: absolutePath}
+    requireString = Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
+    {requireString, absolutePath}
 
   @findModuleSync: (moduleName, options) =>
     [base, rest...] = for mod in [denormalizedBase] = moduleName.split "/"
@@ -33,14 +34,15 @@ defineModule module, class ModuleResolver
 
     for sub in rest
       if matchingName = @_matchingNameInDirectorySync sub, absolutePath
-        absolutePath          = Path.join absolutePath, matchingName
+        absolutePath  = Path.join absolutePath, matchingName
         requireString = "#{requireString}/#{matchingName}"
       else
         throw new ErrorWithInfo "Could not find pathed module",
+          npmName: requireString
           lookingIn: absolutePath
-          require: requireString
           lookingFor: sub
           normalized: normalizeName sub
+          dirItems: fs.readdirSync absolutePath
 
     {requireString, absolutePath}
 
@@ -82,22 +84,33 @@ defineModule module, class ModuleResolver
     else
       @getNpmPackageName moduleName
 
-  @getMatchingName: getMatchingName = (normalizedModuleName, name) ->
-    if 0 == (normalName = normalizeName name).indexOf normalizedModuleName
+  @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
+    if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
+      if isDir
+        return if index + normalName.length == normalizedModuleName.length
+          name
+        else
+          false
+
       foundLegalStop = false
       offset = 0
+
       for stop, i in stops = name.split '.'
+        stop = upperCamelCase stop
         offset += stop.length
         if normalizedModuleName.length == offset
           return stops.slice(0, i + 1).join '.'
 
     false
 
+  isDirectory = (entity) ->
+    fs.statSync(entity).isDirectory()
+
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory) ->
     matchingName = null
     each (fs.readdirSync directory), (name) ->
-      if newMatchingName = getMatchingName normalizedModuleName, name
+      if newMatchingName = getMatchingName normalizedModuleName, name, isDirectory Path.join directory, name
         if matchingName && matchingName != newMatchingName
           throw new ErrorWithInfo """
             More than one matching module name with

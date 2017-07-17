@@ -59,3 +59,12 @@ defineModule module, suite:
       .then ({requireString, absolutePath}) ->
         assert.eq requireString, "art-standard-lib/Types"
         assert.match absolutePath, /art-standard-lib\/Types$/
+
+    ### regressions to test:
+      &testing/testingMin >> testing/testing-min.js
+      should become:
+      &testing/build/testing-min
+
+    - &ArtSuite should NOT resolve a parent directory named: Art.Suite.Demos
+    ###
+
