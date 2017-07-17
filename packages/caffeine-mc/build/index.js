@@ -953,14 +953,14 @@ realRequire = eval('require');
 findSourceRootSync = __webpack_require__(6).findSourceRootSync;
 
 defineModule(module, ModuleResolver = (function() {
-  var getMatchingName, normalizeName;
+  var getMatchingName, isDirectory, normalizeName;
 
   function ModuleResolver() {}
 
   normalizeName = upperCamelCase;
 
   ModuleResolver.getNpmPackageName = function(moduleName) {
-    var absolutePath, name, normalizedModuleName;
+    var absolutePath, name, normalizedModuleName, requireString;
     normalizedModuleName = upperCamelCase(moduleName);
     try {
       absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleName)));
@@ -971,8 +971,9 @@ defineModule(module, ModuleResolver = (function() {
         throw new Error("Could not find module: " + moduleName + " or " + (dashCase(moduleName)));
       }
     }
+    requireString = Path.join(name, absolutePath.slice((absolutePath.lastIndexOf(name)) + name.length));
     return {
-      requireString: name,
+      requireString: requireString,
       absolutePath: absolutePath
     };
   };
@@ -998,10 +999,11 @@ defineModule(module, ModuleResolver = (function() {
         requireString = requireString + "/" + matchingName;
       } else {
         throw new ErrorWithInfo("Could not find pathed module", {
+          npmName: requireString,
           lookingIn: absolutePath,
-          require: requireString,
           lookingFor: sub,
-          normalized: normalizeName(sub)
+          normalized: normalizeName(sub),
+          dirItems: fs.readdirSync(absolutePath)
         });
       }
     }
@@ -1061,14 +1063,22 @@ defineModule(module, ModuleResolver = (function() {
     }
   };
 
-  ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name) {
-    var foundLegalStop, i, j, len, normalName, offset, ref1, stop, stops;
-    if (0 === (normalName = normalizeName(name)).indexOf(normalizedModuleName)) {
+  ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name, isDir) {
+    var foundLegalStop, i, index, j, len, normalName, offset, ref1, stop, stops;
+    if (0 === (index = (normalName = normalizeName(name)).indexOf(normalizedModuleName))) {
+      if (isDir) {
+        if (index + normalName.length === normalizedModuleName.length) {
+          return name;
+        } else {
+          return false;
+        }
+      }
       foundLegalStop = false;
       offset = 0;
       ref1 = stops = name.split('.');
       for (i = j = 0, len = ref1.length; j < len; i = ++j) {
         stop = ref1[i];
+        stop = upperCamelCase(stop);
         offset += stop.length;
         if (normalizedModuleName.length === offset) {
           return stops.slice(0, i + 1).join('.');
@@ -1078,12 +1088,16 @@ defineModule(module, ModuleResolver = (function() {
     return false;
   };
 
+  isDirectory = function(entity) {
+    return fs.statSync(entity).isDirectory();
+  };
+
   ModuleResolver._matchingNameInDirectorySync = function(normalizedModuleName, directory) {
     var matchingName;
     matchingName = null;
     each(fs.readdirSync(directory), function(name) {
       var newMatchingName;
-      if (newMatchingName = getMatchingName(normalizedModuleName, name)) {
+      if (newMatchingName = getMatchingName(normalizedModuleName, name, isDirectory(Path.join(directory, name)))) {
         if (matchingName && matchingName !== newMatchingName) {
           throw new ErrorWithInfo("More than one matching module name with\na) different actual base-names (" + matchingName + " != " + newMatchingName + ") and\nb) for the same normalized name (" + normalizedModuleName + ")", {
             directory: directory,
@@ -1740,7 +1754,7 @@ module.exports = {
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register",
 		"testInBrowser": "webpack-dev-server --progress"
 	},
-	"version": "2.4.7"
+	"version": "2.4.8"
 };
 
 /***/ }),
