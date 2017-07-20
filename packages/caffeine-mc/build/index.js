@@ -959,19 +959,29 @@ defineModule(module, ModuleResolver = (function() {
 
   normalizeName = upperCamelCase;
 
-  ModuleResolver.getNpmPackageName = function(moduleName) {
+
+  /*
+  IN:
+    moduleBaseName: the string before the first '/'
+    modulePathArray: every other sub-string, split by '/'
+      This is only used to determine if there is addutional pathing
+      that must be resolved. It makes a difference what the
+      require path looks like.
+   */
+
+  ModuleResolver.getNpmPackageName = function(moduleBaseName, modulePathArray) {
     var absolutePath, name, normalizedModuleName, requireString;
-    normalizedModuleName = upperCamelCase(moduleName);
+    normalizedModuleName = upperCamelCase(moduleBaseName);
     try {
-      absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleName)));
+      absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleBaseName)));
     } catch (error) {
       try {
-        absolutePath = Path.dirname(realRequire.resolve(name = moduleName));
+        absolutePath = Path.dirname(realRequire.resolve(name = moduleBaseName));
       } catch (error) {
-        throw new Error("Could not find module: " + moduleName + " or " + (dashCase(moduleName)));
+        throw new Error("Could not find module: " + moduleBaseName + " or " + (dashCase(moduleBaseName)));
       }
     }
-    requireString = Path.join(name, absolutePath.slice((absolutePath.lastIndexOf(name)) + name.length));
+    requireString = modulePathArray.length > 0 ? Path.join(name, absolutePath.slice((absolutePath.lastIndexOf(name)) + name.length)) : name;
     return {
       requireString: requireString,
       absolutePath: absolutePath
@@ -979,7 +989,7 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var absolutePath, base, denormalizedBase, j, len, matchingName, mod, out, ref1, ref2, requireString, rest, sub;
+    var absolutePath, base, denormalizedBase, j, len, matchingName, mod, modulePathArray, out, ref1, ref2, requireString, sub;
     ref1 = (function() {
       var j, len, ref1, ref2, results;
       ref2 = (ref1 = moduleName.split("/"), denormalizedBase = ref1[0], ref1);
@@ -990,10 +1000,10 @@ defineModule(module, ModuleResolver = (function() {
         results.push(out);
       }
       return results;
-    })(), base = ref1[0], rest = 2 <= ref1.length ? slice.call(ref1, 1) : [];
-    ref2 = ModuleResolver._findModuleBaseSync(denormalizedBase, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
-    for (j = 0, len = rest.length; j < len; j++) {
-      sub = rest[j];
+    })(), base = ref1[0], modulePathArray = 2 <= ref1.length ? slice.call(ref1, 1) : [];
+    ref2 = ModuleResolver._findModuleBaseSync(denormalizedBase, modulePathArray, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
+    for (j = 0, len = modulePathArray.length; j < len; j++) {
+      sub = modulePathArray[j];
       if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath)) {
         absolutePath = Path.join(absolutePath, matchingName);
         requireString = requireString + "/" + matchingName;
@@ -1017,9 +1027,9 @@ defineModule(module, ModuleResolver = (function() {
     return Promise.resolve(ModuleResolver.findModuleSync(moduleName, options));
   };
 
-  ModuleResolver._findModuleBaseSync = function(moduleName, options) {
+  ModuleResolver._findModuleBaseSync = function(moduleBaseName, modulePathArray, options) {
     var absolutePath, directory, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
-    normalizedModuleName = upperCamelCase(moduleName);
+    normalizedModuleName = upperCamelCase(moduleBaseName);
     if (options) {
       sourceFile = options.sourceFile, sourceDir = options.sourceDir, sourceFiles = options.sourceFiles, sourceRoot = options.sourceRoot;
     }
@@ -1059,7 +1069,7 @@ defineModule(module, ModuleResolver = (function() {
         absolutePath: absolutePath
       };
     } else {
-      return ModuleResolver.getNpmPackageName(moduleName);
+      return ModuleResolver.getNpmPackageName(moduleBaseName, modulePathArray);
     }
   };
 
@@ -1754,7 +1764,7 @@ module.exports = {
 		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register",
 		"testInBrowser": "webpack-dev-server --progress"
 	},
-	"version": "2.4.8"
+	"version": "2.4.9"
 };
 
 /***/ }),
