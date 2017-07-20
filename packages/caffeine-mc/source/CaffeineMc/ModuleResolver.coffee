@@ -13,26 +13,38 @@ defineModule module, class ModuleResolver
 
   normalizeName = upperCamelCase
 
-  @getNpmPackageName: (moduleName) ->
-    normalizedModuleName = upperCamelCase moduleName
+  ###
+  IN:
+    moduleBaseName: the string before the first '/'
+    modulePathArray: every other sub-string, split by '/'
+      This is only used to determine if there is addutional pathing
+      that must be resolved. It makes a difference what the
+      require path looks like.
+  ###
+  @getNpmPackageName: (moduleBaseName, modulePathArray) ->
+    normalizedModuleName = upperCamelCase moduleBaseName
     try
-      absolutePath = Path.dirname realRequire.resolve name = dashCase moduleName
+      absolutePath = Path.dirname realRequire.resolve name = dashCase moduleBaseName
     catch
       try
-        absolutePath = Path.dirname realRequire.resolve name = moduleName
+        absolutePath = Path.dirname realRequire.resolve name = moduleBaseName
       catch
-        throw new Error "Could not find module: #{moduleName} or #{dashCase moduleName}"
-    requireString = Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
+        throw new Error "Could not find module: #{moduleBaseName} or #{dashCase moduleBaseName}"
+
+    requireString = if modulePathArray.length > 0
+      Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
+    else
+      name
     {requireString, absolutePath}
 
   @findModuleSync: (moduleName, options) =>
-    [base, rest...] = for mod in [denormalizedBase] = moduleName.split "/"
+    [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
       out = normalizeName mod
       out
 
-    {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, options
+    {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, modulePathArray, options
 
-    for sub in rest
+    for sub in modulePathArray
       if matchingName = @_matchingNameInDirectorySync sub, absolutePath
         absolutePath  = Path.join absolutePath, matchingName
         requireString = "#{requireString}/#{matchingName}"
@@ -49,8 +61,8 @@ defineModule module, class ModuleResolver
   @findModule: (moduleName, options) =>
     Promise.resolve @findModuleSync moduleName, options
 
-  @_findModuleBaseSync: (moduleName, options) =>
-    normalizedModuleName = upperCamelCase moduleName
+  @_findModuleBaseSync: (moduleBaseName, modulePathArray, options) =>
+    normalizedModuleName = upperCamelCase moduleBaseName
 
     {sourceFile, sourceDir, sourceFiles, sourceRoot} = options if options
     sourceFile ||= sourceFiles?[0]
@@ -82,7 +94,7 @@ defineModule module, class ModuleResolver
       requireString = "./#{requireString}" unless requireString.match /^\./
       {requireString, absolutePath}
     else
-      @getNpmPackageName moduleName
+      @getNpmPackageName moduleBaseName, modulePathArray
 
   @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
     if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName

@@ -65,6 +65,11 @@ defineModule module, suite:
       should become:
       &testing/build/testing-min
 
-    - &ArtSuite should NOT resolve a parent directory named: Art.Suite.Demos
+    - &ArtSuite
+      should NOT resolve a parent directory named: Art.Suite.Demos
+    - &indexeddb-promised
+      should resolve to 'indexeddb-promised'
+      even though the actual file is: indexeddb-promised/js/indexeddb-promised.js
+
     ###
 
