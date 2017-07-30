@@ -429,11 +429,7 @@ module.exports = {
     return (a !== null && a !== void 0) || void 0;
   },
   is: function(a, b) {
-    if ((a != null) && (b != null)) {
-      return a.constructor === b;
-    } else {
-      return a === b;
-    }
+    return a === b || ((a != null) && (b != null) && a.constructor === b);
   },
 
   /*
@@ -446,12 +442,12 @@ module.exports = {
   OUT: and object with one property per importName
    */
   "import": _import = function(importNames, libs) {
-    var i, importFrom, importName, j, len, len1, lib, out, v;
+    var i, importFrom, importName, j, len, lib, out, v;
     out = {};
     libs = compactFlatten(libs);
     for (i = 0, len = importNames.length; i < len; i++) {
       importName = importNames[i];
-      for (j = 0, len1 = libs.length; j < len1; j++) {
+      for (j = libs.length - 1; j >= 0; j += -1) {
         lib = libs[j];
         if ((v = lib[importName]) != null) {
           out[importName] = v;
@@ -460,9 +456,9 @@ module.exports = {
       }
       if (out[importName] == null) {
         importFrom = ((function() {
-          var k, len2, results;
+          var k, len1, results;
           results = [];
-          for (k = 0, len2 = libs.length; k < len2; k++) {
+          for (k = 0, len1 = libs.length; k < len1; k++) {
             lib = libs[k];
             if (lib === global) {
               results.push("global");
