@@ -26,7 +26,7 @@ module.exports =
     out = {}
     libs = compactFlatten libs
     for importName in importNames
-      for lib in libs
+      for lib in libs by -1
         if (v = lib[importName])?
           out[importName] = v
           break
