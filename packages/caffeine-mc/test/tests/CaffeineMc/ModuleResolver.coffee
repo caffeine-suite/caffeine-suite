@@ -1,4 +1,4 @@
-{defineModule, log, each} = require 'art-standard-lib'
+{defineModule, log, each, merge, isArray} = require 'art-standard-lib'
 
 {findModule} = Neptune.CaffeineMc
 
@@ -59,6 +59,58 @@ defineModule module, suite:
       .then ({requireString, absolutePath}) ->
         assert.eq requireString, "art-standard-lib/Types"
         assert.match absolutePath, /art-standard-lib\/Types$/
+
+  stubbedFindModule: ->
+    dirReaderFromDirMap = (structure) ->
+      find = (dir, current = structure) ->
+        return current if dir.length == 0
+        [first, rest...] = if isArray dir then dir else dir.split "/"
+        find rest, structure[first]
+
+      dirReader:
+        read: (dir) ->
+          found = find dir
+          throw new Error "missing dir: #{dir}" unless found
+          Object.keys found
+        isDir: (dir) -> !!find dir
+        resolve: (dir) -> dir
+
+    test "stubbed", ->
+      findModule "ALPHA", merge
+        sourceDir:  "ArtStandardLib/beta"
+        sourceRoot: "ArtStandardLib"
+        dirReaderFromDirMap
+          ArtStandardLib:
+            alpha: {}
+            beta:  {}
+
+      .then ({requireString, absolutePath}) ->
+        assert.eq requireString, "../alpha"
+        assert.match absolutePath, "ArtStandardLib/alpha"
+
+    test "DottedDir finds My.DottedDir", ->
+      findModule "DottedDir", merge
+        sourceDir:  "myRoot/My.DottedDir/MySubdir"
+        sourceRoot: "myRoot"
+        dirReaderFromDirMap
+          myRoot:
+            "My.DottedDir":
+              MySubdir: {}
+
+      .then ({requireString, absolutePath}) ->
+        assert.eq requireString, "../"
+
+    test "MyDottedDir does not find My.DottedDir", ->
+      findModule "MyDottedDir", merge
+        sourceDir:  "myRoot/My.DottedDir/MySubdir"
+        sourceRoot: "myRoot"
+        dirReaderFromDirMap
+          myRoot:
+            "My.DottedDir": MySubdir: {}
+            MyDottedDir: {}
+
+      .then ({requireString, absolutePath}) ->
+        assert.eq requireString, "../../MyDottedDir"
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js

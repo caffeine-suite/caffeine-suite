@@ -2,8 +2,13 @@
   defineModule, peek, Promise, dashCase, upperCamelCase,
   ErrorWithInfo, log, merge, present, find, each, w
 } = require 'art-standard-lib'
-fs = require 'fs-extra'
 Path = require 'path'
+
+{statSync, readdirSync} = require 'fs-extra'
+realDirReader =
+  isDir: (entity) -> statSync(entity).isDirectory()
+  read: readdirSync
+  resolve: Path.resolve
 
 realRequire = eval 'require'
 
@@ -38,6 +43,8 @@ defineModule module, class ModuleResolver
     {requireString, absolutePath}
 
   @findModuleSync: (moduleName, options) =>
+    dirReader = options.dirReader ||= realDirReader
+
     [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
       out = normalizeName mod
       out
@@ -45,7 +52,7 @@ defineModule module, class ModuleResolver
     {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, modulePathArray, options
 
     for sub in modulePathArray
-      if matchingName = @_matchingNameInDirectorySync sub, absolutePath
+      if matchingName = @_matchingNameInDirectorySync sub, absolutePath, options
         absolutePath  = Path.join absolutePath, matchingName
         requireString = "#{requireString}/#{matchingName}"
       else
@@ -54,7 +61,7 @@ defineModule module, class ModuleResolver
           lookingIn: absolutePath
           lookingFor: sub
           normalized: normalizeName sub
-          dirItems: fs.readdirSync absolutePath
+          dirItems: dirReader.read absolutePath
 
     {requireString, absolutePath}
 
@@ -62,20 +69,21 @@ defineModule module, class ModuleResolver
     Promise.resolve @findModuleSync moduleName, options
 
   @_findModuleBaseSync: (moduleBaseName, modulePathArray, options) =>
+    {dirReader} = options
     normalizedModuleName = upperCamelCase moduleBaseName
 
     {sourceFile, sourceDir, sourceFiles, sourceRoot} = options if options
     sourceFile ||= sourceFiles?[0]
 
     if sourceFile || sourceDir
-      directory = sourceDir = Path.resolve sourceDir || Path.dirname sourceFile
+      directory = sourceDir = dirReader.resolve sourceDir || Path.dirname sourceFile
       sourceRoot ||= findSourceRootSync sourceDir
-      sourceRoot = sourceRoot && Path.resolve sourceRoot
+      sourceRoot = sourceRoot && dirReader.resolve sourceRoot
 
     absolutePath = null
     shouldContinue = present sourceRoot
     while shouldContinue
-      if matchingName = @_matchingNameInDirectorySync normalizedModuleName, directory
+      if matchingName = @_matchingNameInDirectorySync normalizedModuleName, directory, options
         absolutePath = Path.join directory, matchingName
         shouldContinue = false
 
@@ -97,12 +105,11 @@ defineModule module, class ModuleResolver
       @getNpmPackageName moduleBaseName, modulePathArray
 
   @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
-    if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
-      if isDir
-        return if index + normalName.length == normalizedModuleName.length
-          name
-        else
-          false
+    if isDir
+      for part in name.split '.'
+        return name if normalizedModuleName == normalizeName part
+      false
+    else if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
 
       foundLegalStop = false
       offset = 0
@@ -115,14 +122,12 @@ defineModule module, class ModuleResolver
 
     false
 
-  isDirectory = (entity) ->
-    fs.statSync(entity).isDirectory()
-
   # PRIVATE
-  @_matchingNameInDirectorySync: (normalizedModuleName, directory) ->
+  @_matchingNameInDirectorySync: (normalizedModuleName, directory, options) ->
+    {dirReader} = options
     matchingName = null
-    each (fs.readdirSync directory), (name) ->
-      if newMatchingName = getMatchingName normalizedModuleName, name, isDirectory Path.join directory, name
+    each (dirReader.read directory), (name) ->
+      if newMatchingName = getMatchingName normalizedModuleName, name, dirReader.isDir Path.join directory, name
         if matchingName && matchingName != newMatchingName
           throw new ErrorWithInfo """
             More than one matching module name with
