@@ -567,13 +567,13 @@ module.exports = require("colors");
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var BabelBridge, CaffeineMcParser, isFunction, isString, log, lowerCamelCase, merge, present, ref, upperCamelCase,
+var CaffeineEight, CaffeineMcParser, isFunction, isString, log, lowerCamelCase, merge, present, ref, upperCamelCase,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
 ref = __webpack_require__(0), present = ref.present, isFunction = ref.isFunction, log = ref.log, isString = ref.isString, lowerCamelCase = ref.lowerCamelCase, upperCamelCase = ref.upperCamelCase, merge = ref.merge;
 
-BabelBridge = __webpack_require__(26);
+CaffeineEight = __webpack_require__(26);
 
 module.exports = CaffeineMcParser = (function(superClass) {
   extend(CaffeineMcParser, superClass);
@@ -608,14 +608,14 @@ module.exports = CaffeineMcParser = (function(superClass) {
     toEof: /(.|\n)*$/,
     toEol: /\S[^\n]*/,
     end: /\n|$/,
-    block: BabelBridge.Extensions.IndentBlocks.getPropsToSubparseBlock({
+    block: CaffeineEight.Extensions.IndentBlocks.getPropsToSubparseBlock({
       rule: "toEof"
     })
   });
 
   return CaffeineMcParser;
 
-})(BabelBridge.Parser);
+})(CaffeineEight.Parser);
 
 
 /***/ }),
@@ -939,21 +939,29 @@ module.exports = {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, fs, log, merge, peek, present, realRequire, ref, upperCamelCase, w,
+/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, peek, present, readdirSync, realDirReader, realRequire, ref, ref1, statSync, upperCamelCase, w,
   slice = [].slice;
 
 ref = __webpack_require__(0), defineModule = ref.defineModule, peek = ref.peek, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
 
-fs = __webpack_require__(4);
-
 Path = __webpack_require__(2);
+
+ref1 = __webpack_require__(4), statSync = ref1.statSync, readdirSync = ref1.readdirSync;
+
+realDirReader = {
+  isDir: function(entity) {
+    return statSync(entity).isDirectory();
+  },
+  read: readdirSync,
+  resolve: Path.resolve
+};
 
 realRequire = eval('require');
 
 findSourceRootSync = __webpack_require__(6).findSourceRootSync;
 
 defineModule(module, ModuleResolver = (function() {
-  var getMatchingName, isDirectory, normalizeName;
+  var getMatchingName, normalizeName;
 
   function ModuleResolver() {}
 
@@ -989,22 +997,23 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var absolutePath, base, denormalizedBase, j, len, matchingName, mod, modulePathArray, out, ref1, ref2, requireString, sub;
-    ref1 = (function() {
-      var j, len, ref1, ref2, results;
-      ref2 = (ref1 = moduleName.split("/"), denormalizedBase = ref1[0], ref1);
+    var absolutePath, base, denormalizedBase, dirReader, j, len, matchingName, mod, modulePathArray, out, ref2, ref3, requireString, sub;
+    dirReader = options.dirReader || (options.dirReader = realDirReader);
+    ref2 = (function() {
+      var j, len, ref2, ref3, results;
+      ref3 = (ref2 = moduleName.split("/"), denormalizedBase = ref2[0], ref2);
       results = [];
-      for (j = 0, len = ref2.length; j < len; j++) {
-        mod = ref2[j];
+      for (j = 0, len = ref3.length; j < len; j++) {
+        mod = ref3[j];
         out = normalizeName(mod);
         results.push(out);
       }
       return results;
-    })(), base = ref1[0], modulePathArray = 2 <= ref1.length ? slice.call(ref1, 1) : [];
-    ref2 = ModuleResolver._findModuleBaseSync(denormalizedBase, modulePathArray, options), requireString = ref2.requireString, absolutePath = ref2.absolutePath;
+    })(), base = ref2[0], modulePathArray = 2 <= ref2.length ? slice.call(ref2, 1) : [];
+    ref3 = ModuleResolver._findModuleBaseSync(denormalizedBase, modulePathArray, options), requireString = ref3.requireString, absolutePath = ref3.absolutePath;
     for (j = 0, len = modulePathArray.length; j < len; j++) {
       sub = modulePathArray[j];
-      if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath)) {
+      if (matchingName = ModuleResolver._matchingNameInDirectorySync(sub, absolutePath, options)) {
         absolutePath = Path.join(absolutePath, matchingName);
         requireString = requireString + "/" + matchingName;
       } else {
@@ -1013,7 +1022,7 @@ defineModule(module, ModuleResolver = (function() {
           lookingIn: absolutePath,
           lookingFor: sub,
           normalized: normalizeName(sub),
-          dirItems: fs.readdirSync(absolutePath)
+          dirItems: dirReader.read(absolutePath)
         });
       }
     }
@@ -1028,21 +1037,22 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver._findModuleBaseSync = function(moduleBaseName, modulePathArray, options) {
-    var absolutePath, directory, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
+    var absolutePath, dirReader, directory, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
+    dirReader = options.dirReader;
     normalizedModuleName = upperCamelCase(moduleBaseName);
     if (options) {
       sourceFile = options.sourceFile, sourceDir = options.sourceDir, sourceFiles = options.sourceFiles, sourceRoot = options.sourceRoot;
     }
     sourceFile || (sourceFile = sourceFiles != null ? sourceFiles[0] : void 0);
     if (sourceFile || sourceDir) {
-      directory = sourceDir = Path.resolve(sourceDir || Path.dirname(sourceFile));
+      directory = sourceDir = dirReader.resolve(sourceDir || Path.dirname(sourceFile));
       sourceRoot || (sourceRoot = findSourceRootSync(sourceDir));
-      sourceRoot = sourceRoot && Path.resolve(sourceRoot);
+      sourceRoot = sourceRoot && dirReader.resolve(sourceRoot);
     }
     absolutePath = null;
     shouldContinue = present(sourceRoot);
     while (shouldContinue) {
-      if (matchingName = ModuleResolver._matchingNameInDirectorySync(normalizedModuleName, directory)) {
+      if (matchingName = ModuleResolver._matchingNameInDirectorySync(normalizedModuleName, directory, options)) {
         absolutePath = Path.join(directory, matchingName);
         shouldContinue = false;
       } else if (directory === sourceRoot) {
@@ -1074,20 +1084,22 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name, isDir) {
-    var foundLegalStop, i, index, j, len, normalName, offset, ref1, stop, stops;
-    if (0 === (index = (normalName = normalizeName(name)).indexOf(normalizedModuleName))) {
-      if (isDir) {
-        if (index + normalName.length === normalizedModuleName.length) {
+    var foundLegalStop, i, index, j, k, len, len1, normalName, offset, part, ref2, ref3, stop, stops;
+    if (isDir) {
+      ref2 = name.split('.');
+      for (j = 0, len = ref2.length; j < len; j++) {
+        part = ref2[j];
+        if (normalizedModuleName === normalizeName(part)) {
           return name;
-        } else {
-          return false;
         }
       }
+      false;
+    } else if (0 === (index = (normalName = normalizeName(name)).indexOf(normalizedModuleName))) {
       foundLegalStop = false;
       offset = 0;
-      ref1 = stops = name.split('.');
-      for (i = j = 0, len = ref1.length; j < len; i = ++j) {
-        stop = ref1[i];
+      ref3 = stops = name.split('.');
+      for (i = k = 0, len1 = ref3.length; k < len1; i = ++k) {
+        stop = ref3[i];
         stop = upperCamelCase(stop);
         offset += stop.length;
         if (normalizedModuleName.length === offset) {
@@ -1098,16 +1110,13 @@ defineModule(module, ModuleResolver = (function() {
     return false;
   };
 
-  isDirectory = function(entity) {
-    return fs.statSync(entity).isDirectory();
-  };
-
-  ModuleResolver._matchingNameInDirectorySync = function(normalizedModuleName, directory) {
-    var matchingName;
+  ModuleResolver._matchingNameInDirectorySync = function(normalizedModuleName, directory, options) {
+    var dirReader, matchingName;
+    dirReader = options.dirReader;
     matchingName = null;
-    each(fs.readdirSync(directory), function(name) {
+    each(dirReader.read(directory), function(name) {
       var newMatchingName;
-      if (newMatchingName = getMatchingName(normalizedModuleName, name, isDirectory(Path.join(directory, name)))) {
+      if (newMatchingName = getMatchingName(normalizedModuleName, name, dirReader.isDir(Path.join(directory, name)))) {
         if (matchingName && matchingName !== newMatchingName) {
           throw new ErrorWithInfo("More than one matching module name with\na) different actual base-names (" + matchingName + " != " + newMatchingName + ") and\nb) for the same normalized name (" + normalizedModuleName + ")", {
             directory: directory,
@@ -1726,8 +1735,8 @@ module.exports = {
 		"art-config": "*",
 		"art-standard-lib": "*",
 		"art-testbench": "*",
-		"babel-bridge": "^1.10.0",
 		"bluebird": "^3.5.0",
+		"caffeine-eight": "*",
 		"caffeine-script": "*",
 		"caffeine-script-runtime": "*",
 		"cardinal": "^1.0.0",
@@ -1771,7 +1780,7 @@ module.exports = {
 /* 26 */
 /***/ (function(module, exports) {
 
-module.exports = require("babel-bridge");
+module.exports = require("caffeine-eight");
 
 /***/ }),
 /* 27 */

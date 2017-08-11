@@ -1,9 +1,9 @@
 {
   present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge
 } = require 'art-standard-lib'
-BabelBridge = require 'babel-bridge'
+CaffeineEight = require 'caffeine-eight'
 
-module.exports = class CaffeineMcParser extends BabelBridge.Parser
+module.exports = class CaffeineMcParser extends CaffeineEight.Parser
 
   @rule
     root: "!oneLinerWithoutColon meta? toEof"
@@ -27,4 +27,4 @@ module.exports = class CaffeineMcParser extends BabelBridge.Parser
     toEof: /(.|\n)*$/
     toEol: /\S[^\n]*/
     end: /\n|$/
-    block: BabelBridge.Extensions.IndentBlocks.getPropsToSubparseBlock rule: "toEof"
+    block: CaffeineEight.Extensions.IndentBlocks.getPropsToSubparseBlock rule: "toEof"
