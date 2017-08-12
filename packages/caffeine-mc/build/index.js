@@ -939,10 +939,10 @@ module.exports = {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, peek, present, readdirSync, realDirReader, realRequire, ref, ref1, statSync, upperCamelCase, w,
+/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, mergeInto, peek, present, readdirSync, realDirReader, realRequire, ref, ref1, statSync, upperCamelCase, w,
   slice = [].slice;
 
-ref = __webpack_require__(0), defineModule = ref.defineModule, peek = ref.peek, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w;
+ref = __webpack_require__(0), defineModule = ref.defineModule, peek = ref.peek, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w, mergeInto = ref.mergeInto;
 
 Path = __webpack_require__(2);
 
@@ -986,7 +986,9 @@ defineModule(module, ModuleResolver = (function() {
       try {
         absolutePath = Path.dirname(realRequire.resolve(name = moduleBaseName));
       } catch (error) {
-        throw new Error("Could not find module: " + moduleBaseName + " or " + (dashCase(moduleBaseName)));
+        throw new ErrorWithInfo("ModuleResolver: Could not find requested npm package: " + moduleBaseName, {
+          npmPackageNamesAttempted: [moduleBaseName, dashCase(moduleBaseName)]
+        });
       }
     }
     requireString = modulePathArray.length > 0 ? Path.join(name, absolutePath.slice((absolutePath.lastIndexOf(name)) + name.length)) : name;
@@ -1017,10 +1019,10 @@ defineModule(module, ModuleResolver = (function() {
         absolutePath = Path.join(absolutePath, matchingName);
         requireString = requireString + "/" + matchingName;
       } else {
-        throw new ErrorWithInfo("Could not find pathed module", {
-          npmName: requireString,
-          lookingIn: absolutePath,
-          lookingFor: sub,
+        throw new ErrorWithInfo("Could not find pathed submodule inside npm package.", {
+          npmPackage: requireString,
+          localNpmPackageLocation: absolutePath,
+          submodulePath: sub,
           normalized: normalizeName(sub),
           dirItems: dirReader.read(absolutePath)
         });
@@ -1037,7 +1039,7 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver._findModuleBaseSync = function(moduleBaseName, modulePathArray, options) {
-    var absolutePath, dirReader, directory, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
+    var absolutePath, dirReader, directory, e, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
     dirReader = options.dirReader;
     normalizedModuleName = upperCamelCase(moduleBaseName);
     if (options) {
@@ -1079,7 +1081,18 @@ defineModule(module, ModuleResolver = (function() {
         absolutePath: absolutePath
       };
     } else {
-      return ModuleResolver.getNpmPackageName(moduleBaseName, modulePathArray);
+      try {
+        return ModuleResolver.getNpmPackageName(moduleBaseName, modulePathArray);
+      } catch (error) {
+        e = error;
+        if (e.info) {
+          mergeInto(e.info, {
+            sourceDir: sourceDir,
+            sourceRoot: sourceRoot
+          });
+        }
+        throw e;
+      }
     }
   };
 
@@ -1724,57 +1737,7 @@ module.exports = JavaScript = (function(superClass) {
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = {
-	"author": "Shane Brinkman-Davis Delamore, Imikimi LLC",
-	"bin": {
-		"caf": "./caf"
-	},
-	"dependencies": {
-		"art-build-configurator": "*",
-		"art-class-system": "*",
-		"art-config": "*",
-		"art-standard-lib": "*",
-		"art-testbench": "*",
-		"bluebird": "^3.5.0",
-		"caffeine-eight": "*",
-		"caffeine-script": "*",
-		"caffeine-script-runtime": "*",
-		"cardinal": "^1.0.0",
-		"case-sensitive-paths-webpack-plugin": "^2.1.1",
-		"chai": "^4.0.1",
-		"chalk": "^1.1.3",
-		"coffee-loader": "^0.7.3",
-		"coffee-script": "^1.12.6",
-		"colors": "^1.1.2",
-		"commander": "^2.9.0",
-		"css-loader": "^0.28.4",
-		"dateformat": "^2.0.0",
-		"detect-node": "^2.0.3",
-		"fs-extra": "^3.0.0",
-		"glob": "^7.0.3",
-		"glob-promise": "^3.1.0",
-		"json-loader": "^0.5.4",
-		"mocha": "^3.4.2",
-		"neptune-namespaces": "*",
-		"prettier": "^0.18.0",
-		"script-loader": "^0.7.0",
-		"style-loader": "^0.18.1",
-		"webpack": "^2.6.1",
-		"webpack-dev-server": "^2.4.5",
-		"webpack-merge": "^4.1.0",
-		"webpack-node-externals": "^1.6.0"
-	},
-	"description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
-	"license": "ISC",
-	"name": "caffeine-mc",
-	"scripts": {
-		"build": "webpack --progress",
-		"start": "webpack-dev-server --hot --inline --progress",
-		"test": "nn -s;mocha -u tdd --compilers coffee:coffee-script/register",
-		"testInBrowser": "webpack-dev-server --progress"
-	},
-	"version": "2.4.10"
-};
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.4.11"}
 
 /***/ }),
 /* 26 */
