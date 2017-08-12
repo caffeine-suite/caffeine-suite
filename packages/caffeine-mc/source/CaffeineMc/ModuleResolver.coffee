@@ -1,6 +1,7 @@
 {
   defineModule, peek, Promise, dashCase, upperCamelCase,
   ErrorWithInfo, log, merge, present, find, each, w
+  mergeInto
 } = require 'art-standard-lib'
 Path = require 'path'
 
@@ -34,7 +35,8 @@ defineModule module, class ModuleResolver
       try
         absolutePath = Path.dirname realRequire.resolve name = moduleBaseName
       catch
-        throw new Error "Could not find module: #{moduleBaseName} or #{dashCase moduleBaseName}"
+        throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
+          npmPackageNamesAttempted: [moduleBaseName, dashCase moduleBaseName]
 
     requireString = if modulePathArray.length > 0
       Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
@@ -56,10 +58,10 @@ defineModule module, class ModuleResolver
         absolutePath  = Path.join absolutePath, matchingName
         requireString = "#{requireString}/#{matchingName}"
       else
-        throw new ErrorWithInfo "Could not find pathed module",
-          npmName: requireString
-          lookingIn: absolutePath
-          lookingFor: sub
+        throw new ErrorWithInfo "Could not find pathed submodule inside npm package.",
+          npmPackage: requireString
+          localNpmPackageLocation: absolutePath
+          submodulePath: sub
           normalized: normalizeName sub
           dirItems: dirReader.read absolutePath
 
@@ -102,7 +104,12 @@ defineModule module, class ModuleResolver
       requireString = "./#{requireString}" unless requireString.match /^\./
       {requireString, absolutePath}
     else
-      @getNpmPackageName moduleBaseName, modulePathArray
+      try
+        @getNpmPackageName moduleBaseName, modulePathArray
+      catch e
+        if e.info
+          mergeInto e.info, {sourceDir, sourceRoot}
+        throw e
 
   @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
     if isDir
