@@ -12,7 +12,7 @@ defineModule module, suite: ->
     assert.eq Caf.import(["foo", "bar"], [foo:123, bar: 456]), foo: 123, bar: 456
 
   test "import miss", ->
-    assert.eq Caf.import(["foo", "bar"], [foo:123]), foo: 123
+    assert.rejects -> Caf.import ["foo", "bar"], [foo:123]
 
   test "import last has priority", ->
     assert.eq Caf.import(["foo"], [{foo:123}, {foo:456}]), foo: 456

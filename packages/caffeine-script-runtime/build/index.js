@@ -442,8 +442,9 @@ module.exports = {
   OUT: and object with one property per importName
    */
   "import": _import = function(importNames, libs) {
-    var i, importFrom, importName, j, len, lib, out, v;
+    var i, importFileName, importFrom, importName, j, k, len, len1, lib, line, notFound, out, ref1, ref2, v;
     out = {};
+    notFound = null;
     libs = compactFlatten(libs);
     for (i = 0, len = importNames.length; i < len; i++) {
       importName = importNames[i];
@@ -455,24 +456,36 @@ module.exports = {
         }
       }
       if (out[importName] == null) {
-        importFrom = ((function() {
-          var k, len1, results;
-          results = [];
-          for (k = 0, len1 = libs.length; k < len1; k++) {
-            lib = libs[k];
-            if (lib === global) {
-              results.push("global");
-            } else if (lib != null) {
-              results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
-            } else {
-              results.push('null');
-            }
-          }
-          return results;
-        })()).join('\n  ');
-        console.warn("Caf.import WARNING: unable to find a non-null, non-undefined value for: " + importName + ". \nimporting:\n  " + (importNames.join('\n  ')) + "\nfrom:\n  " + importFrom);
-        console.log(((new Error).stack.split("\n").slice(0, 3)).join("\n"));
+        (notFound || (notFound = [])).push(importName);
       }
+    }
+    if (notFound != null) {
+      importFrom = ((function() {
+        var k, len1, results;
+        results = [];
+        for (k = 0, len1 = libs.length; k < len1; k++) {
+          lib = libs[k];
+          if (lib === global) {
+            results.push("global");
+          } else if (lib != null) {
+            results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
+          } else {
+            results.push('null');
+          }
+        }
+        return results;
+      })()).join('\n  ');
+      ref1 = (new Error).stack.split("\n");
+      for (k = 0, len1 = ref1.length; k < len1; k++) {
+        line = ref1[k];
+        if (!(line.match(/^\s/) && !line.match(/caffeine-script-runtime/))) {
+          continue;
+        }
+        importFileName = ((ref2 = line.match(/\(([^()]+)/)) != null ? ref2[1] : void 0) || line;
+        break;
+      }
+      console.warn("CaffineScript imports not found:\n  " + (notFound.join('\n  ')) + "\n\nimporting from:\n  " + importFrom + "\n\nsource:\n  " + importFileName + "\n");
+      throw new Error("CaffineScript imports not found: " + (notFound.join(', ')));
     }
     return out;
   },
