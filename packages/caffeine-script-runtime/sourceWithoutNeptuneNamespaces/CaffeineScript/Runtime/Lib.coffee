@@ -24,6 +24,7 @@ module.exports =
   ###
   import: _import = (importNames, libs) ->
     out = {}
+    notFound = null
     libs = compactFlatten libs
     for importName in importNames
       for lib in libs by -1
@@ -31,16 +32,34 @@ module.exports =
           out[importName] = v
           break
       unless out[importName]?
-        importFrom = (for lib in libs
-          if lib == global
-            "global"
-          else if lib?
-            lib.namespacePath || lib.getName?() || "{#{Object.keys(lib).join ', '}}"
-          else
-            'null'
-        ).join '\n  '
-        console.warn "Caf.import WARNING: unable to find a non-null, non-undefined value for: #{importName}. \nimporting:\n  #{importNames.join '\n  '}\nfrom:\n  #{importFrom}"
-        console.log ((new Error).stack.split("\n").slice 0, 3).join "\n"
+        (notFound ||= []).push importName
+
+    if notFound?
+      importFrom = (for lib in libs
+        if lib == global
+          "global"
+        else if lib?
+          lib.namespacePath || lib.getName?() || "{#{Object.keys(lib).join ', '}}"
+        else
+          'null'
+      ).join '\n  '
+
+      for line in (new Error).stack.split("\n") when line.match(/^\s/) && !line.match /caffeine-script-runtime/
+        importFileName = line.match(/\(([^()]+)/)?[1] || line
+        break
+
+      console.warn """
+        CaffineScript imports not found:
+          #{notFound.join '\n  '}
+
+        importing from:
+          #{importFrom}
+
+        source:
+          #{importFileName}
+
+        """
+      throw new Error "CaffineScript imports not found: #{notFound.join ', '}"
     out
 
   # CaffeineStyle truth (same as Ruby)
