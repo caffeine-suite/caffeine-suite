@@ -1474,7 +1474,8 @@ defineModule(module, CafRepl = (function() {
                 _this.cafRepl.outputStream.write("\n\n");
               }
               result = evaluateMode ? (showSource ? _this.cafRepl.outputStream.write("Evaluate...\n".grey) : void 0, _this.replEval(command, context, filename)) : ("evaluation off (.evaluate to turn back on)".grey, void 0);
-              log.resolvePromiseWrapper(result, function(toLog, label, wasResolved) {
+              (_this.replEval("global", context, filename)).$last = result;
+              log.resolvePromiseWrapper(result, function(toLog, label, wasResolved, wasRejected) {
                 var finalOut, lines, obj, out;
                 lastOutput = out = formattedInspect(label ? (
                   obj = {},
@@ -1490,7 +1491,7 @@ defineModule(module, CafRepl = (function() {
                 if (finalOut.length > maxOutputCharacters) {
                   finalOut = finalOut.slice(0, maxOutputCharacters);
                 }
-                if (wasResolved) {
+                if (wasResolved || wasRejected) {
                   log("");
                 }
                 log(finalOut);
@@ -1507,8 +1508,17 @@ defineModule(module, CafRepl = (function() {
                     log(("  showing: " + finalOut.length + "/" + lastOutput.length + " characters").gray);
                   }
                   log("  show all: .last".gray);
+                  log("  result available at: global.$last".gray);
                 }
-                if (wasResolved) {
+                if (wasResolved || wasRejected) {
+                  if (wasResolved) {
+                    log("  resolved value available at: global.$lastResolved");
+                    (_this.replEval("global", context, filename)).$lastResolved = toLog;
+                  } else if (wasRejected) {
+                    log("  rejected value available at: global.$last");
+                    (_this.replEval("global", context, filename)).$lastRejected = toLog;
+                  }
+                  log("  promise available at: global.$last");
                   return _this.cafRepl.displayPrompt();
                 }
               });
@@ -1531,7 +1541,7 @@ defineModule(module, CafRepl = (function() {
         });
         _this.addCommand({
           name: "last",
-          help: "CaffeineMC: Show the last output value in its entirety.",
+          help: "CaffeineMC: Show the last output value in its entirety. $last contains the value of the last output.",
           action: function() {
             _this.cafRepl.outputStream.write("" + lastOutput);
             _this.cafRepl.outputStream.write("\n");
@@ -1737,7 +1747,7 @@ module.exports = JavaScript = (function(superClass) {
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.4.11"}
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.5.0"}
 
 /***/ }),
 /* 26 */
