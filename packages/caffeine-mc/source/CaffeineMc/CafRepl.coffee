@@ -68,7 +68,7 @@ defineModule module, class CafRepl
               "evaluation off (.evaluate to turn back on)".grey
               undefined
 
-            log.resolvePromiseWrapper result, (toLog, label, wasResolved) =>
+            log.resolvePromiseWrapper result, (toLog, label, wasResolved, wasRejected) =>
               lastOutput = out = formattedInspect(
                 if label then {"#{label}": toLog} else toLog
                 color: true
@@ -79,7 +79,7 @@ defineModule module, class CafRepl
               finalOut = ((lines = out.split("\n")).slice 0, maxOutputLines).join "\n"
               finalOut = finalOut.slice 0, maxOutputCharacters if finalOut.length > maxOutputCharacters
 
-              log "" if wasResolved
+              log "" if wasResolved || wasRejected
               log finalOut
               if finalOut != out
                 log "output truncated".gray
@@ -92,8 +92,18 @@ defineModule module, class CafRepl
                 else
                   log "  showing: #{finalOut.length}/#{lastOutput.length} characters".gray
                 log "  show all: .last".gray
+                log "  result available at: global.$last".gray
 
-              @cafRepl.displayPrompt() if wasResolved
+              if wasResolved || wasRejected
+                if wasResolved
+                  log "  resolved value available at: global.$last"
+
+                else if wasRejected
+                  log "  rejected value available at: global.$last"
+
+                @cafRepl.displayPrompt()
+
+              (@replEval "global", context, filename).$last = toLog
 
             callback()
           catch e
@@ -110,7 +120,7 @@ defineModule module, class CafRepl
 
       @addCommand
         name: "last"
-        help: "CaffeineMC: Show the last output value in its entirety."
+        help: "CaffeineMC: Show the last output value in its entirety. $last contains the value of the last output."
         action: =>
           @cafRepl.outputStream.write "#{lastOutput}"
           @cafRepl.outputStream.write "\n"
