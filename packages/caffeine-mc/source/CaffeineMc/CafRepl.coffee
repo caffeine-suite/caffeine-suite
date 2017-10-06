@@ -68,6 +68,8 @@ defineModule module, class CafRepl
               "evaluation off (.evaluate to turn back on)".grey
               undefined
 
+            (@replEval "global", context, filename).$last = result
+
             log.resolvePromiseWrapper result, (toLog, label, wasResolved, wasRejected) =>
               lastOutput = out = formattedInspect(
                 if label then {"#{label}": toLog} else toLog
@@ -96,14 +98,17 @@ defineModule module, class CafRepl
 
               if wasResolved || wasRejected
                 if wasResolved
-                  log "  resolved value available at: global.$last"
+
+                  log "  resolved value available at: global.$lastResolved"
+                  (@replEval "global", context, filename).$lastResolved = toLog
 
                 else if wasRejected
                   log "  rejected value available at: global.$last"
+                  (@replEval "global", context, filename).$lastRejected = toLog
+                log "  promise available at: global.$last"
 
                 @cafRepl.displayPrompt()
 
-              (@replEval "global", context, filename).$last = toLog
 
             callback()
           catch e
