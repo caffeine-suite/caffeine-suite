@@ -1511,11 +1511,11 @@ defineModule(module, CafRepl = (function() {
                   log("  result available at: global.$last".gray);
                 }
                 if (wasResolved || wasRejected) {
-                  if (wasResolved) {
+                  if (!wasRejected) {
                     log("  resolved value available at: global.$lastResolved");
                     (_this.replEval("global", context, filename)).$lastResolved = toLog;
-                  } else if (wasRejected) {
-                    log("  rejected value available at: global.$last");
+                  } else {
+                    log("  rejected value available at: global.$lastRejected");
                     (_this.replEval("global", context, filename)).$lastRejected = toLog;
                   }
                   log("  promise available at: global.$last");
