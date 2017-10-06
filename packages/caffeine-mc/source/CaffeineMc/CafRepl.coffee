@@ -97,16 +97,15 @@ defineModule module, class CafRepl
                 log "  result available at: global.$last".gray
 
               if wasResolved || wasRejected
-                if wasResolved
-
+                if !wasRejected
                   log "  resolved value available at: global.$lastResolved"
                   (@replEval "global", context, filename).$lastResolved = toLog
 
-                else if wasRejected
-                  log "  rejected value available at: global.$last"
+                else
+                  log "  rejected value available at: global.$lastRejected"
                   (@replEval "global", context, filename).$lastRejected = toLog
-                log "  promise available at: global.$last"
 
+                log "  promise available at: global.$last"
                 @cafRepl.displayPrompt()
 
 
