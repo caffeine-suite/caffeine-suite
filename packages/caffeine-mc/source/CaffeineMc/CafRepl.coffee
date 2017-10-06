@@ -93,19 +93,20 @@ defineModule module, class CafRepl
                   log "  showing: #{maxOutputLines}/#{lines.length} lines".gray
                 else
                   log "  showing: #{finalOut.length}/#{lastOutput.length} characters".gray
-                log "  show all: .last".gray
-                log "  result available at: global.$last".gray
+                log "  show all:                      .last".gray
+                log "  result available at:           $last".gray
 
               if wasResolved || wasRejected
                 if !wasRejected
-                  log "  resolved value available at: global.$lastResolved"
+                  log "  resolved value available at:   $lastResolved"
                   (@replEval "global", context, filename).$lastResolved = toLog
 
                 else
-                  log "  rejected value available at: global.$lastRejected"
+                  log "  rejected value available at:   $lastRejected"
                   (@replEval "global", context, filename).$lastRejected = toLog
 
-                log "  promise available at: global.$last"
+                (@replEval "global", context, filename).$lastPromise = result
+                log "  promise available at:          $lastPromise"
                 @cafRepl.displayPrompt()
 
 
