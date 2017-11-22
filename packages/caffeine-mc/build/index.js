@@ -1396,9 +1396,9 @@ __webpack_require__(11);
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, isArray, isArrayUniversal, isPlainObjectUniversal, log, maxOutputCharacters, maxOutputLines, objectKeyCount, path, ref, ref1, repl, runInContext;
+/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, isArray, isArrayUniversal, isPlainObjectUniversal, log, maxOutputCharacters, maxOutputLines, merge, objectKeyCount, path, ref, ref1, repl, runInContext;
 
-ref = __webpack_require__(0), objectKeyCount = ref.objectKeyCount, isArray = ref.isArray, isArrayUniversal = ref.isArrayUniversal, isPlainObjectUniversal = ref.isPlainObjectUniversal, formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
+ref = __webpack_require__(0), merge = ref.merge, objectKeyCount = ref.objectKeyCount, isArray = ref.isArray, isArrayUniversal = ref.isArrayUniversal, isPlainObjectUniversal = ref.isPlainObjectUniversal, formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
 
 getCaffeineInit = __webpack_require__(6).getCaffeineInit;
 
@@ -1441,26 +1441,56 @@ defineModule(module, CafRepl = (function() {
         _this.cafRepl = repl.start({
           prompt: _this.getPrompt(),
           completer: function(command) {
-            var __, commandToEval, commandToReturn, k, keys, last, regex, result, trimmedCommand;
-            try {
-              commandToReturn = command;
-              trimmedCommand = command.trim();
-              commandToEval = (result = trimmedCommand.match(regex = /\.([$\w\u007f-\uffff]*)$/)) ? ((__ = result[0], last = result[1], result), trimmedCommand.split(regex)[0]) : trimmedCommand;
-              result = _this.replEval(commandToEval);
-              keys = (function() {
-                var ref2, results;
-                results = [];
-                for (k in result) {
-                  if (!last || ((ref2 = k.match(last)) != null ? ref2.index : void 0) === 0) {
-                    results.push(k);
+            var __, commandToEval, error, k, key, keys, last, out, regex, result, trimmedCommand;
+            trimmedCommand = command.trim();
+            commandToEval = (result = trimmedCommand.match(regex = /\.([$\w\u007f-\uffff]*)$/)) ? ((__ = result[0], last = result[1], result), trimmedCommand.split(regex)[0]) : trimmedCommand.match(/^[$\w\u007f-\uffff]*$/) ? (last = trimmedCommand, "global") : trimmedCommand;
+            out = (function() {
+              try {
+                result = this._replEval(commandToEval);
+                keys = (function() {
+                  var ref2, results;
+                  results = [];
+                  for (k in result) {
+                    if (!last || ((ref2 = k.match(last)) != null ? ref2.index : void 0) === 0) {
+                      results.push(k);
+                    }
                   }
+                  return results;
+                })();
+                this.cafRepl.outputStream.write("\n" + (formattedInspect({
+                  "tab-completion": merge({
+                    object: commandToEval,
+                    prefix: last != null ? last : "(none)",
+                    found: keys.length <= 3 ? keys.join(', ') : (keys.slice(0, 3).join(', ')) + "..."
+                  })
+                }, {
+                  color: true
+                })) + (keys.length > 3 ? ("  press tab again to show all " + keys.length + "\n").gray : ""));
+                if (last || /\.$/.test(command)) {
+                  return [keys, last];
+                } else {
+                  return [
+                    (function() {
+                      var i, len, results;
+                      results = [];
+                      for (i = 0, len = keys.length; i < len; i++) {
+                        key = keys[i];
+                        results.push("." + key);
+                      }
+                      return results;
+                    })(), ""
+                  ];
                 }
-                return results;
-              })();
-              return [keys, last || ""];
-            } catch (error1) {
-              return [[], command];
+              } catch (error1) {
+                error = error1;
+                this.cafRepl.outputStream.write("\ntab-completion could not evaluate: " + commandToEval.red + "\n");
+                return [[], trimmedCommand];
+              }
+            }).call(_this);
+            if (out[0].length === 0) {
+              _this.cafRepl.displayPrompt(true);
             }
+            return out;
           },
           "eval": function(command, context, filename, callback) {
             var e, result;
@@ -1558,7 +1588,7 @@ defineModule(module, CafRepl = (function() {
             return _this.cafRepl.displayPrompt();
           }
         });
-        return _this.addCommand({
+        _this.addCommand({
           name: "source",
           help: "toggle show-source",
           action: function() {
@@ -1567,6 +1597,7 @@ defineModule(module, CafRepl = (function() {
             return _this.cafRepl.displayPrompt();
           }
         });
+        return runInContext("Neptune.CaffeineMc.register()", _this.cafRepl.context);
       };
     })(this))["catch"](function(error) {
       return log.error({
@@ -1596,6 +1627,19 @@ defineModule(module, CafRepl = (function() {
 
   CafRepl._showCurrentCompiler = function() {
     return log("Your current compiler is: ".gray + this.compiler.compilerName.green);
+  };
+
+  CafRepl._replEval = function(command, context, filename) {
+    var js;
+    if (context == null) {
+      context = this.cafRepl.context;
+    }
+    js = this.compileCommand(command, filename);
+    if (command.match(/^\|/)) {
+      return this.compiler.lastMetacompilerResult;
+    } else {
+      return runInContext(js, context);
+    }
   };
 
   lastCompiler = null;
@@ -1748,7 +1792,7 @@ module.exports = JavaScript = (function(superClass) {
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.5.2"}
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.6.0"}
 
 /***/ }),
 /* 26 */
