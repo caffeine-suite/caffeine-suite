@@ -38,13 +38,24 @@ defineModule module, class CafRepl
             commandToEval = if result = trimmedCommand.match regex = /\.([$\w\u007f-\uffff]*)$/
               [__, last] = result
               trimmedCommand.split(regex)[0]
+            else if trimmedCommand.match /^[$\w\u007f-\uffff]*$/
+              last = trimmedCommand
+              "global"
             else
               trimmedCommand
+
 
             result = @replEval commandToEval
 
             keys = for k of result when !last || k.match(last)?.index == 0
               k
+
+            @cafRepl.outputStream.write "\n" + (formattedInspect
+              object: commandToEval
+              prefix: last ? "(none)"
+              found: keys
+              {color: true}
+            ) + "\n"
 
             [keys, last || ""]
           catch
@@ -146,6 +157,8 @@ defineModule module, class CafRepl
           showSource = !showSource
           @cafRepl.outputStream.write "Show-Source Mode is #{if showSource then 'On' else 'Off'}\n"
           @cafRepl.displayPrompt()
+
+      runInContext "Neptune.CaffeineMc.register()", @cafRepl.context
 
     .catch (error) ->
       log.error replError: error
