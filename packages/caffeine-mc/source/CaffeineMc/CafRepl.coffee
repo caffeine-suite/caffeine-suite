@@ -1,6 +1,6 @@
 # Some code FROM: https://github.com/jashkenas/coffeescript/blob/master/src/repl.coffee
 
-{objectKeyCount, isArray, isArrayUniversal, isPlainObjectUniversal, formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
+{merge, objectKeyCount, isArray, isArrayUniversal, isPlainObjectUniversal, formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
 {getCaffeineInit} = require './SourceRoots'
 {runInContext, displayError} = CaffeineMc = require './namespace'
 
@@ -32,34 +32,47 @@ defineModule module, class CafRepl
         prompt: @getPrompt()
 
         completer: (command)=>
-          try
-            commandToReturn = command
-            trimmedCommand = command.trim()
-            commandToEval = if result = trimmedCommand.match regex = /\.([$\w\u007f-\uffff]*)$/
-              [__, last] = result
-              trimmedCommand.split(regex)[0]
-            else if trimmedCommand.match /^[$\w\u007f-\uffff]*$/
-              last = trimmedCommand
-              "global"
-            else
-              trimmedCommand
+          trimmedCommand = command.trim()
+          commandToEval = if result = trimmedCommand.match regex = /\.([$\w\u007f-\uffff]*)$/
+            [__, last] = result
+            trimmedCommand.split(regex)[0]
+          else if trimmedCommand.match /^[$\w\u007f-\uffff]*$/
+            last = trimmedCommand
+            "global"
+          else
+            trimmedCommand
 
-
-            result = @replEval commandToEval
+          out = try
+            result = @_replEval commandToEval
 
             keys = for k of result when !last || k.match(last)?.index == 0
               k
 
             @cafRepl.outputStream.write "\n" + (formattedInspect
-              object: commandToEval
-              prefix: last ? "(none)"
-              found: keys
+              "tab-completion": merge
+                object: commandToEval
+                prefix: last ? "(none)"
+                found: if keys.length <= 3 then keys.join ', ' else
+                  (keys.slice(0,3).join ', ') + "..."
               {color: true}
-            ) + "\n"
+            ) + if keys.length > 3
+              "  press tab again to show all #{keys.length}\n".gray
+            else ""
 
-            [keys, last || ""]
-          catch
-            [[], command]
+            if last || /\.$/.test command
+              [keys, last]
+            else
+              [
+                ".#{key}" for key in keys
+                ""
+              ]
+          catch error
+            @cafRepl.outputStream.write "\ntab-completion could not evaluate: #{commandToEval.red}\n"
+            [[], trimmedCommand]
+
+          if out[0].length == 0
+            @cafRepl.displayPrompt true
+          out
 
         eval: (command, context, filename, callback) =>
           try
@@ -178,6 +191,13 @@ defineModule module, class CafRepl
 
   @_showCurrentCompiler: ->
     log "Your current compiler is: ".gray + @compiler.compilerName.green
+
+  @_replEval: (command, context = @cafRepl.context, filename) ->
+    js = @compileCommand command, filename
+    if command.match /^\|/
+      @compiler.lastMetacompilerResult
+    else
+      runInContext js, context
 
   lastCompiler = null
   @replEval: (command, context = @cafRepl.context, filename) ->
