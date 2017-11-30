@@ -14,7 +14,7 @@ defineModule module, class CompileCache extends BaseClass
 
   @classGetter
     compileCacheFilePathRoot: ->
-      @_compileCacheFilePathRoot ||= path.join os.tmpDir(), @compileCacheFileNameRoot
+      @_compileCacheFilePathRoot ||= path.join os.tmpdir(), @compileCacheFileNameRoot
 
   @getCompilerSignature: (compiler) ->
     {version} = compiler
