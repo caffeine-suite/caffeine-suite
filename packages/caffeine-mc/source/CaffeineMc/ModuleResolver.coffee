@@ -68,7 +68,7 @@ defineModule module, class ModuleResolver
     {requireString, absolutePath}
 
   @findModule: (moduleName, options) =>
-    Promise.resolve @findModuleSync moduleName, options
+    Promise.then => @findModuleSync moduleName, options
 
   @_findModuleBaseSync: (moduleBaseName, modulePathArray, options) =>
     {dirReader} = options
@@ -111,13 +111,52 @@ defineModule module, class ModuleResolver
           mergeInto e.info, {sourceDir, sourceRoot}
         throw e
 
-  @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
-    if isDir
-      for part in name.split '.'
-        return name if normalizedModuleName == normalizeName part
-      false
-    else if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
+  ###
+  Notes about "." names-with-dots.
 
+    Essentially, dots are treated as word-boundaries.
+
+    Files:
+      We need to manage extensions. Current rule:
+        Full match example: FooCaf matches foo.caf
+        PartialMatch must fully match on dot-boundaries:
+          Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
+        PartialMatch must match starting at the first character:
+          Foo.BarFood.caf does NOT match BarFood but does match Foo
+
+    Dirs:
+      Dirs must fully match:
+        Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
+
+  Future:
+    I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
+    Basically, this parallels how NeptuneNamespaces interprets them.
+    It should work identically to as-if there were nested dirs.
+
+    Given these files:
+
+      MyFile1.caf
+      Foo/Bar/MyFile2.caf
+
+    OR these files:
+
+      MyFile1.caf
+      Foo.Bar/MyFile2.caf
+
+    Then:
+      # inside MyFile1.caf
+      # this works:
+      &Foo/Bar/MyFile2
+
+
+  ###
+  # returns false or name, if it matches
+  @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
+    # log getMatchingName: {normalizedModuleName, name, isDir, normalName: normalizeName name}
+    if isDir
+      if normalizedModuleName == normalName = normalizeName name
+        return name
+    else if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
       foundLegalStop = false
       offset = 0
 

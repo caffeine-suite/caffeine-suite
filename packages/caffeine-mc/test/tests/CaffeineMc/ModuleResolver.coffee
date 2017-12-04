@@ -88,8 +88,8 @@ defineModule module, suite:
         assert.eq requireString, "../alpha"
         assert.match absolutePath, "ArtStandardLib/alpha"
 
-    test "DottedDir finds My.DottedDir", ->
-      findModule "DottedDir", merge
+    test "MyDottedDir finds My.DottedDir", ->
+      findModule "MyDottedDir", merge
         sourceDir:  "myRoot/My.DottedDir/MySubdir"
         sourceRoot: "myRoot"
         dirReaderFromDirMap
@@ -100,8 +100,8 @@ defineModule module, suite:
       .then ({requireString, absolutePath}) ->
         assert.eq requireString, "../"
 
-    test "MyDottedDir does not find My.DottedDir", ->
-      findModule "MyDottedDir", merge
+    test "DottedDir does not find My.DottedDir", ->
+      assert.rejects findModule "DottedDir", merge
         sourceDir:  "myRoot/My.DottedDir/MySubdir"
         sourceRoot: "myRoot"
         dirReaderFromDirMap
@@ -109,8 +109,8 @@ defineModule module, suite:
             "My.DottedDir": MySubdir: {}
             MyDottedDir: {}
 
-      .then ({requireString, absolutePath}) ->
-        assert.eq requireString, "../../MyDottedDir"
+      # .then ({requireString, absolutePath}) ->
+      #   assert.eq requireString, "../../MyDottedDir"
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js
