@@ -1035,7 +1035,9 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModule = function(moduleName, options) {
-    return Promise.resolve(ModuleResolver.findModuleSync(moduleName, options));
+    return Promise.then(function() {
+      return ModuleResolver.findModuleSync(moduleName, options);
+    });
   };
 
   ModuleResolver._findModuleBaseSync = function(moduleBaseName, modulePathArray, options) {
@@ -1096,23 +1098,57 @@ defineModule(module, ModuleResolver = (function() {
     }
   };
 
+
+  /*
+  Notes about "." names-with-dots.
+  
+    Essentially, dots are treated as word-boundaries.
+  
+    Files:
+      We need to manage extensions. Current rule:
+        Full match example: FooCaf matches foo.caf
+        PartialMatch must fully match on dot-boundaries:
+          Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
+        PartialMatch must match starting at the first character:
+          Foo.BarFood.caf does NOT match BarFood but does match Foo
+  
+    Dirs:
+      Dirs must fully match:
+        Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
+  
+  Future:
+    I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
+    Basically, this parallels how NeptuneNamespaces interprets them.
+    It should work identically to as-if there were nested dirs.
+  
+    Given these files:
+  
+      MyFile1.caf
+      Foo/Bar/MyFile2.caf
+  
+    OR these files:
+  
+      MyFile1.caf
+      Foo.Bar/MyFile2.caf
+  
+    Then:
+       * inside MyFile1.caf
+       * this works:
+      &Foo/Bar/MyFile2
+   */
+
   ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name, isDir) {
-    var foundLegalStop, i, index, j, k, len, len1, normalName, offset, part, ref2, ref3, stop, stops;
+    var foundLegalStop, i, index, j, len, normalName, offset, ref2, stop, stops;
     if (isDir) {
-      ref2 = name.split('.');
-      for (j = 0, len = ref2.length; j < len; j++) {
-        part = ref2[j];
-        if (normalizedModuleName === normalizeName(part)) {
-          return name;
-        }
+      if (normalizedModuleName === (normalName = normalizeName(name))) {
+        return name;
       }
-      false;
     } else if (0 === (index = (normalName = normalizeName(name)).indexOf(normalizedModuleName))) {
       foundLegalStop = false;
       offset = 0;
-      ref3 = stops = name.split('.');
-      for (i = k = 0, len1 = ref3.length; k < len1; i = ++k) {
-        stop = ref3[i];
+      ref2 = stops = name.split('.');
+      for (i = j = 0, len = ref2.length; j < len; i = ++j) {
+        stop = ref2[i];
         stop = upperCamelCase(stop);
         offset += stop.length;
         if (normalizedModuleName.length === offset) {
@@ -1792,7 +1828,7 @@ module.exports = JavaScript = (function(superClass) {
 /* 25 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.6.1"}
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.1","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^2.0.0","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.7.0"}
 
 /***/ }),
 /* 26 */
