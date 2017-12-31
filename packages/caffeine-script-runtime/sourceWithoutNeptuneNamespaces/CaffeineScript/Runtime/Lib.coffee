@@ -2,6 +2,33 @@
 require './Global'
 global.__definingModule = null
 
+throwImportError = (notFound, importNames, libs) ->
+  importFrom = (for lib in libs
+    if lib == global
+      "global"
+    else if lib?
+      lib.namespacePath || lib.getName?() || "{#{Object.keys(lib).join ', '}}"
+    else
+      'null'
+  ).join '\n  '
+
+  for line in (new Error).stack.split("\n") when line.match(/^\s/) && !line.match /caffeine-script-runtime/
+    importFileName = line.match(/\(([^()]+)/)?[1] || line
+    break
+
+  console.warn """
+    CaffineScript imports not found:
+      #{notFound.join '\n  '}
+
+    importing from:
+      #{importFrom}
+
+    source:
+      #{importFileName}
+
+    """
+  throw new Error "CaffineScript imports not found: #{notFound.join ', '}"
+
 module.exports =
   in:  (a, b) -> a in b
   mod: (a, b) -> a %% b
@@ -34,33 +61,42 @@ module.exports =
       unless out[importName]?
         (notFound ||= []).push importName
 
-    if notFound?
-      importFrom = (for lib in libs
-        if lib == global
-          "global"
-        else if lib?
-          lib.namespacePath || lib.getName?() || "{#{Object.keys(lib).join ', '}}"
-        else
-          'null'
-      ).join '\n  '
-
-      for line in (new Error).stack.split("\n") when line.match(/^\s/) && !line.match /caffeine-script-runtime/
-        importFileName = line.match(/\(([^()]+)/)?[1] || line
-        break
-
-      console.warn """
-        CaffineScript imports not found:
-          #{notFound.join '\n  '}
-
-        importing from:
-          #{importFrom}
-
-        source:
-          #{importFileName}
-
-        """
-      throw new Error "CaffineScript imports not found: #{notFound.join ', '}"
+    throwImportError notFound, importNames, libs if notFound?
     out
+
+
+
+  ###
+  IN:
+    importNames: array of strings
+    libs: array of objects to import from, with arbitrary subarray nesting
+    toInvoke: function
+
+  EFFECT:
+    for each import-name, libs are searched in reverse order for a value with that name.
+      if no value is found, an error is down with and information is provided.
+
+    toInvoke is called with each of the values found in order as arugments.
+    the value form toInvoke is returned
+
+  EXAMPLE:
+    importInvoke(["a", "b"], [a:1, b:2], toInvoke)
+    EFFECT: return toInvoke 1, 2
+  ###
+  importInvoke: (importNames, libs, toInvoke) ->
+    notFound = null
+    libs = compactFlatten libs
+    importValues = for importName in importNames
+      importValue = null
+      for lib in libs by -1
+        if (v = lib[importName])?
+          importValue = v
+          break
+      unless importValue
+        (notFound ||= []).push importName
+
+    throwImportError notFound, importNames, libs if notFound?
+    toInvoke importValues...
 
   # CaffeineStyle truth (same as Ruby)
 
