@@ -4,8 +4,9 @@
 module.exports = require './namespace'
 module.exports
 .addModules
-  Import:    require './Import'   
-  Is:        require './Is'       
-  Iteration: require './Iteration'
-  Super:     require './Super'    
-  ToString:  require './ToString' 
+  Import:       require './Import'      
+  ImportInvoke: require './ImportInvoke'
+  Is:           require './Is'          
+  Iteration:    require './Iteration'   
+  Super:        require './Super'       
+  ToString:     require './ToString'    

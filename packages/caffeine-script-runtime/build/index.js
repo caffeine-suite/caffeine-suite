@@ -399,7 +399,7 @@ module.exports = {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref,
+var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref, throwImportError,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
@@ -408,6 +408,36 @@ ref = __webpack_require__(0), compactFlatten = ref.compactFlatten, isPlainArray 
 __webpack_require__(3);
 
 global.__definingModule = null;
+
+throwImportError = function(notFound, importNames, libs) {
+  var i, importFileName, importFrom, len, lib, line, ref1, ref2;
+  importFrom = ((function() {
+    var i, len, results;
+    results = [];
+    for (i = 0, len = libs.length; i < len; i++) {
+      lib = libs[i];
+      if (lib === global) {
+        results.push("global");
+      } else if (lib != null) {
+        results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
+      } else {
+        results.push('null');
+      }
+    }
+    return results;
+  })()).join('\n  ');
+  ref1 = (new Error).stack.split("\n");
+  for (i = 0, len = ref1.length; i < len; i++) {
+    line = ref1[i];
+    if (!(line.match(/^\s/) && !line.match(/caffeine-script-runtime/))) {
+      continue;
+    }
+    importFileName = ((ref2 = line.match(/\(([^()]+)/)) != null ? ref2[1] : void 0) || line;
+    break;
+  }
+  console.warn("CaffineScript imports not found:\n  " + (notFound.join('\n  ')) + "\n\nimporting from:\n  " + importFrom + "\n\nsource:\n  " + importFileName + "\n");
+  throw new Error("CaffineScript imports not found: " + (notFound.join(', ')));
+};
 
 module.exports = {
   "in": function(a, b) {
@@ -442,7 +472,7 @@ module.exports = {
   OUT: and object with one property per importName
    */
   "import": _import = function(importNames, libs) {
-    var i, importFileName, importFrom, importName, j, k, len, len1, lib, line, notFound, out, ref1, ref2, v;
+    var i, importName, j, len, lib, notFound, out, v;
     out = {};
     notFound = null;
     libs = compactFlatten(libs);
@@ -460,34 +490,57 @@ module.exports = {
       }
     }
     if (notFound != null) {
-      importFrom = ((function() {
-        var k, len1, results;
-        results = [];
-        for (k = 0, len1 = libs.length; k < len1; k++) {
-          lib = libs[k];
-          if (lib === global) {
-            results.push("global");
-          } else if (lib != null) {
-            results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
-          } else {
-            results.push('null');
-          }
-        }
-        return results;
-      })()).join('\n  ');
-      ref1 = (new Error).stack.split("\n");
-      for (k = 0, len1 = ref1.length; k < len1; k++) {
-        line = ref1[k];
-        if (!(line.match(/^\s/) && !line.match(/caffeine-script-runtime/))) {
-          continue;
-        }
-        importFileName = ((ref2 = line.match(/\(([^()]+)/)) != null ? ref2[1] : void 0) || line;
-        break;
-      }
-      console.warn("CaffineScript imports not found:\n  " + (notFound.join('\n  ')) + "\n\nimporting from:\n  " + importFrom + "\n\nsource:\n  " + importFileName + "\n");
-      throw new Error("CaffineScript imports not found: " + (notFound.join(', ')));
+      throwImportError(notFound, importNames, libs);
     }
     return out;
+  },
+
+  /*
+  IN:
+    importNames: array of strings
+    libs: array of objects to import from, with arbitrary subarray nesting
+    toInvoke: function
+  
+  EFFECT:
+    for each import-name, libs are searched in reverse order for a value with that name.
+      if no value is found, an error is down with and information is provided.
+  
+    toInvoke is called with each of the values found in order as arugments.
+    the value form toInvoke is returned
+  
+  EXAMPLE:
+    importInvoke(["a", "b"], [a:1, b:2], toInvoke)
+    EFFECT: return toInvoke 1, 2
+   */
+  importInvoke: function(importNames, libs, toInvoke) {
+    var importName, importValue, importValues, lib, notFound, v;
+    notFound = null;
+    libs = compactFlatten(libs);
+    importValues = (function() {
+      var i, j, len, results;
+      results = [];
+      for (i = 0, len = importNames.length; i < len; i++) {
+        importName = importNames[i];
+        importValue = null;
+        for (j = libs.length - 1; j >= 0; j += -1) {
+          lib = libs[j];
+          if ((v = lib[importName]) != null) {
+            importValue = v;
+            break;
+          }
+        }
+        if (!importValue) {
+          results.push((notFound || (notFound = [])).push(importName));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    })();
+    if (notFound != null) {
+      throwImportError(notFound, importNames, libs);
+    }
+    return toInvoke.apply(null, importValues);
   },
   isTrue: isTrue = function(a) {
     return (a != null) && a !== false;

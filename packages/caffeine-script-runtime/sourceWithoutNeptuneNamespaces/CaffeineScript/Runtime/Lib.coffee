@@ -92,8 +92,7 @@ module.exports =
         if (v = lib[importName])?
           importValue = v
           break
-      unless importValue
-        (notFound ||= []).push importName
+      importValue ? (notFound ||= []).push importName
 
     throwImportError notFound, importNames, libs if notFound?
     toInvoke importValues...
