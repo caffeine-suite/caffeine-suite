@@ -529,11 +529,7 @@ module.exports = {
             break;
           }
         }
-        if (!importValue) {
-          results.push((notFound || (notFound = [])).push(importName));
-        } else {
-          results.push(void 0);
-        }
+        results.push(importValue != null ? importValue : (notFound || (notFound = [])).push(importName));
       }
       return results;
     })();
