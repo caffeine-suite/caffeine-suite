@@ -10,8 +10,8 @@ fs = require 'fs'
 
 historyFile = path.join process.env.HOME, '.caffeine-mc-history' if process.env.HOME
 historyMaxInputSize = 10240
-maxOutputLines = 20
-maxOutputCharacters = maxOutputLines * 80
+maxOutputLines = 30
+maxOutputCharacters = maxOutputLines * 200
 
 {highlight} = require './Highlight'
 
