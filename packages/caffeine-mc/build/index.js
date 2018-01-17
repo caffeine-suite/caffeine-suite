@@ -1432,9 +1432,9 @@ __webpack_require__(11);
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, isArray, isArrayUniversal, isPlainObjectUniversal, log, maxOutputCharacters, maxOutputLines, merge, objectKeyCount, path, ref, ref1, repl, runInContext;
+/* WEBPACK VAR INJECTION */(function(module) {var CafRepl, CaffeineMc, compactFlatten, currentSecond, defineModule, displayError, formattedInspect, fs, getCaffeineInit, highlight, historyFile, historyMaxInputSize, isArray, isArrayUniversal, isPlainObjectUniversal, log, maxOutputCharacters, maxOutputLines, merge, objectKeyCount, path, ref, ref1, repl, runInContext;
 
-ref = __webpack_require__(0), merge = ref.merge, objectKeyCount = ref.objectKeyCount, isArray = ref.isArray, isArrayUniversal = ref.isArrayUniversal, isPlainObjectUniversal = ref.isPlainObjectUniversal, formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
+ref = __webpack_require__(0), currentSecond = ref.currentSecond, merge = ref.merge, objectKeyCount = ref.objectKeyCount, isArray = ref.isArray, isArrayUniversal = ref.isArrayUniversal, isPlainObjectUniversal = ref.isPlainObjectUniversal, formattedInspect = ref.formattedInspect, defineModule = ref.defineModule, log = ref.log, compactFlatten = ref.compactFlatten;
 
 getCaffeineInit = __webpack_require__(6).getCaffeineInit;
 
@@ -1459,9 +1459,18 @@ maxOutputCharacters = maxOutputLines * 80;
 highlight = __webpack_require__(14).highlight;
 
 defineModule(module, CafRepl = (function() {
-  var lastCompiler;
+  var lastCompiler, logReplInfo;
 
   function CafRepl() {}
+
+  logReplInfo = function(categoryName, info) {
+    var out;
+    out = categoryName.gray;
+    if (info != null) {
+      out += info.green;
+    }
+    return log(out);
+  };
 
   CafRepl.start = function(parser) {
     return getCaffeineInit().then((function(_this) {
@@ -1471,8 +1480,8 @@ defineModule(module, CafRepl = (function() {
         evaluateMode = true;
         lastOutput = null;
         _this.compiler = init.compiler, config = init.config;
-        log("Welcome to the CaffeineMC console.".gray);
-        log("For help: ".gray + ".help");
+        logReplInfo("Welcome to the CaffeineMC console.");
+        logReplInfo("For help: ", ".help");
         _this._showCurrentCompiler();
         _this.cafRepl = repl.start({
           prompt: _this.getPrompt(),
@@ -1529,8 +1538,9 @@ defineModule(module, CafRepl = (function() {
             return out;
           },
           "eval": function(command, context, filename, callback) {
-            var e, result;
+            var e, midTime, result, startTime;
             try {
+              startTime = currentSecond();
               if (command.trim() === '') {
                 return callback();
               }
@@ -1541,8 +1551,10 @@ defineModule(module, CafRepl = (function() {
               }
               result = evaluateMode ? (showSource ? _this.cafRepl.outputStream.write("Evaluate...\n".grey) : void 0, _this.replEval(command, context, filename)) : ("evaluation off (.evaluate to turn back on)".grey, void 0);
               (_this.replEval("global", context, filename)).$last = result;
+              midTime = currentSecond();
               log.resolvePromiseWrapper(result, function(toLog, label, wasResolved, wasRejected) {
-                var finalOut, lines, obj, out;
+                var finalOut, finalTime, lines, obj, out;
+                finalTime = currentSecond();
                 lastOutput = out = formattedInspect(label ? (
                   obj = {},
                   obj["" + label] = toLog,
@@ -1562,33 +1574,38 @@ defineModule(module, CafRepl = (function() {
                 }
                 log(finalOut);
                 if (finalOut !== out) {
-                  log("output truncated".gray);
+                  logReplInfo("output truncated");
                   if (isArray(toLog)) {
-                    log(("  array: length: " + toLog.length).gray);
+                    logReplInfo("  array: length: " + toLog.length);
                   } else if (isPlainObjectUniversal(toLog)) {
-                    log(("  object: keys: " + (objectKeyCount(toLog))).gray);
+                    logReplInfo("  object: keys: " + (objectKeyCount(toLog)));
                   }
                   if (lines.length > maxOutputLines) {
-                    log(("  showing: " + maxOutputLines + "/" + lines.length + " lines").gray);
+                    logReplInfo("  showing: " + maxOutputLines + "/" + lines.length + " lines");
                   } else {
-                    log(("  showing: " + finalOut.length + "/" + lastOutput.length + " characters").gray);
+                    logReplInfo("  showing: " + finalOut.length + "/" + lastOutput.length + " characters");
                   }
-                  log("  show all:                      .last".gray);
-                  log("  result available at:           $last".gray);
+                  logReplInfo("  show all:                      ", ".last");
+                  logReplInfo("  result available at:           ", "$last");
                 }
                 if (wasResolved || wasRejected) {
+                  logReplInfo("  promise wall-time:             ", ((finalTime - midTime) * 1000 | 0) + "ms");
+                  logReplInfo("  total wall-time:               ", ((finalTime - startTime) * 1000 | 0) + "ms");
                   if (!wasRejected) {
-                    log("  resolved value available at:   $lastResolved");
+                    logReplInfo("  resolved value available at:   ", "$lastResolved");
                     (_this.replEval("global", context, filename)).$lastResolved = toLog;
                   } else {
-                    log("  rejected value available at:   $lastRejected");
+                    logReplInfo("  rejected value available at:   ", "$lastRejected");
                     (_this.replEval("global", context, filename)).$lastRejected = toLog;
                   }
                   (_this.replEval("global", context, filename)).$lastPromise = result;
-                  log("  promise available at:          $lastPromise");
+                  logReplInfo("  promise available at:          ", "$lastPromise");
                   return _this.cafRepl.displayPrompt();
                 }
               });
+              if (midTime - startTime > .1) {
+                logReplInfo("wall-time: ", ((midTime - startTime) * 1000 | 0) + "ms");
+              }
               return callback();
             } catch (error1) {
               e = error1;
@@ -1662,7 +1679,7 @@ defineModule(module, CafRepl = (function() {
   };
 
   CafRepl._showCurrentCompiler = function() {
-    return log("Your current compiler is: ".gray + this.compiler.compilerName.green);
+    return logReplInfo("Your current compiler is: ", this.compiler.compilerName);
   };
 
   CafRepl._replEval = function(command, context, filename) {
