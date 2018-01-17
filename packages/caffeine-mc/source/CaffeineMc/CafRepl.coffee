@@ -1,6 +1,6 @@
 # Some code FROM: https://github.com/jashkenas/coffeescript/blob/master/src/repl.coffee
 
-{merge, objectKeyCount, isArray, isArrayUniversal, isPlainObjectUniversal, formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
+{currentSecond, merge, objectKeyCount, isArray, isArrayUniversal, isPlainObjectUniversal, formattedInspect, defineModule, log, compactFlatten} = require 'art-standard-lib'
 {getCaffeineInit} = require './SourceRoots'
 {runInContext, displayError} = CaffeineMc = require './namespace'
 
@@ -16,6 +16,11 @@ maxOutputCharacters = maxOutputLines * 80
 {highlight} = require './Highlight'
 
 defineModule module, class CafRepl
+  logReplInfo = (categoryName, info) ->
+    out = categoryName.gray
+    out += info.green if info?
+    log out
+
   @start: (parser) ->
     getCaffeineInit()
     .then (init) =>
@@ -24,8 +29,8 @@ defineModule module, class CafRepl
       lastOutput = null
       {@compiler, config} = init
 
-      log "Welcome to the CaffeineMC console.".gray
-      log "For help: ".gray + ".help"
+      logReplInfo "Welcome to the CaffeineMC console."
+      logReplInfo "For help: ", ".help"
       @_showCurrentCompiler()
 
       @cafRepl = repl.start
@@ -76,6 +81,7 @@ defineModule module, class CafRepl
 
         eval: (command, context, filename, callback) =>
           try
+            startTime = currentSecond()
             if command.trim() == ''
               return callback()
 
@@ -94,7 +100,9 @@ defineModule module, class CafRepl
 
             (@replEval "global", context, filename).$last = result
 
+            midTime = currentSecond()
             log.resolvePromiseWrapper result, (toLog, label, wasResolved, wasRejected) =>
+              finalTime = currentSecond()
               lastOutput = out = formattedInspect(
                 if label then {"#{label}": toLog} else toLog
                 color: true
@@ -108,31 +116,35 @@ defineModule module, class CafRepl
               log "" if wasResolved || wasRejected
               log finalOut
               if finalOut != out
-                log "output truncated".gray
+                logReplInfo "output truncated"
                 if isArray toLog
-                  log "  array: length: #{toLog.length}".gray
+                  logReplInfo "  array: length: #{toLog.length}"
                 else if isPlainObjectUniversal toLog
-                  log "  object: keys: #{objectKeyCount toLog}".gray
+                  logReplInfo "  object: keys: #{objectKeyCount toLog}"
                 if lines.length > maxOutputLines
-                  log "  showing: #{maxOutputLines}/#{lines.length} lines".gray
+                  logReplInfo "  showing: #{maxOutputLines}/#{lines.length} lines"
                 else
-                  log "  showing: #{finalOut.length}/#{lastOutput.length} characters".gray
-                log "  show all:                      .last".gray
-                log "  result available at:           $last".gray
+                  logReplInfo "  showing: #{finalOut.length}/#{lastOutput.length} characters"
+                logReplInfo "  show all:                      ", ".last"
+                logReplInfo "  result available at:           ", "$last"
 
               if wasResolved || wasRejected
+                logReplInfo "  promise wall-time:             ", "#{(finalTime - midTime) * 1000 | 0}ms"
+                logReplInfo "  total wall-time:               ", "#{(finalTime - startTime) * 1000 | 0}ms"
+
                 if !wasRejected
-                  log "  resolved value available at:   $lastResolved"
+                  logReplInfo "  resolved value available at:   ", "$lastResolved"
                   (@replEval "global", context, filename).$lastResolved = toLog
 
                 else
-                  log "  rejected value available at:   $lastRejected"
+                  logReplInfo "  rejected value available at:   ", "$lastRejected"
                   (@replEval "global", context, filename).$lastRejected = toLog
 
                 (@replEval "global", context, filename).$lastPromise = result
-                log "  promise available at:          $lastPromise"
+                logReplInfo "  promise available at:          ", "$lastPromise"
                 @cafRepl.displayPrompt()
-
+            if midTime - startTime > .1
+              logReplInfo "wall-time: ", "#{(midTime-startTime)*1000 | 0}ms"
 
             callback()
           catch e
@@ -190,7 +202,7 @@ defineModule module, class CafRepl
       displayError e
 
   @_showCurrentCompiler: ->
-    log "Your current compiler is: ".gray + @compiler.compilerName.green
+    logReplInfo "Your current compiler is: ", @compiler.compilerName
 
   @_replEval: (command, context = @cafRepl.context, filename) ->
     js = @compileCommand command, filename
