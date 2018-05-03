@@ -64,7 +64,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -186,9 +186,26 @@ module.exports = ArrayCompactFlatten = (function() {
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+var isNonNegativeInt;
+
+isNonNegativeInt = function(x) {
+  return ((x | 0) === x) && x >= 0;
+};
+
+module.exports = {
+  isArrayIterable: function(source) {
+    return source && isNonNegativeInt(source.length) && source.constructor !== Object;
+  }
+};
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var k, out, ref, ref1, ref2, v;
+var k, out, ref, ref1, ref2, ref3, v;
 
 module.exports = out = {};
 
@@ -198,28 +215,34 @@ for (k in ref) {
   out[k] = v;
 }
 
-ref1 = __webpack_require__(4);
+ref1 = __webpack_require__(5);
 for (k in ref1) {
   v = ref1[k];
   out[k] = v;
 }
 
-ref2 = __webpack_require__(5);
+ref2 = __webpack_require__(6);
 for (k in ref2) {
   v = ref2[k];
   out[k] = v;
 }
 
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(1);
+ref3 = __webpack_require__(7);
+for (k in ref3) {
+  v = ref3[k];
+  out[k] = v;
+}
 
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(2);
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 var g;
@@ -230,18 +253,12 @@ g.global = g;
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
 
-var arrayIterableTest, each, extendedEach, isNonNegativeInt;
+var each, extendedEach, isArrayIterable;
 
-isNonNegativeInt = function(x) {
-  return ((x | 0) === x) && x >= 0;
-};
-
-arrayIterableTest = function(source) {
-  return source && isNonNegativeInt(source.length) && source.constructor !== Object;
-};
+isArrayIterable = __webpack_require__(1).isArrayIterable;
 
 
 /*
@@ -273,11 +290,11 @@ module.exports = {
    */
   each: each = function(source, out, withBlock) {
     var i, k, len, v;
-    if (out === "undefined") {
+    if (out == null) {
       out = source;
     }
     if (source != null) {
-      if (arrayIterableTest(source)) {
+      if (isArrayIterable(source)) {
         for (k = i = 0, len = source.length; i < len; k = ++i) {
           v = source[k];
           withBlock(v, k, out);
@@ -371,7 +388,7 @@ module.exports = {
         shouldBreak = true;
         return void 0;
       };
-      if (arrayIterableTest(source)) {
+      if (isArrayIterable(source)) {
         for (k = i = 0, len = source.length; i < len; k = ++i) {
           v = source[k];
           out = withBlock(v, k, out, setShouldBreak);
@@ -396,7 +413,258 @@ module.exports = {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var existsTest, isArrayIterable, returnFirst, returnSecond, returnTrue;
+
+isArrayIterable = __webpack_require__(1).isArrayIterable;
+
+existsTest = function(a) {
+  return a != null;
+};
+
+returnTrue = function() {
+  return true;
+};
+
+returnFirst = function(a) {
+  return a;
+};
+
+returnSecond = function(a, b) {
+  return b;
+};
+
+module.exports = {
+  find: function(source, withClause, whenClause) {
+    var i, j, k, l, len, len1, len2, result, v;
+    if (source != null) {
+      if (!(whenClause || withClause)) {
+        whenClause = existsTest;
+      }
+      if (isArrayIterable(source)) {
+        switch (false) {
+          case !(whenClause && withClause):
+            for (k = i = 0, len = source.length; i < len; k = ++i) {
+              v = source[k];
+              if (whenClause(v, k)) {
+                return withClause(v, k);
+              }
+            }
+            break;
+          case !whenClause:
+            for (k = j = 0, len1 = source.length; j < len1; k = ++j) {
+              v = source[k];
+              if (whenClause(v, k)) {
+                return v;
+              }
+            }
+            break;
+          case !withClause:
+            for (k = l = 0, len2 = source.length; l < len2; k = ++l) {
+              v = source[k];
+              if (result = withClause(v, k)) {
+                return result;
+              }
+            }
+        }
+      } else {
+        switch (false) {
+          case !(whenClause && withClause):
+            for (k in source) {
+              v = source[k];
+              if (whenClause(v, k)) {
+                return withClause(v, k);
+              }
+            }
+            break;
+          case !whenClause:
+            for (k in source) {
+              v = source[k];
+              if (whenClause(v, k)) {
+                return v;
+              }
+            }
+            break;
+          case !withClause:
+            for (k in source) {
+              v = source[k];
+              if (result = withClause(v, k)) {
+                return result;
+              }
+            }
+        }
+      }
+    }
+  },
+  object: function(source, into, withClause, whenClause, keyClause) {
+    var i, k, len, v;
+    if (into == null) {
+      into = {};
+    }
+    if (withClause == null) {
+      withClause = returnFirst;
+    }
+    if (whenClause == null) {
+      whenClause = returnTrue;
+    }
+    if (isArrayIterable(source)) {
+      if (keyClause == null) {
+        keyClause = returnFirst;
+      }
+      for (k = i = 0, len = source.length; i < len; k = ++i) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          into[keyClause(v, k)] = withClause(v, k);
+        }
+      }
+    } else {
+      if (keyClause == null) {
+        keyClause = returnSecond;
+      }
+      for (k in source) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          into[keyClause(v, k)] = withClause(v, k);
+        }
+      }
+    }
+    return into;
+  },
+  array: function(source, into, withClause, whenClause) {
+    var i, k, len, v;
+    if (into == null) {
+      into = [];
+    }
+    if (withClause == null) {
+      withClause = returnFirst;
+    }
+    if (whenClause == null) {
+      whenClause = returnTrue;
+    }
+    if (isArrayIterable(source)) {
+      for (k = i = 0, len = source.length; i < len; k = ++i) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          into.push(withClause(v, k));
+        }
+      }
+    } else {
+      for (k in source) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          into.push(withClause(v, k));
+        }
+      }
+    }
+    return into;
+  },
+  each2: function(source, into, withClause, whenClause) {
+    var i, k, len, v;
+    if (withClause == null) {
+      withClause = returnFirst;
+    }
+    if (whenClause == null) {
+      whenClause = returnTrue;
+    }
+    if (into == null) {
+      into = source;
+    }
+    if (isArrayIterable(source)) {
+      for (k = i = 0, len = source.length; i < len; k = ++i) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          withClause(v, k);
+        }
+      }
+    } else {
+      for (k in source) {
+        v = source[k];
+        if (whenClause(v, k)) {
+          withClause(v, k);
+        }
+      }
+    }
+    return into;
+  },
+
+  /*
+  IN:
+    fromValue:  number (required)
+    toValue:    number (required)
+    byValue:    number (optional)
+    into:       object implementing .push(v) (optional)
+    withClause: (v) -> value-to-push
+    whenCluase: (v) -> truish
+    til:        t/f; if true, will stop just before v == toValue
+   */
+  arrayRange: function(fromValue, toValue, byValue, into, withClause, whenClause, til) {
+    var v;
+    if (into == null) {
+      into = [];
+    }
+    if (withClause == null) {
+      withClause = returnFirst;
+    }
+    if (whenClause == null) {
+      whenClause = returnTrue;
+    }
+    if (byValue === 0) {
+      throw new Error("CaffeineScript array-range comprehension: 'by' is zero. (from: " + fromValue + ", to: " + toValue + ")");
+    }
+    if (byValue == null) {
+      byValue = fromValue < toValue ? 1 : -1;
+    }
+    v = fromValue;
+    if (til) {
+      if (byValue > 0) {
+        if (v < toValue) {
+          while (v < toValue) {
+            if (whenClause(v)) {
+              into.push(withClause(v));
+            }
+            v += byValue;
+          }
+        }
+      } else {
+        if (v > toValue) {
+          while (v > toValue) {
+            if (whenClause(v)) {
+              into.push(withClause(v));
+            }
+            v += byValue;
+          }
+        }
+      }
+    } else {
+      if (byValue > 0) {
+        if (v <= toValue) {
+          while (v <= toValue) {
+            if (whenClause(v)) {
+              into.push(withClause(v));
+            }
+            v += byValue;
+          }
+        }
+      } else {
+        if (v >= toValue) {
+          while (v >= toValue) {
+            if (whenClause(v)) {
+              into.push(withClause(v));
+            }
+            v += byValue;
+          }
+        }
+      }
+    }
+    return into;
+  }
+};
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref, throwImportError,
@@ -405,7 +673,7 @@ var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction,
 
 ref = __webpack_require__(0), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
 
-__webpack_require__(3);
+__webpack_require__(4);
 
 global.__definingModule = null;
 
