@@ -5,23 +5,23 @@ array123 = [1, 2, 3]
 objectAbc = a: 1, b: 2, c: 3
 
 defineModule module, suite:
-  each: ->
-    test "array123/objectAbc: each ...", ->
-      assert.same array123, Caf.each array123
-      assert.same objectAbc, Caf.each objectAbc
+  each2: ->
+    test "array123/objectAbc: each2 ...", ->
+      assert.same array123, Caf.each2 array123
+      assert.same objectAbc, Caf.each2 objectAbc
 
-    test "array123/objectAbc: each v from ... do count += v", ->
+    test "array123/objectAbc: each2 v from ... do count += v", ->
       count = 0
-      assert.same array123,   Caf.each array123,  null, (v) -> count += v
+      assert.same array123,   Caf.each2 array123,  null, (v) -> count += v
       assert.eq count, 6
 
       count = 0
-      assert.same objectAbc,  Caf.each objectAbc, null, (v) -> count += v
+      assert.same objectAbc,  Caf.each2 objectAbc, null, (v) -> count += v
       assert.eq count, 6
 
-    test "array123/objectAbc: each ... into 123", ->
-      assert.eq 123, Caf.each array123,  123
-      assert.eq 123, Caf.each objectAbc, 123
+    test "array123/objectAbc: each2 ... into 123", ->
+      assert.eq 123, Caf.each2 array123,  123
+      assert.eq 123, Caf.each2 objectAbc, 123
 
   array: ->
     test "array [] 1 2 3", ->

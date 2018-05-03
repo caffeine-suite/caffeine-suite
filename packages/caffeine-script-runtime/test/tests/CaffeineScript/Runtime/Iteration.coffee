@@ -2,6 +2,11 @@
 Caf = Neptune.CaffeinScript.Runtime
 
 defineModule module, suite: ->
+  test "each", ->
+    assert.eq [2,4,6], Caf.each [1,2,3], [], (cafV, cafK, cafInto) ->
+      cafInto.push cafV * 2
+
+
   test "extendedEach is ee", ->
     assert.eq Caf.extendedEach, Caf.ee
 

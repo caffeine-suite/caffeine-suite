@@ -71,7 +71,7 @@ module.exports =
 
     into
 
-  each: (source, into, withClause = returnFirst, whenClause = returnTrue) ->
+  each2: (source, into, withClause = returnFirst, whenClause = returnTrue) ->
 
     into ?= source
 

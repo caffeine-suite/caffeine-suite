@@ -30,7 +30,7 @@ module.exports =
   ###
   each: each = (source, out, withBlock) ->
 
-    out = source if out == "undefined"
+    out = source unless out?
 
     if source?
       if isArrayIterable source
