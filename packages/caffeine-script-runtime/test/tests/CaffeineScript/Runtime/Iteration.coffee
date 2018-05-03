@@ -1,11 +1,15 @@
 {defineModule, log} = require "art-standard-lib"
 Caf = Neptune.CaffeinScript.Runtime
 
+array123 = [1,2,3]
+
 defineModule module, suite: ->
   test "each", ->
-    assert.eq [2,4,6], Caf.each [1,2,3], [], (cafV, cafK, cafInto) ->
+    assert.eq [2,4,6], Caf.each array123, [], (cafV, cafK, cafInto) ->
       cafInto.push cafV * 2
 
+  test "each", ->
+    assert.same array123, Caf.each array123, null, ->
 
   test "extendedEach is ee", ->
     assert.eq Caf.extendedEach, Caf.ee
