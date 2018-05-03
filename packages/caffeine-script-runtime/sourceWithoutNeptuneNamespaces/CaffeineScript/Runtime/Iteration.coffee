@@ -1,5 +1,5 @@
-isNonNegativeInt = (x) -> ((x | 0) == x) && x >= 0
-arrayIterableTest = (source) -> source && isNonNegativeInt(source.length) && source.constructor != Object
+
+{isArrayIterable} = require './IterationBase'
 
 ###
 Notes:
@@ -33,7 +33,7 @@ module.exports =
     out = source if out == "undefined"
 
     if source?
-      if arrayIterableTest source
+      if isArrayIterable source
         withBlock v, k, out for v, k in source
       else
         withBlock v, k, out for k, v of source
@@ -119,7 +119,7 @@ module.exports =
       shouldBreak = false
       setShouldBreak = -> shouldBreak = true; undefined
 
-      if arrayIterableTest source
+      if isArrayIterable source
         for v, k in source
           out = withBlock v, k, out, setShouldBreak
           break if shouldBreak

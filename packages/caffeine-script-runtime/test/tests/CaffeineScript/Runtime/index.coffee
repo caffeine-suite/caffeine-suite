@@ -8,5 +8,6 @@ module.exports
   ImportInvoke: require './ImportInvoke'
   Is:           require './Is'          
   Iteration:    require './Iteration'   
+  Iteration2:   require './Iteration2'  
   Super:        require './Super'       
   ToString:     require './ToString'    
