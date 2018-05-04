@@ -101,7 +101,7 @@ module.exports =
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
   ###
-  arrayRange: (fromValue, toValue, byValue, withClause = returnFirst, whenClause = returnTrue, til, into = []) ->
+  arrayRange: (fromValue, toValue, withClause = returnFirst, whenClause = returnTrue, byValue, til, into = []) ->
 
     if byValue == 0
       throw new Error "CaffeineScript array-range comprehension: 'by' is zero. (from: #{fromValue}, to: #{toValue})"
