@@ -498,16 +498,16 @@ module.exports = {
       }
     }
   },
-  object: function(source, into, withClause, whenClause, keyClause) {
+  object: function(source, withClause, whenClause, into, keyClause) {
     var i, k, len, v;
-    if (into == null) {
-      into = {};
-    }
     if (withClause == null) {
       withClause = returnFirst;
     }
     if (whenClause == null) {
       whenClause = returnTrue;
+    }
+    if (into == null) {
+      into = {};
     }
     if (isArrayIterable(source)) {
       if (keyClause == null) {
@@ -532,16 +532,16 @@ module.exports = {
     }
     return into;
   },
-  array: function(source, into, withClause, whenClause) {
+  array: function(source, withClause, whenClause, into) {
     var i, k, len, v;
-    if (into == null) {
-      into = [];
-    }
     if (withClause == null) {
       withClause = returnFirst;
     }
     if (whenClause == null) {
       whenClause = returnTrue;
+    }
+    if (into == null) {
+      into = [];
     }
     if (isArrayIterable(source)) {
       for (k = i = 0, len = source.length; i < len; k = ++i) {
@@ -560,7 +560,7 @@ module.exports = {
     }
     return into;
   },
-  each2: function(source, into, withClause, whenClause) {
+  each2: function(source, withClause, whenClause, into) {
     var i, k, len, v;
     if (withClause == null) {
       withClause = returnFirst;
@@ -599,16 +599,16 @@ module.exports = {
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
    */
-  arrayRange: function(fromValue, toValue, byValue, into, withClause, whenClause, til) {
+  arrayRange: function(fromValue, toValue, byValue, withClause, whenClause, til, into) {
     var v;
-    if (into == null) {
-      into = [];
-    }
     if (withClause == null) {
       withClause = returnFirst;
     }
     if (whenClause == null) {
       whenClause = returnTrue;
+    }
+    if (into == null) {
+      into = [];
     }
     if (byValue === 0) {
       throw new Error("CaffeineScript array-range comprehension: 'by' is zero. (from: " + fromValue + ", to: " + toValue + ")");
