@@ -112,28 +112,24 @@ module.exports =
 
     if til
       if byValue > 0
-        if v < toValue
-          while v < toValue
-            into.push withClause v if whenClause v
-            v += byValue
+        while v < toValue
+          into.push withClause v if whenClause v
+          v += byValue
 
       else
-        if v > toValue
-          while v > toValue
-            into.push withClause v if whenClause v
-            v += byValue
+        while v > toValue
+          into.push withClause v if whenClause v
+          v += byValue
 
     else
       if byValue > 0
-        if v <= toValue
-          while v <= toValue
-            into.push withClause v if whenClause v
-            v += byValue
+        while v <= toValue
+          into.push withClause v if whenClause v
+          v += byValue
 
       else
-        if v >= toValue
-          while v >= toValue
-            into.push withClause v if whenClause v
-            v += byValue
+        while v >= toValue
+          into.push withClause v if whenClause v
+          v += byValue
 
     into
