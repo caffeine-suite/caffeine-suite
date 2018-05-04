@@ -1,3 +1,7 @@
+# PERFORMANCE INFO: https://jsbench.me/r8jgqj6vpd/1
+# Currently, the best possible itterator is 1/2 the speed
+# of the best pure-for-loop. (Chrome, May-2018)
+
 {isArrayIterable} = require './IterationBase'
 
 existsTest = (a) -> a?
@@ -41,7 +45,7 @@ module.exports =
               if result = withClause v, k
                 return result
 
-  object: (source, into = {}, withClause = returnFirst, whenClause = returnTrue, keyClause) ->
+  object: (source, withClause = returnFirst, whenClause = returnTrue, into = {}, keyClause) ->
 
     if isArrayIterable source
       keyClause ?= returnFirst
@@ -57,7 +61,7 @@ module.exports =
 
     into
 
-  array: (source, into = [], withClause = returnFirst, whenClause = returnTrue) ->
+  array: (source, withClause = returnFirst, whenClause = returnTrue, into = []) ->
 
     if isArrayIterable source
 
@@ -71,7 +75,7 @@ module.exports =
 
     into
 
-  each2: (source, into, withClause = returnFirst, whenClause = returnTrue) ->
+  each2: (source, withClause = returnFirst, whenClause = returnTrue, into) ->
 
     into ?= source
 
@@ -97,7 +101,7 @@ module.exports =
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
   ###
-  arrayRange: (fromValue, toValue, byValue, into = [], withClause = returnFirst, whenClause = returnTrue, til) ->
+  arrayRange: (fromValue, toValue, byValue, withClause = returnFirst, whenClause = returnTrue, til, into = []) ->
 
     if byValue == 0
       throw new Error "CaffeineScript array-range comprehension: 'by' is zero. (from: #{fromValue}, to: #{toValue})"
