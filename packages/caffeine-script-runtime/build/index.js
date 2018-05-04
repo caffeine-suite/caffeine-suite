@@ -599,7 +599,7 @@ module.exports = {
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
    */
-  arrayRange: function(fromValue, toValue, byValue, withClause, whenClause, til, into) {
+  arrayRange: function(fromValue, toValue, withClause, whenClause, byValue, til, into) {
     var v;
     if (withClause == null) {
       withClause = returnFirst;
