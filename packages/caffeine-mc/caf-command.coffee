@@ -11,7 +11,7 @@ require 'coffee-script/register'
 # webpack hack
 realRequire = eval 'require'
 
-{version, displayError, CafRepl, CompileCache} = CaffeineMc = eval('require') './source/CaffeineMc'
+{version, displayError, CafRepl, CompileCache} = CaffeineMc = eval('require') './index'
 {log, dashCase, escapeRegExp, present, isString,
 Promise, formattedInspect, each, escapeRegExp
 } = Neptune.Art.StandardLib
