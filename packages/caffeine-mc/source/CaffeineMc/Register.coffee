@@ -10,7 +10,7 @@ defineModule module, class Register
     for ext in CaffeineMc.fileExtensions
       realRequire.extensions[".#{ext}"] ||= (module, filename) ->
         try
-          answer = CaffeineMc.compileFileSync filename
+          answer = CaffeineMc.compileFileSync filename, inlineMap: true
           module._compile answer.compiled.js, filename
         catch error
           CaffeineMc.displayError error

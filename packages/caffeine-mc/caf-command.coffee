@@ -28,6 +28,8 @@ commander = require "commander"
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
 .option '-r, --reset', 'reset cache'
+# .option '-m, --map',        'generate source map and save as .js.map files'
+.option '-M, --inlineMap', 'generate source map and include it directly in output'
 .option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
 .on "--help", ->
   console.log """
@@ -53,6 +55,7 @@ compileFile = (filename, outputDirectory) ->
     outputDirectory: outputDirectory || output || path.dirname filename
     prettier
     cache
+    inlineMap: commander.inlineMap
   })
   .then ({readCount, writeCount, output}) ->
 
