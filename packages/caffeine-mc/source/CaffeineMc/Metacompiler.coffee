@@ -90,6 +90,8 @@ module.exports = class Metacompiler extends BaseClass
   compile: (code, options = {})->
     {compilerName, metaCode, code} = @_metaParser.parse code.toString()
 
+    options.prettier = false if options.inlineMap || options.sourceMap
+
     if compilerName
       @_lastMetacompilerResult = @setCompiler compilerName, options
 
@@ -100,6 +102,7 @@ module.exports = class Metacompiler extends BaseClass
         source:     code
         sourceFile: options.sourceFile
       cacheInfo.prettier = true if options.prettier
+      cacheInfo.inlineMap = true if options.inlineMap
 
       if cachedCompile = CompileCache.fetch cacheInfo
         cachedCompile

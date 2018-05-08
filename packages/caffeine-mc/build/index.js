@@ -489,6 +489,9 @@ module.exports = Metacompiler = (function(superClass) {
       options = {};
     }
     ref1 = this._metaParser.parse(code.toString()), compilerName = ref1.compilerName, metaCode = ref1.metaCode, code = ref1.code;
+    if (options.inlineMap || options.sourceMap) {
+      options.prettier = false;
+    }
     if (compilerName) {
       this._lastMetacompilerResult = this.setCompiler(compilerName, options);
     }
