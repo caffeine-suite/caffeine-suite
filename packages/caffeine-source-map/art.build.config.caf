@@ -6,8 +6,10 @@ target:
   node: true
 
 npm:
-  description: "" Caffeine.Source.Map
-  dependencies: {}
+  description: "" Caffeine.SourceMap
+  dependencies:
+    art-standard-lib: :*
+    caffeine-eight: :*
 
 webpack:
   # common properties are merged into each target's properties

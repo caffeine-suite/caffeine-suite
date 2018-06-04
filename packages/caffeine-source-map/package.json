@@ -7,6 +7,7 @@
     "art-standard-lib": "*",
     "art-testbench": "*",
     "bluebird": "^3.5.0",
+    "caffeine-eight": "*",
     "caffeine-script": "*",
     "caffeine-script-runtime": "*",
     "case-sensitive-paths-webpack-plugin": "^2.1.2",
@@ -31,7 +32,7 @@
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0"
   },
-  "description": "Caffeine.Source.Map",
+  "description": "Caffeine.SourceMap",
   "license": "ISC",
   "name": "caffeine-source-map",
   "scripts": {
