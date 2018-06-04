@@ -34,3 +34,4 @@ npm install caffeine-source-map
   - CaffeineSourceMapWe works in sourceIndex-space most the time. Code-generation doesn't have to think about lines and columns. Only CaffeineSourceMap needs to actually worry about lines and columns.
 - Consistency:
   - both column AND LINE are 0-based, same as the SourceMapV3 standard. I had so many off-by-one bugs with `source-map npm`!
+
