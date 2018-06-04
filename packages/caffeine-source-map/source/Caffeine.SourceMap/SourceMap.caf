@@ -1,0 +1,6 @@
+import &StandardImport
+
+merge
+  &Base64
+  &SourceMapGenerator
+  &SourceMapConsumer

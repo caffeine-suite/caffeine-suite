@@ -1,0 +1,7 @@
+import &ArtStandardLib
+
+merge
+  &ArtStandardLib
+  &ArtClassSystem
+  &source
+  test: (args...) -> global.test args...
