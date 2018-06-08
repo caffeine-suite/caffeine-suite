@@ -619,42 +619,34 @@ module.exports = {
     v = fromValue;
     if (til) {
       if (byValue > 0) {
-        if (v < toValue) {
-          while (v < toValue) {
-            if (whenClause(v)) {
-              into.push(withClause(v));
-            }
-            v += byValue;
+        while (v < toValue) {
+          if (whenClause(v)) {
+            into.push(withClause(v));
           }
+          v += byValue;
         }
       } else {
-        if (v > toValue) {
-          while (v > toValue) {
-            if (whenClause(v)) {
-              into.push(withClause(v));
-            }
-            v += byValue;
+        while (v > toValue) {
+          if (whenClause(v)) {
+            into.push(withClause(v));
           }
+          v += byValue;
         }
       }
     } else {
       if (byValue > 0) {
-        if (v <= toValue) {
-          while (v <= toValue) {
-            if (whenClause(v)) {
-              into.push(withClause(v));
-            }
-            v += byValue;
+        while (v <= toValue) {
+          if (whenClause(v)) {
+            into.push(withClause(v));
           }
+          v += byValue;
         }
       } else {
-        if (v >= toValue) {
-          while (v >= toValue) {
-            if (whenClause(v)) {
-              into.push(withClause(v));
-            }
-            v += byValue;
+        while (v >= toValue) {
+          if (whenClause(v)) {
+            into.push(withClause(v));
           }
+          v += byValue;
         }
       }
     }
