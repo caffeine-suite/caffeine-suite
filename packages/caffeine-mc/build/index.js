@@ -71,13 +71,13 @@ module.exports =
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = require("art-standard-lib");
+module.exports = require('art-standard-lib' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require('path' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 2 */
@@ -111,7 +111,7 @@ module.exports = function(module) {
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs-extra");
+module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 4 */
@@ -141,13 +141,13 @@ __webpack_require__(13);
 /* 5 */
 /***/ (function(module, exports) {
 
-module.exports = require("art-class-system");
+module.exports = require('art-class-system' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("colors");
+module.exports = require('colors' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 7 */
@@ -343,7 +343,7 @@ defineModule(module, SourceRoots = (function(superClass) {
 /* 8 */
 /***/ (function(module, exports) {
 
-module.exports = require("glob-promise");
+module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 9 */
@@ -507,6 +507,9 @@ module.exports = Metacompiler = (function(superClass) {
       };
       if (options.prettier) {
         cacheInfo.prettier = true;
+      }
+      if (options.inlineMap) {
+        cacheInfo.inlineMap = true;
       }
       if (cachedCompile = CompileCache.fetch(cacheInfo)) {
         return cachedCompile;
@@ -1408,7 +1411,8 @@ defineModule(module, Tools = (function() {
 /* 20 */
 /***/ (function(module, exports) {
 
-module.exports = require("prettier");
+if(typeof require('prettier' /* ABC - not inlining fellow NPM */) === 'undefined') {var e = new Error("Cannot find module \"require('prettier' /* ABC - not inlining fellow NPM */)\""); e.code = 'MODULE_NOT_FOUND'; throw e;}
+module.exports = require('prettier' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 21 */
@@ -1860,67 +1864,67 @@ module.exports = JavaScript = (function(superClass) {
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","art-class-system":"*","art-config":"*","art-standard-lib":"*","art-testbench":"*","bluebird":"^3.5.0","caffeine-eight":"*","caffeine-script":"*","caffeine-script-runtime":"*","cardinal":"^1.0.0","case-sensitive-paths-webpack-plugin":"^2.1.2","chai":"^4.0.1","chalk":"^1.1.3","coffee-loader":"^0.7.3","coffee-script":"^1.12.6","colors":"^1.1.2","commander":"^2.9.0","css-loader":"^0.28.4","dateformat":"^3.0.3","detect-node":"^2.0.3","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","json-loader":"^0.5.4","mocha":"^3.4.2","neptune-namespaces":"*","prettier":"^0.18.0","script-loader":"^0.7.0","style-loader":"^0.18.1","webpack":"^2.6.1","webpack-dev-server":"^2.4.5","webpack-merge":"^4.1.0","webpack-node-externals":"^1.6.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.8.0"}
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","prettier":"^0.18.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.8.2"}
 
 /***/ }),
 /* 30 */
 /***/ (function(module, exports) {
 
-module.exports = require("caffeine-eight");
+module.exports = require('caffeine-eight' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 31 */
 /***/ (function(module, exports) {
 
-module.exports = require("caffeine-script");
+module.exports = require('caffeine-script' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 32 */
 /***/ (function(module, exports) {
 
-module.exports = require("cardinal");
+module.exports = require('cardinal' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 33 */
 /***/ (function(module, exports) {
 
-module.exports = require("chalk");
+module.exports = require('chalk' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 34 */
 /***/ (function(module, exports) {
 
-module.exports = require("crypto");
+module.exports = require('crypto' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 35 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
+module.exports = require('fs' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 36 */
 /***/ (function(module, exports) {
 
-module.exports = require("neptune-namespaces");
+module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports) {
 
-module.exports = require("os");
+module.exports = require('os' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 38 */
 /***/ (function(module, exports) {
 
-module.exports = require("repl");
+module.exports = require('repl' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 39 */
 /***/ (function(module, exports) {
 
-module.exports = require("vm");
+module.exports = require('vm' /* ABC - not inlining fellow NPM */);
 
 /***/ })
 /******/ ]);

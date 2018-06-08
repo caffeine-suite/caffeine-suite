@@ -72,21 +72,21 @@ module.exports =
 /***/ 1:
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require('path' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
 /***/ 22:
 /***/ (function(module, exports) {
 
-module.exports = require("coffee-script/register");
+module.exports = require('coffee-script/register' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
 /***/ 23:
 /***/ (function(module, exports) {
 
-module.exports = require("commander");
+module.exports = require('commander' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
@@ -257,21 +257,21 @@ if (compile) {
 /***/ 3:
 /***/ (function(module, exports) {
 
-module.exports = require("fs-extra");
+module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
 /***/ 6:
 /***/ (function(module, exports) {
 
-module.exports = require("colors");
+module.exports = require('colors' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
 /***/ 8:
 /***/ (function(module, exports) {
 
-module.exports = require("glob-promise");
+module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
 
 /***/ })
 
