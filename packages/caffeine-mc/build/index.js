@@ -527,7 +527,9 @@ module.exports = Metacompiler = (function(superClass) {
     if (options.prettier) {
       try {
         if (out.compiled.js != null) {
-          out.compiled.js = __webpack_require__(20).format(out.compiled.js);
+          out.compiled.js = __webpack_require__(20).format(out.compiled.js, {
+            parser: "babylon"
+          });
         }
         out.prettier = true;
       } catch (error) {
@@ -1690,7 +1692,9 @@ defineModule(module, CafRepl = (function() {
       sourceFile: filename
     }).compiled.js;
     try {
-      return __webpack_require__(20).format(js);
+      return __webpack_require__(20).format(js, {
+        parser: 'babylon'
+      });
     } catch (error1) {
       e = error1;
       return displayError(e);
@@ -1864,7 +1868,7 @@ module.exports = JavaScript = (function(superClass) {
 /* 29 */
 /***/ (function(module, exports) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","prettier":"^0.18.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.8.2"}
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","prettier":"^0.18.0"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"2.8.3"}
 
 /***/ }),
 /* 30 */
