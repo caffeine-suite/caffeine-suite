@@ -197,7 +197,7 @@ defineModule module, class CafRepl
     command = command.trim()
     {compiled:{js}} = @compiler.compile command, bare: true, sourceFile: filename
     try
-      require("prettier").format js
+      require("prettier").format js, parser: 'babylon'
     catch e
       displayError e
 
