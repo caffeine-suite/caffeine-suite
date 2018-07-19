@@ -25,6 +25,7 @@ commander = require "commander"
 .option '-c, --compile', 'compile files'
 .option '-C, --cache', 'cache compiled files'
 .option '-p, --prettier', 'apply "prettier" to any js output'
+.option '-t, --transpile [presets...]', 'transpile with babel'
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
 .option '-r, --reset', 'reset cache'
@@ -42,7 +43,7 @@ commander = require "commander"
 displayError = (e) ->
   CaffeineMc.displayError e, commander
 
-{reset, output, compile, prettier, verbose, versions, cache} = commander
+{reset, output, compile, prettier, transpile, verbose, versions, cache} = commander
 
 fileCounts =
   read: 0
@@ -54,6 +55,7 @@ compileFile = (filename, outputDirectory) ->
   CaffeineMc.compileFile(filename, {
     outputDirectory: outputDirectory || output || path.dirname filename
     prettier
+    transpile
     cache
     inlineMap: commander.inlineMap
   })
@@ -111,7 +113,7 @@ if compile
       inputs: if files.length == 1 then files[0] else files
       output: output
     log "caffeine-mc loaded" if verbose
-    log "using prettier" if verbose && prettier
+    log {prettier, transpile} if verbose && (transpile || prettier)
     serializer = new Promise.Serializer
 
 

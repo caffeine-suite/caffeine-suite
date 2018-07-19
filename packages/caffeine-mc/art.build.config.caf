@@ -6,15 +6,19 @@ package:
       with arbitrary code, on a per file bases from within the file.
 
   dependencies:
-    caffeine-eight: :*
-    fs-extra:       :^3.0.0
-    colors:         :^1.1.2
-    glob:           :^7.0.3
-    commander:      :^2.9.0
-    prettier:       :^1.13.6
-    cardinal:       :^1.0.0
-    chalk:          :^1.1.3
-    glob-promise:   :^3.1.0
+    caffeine-eight:       :*
+    fs-extra:             :^3.0.0
+    colors:               :^1.1.2
+    glob:                 :^7.0.3
+    commander:            :^2.9.0
+    prettier:             :^1.13.6
+    cardinal:             :^1.0.0
+    chalk:                :^1.1.3
+    glob-promise:         :^3.1.0
+    babel-preset-env:     :^1.7.0
+    babel-preset-es2015:  :^6.24.1
+    babel-loader:         :^7.1.5
+    babel-core:           :^6.26.3
 
   scripts:
     test: "" nn -s;mocha -u tdd --compilers coffee:coffee-script/register

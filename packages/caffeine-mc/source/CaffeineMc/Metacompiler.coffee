@@ -8,6 +8,8 @@ realRequire = eval 'require'
 
 { dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge
   objectWithout
+  isArray
+  isObject
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
@@ -101,8 +103,11 @@ module.exports = class Metacompiler extends BaseClass
         compiler:   {name, version}
         source:     code
         sourceFile: options.sourceFile
-      cacheInfo.prettier = true if options.prettier
-      cacheInfo.inlineMap = true if options.inlineMap
+
+      {prettier, inlineMap, transpile} = options
+
+      if prettier? ? inlineMap? ? transpile?
+        cacheInfo.compilerOptions {prettier, inlineMap, transpile}
 
       if cachedCompile = CompileCache.fetch cacheInfo
         cachedCompile
@@ -119,6 +124,34 @@ module.exports = class Metacompiler extends BaseClass
       @compile code, options
     else
       @compiler.compile code, options
+
+    if transpileOptions = options.transpile
+      transpileOptions = switch
+        when isArray transpileOptions   then presets: transpileOptions
+        when isString transpileOptions  then presets: [transpileOptions]
+        when isObject transpileOptions  then transpileOptions
+        else                                 presets: ['env']
+
+      try
+        babel = require 'babel-core'
+
+        # See https://github.com/babel/babel/issues/827#issuecomment-77573107:
+        # Babel can take a v3 source map object as input in `inputSourceMap`
+        # and it will return an *updated* v3 source map object in its output.
+        if sourceMap = out.compiled.sourceMap and not transpileOptions.inputSourceMap?
+          transpileOptions = merge transpileOptions, inputSourceMap: sourceMap
+
+        {code, map} = babel.transform out.compiled.js, transpileOptions
+
+        if map? && out.sourceMap?
+          out.compiled.sourceMap = JSON.stringify map
+        out.compiled.js = code
+
+        out.transpiled = true
+
+      catch e
+        log e.message
+        throw e
 
     if options.prettier
       try
