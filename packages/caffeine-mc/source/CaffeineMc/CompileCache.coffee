@@ -3,6 +3,8 @@
   consistentJsonStringify
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
+{findSourceRootSync} = require './SourceRoots'
+
 require 'colors'
 
 fs = require 'fs-extra'
@@ -11,6 +13,17 @@ glob = require 'glob-promise'
 crypto = require 'crypto'
 os = require 'os'
 path = require 'path'
+###
+cachedFileKey: (object)
+  compiler:   (required, object) compiler
+  source:     (required, string) source-code
+  sourceFile: (required, string) source file path & name
+  compilerOptions: (object) all options which affect the generated output
+
+cachedFileKeyWithCompilerResults: (object)
+  all the cachedFileKey fields
+  compiled: (required, object) the compiler's results
+###
 
 defineModule module, class CompileCache extends BaseClass
   @compileCacheFileNameRoot: "CaffineMcCompileCache"
@@ -19,43 +32,66 @@ defineModule module, class CompileCache extends BaseClass
     compileCacheFilePathRoot: ->
       @_compileCacheFilePathRoot ||= path.join os.tmpdir(), @compileCacheFileNameRoot
 
-  @getCompilerSignature: (compiler) ->
-    {version} = compiler
-    if isString(version) && name = compiler.getName?() || compiler.name
-      "#{name}-#{version}"
+  @compilerSupportsCaching: (compiler) ->
+    isString(compiler.version) && @getCompilerName compiler
 
-  @getFileName: ({compiler, compilerSignature, source, sourceFile, compilerOptions}) ->
-    compilerSignature ?= @getCompilerSignature compiler
-    unless compilerSignature && sourceFile && source
-      throw new Error "expecting compilerSignature, source and sourceFile: " + formattedInspect {source, sourceFile, compilerSignature}
+  @getCompilerName: (compiler) -> compiler.getName?() || compiler.name
+
+  @getCompilerSignature: (compiler) ->
+    "#{@getCompilerName compiler}-#{compiler.version}"
+
+  @makeSha256FilenameFriendly: (sha256String) -> sha256String.replace /[\/+=]/g, "-"
+
+  @hashSource: (source) ->
+    @makeSha256FilenameFriendly(
+      crypto.createHmac 'sha256', "no need for a real secret"
+      .update source
+      .digest 'base64'
+      .split("=")[0]
+    )
+
+  ###
+  IN: cachedFileKey (see above)
+  ###
+  @getFileName: (cachedFileKey) ->
+    {compiler, source, sourceFile, compilerOptions} = cachedFileKey
+    unless compiler && sourceFile && source
+      throw new Error "expecting compiler, source and sourceFile: " + formattedInspect {compiler, source, sourceFile, compilerSignature}
+
+    return null unless @compilerSupportsCaching compiler
+
+    sourceRoot = findSourceRootSync sourceFile
 
     if compilerOptions
       source = "# compilerOptions: #{consistentJsonStringify compilerOptions}\n#{source}"
 
-    hashed = crypto.createHmac('sha256', "no need for a real secret").update(source).digest('base64').split("=")[0].replace /[\/+=]/g, "_"
-    [basename] = path.basename(sourceFile).split '.'
-    "#{@compileCacheFilePathRoot}_#{compilerSignature}_#{upperCamelCase basename}_#{hashed}.json"
+    [
+      @compileCacheFilePathRoot
+      path.basename(sourceRoot).replace /\./g, "-"
+      path.basename(sourceFile).replace /\./g, "-"
+      @getCompilerSignature compiler
+      @hashSource source
+    ].join("_") + ".json"
 
-  @cache: (compileResultAndInfo) ->
-    {compiler, source, sourceFile, compiled, compilerOptions} = compileResultAndInfo
-    if compilerSignature = @getCompilerSignature compiler
-      fileName = @getFileName {compilerSignature, source, sourceFile, compilerOptions}
-      cacheFileContents = JSON.stringify {
-        source
-        compiled
-      }
-      fs.writeFileSync fileName, cacheFileContents
+  ###
+  IN: cachedFileKeyWithCompilerResults (see above)
+  ###
+  @cache: (cachedFileKeyWithCompilerResults) ->
+    if fileName = @getFileName cachedFileKeyWithCompilerResults
+      {source, compiled} = cachedFileKeyWithCompilerResults
+      fs.writeFileSync fileName, JSON.stringify {source, compiled}
 
-    compileResultAndInfo
+    cachedFileKeyWithCompilerResults
 
-  @fetch: ({compiler, source, sourceFile, compilerOptions}) ->
-    if compilerSignature = @getCompilerSignature compiler
-      fileName = @getFileName {compilerSignature, source, sourceFile, compilerOptions}
-      if fs.existsSync fileName
-        cacheFileContents = fs.readFileSync fileName
-        parsedContents = try JSON.parse cacheFileContents
-        if parsedContents?.source == source
-          merge parsedContents, fromCache: true
+  ###
+  IN: cachedFileKey (see above)
+  ###
+  @fetch: (cachedFileKey) ->
+    if (fileName = @getFileName cachedFileKey) && fs.existsSync fileName
+      parsedContents = try JSON.parse fs.readFileSync fileName
+      if parsedContents?.source == cachedFileKey.source
+        parsedContents.fromCache = true
+        parsedContents
 
   @reset: ->
     glob @compileCacheFilePathRoot + "*"

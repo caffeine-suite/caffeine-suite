@@ -2,12 +2,16 @@
 {BaseClass} = require 'art-class-system'
 fs = require 'fs-extra'
 path = require 'path'
-Metacompiler = require './Metacompiler'
 
 defineModule module, class SourceRoots extends BaseClass
 
   @classGetter "sourceRootIndicatorFiles knownSourceRoots caffeineInits",
     caffeineInitFileName: -> "caffeine-mc.config.caf"
+
+  _Metacompiler = null
+  newMetacompiler = ->
+    new _Metacompiler ?= require './Metacompiler'
+
 
   # TODO - capture and report syntax errors in source better
   evalCapturingModuleExports = (source) ->
@@ -46,7 +50,7 @@ defineModule module, class SourceRoots extends BaseClass
           Promise.resolve false
 
         contentsPromise.then (contents) =>
-          metacompiler = new Metacompiler
+          metacompiler = newMetacompiler()
           @caffeineInits[sourceRoot] =
             compiler: metacompiler
             config: if result = contents && metacompiler.compile contents, {sourceFile, sourceRoot}
@@ -62,12 +66,13 @@ defineModule module, class SourceRoots extends BaseClass
       if fs.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
         contents = fs.readFileSync(sourceFile).toString()
 
-        metacompiler = new Metacompiler
+        metacompiler = newMetacompiler()
         result = metacompiler.compile contents, {sourceFile, sourceRoot}
 
         @caffeineInits[sourceRoot] =
           compiler: metacompiler.compiler
           config: evalCapturingModuleExports result.compiled.js
+
       else
         false
 
