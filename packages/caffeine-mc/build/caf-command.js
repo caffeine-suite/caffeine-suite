@@ -70,6 +70,11 @@ module.exports =
 /******/ ({
 
 /***/ 1:
+/* no static exports found */
+/* all exports used */
+/*!**********************************************************************!*\
+  !*** external "require('path' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**********************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('path' /* ABC - not inlining fellow NPM */);
@@ -77,6 +82,11 @@ module.exports = require('path' /* ABC - not inlining fellow NPM */);
 /***/ }),
 
 /***/ 22:
+/* no static exports found */
+/* all exports used */
+/*!****************************************************************************************!*\
+  !*** external "require('coffee-script/register' /* ABC - not inlining fellow NPM *_/)" ***!
+  \****************************************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('coffee-script/register' /* ABC - not inlining fellow NPM */);
@@ -84,6 +94,11 @@ module.exports = require('coffee-script/register' /* ABC - not inlining fellow N
 /***/ }),
 
 /***/ 23:
+/* no static exports found */
+/* all exports used */
+/*!***************************************************************************!*\
+  !*** external "require('commander' /* ABC - not inlining fellow NPM *_/)" ***!
+  \***************************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('commander' /* ABC - not inlining fellow NPM */);
@@ -91,21 +106,26 @@ module.exports = require('commander' /* ABC - not inlining fellow NPM */);
 /***/ }),
 
 /***/ 24:
+/* no static exports found */
+/* all exports used */
+/*!****************************!*\
+  !*** ./caf-command.coffee ***!
+  \****************************/
 /***/ (function(module, exports, __webpack_require__) {
 
-var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, ref1, reset, serializer, verbose, version, versions;
+var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, ref1, reset, serializer, transpile, verbose, version, versions;
 
 global.ArtStandardLibMultipleContextTypeSupport = true;
 
-colors = __webpack_require__(6);
+colors = __webpack_require__(/*! colors */ 7);
 
-glob = __webpack_require__(8);
+glob = __webpack_require__(/*! glob-promise */ 8);
 
-fs = __webpack_require__(3);
+fs = __webpack_require__(/*! fs-extra */ 3);
 
-path = __webpack_require__(1);
+path = __webpack_require__(/*! path */ 1);
 
-__webpack_require__(22);
+__webpack_require__(/*! coffee-script/register */ 22);
 
 realRequire = eval('require');
 
@@ -113,7 +133,7 @@ ref = CaffeineMc = eval('require')('./index'), version = ref.version, displayErr
 
 ref1 = Neptune.Art.StandardLib, log = ref1.log, dashCase = ref1.dashCase, escapeRegExp = ref1.escapeRegExp, present = ref1.present, isString = ref1.isString, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
 
-commander = __webpack_require__(23).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'cache compiled files').option('-p, --prettier', 'apply "prettier" to any js output').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(/*! commander */ 23).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'cache compiled files').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -121,7 +141,7 @@ displayError = function(e) {
   return CaffeineMc.displayError(e, commander);
 };
 
-reset = commander.reset, output = commander.output, compile = commander.compile, prettier = commander.prettier, verbose = commander.verbose, versions = commander.versions, cache = commander.cache;
+reset = commander.reset, output = commander.output, compile = commander.compile, prettier = commander.prettier, transpile = commander.transpile, verbose = commander.verbose, versions = commander.versions, cache = commander.cache;
 
 fileCounts = {
   read: 0,
@@ -134,6 +154,7 @@ compileFile = function(filename, outputDirectory) {
   return CaffeineMc.compileFile(filename, {
     outputDirectory: outputDirectory || output || path.dirname(filename),
     prettier: prettier,
+    transpile: transpile,
     cache: cache,
     inlineMap: commander.inlineMap
   }).then(function(arg) {
@@ -196,8 +217,11 @@ if (compile) {
     if (verbose) {
       log("caffeine-mc loaded");
     }
-    if (verbose && prettier) {
-      log("using prettier");
+    if (verbose && (transpile || prettier)) {
+      log({
+        prettier: prettier,
+        transpile: transpile
+      });
     }
     serializer = new Promise.Serializer;
     each(files, function(filename) {
@@ -255,13 +279,23 @@ if (compile) {
 /***/ }),
 
 /***/ 3:
+/* no static exports found */
+/* all exports used */
+/*!**************************************************************************!*\
+  !*** external "require('fs-extra' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**************************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
+/* no static exports found */
+/* all exports used */
+/*!************************************************************************!*\
+  !*** external "require('colors' /* ABC - not inlining fellow NPM *_/)" ***!
+  \************************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('colors' /* ABC - not inlining fellow NPM */);
@@ -269,6 +303,11 @@ module.exports = require('colors' /* ABC - not inlining fellow NPM */);
 /***/ }),
 
 /***/ 8:
+/* no static exports found */
+/* all exports used */
+/*!******************************************************************************!*\
+  !*** external "require('glob-promise' /* ABC - not inlining fellow NPM *_/)" ***!
+  \******************************************************************************/
 /***/ (function(module, exports) {
 
 module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
