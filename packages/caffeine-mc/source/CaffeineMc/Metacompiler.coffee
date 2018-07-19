@@ -90,40 +90,17 @@ module.exports = class Metacompiler extends BaseClass
         write originalFileNameWith(extension), output
   ###
   compile: (code, options = {})->
-    {compilerName, metaCode, code} = @_metaParser.parse code.toString()
+    throw new Error "prettier does not support sourcemaps" if options.prettier && (options.inlineMap || options.sourceMap)
 
-    options.prettier = false if options.inlineMap || options.sourceMap
-
-    if compilerName
-      @_lastMetacompilerResult = @setCompiler compilerName, options
-
-    if options.cache && (version = @compiler.version) && (name = @compiler.getName?())
-      options = objectWithout options, "cache"
-      cacheInfo =
-        compiler:   {name, version}
-        source:     code
-        sourceFile: options.sourceFile
-
-      {prettier, inlineMap, transpile} = options
-
-      if prettier? ? inlineMap? ? transpile?
-        cacheInfo.compilerOptions {prettier, inlineMap, transpile}
-
-      if cachedCompile = CompileCache.fetch cacheInfo
-        cachedCompile
-      else
-        CompileCache.cache merge cacheInfo, @_compileInternal metaCode, code, options
+    if options.cache
+      @_compileWithCaching code, options
     else
-      @_compileInternal metaCode, code, options
+      @_postprocess options, @_compileWithMetacompiler code, options
 
-  _compileInternal: (metaCode, code, options) ->
+  _postprocess: (options, out) ->
+    @_postprocesPrettier options, @_postprocessWithTranspiler options, out
 
-    out = @normalizeCompilerResult if metaCode
-      result = @normalizeCompilerResult @compiler.compile metaCode
-      @_lastMetacompilerResult = CaffeineMc.evalInContext result.compiled.js, @
-      @compile code, options
-    else
-      @compiler.compile code, options
+  _postprocessWithTranspiler: (options, out) ->
 
     if transpileOptions = options.transpile
       transpileOptions = switch
@@ -153,6 +130,9 @@ module.exports = class Metacompiler extends BaseClass
         log e.message
         throw e
 
+    out
+
+  _postprocesPrettier: (options, out) ->
     if options.prettier
       try
         if out.compiled.js?
@@ -161,7 +141,41 @@ module.exports = class Metacompiler extends BaseClass
       catch e
         log e.message
         throw e
+
     out
+
+  _compileWithCaching: (code, options) ->
+    options = objectWithout options, "cache"
+    cacheInfo =
+      compiler:   @compiler
+      source:     code
+      sourceFile: options.sourceFile
+
+    {prettier, inlineMap, transpile} = options
+
+    if prettier? ? inlineMap? ? transpile?
+      cacheInfo.compilerOptions = {prettier, inlineMap, transpile}
+
+    if cachedCompile = CompileCache.fetch cacheInfo
+      cachedCompile
+    else
+      CompileCache.cache merge cacheInfo, @_postprocess options, @_compileWithMetacompiler code, options
+
+  _compileWithMetacompiler: (rawCode, options) ->
+    {compilerName, metaCode, code} = @_metaParser.parse rawCode.toString()
+
+    if metaCode || compilerName
+      @_lastMetacompilerResult = if metaCode
+        result = @normalizeCompilerResult @compiler.compile metaCode
+        CaffeineMc.evalInContext result.compiled.js, @
+
+      else
+        @setCompiler compilerName, options
+
+      @_compileWithMetacompiler code, options
+
+    else
+      @normalizeCompilerResult @compiler.compile code, options
 
   @getter
     compilerName: -> @compiler.getClassName?() || @compiler.getName?() || @_compilerName || 'unknown-compiler'

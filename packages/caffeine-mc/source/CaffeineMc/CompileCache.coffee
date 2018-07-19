@@ -1,6 +1,7 @@
 {
   array, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character
   consistentJsonStringify
+  Promise
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 {findSourceRootSync} = require './SourceRoots'
@@ -29,8 +30,9 @@ defineModule module, class CompileCache extends BaseClass
   @compileCacheFileNameRoot: "CaffineMcCompileCache"
 
   @classGetter
+    compileCachePathRoot: -> os.tmpdir()
     compileCacheFilePathRoot: ->
-      @_compileCacheFilePathRoot ||= path.join os.tmpdir(), @compileCacheFileNameRoot
+      @_compileCacheFilePathRoot ||= path.join @compileCachePathRoot, @compileCacheFileNameRoot
 
   @compilerSupportsCaching: (compiler) ->
     isString(compiler.version) && @getCompilerName compiler
@@ -93,11 +95,12 @@ defineModule module, class CompileCache extends BaseClass
         parsedContents.fromCache = true
         parsedContents
 
-  @reset: ->
+  # NOTE: for some reason when using mock-fs, we need to apply (Promise.resolve item) to glob's results
+  @reset: (verbose) ->
     glob @compileCacheFilePathRoot + "*"
     .then (list) ->
       Promise.all array list, (item) ->
-        fs.unlink item
-        .then ->
-          log "cache-reset: ".gray + item.green + " (deleted)".gray
+        Promise.resolve item
+        .then (item) -> fs.unlink item
+        .tap -> log "cache-reset: ".gray + item.green + " (deleted)".gray if verbose
 
