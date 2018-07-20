@@ -34,18 +34,35 @@ module.exports =
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -63,20 +80,42 @@ module.exports =
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/*!*******************!*\
+  !*** ./index.caf ***!
+  \*******************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
+Caf.defMod(module, () => {
+  return __webpack_require__(/*! ./source */ 3);
+});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/webpack/buildin/module.js */ 1)(module)))
+
+/***/ }),
+/* 1 */
+/*!*************************************************!*\
+  !*** ../node_modules/webpack/buildin/module.js ***!
+  \*************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
-	if(!module.webpackPolyfill) {
+	if (!module.webpackPolyfill) {
 		module.deprecate = function() {};
 		module.paths = [];
 		// module.parent = undefined by default
-		if(!module.children) module.children = [];
+		if (!module.children) module.children = [];
 		Object.defineProperty(module, "loaded", {
 			enumerable: true,
 			get: function() {
@@ -96,24 +135,175 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 1 */
+/* 2 */
+/*!*****************************************************************************************!*\
+  !*** external "require('caffeine-script-runtime' /* ABC - not inlining fellow NPM *_/)" ***!
+  \*****************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require('caffeine-script-runtime' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
-/* 2 */
+/* 3 */
+/*!**************************!*\
+  !*** ./source/index.caf ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
+Caf.defMod(module, () => {
+  return __webpack_require__(/*! ./Caffeine.SourceMap */ 4);
+});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/module.js */ 1)(module)))
+
+/***/ }),
+/* 4 */
+/*!************************************************!*\
+  !*** ./source/Caffeine.SourceMap/index.coffee ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./namespace */ 5);
+
+module.exports.includeInNamespace(__webpack_require__(/*! ./SourceMap */ 8)).addModules({
+  Base64: __webpack_require__(/*! ./Base64 */ 12),
+  SourceMapConsumer: __webpack_require__(/*! ./SourceMapConsumer */ 15),
+  SourceMapGenerator: __webpack_require__(/*! ./SourceMapGenerator */ 13),
+  SourceNode: __webpack_require__(/*! ./SourceNode */ 16),
+  StandardImport: __webpack_require__(/*! ./StandardImport */ 9)
+});
+
+
+/***/ }),
+/* 5 */
+/*!****************************************************!*\
+  !*** ./source/Caffeine.SourceMap/namespace.coffee ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var SourceMap,
+  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  hasProp = {}.hasOwnProperty;
+
+module.exports = (__webpack_require__(/*! neptune-namespaces */ 6)).addNamespace('Caffeine.SourceMap', SourceMap = (function(superClass) {
+  extend(SourceMap, superClass);
+
+  function SourceMap() {
+    return SourceMap.__super__.constructor.apply(this, arguments);
+  }
+
+  SourceMap.version = __webpack_require__(/*! ../../package.json */ 7).version;
+
+  return SourceMap;
+
+})(Neptune.PackageNamespace));
+
+
+/***/ }),
+/* 6 */
+/*!************************************************************************************!*\
+  !*** external "require('neptune-namespaces' /* ABC - not inlining fellow NPM *_/)" ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM */);
+
+/***/ }),
+/* 7 */
+/*!**********************!*\
+  !*** ./package.json ***!
+  \**********************/
+/*! exports provided: author, dependencies, description, license, name, scripts, version, default */
+/***/ (function(module) {
+
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","dependencies":{"art-build-configurator":"*","art-standard-lib":"*","caffeine-eight":"*"},"description":"Caffeine.SourceMap","license":"ISC","name":"caffeine-source-map","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"1.1.0"};
+
+/***/ }),
+/* 8 */
+/*!*************************************************!*\
+  !*** ./source/Caffeine.SourceMap/SourceMap.caf ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
+Caf.defMod(module, () => {
+  return Caf.importInvoke(
+    ["merge"],
+    [global, __webpack_require__(/*! ./StandardImport */ 9)],
+    merge => {
+      return merge(
+        __webpack_require__(/*! ./Base64 */ 12),
+        __webpack_require__(/*! ./SourceMapGenerator */ 13),
+        __webpack_require__(/*! ./SourceMapConsumer */ 15)
+      );
+    }
+  );
+});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
+
+/***/ }),
+/* 9 */
+/*!******************************************************!*\
+  !*** ./source/Caffeine.SourceMap/StandardImport.caf ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
+Caf.defMod(module, () => {
+  return __webpack_require__(/*! art-standard-lib */ 10).merge(
+    __webpack_require__(/*! art-standard-lib */ 10),
+    __webpack_require__(/*! art-class-system */ 11)
+  );
+});
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
+
+/***/ }),
+/* 10 */
+/*!**********************************************************************************!*\
+  !*** external "require('art-standard-lib' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**********************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require('art-standard-lib' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
-/* 3 */
+/* 11 */
+/*!**********************************************************************************!*\
+  !*** external "require('art-class-system' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('art-class-system' /* ABC - not inlining fellow NPM */);
+
+/***/ }),
+/* 12 */
+/*!**********************************************!*\
+  !*** ./source/Caffeine.SourceMap/Base64.caf ***!
+  \**********************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
 Caf.defMod(module, () => {
   return (() => {
     let vlqBaseShift,
@@ -200,21 +390,19 @@ Caf.defMod(module, () => {
   })();
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = require('art-class-system' /* ABC - not inlining fellow NPM */);
-
-/***/ }),
-/* 5 */
+/* 13 */
+/*!**********************************************************!*\
+  !*** ./source/Caffeine.SourceMap/SourceMapGenerator.caf ***!
+  \**********************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
 Caf.defMod(module, () => {
   return Caf.importInvoke(
     [
@@ -228,10 +416,10 @@ Caf.defMod(module, () => {
     ],
     [
       global,
-      __webpack_require__(2),
-      __webpack_require__(4),
-      __webpack_require__(8),
-      __webpack_require__(3)
+      __webpack_require__(/*! art-standard-lib */ 10),
+      __webpack_require__(/*! art-class-system */ 11),
+      __webpack_require__(/*! caffeine-eight */ 14),
+      __webpack_require__(/*! ./Base64 */ 12)
     ],
     (BaseClass, JSON, merge, encodeVlq, String, Array, SourceLineColumnMap) => {
       let SourceMapGenerator;
@@ -367,24 +555,38 @@ Caf.defMod(module, () => {
   );
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
 
 /***/ }),
-/* 6 */
+/* 14 */
+/*!********************************************************************************!*\
+  !*** external "require('caffeine-eight' /* ABC - not inlining fellow NPM *_/)" ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('caffeine-eight' /* ABC - not inlining fellow NPM */);
+
+/***/ }),
+/* 15 */
+/*!*********************************************************!*\
+  !*** ./source/Caffeine.SourceMap/SourceMapConsumer.caf ***!
+  \*********************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
 Caf.defMod(module, () => {
   return Caf.importInvoke(
     ["BaseClass", "readVlqSequence", "Error", "String", "JSON"],
     [
       global,
-      __webpack_require__(2),
-      __webpack_require__(4),
-      __webpack_require__(8),
-      __webpack_require__(3)
+      __webpack_require__(/*! art-standard-lib */ 10),
+      __webpack_require__(/*! art-class-system */ 11),
+      __webpack_require__(/*! caffeine-eight */ 14),
+      __webpack_require__(/*! ./Base64 */ 12)
     ],
     (BaseClass, readVlqSequence, Error, String, JSON) => {
       let SourceMapConsumer;
@@ -501,102 +703,45 @@ Caf.defMod(module, () => {
   );
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
 
 /***/ }),
-/* 7 */
+/* 16 */
+/*!**************************************************!*\
+  !*** ./source/Caffeine.SourceMap/SourceNode.caf ***!
+  \**************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
-Caf.defMod(module, () => {
-  return __webpack_require__(2).merge(
-    __webpack_require__(2),
-    __webpack_require__(4)
-  );
-});
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require('caffeine-eight' /* ABC - not inlining fellow NPM */);
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
-Caf.defMod(module, () => {
-  return __webpack_require__(13);
-});
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
-Caf.defMod(module, () => {
-  return __webpack_require__(9);
-});
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
-Caf.defMod(module, () => {
-  return Caf.importInvoke(
-    ["merge"],
-    [global, __webpack_require__(7)],
-    merge => {
-      return merge(
-        __webpack_require__(3),
-        __webpack_require__(5),
-        __webpack_require__(6)
-      );
-    }
-  );
-});
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(module) {
-let Caf = __webpack_require__(1);
+let Caf = __webpack_require__(/*! caffeine-script-runtime */ 2);
 Caf.defMod(module, () => {
   return Caf.importInvoke(
     [
       "BaseClass",
       "toInspectedObjects",
+      "compactFlatten",
+      "merge",
+      "deepMerge",
       "SourceMapGenerator",
-      "String",
-      "Array"
+      "String"
     ],
     [
       global,
-      __webpack_require__(2),
-      __webpack_require__(4),
-      { SourceMapGenerator: __webpack_require__(5) }
+      __webpack_require__(/*! art-standard-lib */ 10),
+      __webpack_require__(/*! art-class-system */ 11),
+      { SourceMapGenerator: __webpack_require__(/*! ./SourceMapGenerator */ 13) }
     ],
-    (BaseClass, toInspectedObjects, SourceMapGenerator, String, Array) => {
+    (
+      BaseClass,
+      toInspectedObjects,
+      compactFlatten,
+      merge,
+      deepMerge,
+      SourceMapGenerator,
+      String
+    ) => {
       let SourceNode;
       return (SourceNode = Caf.defClass(
         class SourceNode extends BaseClass {
@@ -604,37 +749,57 @@ Caf.defMod(module, () => {
             super(...arguments);
             this.sourceIndex = sourceIndex;
             this.children = children;
+            this._props = null;
+            this._flattenedChildren = null;
           }
         },
         function(SourceNode, classSuper, instanceSuper) {
-          this.property("sourceIndex", "children");
+          this.property("sourceIndex", "children", "props");
           this.getter({
             inspectedObjects: function() {
               return {
                 sourceIndex: this.sourceIndex,
+                props: this.props,
                 children: toInspectedObjects(this.children)
               };
             }
           });
+          this.getter({
+            flattenedChildren: function() {
+              let cafTemp;
+              return (cafTemp = this._flattenedChildren) != null
+                ? cafTemp
+                : (this._flattenedChildren = compactFlatten(this.children));
+            },
+            mergedProps: function() {
+              let out;
+              if (this._props) {
+                out = merge(this._props);
+              }
+              Caf.each2(this.flattenedChildren, child => {
+                let mergedProps;
+                return (mergedProps = child.mergedProps)
+                  ? (out = out ? deepMerge(out, mergedProps) : mergedProps)
+                  : undefined;
+              });
+              return out;
+            }
+          });
+          this.prototype.withProps = function(_props) {
+            this._props = _props;
+            return this;
+          };
           this.prototype.generate = function(source, sourceFileName) {
             return new SourceMapGenerator(source, sourceFileName).add(this);
           };
-          this.prototype.toString = function(source, output = { js: "" }) {
-            source != null ? source : (source = this.children);
-            switch (false) {
-              case !Caf.is(source, String):
-                output.js += source;
-                break;
-              case !Caf.is(source, Array):
-                Caf.each2(
-                  source,
-                  child => this.toString(child, output),
-                  child => child != null
-                );
-                break;
-              case !Caf.is(source, SourceNode):
-                source.toString(null, output);
-            }
+          this.prototype.toString = function(output = { js: "" }) {
+            Caf.each2(
+              this.flattenedChildren,
+              child =>
+                Caf.is(child, String)
+                  ? (output.js += child)
+                  : child.toString(output)
+            );
             return output.js;
           };
         }
@@ -643,56 +808,7 @@ Caf.defMod(module, () => {
   );
 });
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)(module)))
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(14);
-
-module.exports.includeInNamespace(__webpack_require__(11)).addModules({
-  Base64: __webpack_require__(3),
-  SourceMapConsumer: __webpack_require__(6),
-  SourceMapGenerator: __webpack_require__(5),
-  SourceNode: __webpack_require__(12),
-  StandardImport: __webpack_require__(7)
-});
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var SourceMap,
-  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  hasProp = {}.hasOwnProperty;
-
-module.exports = (__webpack_require__(16)).addNamespace('Caffeine.SourceMap', SourceMap = (function(superClass) {
-  extend(SourceMap, superClass);
-
-  function SourceMap() {
-    return SourceMap.__super__.constructor.apply(this, arguments);
-  }
-
-  SourceMap.version = __webpack_require__(15).version;
-
-  return SourceMap;
-
-})(Neptune.PackageNamespace));
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","dependencies":{"art-build-configurator":"*","art-standard-lib":"*","caffeine-eight":"*"},"description":"Caffeine.SourceMap","license":"ISC","name":"caffeine-source-map","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd --compilers coffee:coffee-script/register","testInBrowser":"webpack-dev-server --progress"},"version":"1.0.2"}
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM */);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
 
 /***/ })
 /******/ ]);
