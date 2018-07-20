@@ -2,22 +2,36 @@ import &ArtStandardLib,  &ArtClassSystem, {} &SourceMapGenerator
 
 class SourceNode extends BaseClass
 
-  @property :sourceIndex :children
+  @property :sourceIndex :children :props
 
   constructor: (@sourceIndex, @children)->
-    # [@children] = @children if @children is Array and @children.length <= 1 # mostly to make inspecting nicer
+    @_props = null
+    @_flattenedChildren = null
 
   @getter
-    inspectedObjects: -> {} @sourceIndex, children: toInspectedObjects @children
+    inspectedObjects: -> {} @sourceIndex, @props, children: toInspectedObjects @children
+
+  @getter
+    flattenedChildren: -> @_flattenedChildren ?= compactFlatten @children
+    mergedProps: ->
+      out = merge @_props if @_props
+      each child in @flattenedChildren
+        if child extract mergedProps
+          out = if out
+            deepMerge out, mergedProps
+          else
+            mergedProps
+
+      out
+
+  withProps: (@_props) -> @
 
   generate: (source, sourceFileName) ->
     new SourceMapGenerator source, sourceFileName
     .add @
 
-  toString: (source, output = js: '') ->
-    source ?= @children
-    switch
-    when source is String     then output.js += source
-    when source is Array      then each child in source with @toString child, output when child?
-    when source is SourceNode then source.toString null, output
+  toString: (output = js: '') ->
+    each child in @flattenedChildren
+      if child is String then output.js += child
+      else child.toString output
     output.js
