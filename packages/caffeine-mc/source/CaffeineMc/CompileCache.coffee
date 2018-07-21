@@ -88,7 +88,7 @@ defineModule module, class CompileCache extends BaseClass
   @cache: (cachedFileKey) ->
     if fileName = @getFileName cachedFileKey
       {source, compiled, props} = cachedFileKey
-      log cached: cachedFileKey.sourceFile if cachedFileKey.verbose
+      log caching: cachedFileKey.sourceFile if cachedFileKey.verbose
       fs.writeFileSync fileName, JSON.stringify merge {source, compiled, props}
 
     cachedFileKey
