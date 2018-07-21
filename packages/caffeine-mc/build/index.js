@@ -169,7 +169,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, bin, dependencies, description, license, name, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.10.0"};
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.11.0"};
 
 /***/ }),
 /* 5 */
@@ -1094,7 +1094,7 @@ module.exports = require('path' /* ABC - not inlining fellow NPM */);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, each, find, findSourceRootSync, log, merge, mergeInto, peek, present, readdirSync, realDirReader, realRequire, ref, ref1, statSync, upperCamelCase, w,
+/* WEBPACK VAR INJECTION */(function(module) {var ErrorWithInfo, ModuleResolver, Path, Promise, dashCase, defineModule, dirReader, each, find, findSourceRootSync, log, merge, mergeInto, peek, present, readdirSync, realRequire, ref, ref1, statSync, upperCamelCase, w,
   slice = [].slice;
 
 ref = __webpack_require__(/*! art-standard-lib */ 12), defineModule = ref.defineModule, peek = ref.peek, Promise = ref.Promise, dashCase = ref.dashCase, upperCamelCase = ref.upperCamelCase, ErrorWithInfo = ref.ErrorWithInfo, log = ref.log, merge = ref.merge, present = ref.present, find = ref.find, each = ref.each, w = ref.w, mergeInto = ref.mergeInto;
@@ -1103,7 +1103,7 @@ Path = __webpack_require__(/*! path */ 18);
 
 ref1 = __webpack_require__(/*! fs-extra */ 17), statSync = ref1.statSync, readdirSync = ref1.readdirSync;
 
-realDirReader = {
+dirReader = {
   isDir: function(entity) {
     return statSync(entity).isDirectory();
   },
@@ -1154,8 +1154,7 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver.findModuleSync = function(moduleName, options) {
-    var absolutePath, base, denormalizedBase, dirReader, j, len, matchingName, mod, modulePathArray, out, ref2, ref3, requireString, sub;
-    dirReader = options.dirReader || (options.dirReader = realDirReader);
+    var absolutePath, base, denormalizedBase, j, len, matchingName, mod, modulePathArray, out, ref2, ref3, requireString, sub;
     ref2 = (function() {
       var j, len, ref2, ref3, results;
       ref3 = (ref2 = moduleName.split("/"), denormalizedBase = ref2[0], ref2);
@@ -1196,8 +1195,7 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver._findModuleBaseSync = function(moduleBaseName, modulePathArray, options) {
-    var absolutePath, dirReader, directory, e, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
-    dirReader = options.dirReader;
+    var absolutePath, absoluteSourceFilePath, directory, e, matchingName, normalizedModuleName, requireString, shouldContinue, sourceDir, sourceFile, sourceFiles, sourceRoot;
     normalizedModuleName = upperCamelCase(moduleBaseName);
     if (options) {
       sourceFile = options.sourceFile, sourceDir = options.sourceDir, sourceFiles = options.sourceFiles, sourceRoot = options.sourceRoot;
@@ -1207,20 +1205,23 @@ defineModule(module, ModuleResolver = (function() {
       directory = sourceDir = dirReader.resolve(sourceDir || Path.dirname(sourceFile));
       sourceRoot || (sourceRoot = findSourceRootSync(sourceDir));
       sourceRoot = sourceRoot && dirReader.resolve(sourceRoot);
+      absoluteSourceFilePath = sourceFile && Path.join(sourceDir, Path.parse(sourceFile).name);
     }
     absolutePath = null;
     shouldContinue = present(sourceRoot);
     while (shouldContinue) {
-      if (matchingName = ModuleResolver._matchingNameInDirectorySync(normalizedModuleName, directory, options)) {
-        absolutePath = Path.join(directory, matchingName);
-        shouldContinue = false;
-      } else if (directory === sourceRoot) {
-        if (normalizedModuleName === normalizeName(peek(sourceRoot.split("/")))) {
-          absolutePath = sourceRoot;
-        }
+      if ((matchingName = ModuleResolver._matchingNameInDirectorySync(normalizedModuleName, directory, options)) && absoluteSourceFilePath !== (absolutePath = Path.join(directory, matchingName))) {
         shouldContinue = false;
       } else {
-        directory = Path.dirname(directory);
+        absolutePath = null;
+        if (directory === sourceRoot) {
+          if (normalizedModuleName === normalizeName(peek(sourceRoot.split("/")))) {
+            absolutePath = sourceRoot;
+          }
+          shouldContinue = false;
+        } else {
+          directory = Path.dirname(directory);
+        }
       }
     }
     if (absolutePath) {
@@ -1315,8 +1316,7 @@ defineModule(module, ModuleResolver = (function() {
   };
 
   ModuleResolver._matchingNameInDirectorySync = function(normalizedModuleName, directory, options) {
-    var dirReader, matchingName;
-    dirReader = options.dirReader;
+    var matchingName;
     matchingName = null;
     each(dirReader.read(directory), function(name) {
       var newMatchingName;
