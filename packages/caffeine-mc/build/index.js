@@ -171,7 +171,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, bin, dependencies, description, license, name, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.11.1"};
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.12.0"};
 
 /***/ }),
 /* 5 */
@@ -358,7 +358,7 @@ module.exports = Metacompiler = (function(superClass) {
     if (options.prettier && (options.inlineMap || options.sourceMap)) {
       throw new Error("prettier does not support sourcemaps");
     }
-    if (options.cache !== false && options.sourceFile) {
+    if (options.cache && options.sourceFile) {
       return this._compileWithCaching(code, options);
     } else {
       return this._postprocess(options, this._compileWithMetacompiler(code, options));
@@ -757,7 +757,7 @@ defineModule(module, CompileCache = (function(superClass) {
       source = cachedFileKey.source, compiled = cachedFileKey.compiled, props = cachedFileKey.props;
       if (cachedFileKey.verbose) {
         log({
-          cached: cachedFileKey.sourceFile
+          caching: cachedFileKey.sourceFile
         });
       }
       fs.writeFileSync(fileName, JSON.stringify(merge({
@@ -1839,7 +1839,8 @@ defineModule(module, Register = (function() {
         var answer, error;
         try {
           answer = CaffeineMc.compileFileSync(filename, {
-            inlineMap: true
+            inlineMap: true,
+            cache: true
           });
           return module._compile(answer.compiled.js, filename);
         } catch (error1) {
@@ -2124,6 +2125,9 @@ defineModule(module, CafRepl = (function() {
     if (context == null) {
       context = this.cafRepl.context;
     }
+    if (filename == null) {
+      filename = 'repl';
+    }
     js = this.compileCommand(command, filename);
     if (command.match(/^\|/)) {
       return this.compiler.lastMetacompilerResult;
@@ -2138,6 +2142,9 @@ defineModule(module, CafRepl = (function() {
     var e, error, js, result;
     if (context == null) {
       context = this.cafRepl.context;
+    }
+    if (filename == null) {
+      filename = 'repl';
     }
     result = error = null;
     try {
