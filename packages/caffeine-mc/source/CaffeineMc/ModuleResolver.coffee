@@ -6,7 +6,7 @@
 Path = require 'path'
 
 {statSync, readdirSync} = require 'fs-extra'
-realDirReader =
+dirReader =
   isDir: (entity) -> statSync(entity).isDirectory()
   read: readdirSync
   resolve: Path.resolve
@@ -45,7 +45,6 @@ defineModule module, class ModuleResolver
     {requireString, absolutePath}
 
   @findModuleSync: (moduleName, options) =>
-    dirReader = options.dirReader ||= realDirReader
 
     [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
       out = normalizeName mod
@@ -71,7 +70,6 @@ defineModule module, class ModuleResolver
     Promise.then => @findModuleSync moduleName, options
 
   @_findModuleBaseSync: (moduleBaseName, modulePathArray, options) =>
-    {dirReader} = options
     normalizedModuleName = upperCamelCase moduleBaseName
 
     {sourceFile, sourceDir, sourceFiles, sourceRoot} = options if options
@@ -170,7 +168,6 @@ defineModule module, class ModuleResolver
 
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory, options) ->
-    {dirReader} = options
     matchingName = null
     each (dirReader.read directory), (name) ->
       if newMatchingName = getMatchingName normalizedModuleName, name, dirReader.isDir Path.join directory, name

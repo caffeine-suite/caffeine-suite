@@ -1,6 +1,7 @@
 {defineModule, log, each, merge, isArray} = require 'art-standard-lib'
 
 {findModule} = Neptune.CaffeineMc
+mockFs = require 'mock-fs'
 
 defineModule module, suite:
 
@@ -61,6 +62,9 @@ defineModule module, suite:
         assert.match absolutePath, /art-standard-lib\/Types$/
 
   stubbedFindModule: ->
+    # setup -> mockFs initialFs
+    teardown -> mockFs.restore()
+
     dirReaderFromDirMap = (structure) ->
       find = (dir, current = structure) ->
         return current if dir.length == 0
@@ -76,41 +80,42 @@ defineModule module, suite:
         resolve: (dir) -> dir
 
     test "stubbed", ->
+      mockFs
+        ArtStandardLib:
+          alpha: {}
+          beta:  {}
+
       findModule "ALPHA", merge
         sourceDir:  "ArtStandardLib/beta"
         sourceRoot: "ArtStandardLib"
-        dirReaderFromDirMap
-          ArtStandardLib:
-            alpha: {}
-            beta:  {}
 
       .then ({requireString, absolutePath}) ->
         assert.eq requireString, "../alpha"
         assert.match absolutePath, "ArtStandardLib/alpha"
 
     test "MyDottedDir finds My.DottedDir", ->
+      mockFs
+        myRoot:
+          "My.DottedDir":
+            MySubdir: {}
       findModule "MyDottedDir", merge
         sourceDir:  "myRoot/My.DottedDir/MySubdir"
         sourceRoot: "myRoot"
-        dirReaderFromDirMap
-          myRoot:
-            "My.DottedDir":
-              MySubdir: {}
 
       .then ({requireString, absolutePath}) ->
         assert.eq requireString, "../"
 
     test "DottedDir does not find My.DottedDir", ->
+      mockFs
+        myRoot:
+          "My.DottedDir": MySubdir: {}
+          MyDottedDir: {}
+
       assert.rejects findModule "DottedDir", merge
         sourceDir:  "myRoot/My.DottedDir/MySubdir"
         sourceRoot: "myRoot"
-        dirReaderFromDirMap
-          myRoot:
-            "My.DottedDir": MySubdir: {}
-            MyDottedDir: {}
-
-      # .then ({requireString, absolutePath}) ->
-      #   assert.eq requireString, "../../MyDottedDir"
+      .then (rejectsWith) ->
+        assert.match rejectsWith.message, /Could not find.*DottedDir/i
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js
