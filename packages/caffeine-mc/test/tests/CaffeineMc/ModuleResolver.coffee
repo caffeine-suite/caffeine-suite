@@ -1,6 +1,6 @@
 {defineModule, log, each, merge, isArray} = require 'art-standard-lib'
 
-{findModule} = Neptune.CaffeineMc
+{findModule, findModuleSync} = Neptune.CaffeineMc
 mockFs = require 'mock-fs'
 
 defineModule module, suite:
@@ -11,10 +11,13 @@ defineModule module, suite:
 
     each CaffeineMcTestHelper.testFiles, (file) ->
       test "'sub-awesome' in absolutePath.basename('#{file}')", ->
-        findModule "hurlock-alpha", sourceFile: file
-        .then ({requireString, absolutePath}) ->
-          assert.match requireString, /\..*HurlockAlpha/, "requireString"
-          assert.match absolutePath, /\/.*\/HurlockAlpha/, "absolutePath"
+        if /HurlockAlpha\.caf/.test file
+          assert.rejects findModule "hurlock-alpha", sourceFile: file
+        else
+          findModule "hurlock-alpha", sourceFile: file
+          .then ({requireString, absolutePath}) ->
+            assert.match requireString, /\..*HurlockAlpha/, "requireString"
+            assert.match absolutePath, /\/.*\/HurlockAlpha/, "absolutePath"
 
     each CaffeineMcTestHelper.testFiles, (file) ->
       test "'sub-awesome/betaRelease' in absolutePath.basename('#{file}')", ->
@@ -116,6 +119,22 @@ defineModule module, suite:
         sourceRoot: "myRoot"
       .then (rejectsWith) ->
         assert.match rejectsWith.message, /Could not find.*DottedDir/i
+
+    test "findModuleSync does not resolve to the sourceFile the request came from", ->
+      mockFs
+        myRoot:
+          MySubdir: "StandardImport.caf": "&StandardImport"
+          "StandardImport.caf": "&ArtSuite"
+
+
+      found = findModuleSync "StandardImport",
+        sourceDir:  "myRoot/MySubdir"
+        sourceFile: "StandardImport.caf"
+        sourceRoot: "myRoot"
+
+      assert.eq found,
+        requireString: "../StandardImport"
+        absolutePath: "/Users/shanebdavis/imikimi/npm/caffeine-mc/myRoot/StandardImport"
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js

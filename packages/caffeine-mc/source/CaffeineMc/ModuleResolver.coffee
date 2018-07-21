@@ -79,21 +79,26 @@ defineModule module, class ModuleResolver
       directory = sourceDir = dirReader.resolve sourceDir || Path.dirname sourceFile
       sourceRoot ||= findSourceRootSync sourceDir
       sourceRoot = sourceRoot && dirReader.resolve sourceRoot
+      absoluteSourceFilePath = sourceFile && Path.join sourceDir, Path.parse(sourceFile).name
+
 
     absolutePath = null
     shouldContinue = present sourceRoot
     while shouldContinue
-      if matchingName = @_matchingNameInDirectorySync normalizedModuleName, directory, options
-        absolutePath = Path.join directory, matchingName
-        shouldContinue = false
-
-      else if directory == sourceRoot
-        if normalizedModuleName == normalizeName peek sourceRoot.split "/"
-          absolutePath = sourceRoot
+      # log lookin: {normalizedModuleName, directory, options}
+      if (matchingName = @_matchingNameInDirectorySync normalizedModuleName, directory, options) &&
+          absoluteSourceFilePath != absolutePath = Path.join directory, matchingName
         shouldContinue = false
 
       else
-        directory = Path.dirname directory
+        absolutePath = null
+        if directory == sourceRoot
+          if normalizedModuleName == normalizeName peek sourceRoot.split "/"
+            absolutePath = sourceRoot
+          shouldContinue = false
+
+        else
+          directory = Path.dirname directory
 
     if absolutePath
       requireString = Path.relative sourceDir, absolutePath
