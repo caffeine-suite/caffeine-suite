@@ -34,18 +34,35 @@ module.exports =
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -63,69 +80,77 @@ module.exports =
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 38);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
-/* no static exports found */
-/* all exports used */
+/***/ 17:
+/*!**************************************************************************!*\
+  !*** external "require('fs-extra' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
+
+/***/ }),
+
+/***/ 18:
 /*!**********************************************************************!*\
   !*** external "require('path' /* ABC - not inlining fellow NPM *_/)" ***!
   \**********************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require('path' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 22:
-/* no static exports found */
-/* all exports used */
-/*!****************************************************************************************!*\
-  !*** external "require('coffee-script/register' /* ABC - not inlining fellow NPM *_/)" ***!
-  \****************************************************************************************/
+/***/ 20:
+/*!************************************************************************!*\
+  !*** external "require('colors' /* ABC - not inlining fellow NPM *_/)" ***!
+  \************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require('coffee-script/register' /* ABC - not inlining fellow NPM */);
+module.exports = require('colors' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 23:
-/* no static exports found */
-/* all exports used */
-/*!***************************************************************************!*\
-  !*** external "require('commander' /* ABC - not inlining fellow NPM *_/)" ***!
-  \***************************************************************************/
+/***/ 21:
+/*!******************************************************************************!*\
+  !*** external "require('glob-promise' /* ABC - not inlining fellow NPM *_/)" ***!
+  \******************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require('commander' /* ABC - not inlining fellow NPM */);
+module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 24:
-/* no static exports found */
-/* all exports used */
+/***/ 38:
 /*!****************************!*\
   !*** ./caf-command.coffee ***!
   \****************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, obj, output, path, present, prettier, realRequire, ref, ref1, reset, serializer, transpile, verbose, version, versions;
+var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, nocache, obj, output, path, present, prettier, realRequire, ref, ref1, reset, serializer, transpile, verbose, version, versions;
 
 global.ArtStandardLibMultipleContextTypeSupport = true;
 
-colors = __webpack_require__(/*! colors */ 7);
+colors = __webpack_require__(/*! colors */ 20);
 
-glob = __webpack_require__(/*! glob-promise */ 8);
+glob = __webpack_require__(/*! glob-promise */ 21);
 
-fs = __webpack_require__(/*! fs-extra */ 3);
+fs = __webpack_require__(/*! fs-extra */ 17);
 
-path = __webpack_require__(/*! path */ 1);
+path = __webpack_require__(/*! path */ 18);
 
-__webpack_require__(/*! coffee-script/register */ 22);
+__webpack_require__(/*! coffee-script/register */ 39);
 
 realRequire = eval('require');
 
@@ -133,7 +158,7 @@ ref = CaffeineMc = eval('require')('./index'), version = ref.version, displayErr
 
 ref1 = Neptune.Art.StandardLib, log = ref1.log, dashCase = ref1.dashCase, escapeRegExp = ref1.escapeRegExp, present = ref1.present, isString = ref1.isString, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
 
-commander = __webpack_require__(/*! commander */ 23).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'cache compiled files').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(/*! commander */ 40).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'DEPRICATED - cache is on by default').option('--nocache', 'disable compile cache').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -141,7 +166,9 @@ displayError = function(e) {
   return CaffeineMc.displayError(e, commander);
 };
 
-reset = commander.reset, output = commander.output, compile = commander.compile, prettier = commander.prettier, transpile = commander.transpile, verbose = commander.verbose, versions = commander.versions, cache = commander.cache;
+reset = commander.reset, output = commander.output, compile = commander.compile, prettier = commander.prettier, transpile = commander.transpile, verbose = commander.verbose, versions = commander.versions, cache = commander.cache, nocache = commander.nocache;
+
+cache = !nocache;
 
 fileCounts = {
   read: 0,
@@ -257,7 +284,8 @@ if (compile) {
   CaffeineMc.register();
   CaffeineMc.runFile(fileToRun, {
     color: true,
-    cache: cache
+    cache: cache,
+    verbose: verbose
   });
 } else if (versions) {
   if (isString(versions)) {
@@ -278,39 +306,25 @@ if (compile) {
 
 /***/ }),
 
-/***/ 3:
-/* no static exports found */
-/* all exports used */
-/*!**************************************************************************!*\
-  !*** external "require('fs-extra' /* ABC - not inlining fellow NPM *_/)" ***!
-  \**************************************************************************/
+/***/ 39:
+/*!****************************************************************************************!*\
+  !*** external "require('coffee-script/register' /* ABC - not inlining fellow NPM *_/)" ***!
+  \****************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
+module.exports = require('coffee-script/register' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 7:
-/* no static exports found */
-/* all exports used */
-/*!************************************************************************!*\
-  !*** external "require('colors' /* ABC - not inlining fellow NPM *_/)" ***!
-  \************************************************************************/
+/***/ 40:
+/*!***************************************************************************!*\
+  !*** external "require('commander' /* ABC - not inlining fellow NPM *_/)" ***!
+  \***************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = require('colors' /* ABC - not inlining fellow NPM */);
-
-/***/ }),
-
-/***/ 8:
-/* no static exports found */
-/* all exports used */
-/*!******************************************************************************!*\
-  !*** external "require('glob-promise' /* ABC - not inlining fellow NPM *_/)" ***!
-  \******************************************************************************/
-/***/ (function(module, exports) {
-
-module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
+module.exports = require('commander' /* ABC - not inlining fellow NPM */);
 
 /***/ })
 
