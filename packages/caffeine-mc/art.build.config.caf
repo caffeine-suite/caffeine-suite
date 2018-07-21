@@ -21,9 +21,6 @@ package:
     babel-core:           :^6.26.3
     mock-fs:              :^4.5.0
 
-  scripts:
-    test: "" nn -s;mocha -u tdd --compilers coffee:coffee-script/register
-
   bin:
     caf: :./caf
 

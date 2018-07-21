@@ -6,6 +6,8 @@
 {BaseClass} = require 'art-class-system'
 {findSourceRootSync} = require './SourceRoots'
 
+{findModuleSync} = require './ModuleResolver'
+
 require 'colors'
 
 fs = require 'fs-extra'
@@ -63,9 +65,13 @@ defineModule module, class CompileCache extends BaseClass
     return null unless @compilerSupportsCaching compiler
 
     sourceRoot = findSourceRootSync sourceFile
+    relativeSourceFile = path.relative sourceRoot, sourceFile
 
-    if compilerOptions
-      source = "# compilerOptions: #{consistentJsonStringify compilerOptions}\n#{source}"
+    source = """
+      # sourceFile: #{relativeSourceFile}
+      # compilerOptions: #{consistentJsonStringify compilerOptions ? null}
+      #{source}
+      """
 
     [
       @compileCacheFilePathRoot
@@ -80,8 +86,9 @@ defineModule module, class CompileCache extends BaseClass
   ###
   @cache: (cachedFileKeyWithCompilerResults) ->
     if fileName = @getFileName cachedFileKeyWithCompilerResults
-      {source, compiled} = cachedFileKeyWithCompilerResults
-      fs.writeFileSync fileName, JSON.stringify {source, compiled}
+      {source, compiled, props} = cachedFileKeyWithCompilerResults
+      log CaffineMcCompileCache_caching: cachedFileKeyWithCompilerResults.sourceFile
+      fs.writeFileSync fileName, JSON.stringify merge {source, compiled, props}
 
     cachedFileKeyWithCompilerResults
 
@@ -89,11 +96,36 @@ defineModule module, class CompileCache extends BaseClass
   IN: cachedFileKey (see above)
   ###
   @fetch: (cachedFileKey) ->
-    if (fileName = @getFileName cachedFileKey) && fs.existsSync fileName
-      parsedContents = try JSON.parse fs.readFileSync fileName
-      if parsedContents?.source == cachedFileKey.source
-        parsedContents.fromCache = true
-        parsedContents
+    if (fileName = @getFileName cachedFileKey) &&
+        fs.existsSync(fileName)
+      if (cacheContents = try JSON.parse fs.readFileSync fileName) &&
+          cacheContents.source == cachedFileKey.source &&
+          @verifyDependencies cachedFileKey, cacheContents.props
+        cacheContents.fromCache = true
+        cacheContents
+      # # debug caching:
+      # else
+      #   log CompileCache:
+      #     cacheFileInvalid:
+      #       cacheContents: cacheContents
+      #       sourceMatch: cacheContents && cacheContents.source == cachedFileKey.source
+      #       verifyDependencies: cacheContents && @verifyDependencies cachedFileKey, cacheContents.props
+
+      #   null
+
+  @verifyDependencies: (cachedFileKey, props) ->
+    if moduleDependencies = props?.moduleDependencies
+      for sourceString, cachedRequireString of moduleDependencies
+        {requireString} = findModuleSync sourceString, sourceFile: cachedFileKey.sourceFile
+        if requireString != cachedRequireString
+          log verifyDependencies:
+            sourceString:sourceString
+            sourceFile: cachedFileKey.sourceFile
+            notEqual: {requireString, cachedRequireString}
+          return false
+      true
+    else
+      true
 
   # NOTE: for some reason when using mock-fs, we need to apply (Promise.resolve item) to glob's results
   @reset: (verbose) ->

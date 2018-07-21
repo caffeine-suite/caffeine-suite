@@ -18,7 +18,8 @@
       result = CaffeineMc.FileCompiler.compileFileSync(sourceFile, {
         source: source,
         debug: this.debug,
-        prettier: true
+        prettier: true,
+        cache: true
       });
     } catch (error) {
       e = error;
