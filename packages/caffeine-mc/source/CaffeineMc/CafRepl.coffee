@@ -204,7 +204,7 @@ defineModule module, class CafRepl
   @_showCurrentCompiler: ->
     logReplInfo "Your current compiler is: ", @compiler.compilerName
 
-  @_replEval: (command, context = @cafRepl.context, filename) ->
+  @_replEval: (command, context = @cafRepl.context, filename = 'repl') ->
     js = @compileCommand command, filename
     if command.match /^\|/
       @compiler.lastMetacompilerResult
@@ -212,7 +212,7 @@ defineModule module, class CafRepl
       runInContext js, context
 
   lastCompiler = null
-  @replEval: (command, context = @cafRepl.context, filename) ->
+  @replEval: (command, context = @cafRepl.context, filename = 'repl') ->
     result = error = null
     try
       js = @compileCommand command, filename
@@ -222,9 +222,11 @@ defineModule module, class CafRepl
           @compiler.lastMetacompilerResult
         else
           runInContext js, context
+
         if lastCompiler != @compiler
           @_showCurrentCompiler()
           lastCompiler = @compiler
+
         @cafRepl.setPrompt @getPrompt()
 
       catch e
