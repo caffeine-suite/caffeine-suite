@@ -2,22 +2,43 @@
   defineModule, peek, Promise, dashCase, upperCamelCase,
   ErrorWithInfo, log, merge, present, find, each, w
   mergeInto
+  currentSecond
 } = require 'art-standard-lib'
 Path = require 'path'
 
 {statSync, readdirSync} = require 'fs-extra'
-dirReader =
-  isDir: (entity) -> statSync(entity).isDirectory()
-  read: readdirSync
-  resolve: Path.resolve
+
+dirReader = require './DirReader'
+{cacheable} = require './WorkingCache'
+
+normalizeName = cacheable "normalizeName", upperCamelCase
 
 realRequire = eval 'require'
 
 {findSourceRootSync} = require './SourceRoots'
+###
+2018-07-21 Optimization TODO:
 
+I think if we simplify the semantics such that matches are defined as:
+  normalizeName(dirName) == normalizeName(moduleName)
+AND
+  # this is the change:
+  normalizeName(fileName.split(".")[0]) == normalizeName(moduleName)
+
+Then we can probably make much better use of caching:
+  Read the dir in and create a map:
+    normalizedName: name
+  (where normalizedName here means for files, we strip the extensions)
+
+Then, we don't have to scan the dir every time!
+
+NOTE: I think if we have >= 2 files which map to the same noramlized name
+we encode that in the map somehow and can therefore raise the same
+exception we already do.
+###
 defineModule module, class ModuleResolver
 
-  normalizeName = upperCamelCase
+  # normalizeName = upperCamelCase
 
   ###
   IN:
@@ -38,7 +59,7 @@ defineModule module, class ModuleResolver
         throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
           npmPackageNamesAttempted: [moduleBaseName, dashCase moduleBaseName]
 
-    requireString = if modulePathArray.length > 0
+    requireString = if modulePathArray?.length > 0
       Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
     else
       name
@@ -46,29 +67,33 @@ defineModule module, class ModuleResolver
 
   @findModuleSync: (moduleName, options) =>
 
-    [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
-      out = normalizeName mod
-      out
+    if /\//.test moduleName
+      [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
+        out = normalizeName mod
+        out
+    else denormalizedBase = moduleName
 
     {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, modulePathArray, options
 
-    for sub in modulePathArray
-      if matchingName = @_matchingNameInDirectorySync sub, absolutePath, options
-        absolutePath  = Path.join absolutePath, matchingName
-        requireString = "#{requireString}/#{matchingName}"
-      else
-        throw new ErrorWithInfo "Could not find pathed submodule inside npm package.",
-          npmPackage: requireString
-          localNpmPackageLocation: absolutePath
-          submodulePath: sub
-          normalized: normalizeName sub
-          dirItems: dirReader.read absolutePath
+    if modulePathArray
+      for sub in modulePathArray
+        if matchingName = @_matchingNameInDirectorySync sub, absolutePath, options
+          absolutePath  = Path.join absolutePath, matchingName
+          requireString = "#{requireString}/#{matchingName}"
+        else
+          throw new ErrorWithInfo "Could not find pathed submodule inside npm package.",
+            npmPackage: requireString
+            localNpmPackageLocation: absolutePath
+            submodulePath: sub
+            normalized: normalizeName sub
+            dirItems: dirReader.read absolutePath
 
     {requireString, absolutePath}
 
   @findModule: (moduleName, options) =>
     Promise.then => @findModuleSync moduleName, options
 
+  maybeCouldHaveCached = {}
   @_findModuleBaseSync: (moduleBaseName, modulePathArray, options) =>
     normalizedModuleName = upperCamelCase moduleBaseName
 
@@ -80,7 +105,6 @@ defineModule module, class ModuleResolver
       sourceRoot ||= findSourceRootSync sourceDir
       sourceRoot = sourceRoot && dirReader.resolve sourceRoot
       absoluteSourceFilePath = sourceFile && Path.join sourceDir, Path.parse(sourceFile).name
-
 
     absolutePath = null
     shouldContinue = present sourceRoot
@@ -155,26 +179,27 @@ defineModule module, class ModuleResolver
   ###
   # returns false or name, if it matches
   @getMatchingName: getMatchingName = (normalizedModuleName, name, isDir) ->
-    # log getMatchingName: {normalizedModuleName, name, isDir, normalName: normalizeName name}
-    if isDir
-      if normalizedModuleName == normalName = normalizeName name
-        return name
-    else if 0 == index = (normalName = normalizeName name).indexOf normalizedModuleName
-      foundLegalStop = false
-      offset = 0
 
-      for stop, i in stops = name.split '.'
-        stop = upperCamelCase stop
-        offset += stop.length
-        if normalizedModuleName.length == offset
-          return stops.slice(0, i + 1).join '.'
+    if normalizedModuleName == normalizedTestName = normalizeName name
+      name
 
-    false
+    else unless isDir
+      if 0 == normalizedTestName.indexOf normalizedModuleName
+        foundLegalStop = false
+        offset = 0
+
+        for stop, i in stops = name.split '.'
+          stop = normalizeName stop
+          offset += stop.length
+          if normalizedModuleName.length == offset
+            return stops.slice(0, i + 1).join '.'
+
+      false
 
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory, options) ->
     matchingName = null
-    each (dirReader.read directory), (name) ->
+    for name in dirReader.read directory
       if newMatchingName = getMatchingName normalizedModuleName, name, dirReader.isDir Path.join directory, name
         if matchingName && matchingName != newMatchingName
           throw new ErrorWithInfo """

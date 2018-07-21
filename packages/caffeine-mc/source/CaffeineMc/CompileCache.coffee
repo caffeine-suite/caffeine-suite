@@ -2,6 +2,7 @@
   array, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character
   consistentJsonStringify
   Promise
+  currentSecond
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 {findSourceRootSync} = require './SourceRoots'
@@ -82,27 +83,28 @@ defineModule module, class CompileCache extends BaseClass
     ].join("_") + ".json"
 
   ###
-  IN: cachedFileKeyWithCompilerResults (see above)
+  IN: cachedFileKey (see above), but also with {source, compiled and props}
   ###
-  @cache: (cachedFileKeyWithCompilerResults) ->
-    if fileName = @getFileName cachedFileKeyWithCompilerResults
-      {source, compiled, props} = cachedFileKeyWithCompilerResults
-      log cached: cachedFileKey.sourceFile if cachedFileKeyWithCompilerResults.verbose
+  @cache: (cachedFileKey) ->
+    if fileName = @getFileName cachedFileKey
+      {source, compiled, props} = cachedFileKey
+      log cached: cachedFileKey.sourceFile if cachedFileKey.verbose
       fs.writeFileSync fileName, JSON.stringify merge {source, compiled, props}
 
-    cachedFileKeyWithCompilerResults
+    cachedFileKey
 
   ###
   IN: cachedFileKey (see above)
   ###
   @fetch: (cachedFileKey) ->
+    start = currentSecond()
     if (fileName = @getFileName cachedFileKey) &&
         fs.existsSync(fileName)
       if (cacheContents = try JSON.parse fs.readFileSync fileName) &&
           cacheContents.source == cachedFileKey.source &&
           @verifyDependencies cachedFileKey, cacheContents.props
         cacheContents.fromCache = true
-        log cached: cachedFileKey.sourceFile if cachedFileKey.verbose
+        log cached: "#{(currentSecond() - start) * 1000 | 0}ms " + cachedFileKey.sourceFile if cachedFileKey.verbose
         cacheContents
       # # debug caching:
       # else

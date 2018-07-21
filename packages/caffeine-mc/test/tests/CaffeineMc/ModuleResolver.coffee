@@ -1,12 +1,13 @@
 {defineModule, log, each, merge, isArray} = require 'art-standard-lib'
 
-{findModule, findModuleSync} = Neptune.CaffeineMc
+{findModule, findModuleSync, WorkingCache} = Neptune.CaffeineMc
 mockFs = require 'mock-fs'
 
 defineModule module, suite:
 
   findModule: ->
     setup ->
+      WorkingCache.resetWorkingCache()
       CaffeineMcTestHelper.reset()
 
     each CaffeineMcTestHelper.testFiles, (file) ->
@@ -66,6 +67,9 @@ defineModule module, suite:
 
   stubbedFindModule: ->
     # setup -> mockFs initialFs
+    setup ->
+      WorkingCache.resetWorkingCache()
+
     teardown -> mockFs.restore()
 
     dirReaderFromDirMap = (structure) ->

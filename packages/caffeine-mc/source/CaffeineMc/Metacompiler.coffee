@@ -13,6 +13,8 @@ realRequire = eval 'require'
 } = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
+{checkWorkingCacheExpiration} = require './WorkingCache'
+
 module.exports = class Metacompiler extends BaseClass
   @compile: (code, options = {})=>
     new @().compile code, options
@@ -90,10 +92,11 @@ module.exports = class Metacompiler extends BaseClass
         write originalFileNameWith(extension), output
   ###
   compile: (code, options)->
+    checkWorkingCacheExpiration()
     options = merge Neptune.CaffeineMc.globalCompilerOptions, options
     throw new Error "prettier does not support sourcemaps" if options.prettier && (options.inlineMap || options.sourceMap)
 
-    if options.cache
+    if options.cache != false && options.sourceFile
       @_compileWithCaching code, options
     else
       @_postprocess options, @_compileWithMetacompiler code, options

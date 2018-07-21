@@ -8,6 +8,7 @@ module.exports
   CaffeineMcParser: require './CaffeineMcParser'
   CafRepl:          require './CafRepl'         
   CompileCache:     require './CompileCache'    
+  DirReader:        require './DirReader'       
   FileCompiler:     require './FileCompiler'    
   Highlight:        require './Highlight'       
   Metacompiler:     require './Metacompiler'    
@@ -16,4 +17,5 @@ module.exports
   Run:              require './Run'             
   SourceRoots:      require './SourceRoots'     
   Tools:            require './Tools'           
+  WorkingCache:     require './WorkingCache'    
 require './Compilers'
