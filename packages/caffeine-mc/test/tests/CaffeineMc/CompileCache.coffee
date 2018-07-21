@@ -80,6 +80,8 @@ module.exports = suite:
     .thenTest "move moduleDependency triggers recompile", ->
       outputFilename = path.join path.dirname(sourceFile), "StandardImport.caf"
       fs.writeFile outputFilename, ":bar"
-      .then -> FileCompiler.compileFile sourceFile, cache: true
+      .then ->
+        WorkingCache.resetWorkingCache()
+        FileCompiler.compileFile sourceFile, cache: true
       .then ({output}) ->
         assert.false output.fromCache
