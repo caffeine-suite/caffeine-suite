@@ -23,7 +23,8 @@ commander = require "commander"
 .usage('[options] <input files and directories>')
 .option '-o, --output <directory>', "where to write output files"
 .option '-c, --compile', 'compile files'
-.option '-C, --cache', 'cache compiled files'
+.option '-C, --cache', 'DEPRICATED - cache is on by default'
+.option '--nocache', 'disable compile cache'
 .option '-p, --prettier', 'apply "prettier" to any js output'
 .option '-t, --transpile [presets...]', 'transpile with babel'
 .option '-d, --debug', 'show debug info'
@@ -43,7 +44,9 @@ commander = require "commander"
 displayError = (e) ->
   CaffeineMc.displayError e, commander
 
-{reset, output, compile, prettier, transpile, verbose, versions, cache} = commander
+{reset, output, compile, prettier, transpile, verbose, versions, cache, nocache} = commander
+
+cache = !nocache
 
 fileCounts =
   read: 0
@@ -142,7 +145,7 @@ else if commander.args.length == 1
   [fileToRun] = commander.args
 
   CaffeineMc.register()
-  CaffeineMc.runFile fileToRun, {color: true, cache}
+  CaffeineMc.runFile fileToRun, {color: true, cache, verbose}
 
 else if versions
   if isString versions

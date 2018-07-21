@@ -26,8 +26,14 @@ defineModule module, class Run extends BaseClass
       throw e
 
   @runFile: (sourceFile, options) =>
-    @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
-    realRequire realRequire.main.filename
+    {globalCompilerOptions} = Neptune.CaffeineMc
+    try
+      Neptune.CaffeineMc.globalCompilerOptions = options
+      @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
+      realRequire realRequire.main.filename
+    finally
+      Neptune.CaffeineMc.globalCompilerOptions = globalCompilerOptions
+
 
     # CaffeineMc.compileFile sourceFile, options
     # .then ({output}) =>

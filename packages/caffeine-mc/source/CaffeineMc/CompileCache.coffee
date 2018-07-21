@@ -87,7 +87,7 @@ defineModule module, class CompileCache extends BaseClass
   @cache: (cachedFileKeyWithCompilerResults) ->
     if fileName = @getFileName cachedFileKeyWithCompilerResults
       {source, compiled, props} = cachedFileKeyWithCompilerResults
-      log CaffineMcCompileCache_caching: cachedFileKeyWithCompilerResults.sourceFile
+      log cached: cachedFileKey.sourceFile if cachedFileKeyWithCompilerResults.verbose
       fs.writeFileSync fileName, JSON.stringify merge {source, compiled, props}
 
     cachedFileKeyWithCompilerResults
@@ -102,6 +102,7 @@ defineModule module, class CompileCache extends BaseClass
           cacheContents.source == cachedFileKey.source &&
           @verifyDependencies cachedFileKey, cacheContents.props
         cacheContents.fromCache = true
+        log cached: cachedFileKey.sourceFile if cachedFileKey.verbose
         cacheContents
       # # debug caching:
       # else

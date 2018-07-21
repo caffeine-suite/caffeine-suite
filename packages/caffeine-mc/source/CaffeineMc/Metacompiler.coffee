@@ -89,7 +89,8 @@ module.exports = class Metacompiler extends BaseClass
       for extension, output of compiled
         write originalFileNameWith(extension), output
   ###
-  compile: (code, options = {})->
+  compile: (code, options)->
+    options = merge Neptune.CaffeineMc.globalCompilerOptions, options
     throw new Error "prettier does not support sourcemaps" if options.prettier && (options.inlineMap || options.sourceMap)
 
     if options.cache
@@ -149,6 +150,7 @@ module.exports = class Metacompiler extends BaseClass
     cacheInfo =
       compiler:   @compiler
       source:     code
+      verbose:    options.verbose
       sourceFile: options.sourceFile
 
     {prettier, inlineMap, transpile} = options
