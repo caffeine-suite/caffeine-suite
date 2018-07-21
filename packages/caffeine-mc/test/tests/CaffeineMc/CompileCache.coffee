@@ -61,9 +61,10 @@ module.exports = suite:
 
   FileCompiler: ->
     suiteSetup ->
-      WorkingCache.resetWorkingCache()
       mockFs initialFs
     suiteTeardown -> mockFs.restore()
+
+    setup -> WorkingCache.resetWorkingCache()
 
     ChainedTest.setup()
     .thenTest "initial", ->
