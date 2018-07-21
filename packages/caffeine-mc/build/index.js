@@ -171,7 +171,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, bin, dependencies, description, license, name, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.12.0"};
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","bin":{"caf":"./caf"},"dependencies":{"art-build-configurator":"*","babel-core":"^6.26.3","babel-loader":"^7.1.5","babel-preset-env":"^1.7.0","caffeine-eight":"*","cardinal":"^1.0.0","chalk":"^1.1.3","colors":"^1.1.2","commander":"^2.9.0","fs-extra":"^3.0.0","glob":"^7.0.3","glob-promise":"^3.1.0","mock-fs":"^4.5.0","prettier":"^1.13.6"},"description":"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.","license":"ISC","name":"caffeine-mc","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.12.1"};
 
 /***/ }),
 /* 5 */
@@ -804,12 +804,13 @@ defineModule(module, CompileCache = (function(superClass) {
         }).requireString;
         if (requireString !== cachedRequireString) {
           log({
-            verifyDependencies: {
+            CompileCache: {
+              message: "moduleDependencies changed",
               sourceString: sourceString,
               sourceFile: cachedFileKey.sourceFile,
-              notEqual: {
-                requireString: requireString,
-                cachedRequireString: cachedRequireString
+              require: {
+                old: cachedRequireString,
+                "new": requireString
               }
             }
           });
