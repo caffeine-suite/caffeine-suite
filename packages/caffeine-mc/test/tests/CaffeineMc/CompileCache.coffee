@@ -1,5 +1,5 @@
 {merge, log, objectWithout} = require 'art-standard-lib'
-{SourceRoots, CompileCache, FileCompiler} = Neptune.CaffeineMc
+{SourceRoots, CompileCache, FileCompiler, WorkingCache} = Neptune.CaffeineMc
 mockFs = require 'mock-fs'
 fs = require 'fs-extra'
 {ChainedTest} = require 'art-testbench'
@@ -60,7 +60,9 @@ module.exports = suite:
       )
 
   FileCompiler: ->
-    suiteSetup -> mockFs initialFs
+    suiteSetup ->
+      WorkingCache.resetWorkingCache()
+      mockFs initialFs
     suiteTeardown -> mockFs.restore()
 
     ChainedTest.setup()

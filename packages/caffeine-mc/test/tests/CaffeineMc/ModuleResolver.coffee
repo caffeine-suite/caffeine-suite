@@ -136,9 +136,8 @@ defineModule module, suite:
         sourceFile: "StandardImport.caf"
         sourceRoot: "myRoot"
 
-      assert.eq found,
-        requireString: "../StandardImport"
-        absolutePath: "/Users/shanebdavis/imikimi/npm/caffeine-mc/myRoot/StandardImport"
+      assert.eq found.requireString, "../StandardImport"
+      assert.isString found.absolutePath
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js
