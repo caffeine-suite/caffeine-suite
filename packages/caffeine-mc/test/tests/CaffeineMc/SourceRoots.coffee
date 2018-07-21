@@ -1,11 +1,13 @@
 {defineModule, log, each} = require 'art-standard-lib'
 path = require 'path'
 
-{getCaffeineInit, findSourceRoot, _resetSourceRoots} = Neptune.CaffeineMc.SourceRoots
+{WorkingCache, SourceRoots} = Neptune.CaffeineMc
+{getCaffeineInit, findSourceRoot, _resetSourceRoots} = SourceRoots
 
 
 defineModule module, suite: ->
   setup ->
+    WorkingCache.resetWorkingCache()
     CaffeineMcTestHelper.reset()
 
   each CaffeineMcTestHelper.testFiles, (file) ->
