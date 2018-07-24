@@ -729,12 +729,11 @@ defineModule(module, CompileCache = (function(superClass) {
   CompileCache.getFileName = function(cachedFileKey) {
     var compiler, compilerOptions, relativeSourceFile, source, sourceFile, sourceRoot;
     compiler = cachedFileKey.compiler, source = cachedFileKey.source, sourceFile = cachedFileKey.sourceFile, compilerOptions = cachedFileKey.compilerOptions;
-    if (!(compiler && sourceFile && source)) {
+    if (!(compiler && sourceFile && (source != null))) {
       throw new Error("expecting compiler, source and sourceFile: " + formattedInspect({
         compiler: compiler,
         source: source,
-        sourceFile: sourceFile,
-        compilerSignature: compilerSignature
+        sourceFile: sourceFile
       }));
     }
     if (!this.compilerSupportsCaching(compiler)) {

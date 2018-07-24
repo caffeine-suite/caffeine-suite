@@ -60,8 +60,8 @@ defineModule module, class CompileCache extends BaseClass
   ###
   @getFileName: (cachedFileKey) ->
     {compiler, source, sourceFile, compilerOptions} = cachedFileKey
-    unless compiler && sourceFile && source
-      throw new Error "expecting compiler, source and sourceFile: " + formattedInspect {compiler, source, sourceFile, compilerSignature}
+    unless compiler && sourceFile && source?
+      throw new Error "expecting compiler, source and sourceFile: " + formattedInspect {compiler, source, sourceFile}
 
     return null unless @compilerSupportsCaching compiler
 
