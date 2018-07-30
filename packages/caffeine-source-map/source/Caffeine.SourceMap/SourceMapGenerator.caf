@@ -6,8 +6,9 @@ class SourceMapGenerator extends BaseClass
 
   @property
     :source
-    :sourceFileName
-    :generatedFileName
+    :sourceFile
+    :generatedFile
+    :sourceRoot
 
   @getter
     :js
@@ -25,13 +26,19 @@ class SourceMapGenerator extends BaseClass
         @mappings
 
     sourceMap:    -> JSON.stringify @rawSourceMap
+    sourceFile: ->
+      if @_sourceRoot
+        './' + &path.relative @_sourceRoot, @_sourceFile
+      else
+        @_sourceFile
+
     rawSourceMap: ->
       merge
         {}
           version:        3
-          file:           @generatedFileName ? ""
-          sourceRoot:     @sourceFileName && ""
-          sources:        @sourceFileName && [] @sourceFileName
+          file:           @generatedFile ? ""
+          sourceRoot:     @sourceFile && ""
+          sources:        @sourceFile && [] @sourceFile
           sourceContent:  [] @source
           names:          []
           @mappings # Example: "" A,AAAB;;ABCDE;
@@ -43,7 +50,11 @@ class SourceMapGenerator extends BaseClass
 
     inspectedObjects: -> @rawSourceMap
 
-  constructor: (@source, @sourceFileName, @generatedFileName) ->
+  constructor: (@source, options) ->
+    @sourceFile     = options.sourceFile
+    @generatedFile  = options.generatedFile
+    @sourceRoot     = options.sourceRoot
+
     @_js = ""
     @_mappings = ""
 

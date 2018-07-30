@@ -1,4 +1,4 @@
-import &ArtStandardLib,  &ArtClassSystem, {} &SourceMapGenerator
+import &ArtStandardLib,  &ArtClassSystem, &ArtBinary, {} &SourceMapGenerator
 
 class SourceNode extends BaseClass
 
@@ -26,9 +26,27 @@ class SourceNode extends BaseClass
 
   withProps: (@_props) -> @
 
-  generate: (source, sourceFileName) ->
-    new SourceMapGenerator source, sourceFileName
-    .add @
+  generate: (source, options) ->
+    {sourceFile, sourceRoot, inlineMap} = options
+    {js, sourceMap} = out =
+      new SourceMapGenerator source, options
+      .add @
+
+    if inlineMap
+      {}
+        sourceMap
+        js:
+          []
+            js
+            "" //# sourceMappingURL=#{binary(sourceMap).toDataUri :application/json, true}
+
+            if sourceFile
+              sourceFile = './' + &path.relative sourceRoot, sourceFile if sourceRoot
+              "" //# sourceURL=#{sourceFile}
+
+          .join "\n"
+
+    else out
 
   toString: (output = js: '') ->
     each child in @flattenedChildren
