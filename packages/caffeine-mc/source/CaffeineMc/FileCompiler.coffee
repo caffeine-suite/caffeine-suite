@@ -12,9 +12,14 @@ defineModule module, class FileCompiler
   @compileFileSync: (sourceFile, options = {}) ->
     throw new Error "outputDirectory unsupported" if options.outputDirectory
 
-    {source} = options
+    {source, sourceRoot} = options
 
-    caffeineInit = getCaffeineInitSync sourceRoot = findSourceRootSync sourceFile
+    sourceRoot = if sourceRoot
+      path.resolve sourceRoot
+    else
+      findSourceRootSync sourceFile
+
+    caffeineInit = getCaffeineInitSync sourceRoot
 
     source ||= (fs.readFileSync sourceFile).toString()
 
