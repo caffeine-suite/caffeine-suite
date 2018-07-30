@@ -173,9 +173,9 @@ module.exports = __webpack_require__(/*! ./namespace */ 5);
 
 module.exports.includeInNamespace(__webpack_require__(/*! ./SourceMap */ 8)).addModules({
   Base64: __webpack_require__(/*! ./Base64 */ 12),
-  SourceMapConsumer: __webpack_require__(/*! ./SourceMapConsumer */ 15),
+  SourceMapConsumer: __webpack_require__(/*! ./SourceMapConsumer */ 16),
   SourceMapGenerator: __webpack_require__(/*! ./SourceMapGenerator */ 13),
-  SourceNode: __webpack_require__(/*! ./SourceNode */ 16),
+  SourceNode: __webpack_require__(/*! ./SourceNode */ 17),
   StandardImport: __webpack_require__(/*! ./StandardImport */ 9)
 });
 
@@ -224,7 +224,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, dependencies, description, license, name, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","dependencies":{"art-build-configurator":"*","art-standard-lib":"*","caffeine-eight":"*"},"description":"Caffeine.SourceMap","license":"ISC","name":"caffeine-source-map","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"1.1.0"};
+module.exports = {"author":"Shane Brinkman-Davis Delamore, Imikimi LLC","dependencies":{"art-build-configurator":"*","art-standard-lib":"*","caffeine-eight":"*"},"description":"Caffeine.SourceMap","license":"ISC","name":"caffeine-source-map","scripts":{"build":"webpack --progress","start":"webpack-dev-server --hot --inline --progress","test":"nn -s;mocha -u tdd","testInBrowser":"webpack-dev-server --progress"},"version":"2.0.0"};
 
 /***/ }),
 /* 8 */
@@ -245,7 +245,7 @@ Caf.defMod(module, () => {
       return merge(
         __webpack_require__(/*! ./Base64 */ 12),
         __webpack_require__(/*! ./SourceMapGenerator */ 13),
-        __webpack_require__(/*! ./SourceMapConsumer */ 15)
+        __webpack_require__(/*! ./SourceMapConsumer */ 16)
       );
     }
   );
@@ -425,11 +425,12 @@ Caf.defMod(module, () => {
       let SourceMapGenerator;
       return (SourceMapGenerator = Caf.defClass(
         class SourceMapGenerator extends BaseClass {
-          constructor(source, sourceFileName, generatedFileName) {
+          constructor(source, options) {
             super(...arguments);
             this.source = source;
-            this.sourceFileName = sourceFileName;
-            this.generatedFileName = generatedFileName;
+            this.sourceFile = options.sourceFile;
+            this.generatedFile = options.generatedFile;
+            this.sourceRoot = options.sourceRoot;
             this._js = "";
             this._mappings = "";
             this._lastSourceLine = this._lastSourceColumn = this._lastGeneratedColumn = this._nextGeneratedColumn = 0;
@@ -440,7 +441,7 @@ Caf.defMod(module, () => {
         },
         function(SourceMapGenerator, classSuper, instanceSuper) {
           let reusableColLine;
-          this.property("source", "sourceFileName", "generatedFileName");
+          this.property("source", "sourceFile", "generatedFile", "sourceRoot");
           this.getter(
             "js",
             "mappings",
@@ -461,14 +462,22 @@ Caf.defMod(module, () => {
               sourceMap: function() {
                 return JSON.stringify(this.rawSourceMap);
               },
+              sourceFile: function() {
+                return this._sourceRoot
+                  ? "./" +
+                      __webpack_require__(/*! path */ 15).relative(
+                        this._sourceRoot,
+                        this._sourceFile
+                      )
+                  : this._sourceFile;
+              },
               rawSourceMap: function() {
                 let cafTemp;
                 return merge({
                   version: 3,
-                  file:
-                    (cafTemp = this.generatedFileName) != null ? cafTemp : "",
-                  sourceRoot: this.sourceFileName && "",
-                  sources: this.sourceFileName && [this.sourceFileName],
+                  file: (cafTemp = this.generatedFile) != null ? cafTemp : "",
+                  sourceRoot: this.sourceFile && "",
+                  sources: this.sourceFile && [this.sourceFile],
                   sourceContent: [this.source],
                   names: [],
                   mappings: this.mappings
@@ -569,6 +578,16 @@ module.exports = require('caffeine-eight' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 /* 15 */
+/*!**********************************************************************!*\
+  !*** external "require('path' /* ABC - not inlining fellow NPM *_/)" ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('path' /* ABC - not inlining fellow NPM */);
+
+/***/ }),
+/* 16 */
 /*!*********************************************************!*\
   !*** ./source/Caffeine.SourceMap/SourceMapConsumer.caf ***!
   \*********************************************************/
@@ -706,7 +725,7 @@ Caf.defMod(module, () => {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /*!**************************************************!*\
   !*** ./source/Caffeine.SourceMap/SourceNode.caf ***!
   \**************************************************/
@@ -725,12 +744,14 @@ Caf.defMod(module, () => {
       "merge",
       "deepMerge",
       "SourceMapGenerator",
+      "binary",
       "String"
     ],
     [
       global,
       __webpack_require__(/*! art-standard-lib */ 10),
       __webpack_require__(/*! art-class-system */ 11),
+      __webpack_require__(/*! art-binary */ 18),
       { SourceMapGenerator: __webpack_require__(/*! ./SourceMapGenerator */ 13) }
     ],
     (
@@ -740,6 +761,7 @@ Caf.defMod(module, () => {
       merge,
       deepMerge,
       SourceMapGenerator,
+      binary,
       String
     ) => {
       let SourceNode;
@@ -789,8 +811,32 @@ Caf.defMod(module, () => {
             this._props = _props;
             return this;
           };
-          this.prototype.generate = function(source, sourceFileName) {
-            return new SourceMapGenerator(source, sourceFileName).add(this);
+          this.prototype.generate = function(source, options) {
+            let sourceFile, sourceRoot, inlineMap, js, sourceMap, out;
+            ({ sourceFile, sourceRoot, inlineMap } = options);
+            ({ js, sourceMap } = out = new SourceMapGenerator(
+              source,
+              options
+            ).add(this));
+            return inlineMap
+              ? {
+                  sourceMap,
+                  js: [
+                    js,
+                    `//# sourceMappingURL=${Caf.toString(
+                      binary(sourceMap).toDataUri("application/json", true)
+                    )}`,
+                    sourceFile
+                      ? (sourceRoot
+                          ? (sourceFile =
+                              "./" +
+                              __webpack_require__(/*! path */ 15).relative(sourceRoot, sourceFile))
+                          : undefined,
+                        `//# sourceURL=${Caf.toString(sourceFile)}`)
+                      : undefined
+                  ].join("\n")
+                }
+              : out;
           };
           this.prototype.toString = function(output = { js: "" }) {
             Caf.each2(
@@ -809,6 +855,16 @@ Caf.defMod(module, () => {
 });
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 1)(module)))
+
+/***/ }),
+/* 18 */
+/*!****************************************************************************!*\
+  !*** external "require('art-binary' /* ABC - not inlining fellow NPM *_/)" ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require('art-binary' /* ABC - not inlining fellow NPM */);
 
 /***/ })
 /******/ ]);
