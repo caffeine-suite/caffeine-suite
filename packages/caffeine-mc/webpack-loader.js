@@ -26,7 +26,7 @@
   module.exports = function(source) {
     var e, js, ref1, sourceFile, sourceMap;
     if (typeof this.cacheable === "function") {
-      this.cacheable(false);
+      this.cacheable();
     }
     sourceFile = loaderUtils.getRemainingRequest(this);
     try {
