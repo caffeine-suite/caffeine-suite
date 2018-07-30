@@ -37,7 +37,7 @@
         cache: true,
         inlineMap: !!cafSourceMaps,
         prettier: !cafSourceMaps
-      }), js = ref1.js, sourceMap = ref1.sourceMap;
+      }).compiled, js = ref1.js, sourceMap = ref1.sourceMap;
       return this.callback(null, js, sourceMap);
     } catch (error) {
       e = error;

@@ -21,7 +21,7 @@ module.exports = (source) ->
 
   sourceFile = loaderUtils.getRemainingRequest @
   try
-    {js, sourceMap} = CaffeineMc.FileCompiler.compileFileSync sourceFile, {
+    {compiled:{js, sourceMap}} = CaffeineMc.FileCompiler.compileFileSync sourceFile, {
       source
       @debug
       sourceRoot: ""                # make sourceMaps references relative to webpack's start directory
