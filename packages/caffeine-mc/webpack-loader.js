@@ -18,7 +18,8 @@
       result = CaffeineMc.FileCompiler.compileFileSync(sourceFile, {
         source: source,
         debug: this.debug,
-        prettier: true,
+        sourceRoot: "",
+        inlineMap: true,
         cache: true
       });
     } catch (error) {
@@ -29,7 +30,7 @@
       throw e;
     }
     sourceMap = null;
-    return this.callback(null, result.compiled.js, sourceMap);
+    return this.callback(null, result.compiled.js, result.compiled.sourceMap);
   };
 
   module.exports.seperable = true;
