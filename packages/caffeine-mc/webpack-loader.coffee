@@ -1,22 +1,38 @@
 CaffeineMc = require './index'
 loaderUtils = require 'loader-utils'
-{log} = require 'art-standard-lib'
+{log, getEnv} = require 'art-standard-lib'
 
-# TODO: - source maps
+###
+TODO: Fix SOURCEMAPS (SBD 2018-07-30 notes)
+'cafSourceMaps' is a temporary hack for testing.
+
+This current code actually works with webpack4/webpack-dev-server3 && Safari,
+but it DOESNT work in Chrome. Chrome seems to actually get the sourcemap correctly,
+but it won't show the original source.
+SO - cafSourceMaps is off by default, but you can turn it on if you want:
+
+  > cafSourceMaps=true webpack-dev-server
+
+###
+{cafSourceMaps} = getEnv
 
 module.exports = (source) ->
-  @cacheable?()
+  @cacheable? false # CaffeineMc manages its own cachability.
 
   sourceFile = loaderUtils.getRemainingRequest @
   try
-    result = CaffeineMc.FileCompiler.compileFileSync sourceFile, {source, @debug, prettier: true, cache: true}
+    {js, sourceMap} = CaffeineMc.FileCompiler.compileFileSync sourceFile, {
+      source
+      @debug
+      sourceRoot: ""                # make sourceMaps references relative to webpack's start directory
+      cache:      true              # CaffeineMc's external-reference-smart caching
+      inlineMap:  !!cafSourceMaps   # experimental - works in Safari, not Chrome
+      prettier:   !cafSourceMaps    # prettier is incompatible with sourceMaps
+    }
+    @callback null, js, sourceMap
 
   catch e
-    log.error "CaffeineMc error": e
+    log.error "CaffeineMc webpack-loader error": e
     throw e
 
-  sourceMap = null
-
-  @callback null, result.compiled.js, sourceMap
-
-module.exports.seperable = true
+module.exports.separable = true
