@@ -77,6 +77,7 @@ defineModule module, class SourceRoots extends BaseClass
         false
 
   @findSourceRoot: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
+    directory = path.resolve directory
     fs.stat directory
     .then (stat) =>
       directory = path.dirname directory unless stat.isDirectory()
@@ -88,6 +89,7 @@ defineModule module, class SourceRoots extends BaseClass
           @knownSourceRoots[directory] = sourceRoot || false
 
   @findSourceRootSync: (directory, rootFiles = @_sourceRootIndicatorFiles) =>
+    directory = path.resolve directory
     stat = fs.statSync directory
     directory = path.dirname directory unless stat.isDirectory()
     if (ret = @knownSourceRoots[directory])?
