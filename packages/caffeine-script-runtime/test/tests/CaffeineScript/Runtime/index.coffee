@@ -10,4 +10,5 @@ module.exports
   Iteration:    require './Iteration'   
   Iteration2:   require './Iteration2'  
   Super:        require './Super'       
+  Testers:      require './Testers'     
   ToString:     require './ToString'    
