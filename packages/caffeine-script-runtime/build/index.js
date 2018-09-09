@@ -34,18 +34,35 @@ module.exports =
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -63,12 +80,65 @@ module.exports =
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/*!**********************!*\
+  !*** ./index.coffee ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime */ 1);
+
+
+/***/ }),
+/* 1 */
+/*!****************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/index.coffee ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var k, out, ref, ref1, ref2, ref3, v;
+
+module.exports = out = {};
+
+ref = __webpack_require__(/*! ./ArrayCompactFlatten */ 2);
+for (k in ref) {
+  v = ref[k];
+  out[k] = v;
+}
+
+ref1 = __webpack_require__(/*! ./Iteration */ 3);
+for (k in ref1) {
+  v = ref1[k];
+  out[k] = v;
+}
+
+ref2 = __webpack_require__(/*! ./Iteration2 */ 5);
+for (k in ref2) {
+  v = ref2[k];
+  out[k] = v;
+}
+
+ref3 = __webpack_require__(/*! ./Lib */ 6);
+for (k in ref3) {
+  v = ref3[k];
+  out[k] = v;
+}
+
+
+/***/ }),
+/* 2 */
+/*!******************************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/ArrayCompactFlatten.coffee ***!
+  \******************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 var ArrayCompactFlatten, arraySlice, doFlattenInternal, flattenIfNeeded, isArguments, isArrayOrArguments, isPlainArray, keepAll, keepUnlessNullOrUndefined, needsFlatteningOrCompacting;
@@ -185,80 +255,16 @@ module.exports = ArrayCompactFlatten = (function() {
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-var isNonNegativeInt;
-
-isNonNegativeInt = function(x) {
-  return ((x | 0) === x) && x >= 0;
-};
-
-module.exports = {
-  isArrayIterable: function(source) {
-    return source && isNonNegativeInt(source.length) && source.constructor !== Object;
-  }
-};
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var k, out, ref, ref1, ref2, ref3, v;
-
-module.exports = out = {};
-
-ref = __webpack_require__(0);
-for (k in ref) {
-  v = ref[k];
-  out[k] = v;
-}
-
-ref1 = __webpack_require__(5);
-for (k in ref1) {
-  v = ref1[k];
-  out[k] = v;
-}
-
-ref2 = __webpack_require__(6);
-for (k in ref2) {
-  v = ref2[k];
-  out[k] = v;
-}
-
-ref3 = __webpack_require__(7);
-for (k in ref3) {
-  v = ref3[k];
-  out[k] = v;
-}
-
-
-/***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(2);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-var g;
-
-g = typeof window !== "undefined" && window !== null ? window : typeof self !== "undefined" && self !== null ? self : global;
-
-g.global = g;
-
-
-/***/ }),
-/* 5 */
+/*!********************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Iteration.coffee ***!
+  \********************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 var each, extendedEach, isArrayIterable;
 
-isArrayIterable = __webpack_require__(1).isArrayIterable;
+isArrayIterable = __webpack_require__(/*! ./IterationBase */ 4).isArrayIterable;
 
 
 /*
@@ -413,12 +419,37 @@ module.exports = {
 
 
 /***/ }),
-/* 6 */
+/* 4 */
+/*!************************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/IterationBase.coffee ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var isNonNegativeInt;
+
+isNonNegativeInt = function(x) {
+  return ((x | 0) === x) && x >= 0;
+};
+
+module.exports = {
+  isArrayIterable: function(source) {
+    return source && isNonNegativeInt(source.length) && source.constructor !== Object;
+  }
+};
+
+
+/***/ }),
+/* 5 */
+/*!*********************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Iteration2.coffee ***!
+  \*********************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 var existsTest, isArrayIterable, returnFirst, returnSecond, returnTrue;
 
-isArrayIterable = __webpack_require__(1).isArrayIterable;
+isArrayIterable = __webpack_require__(/*! ./IterationBase */ 4).isArrayIterable;
 
 existsTest = function(a) {
   return a != null;
@@ -656,16 +687,20 @@ module.exports = {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
+/*!**************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Lib.coffee ***!
+  \**************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref, throwImportError,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
-ref = __webpack_require__(0), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
+ref = __webpack_require__(/*! ./ArrayCompactFlatten */ 2), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
 
-__webpack_require__(4);
+__webpack_require__(/*! ./Global */ 7);
 
 global.__definingModule = null;
 
@@ -716,7 +751,7 @@ module.exports = {
     return a != null ? a : b();
   },
   exists: function(a) {
-    return (a !== null && a !== void 0) || void 0;
+    return a != null;
   },
   is: function(a, b) {
     return a === b || ((a != null) && (b != null) && a.constructor === b);
@@ -983,6 +1018,21 @@ module.exports = {
   f: isFalse,
   isF: isFunction
 };
+
+
+/***/ }),
+/* 7 */
+/*!*****************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Global.coffee ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+g = typeof window !== "undefined" && window !== null ? window : typeof self !== "undefined" && self !== null ? self : global;
+
+g.global = g;
 
 
 /***/ })
