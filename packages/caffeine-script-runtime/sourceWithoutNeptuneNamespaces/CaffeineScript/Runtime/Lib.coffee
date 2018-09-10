@@ -35,7 +35,7 @@ module.exports =
   div: (a, b) -> a // b
   pow: (a, b) -> a ** b
   existsOr: (a, b) -> a ? b()
-  exists: (a) -> a?
+  exists: (a) -> a? || undefined
 
   is: (a, b) ->
     a == b || (a? && b? && a.constructor == b)

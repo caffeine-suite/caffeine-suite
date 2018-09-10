@@ -751,7 +751,7 @@ module.exports = {
     return a != null ? a : b();
   },
   exists: function(a) {
-    return a != null;
+    return (a != null) || void 0;
   },
   is: function(a, b) {
     return a === b || ((a != null) && (b != null) && a.constructor === b);
