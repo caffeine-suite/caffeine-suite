@@ -44,6 +44,7 @@ module.exports =
             for k, v of source
               if result = withClause v, k
                 return result
+    null
 
   object: (source, withClause = returnFirst, whenClause = returnTrue, into = {}, keyClause) ->
 
@@ -60,6 +61,20 @@ module.exports =
         into[keyClause v, k] = withClause v, k
 
     into
+
+  reduce: (source, withClause = returnFirst, whenClause = returnTrue, inject) ->
+    if isArrayIterable source
+
+      for v, k in source when v != undefined && whenClause inject, v
+        inject = if inject == undefined then v
+        else withClause inject, v
+    else
+
+      for k, v of source when v != undefined && whenClause inject, v
+        inject = if inject == undefined then v
+        else withClause inject, v
+
+    inject
 
   array: (source, withClause = returnFirst, whenClause = returnTrue, into = []) ->
 
@@ -100,6 +115,42 @@ module.exports =
     withClause: (v) -> value-to-push
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
+
+  What will the efficiency-implimentaiton look like?
+    We know if we have a 'til' or not.
+
+    Assuming it's 'til' for this example:
+
+    If we don't know fromValue <> toValue:
+
+      byValue ?= if fromValue < toValue then 1 else -1
+      while if byValue >= 0 then v <= toValue else v >= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+
+    else if fromValue < toValue
+
+      byValue ?= 1
+      while v <= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+
+    else # the mirror version:
+
+      byValue ?= -1
+      while v >= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+
+    We'd have to do performance testing, but it's possible
+    this would be faster - it avoids a CPU jump instruction:
+
+      byValue ?= if fromValue < toValue then 1 else -1
+      while (byValue >= 0 && v <= toValue) || (byValue < 0 && v >= toValue)
+        into.push withClause v if whenClause v
+        v += byValue
+
+
   ###
   arrayRange: (fromValue, toValue, withClause = returnFirst, whenClause = returnTrue, byValue, til, into = []) ->
 

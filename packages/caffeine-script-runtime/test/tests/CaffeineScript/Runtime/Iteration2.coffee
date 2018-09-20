@@ -139,3 +139,14 @@ defineModule module, suite:
     test "array from 1 til 3",        -> assert.eq [1,  2               ],    Caf.arrayRange 1, 3,  null, null, null, true
     test "array til 3",               -> assert.eq [0,  1,  2           ],    Caf.arrayRange 0, 3,  null, null, null, true
     test "array til -3",              -> assert.eq [0, -1, -2           ],    Caf.arrayRange 0, -3, null, null, null, true
+
+  reduce: ->
+    test "reduce a, b from [1, 2, 3] with a + b",                       -> assert.eq 6, Caf.reduce [1,2,3], (a, b) -> a + b
+    test "reduce a, b from [1, 2, 3, 4, 5] with a + b when b % 2 == 0", -> assert.eq 6, Caf.reduce [1,2,3,4,5], ((a, b) -> a + b), (a, b) -> (b % 2) == 0
+
+    test "reduce a, b from [] with a + b",                   -> assert.eq undefined, Caf.reduce [], (a, b) -> a + b
+    test "reduce a, b from [] with a + b inject 0",          -> assert.eq 0, Caf.reduce [], ((a, b) -> a + b), null, 0
+    test "reduce a, b from [1] with a + b",                  -> assert.eq 1, Caf.reduce [1], (a, b) -> a + b
+    test "reduce a, b from [undefined, 1, 2, 3] with a + b", -> assert.eq 6, Caf.reduce [undefined, 1,2,3], (a, b) -> a + b
+    test "reduce a, b from [1, undefined, 2, 3] with a + b", -> assert.eq 6, Caf.reduce [1,undefined,2,3], (a, b) -> a + b
+    test "reduce a, b from [1, 2, 3, undefined] with a + b", -> assert.eq 6, Caf.reduce [1,2,3,undefined], (a, b) -> a + b
