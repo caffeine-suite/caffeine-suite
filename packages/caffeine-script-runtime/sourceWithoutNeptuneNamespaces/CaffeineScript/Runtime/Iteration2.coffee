@@ -65,14 +65,14 @@ module.exports =
   reduce: (source, withClause = returnFirst, whenClause = returnTrue, inject) ->
     if isArrayIterable source
 
-      for v, k in source when v != undefined && whenClause inject, v
+      for v, k in source when v != undefined && whenClause inject, v, k
         inject = if inject == undefined then v
-        else withClause inject, v
+        else withClause inject, v, k
     else
 
-      for k, v of source when v != undefined && whenClause inject, v
+      for k, v of source when v != undefined && whenClause inject, v, k
         inject = if inject == undefined then v
-        else withClause inject, v
+        else withClause inject, v, k
 
     inject
 
