@@ -575,15 +575,15 @@ module.exports = {
     if (isArrayIterable(source)) {
       for (k = i = 0, len = source.length; i < len; k = ++i) {
         v = source[k];
-        if (v !== void 0 && whenClause(inject, v)) {
-          inject = inject === void 0 ? v : withClause(inject, v);
+        if (v !== void 0 && whenClause(inject, v, k)) {
+          inject = inject === void 0 ? v : withClause(inject, v, k);
         }
       }
     } else {
       for (k in source) {
         v = source[k];
-        if (v !== void 0 && whenClause(inject, v)) {
-          inject = inject === void 0 ? v : withClause(inject, v);
+        if (v !== void 0 && whenClause(inject, v, k)) {
+          inject = inject === void 0 ? v : withClause(inject, v, k);
         }
       }
     }

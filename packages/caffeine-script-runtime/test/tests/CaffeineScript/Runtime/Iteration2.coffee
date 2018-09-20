@@ -153,13 +153,11 @@ defineModule module, suite:
     test "reduce a, v, k", ->
       assert.eq 222,
         Caf.reduce(
-          {
-            no1: .5
-            yes1: 2
-            yes2: 200
-            yes3: 20
-            no2: .25
-          }
+          no1: .5
+          yes1: 2
+          yes2: 200
+          yes3: 20
+          no2: .25
           (a, v) -> a + v
           (a, v, k) -> /yes/.test k
         )
