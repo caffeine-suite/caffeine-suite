@@ -528,6 +528,7 @@ module.exports = {
         }
       }
     }
+    return null;
   },
   object: function(source, withClause, whenClause, into, keyClause) {
     var i, k, len, v;
@@ -562,6 +563,31 @@ module.exports = {
       }
     }
     return into;
+  },
+  reduce: function(source, withClause, whenClause, inject) {
+    var i, k, len, v;
+    if (withClause == null) {
+      withClause = returnFirst;
+    }
+    if (whenClause == null) {
+      whenClause = returnTrue;
+    }
+    if (isArrayIterable(source)) {
+      for (k = i = 0, len = source.length; i < len; k = ++i) {
+        v = source[k];
+        if (v !== void 0 && whenClause(inject, v)) {
+          inject = inject === void 0 ? v : withClause(inject, v);
+        }
+      }
+    } else {
+      for (k in source) {
+        v = source[k];
+        if (v !== void 0 && whenClause(inject, v)) {
+          inject = inject === void 0 ? v : withClause(inject, v);
+        }
+      }
+    }
+    return inject;
   },
   array: function(source, withClause, whenClause, into) {
     var i, k, len, v;
@@ -629,6 +655,40 @@ module.exports = {
     withClause: (v) -> value-to-push
     whenCluase: (v) -> truish
     til:        t/f; if true, will stop just before v == toValue
+  
+  What will the efficiency-implimentaiton look like?
+    We know if we have a 'til' or not.
+  
+    Assuming it's 'til' for this example:
+  
+    If we don't know fromValue <> toValue:
+  
+      byValue ?= if fromValue < toValue then 1 else -1
+      while if byValue >= 0 then v <= toValue else v >= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+  
+    else if fromValue < toValue
+  
+      byValue ?= 1
+      while v <= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+  
+    else # the mirror version:
+  
+      byValue ?= -1
+      while v >= toValue
+        into.push withClause v if whenClause v
+        v += byValue
+  
+    We'd have to do performance testing, but it's possible
+    this would be faster - it avoids a CPU jump instruction:
+  
+      byValue ?= if fromValue < toValue then 1 else -1
+      while (byValue >= 0 && v <= toValue) || (byValue < 0 && v >= toValue)
+        into.push withClause v if whenClause v
+        v += byValue
    */
   arrayRange: function(fromValue, toValue, withClause, whenClause, byValue, til, into) {
     var v;
