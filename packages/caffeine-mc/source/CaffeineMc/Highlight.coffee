@@ -8,7 +8,7 @@ module.exports =
     keywordColor = normalizeChalkColor chalk.yellow
     operatorColor = normalizeChalkColor chalk.magenta
     functionDeclarationColor = normalizeChalkColor chalk.blue
-    itentifierColor = normalizeChalkColor chalk.black
+    itentifierColor = (str) -> str # normalizeChalkColor chalk.white.dim
 
     options =
       linenos: true

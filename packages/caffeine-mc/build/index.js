@@ -2295,7 +2295,9 @@ module.exports = {
     keywordColor = normalizeChalkColor(chalk.yellow);
     operatorColor = normalizeChalkColor(chalk.magenta);
     functionDeclarationColor = normalizeChalkColor(chalk.blue);
-    itentifierColor = normalizeChalkColor(chalk.black);
+    itentifierColor = function(str) {
+      return str;
+    };
     options = {
       linenos: true,
       theme: {
