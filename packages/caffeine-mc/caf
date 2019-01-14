@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --trace-warnings
 
 if (true) { // use build
   require('./build/caf-command.js');

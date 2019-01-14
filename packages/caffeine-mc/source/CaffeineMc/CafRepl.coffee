@@ -268,7 +268,7 @@ defineModule module, class CafRepl
 
       # Read last `size` bytes from the file
       readFd = fs.openSync filename, 'r'
-      buffer = new Buffer(size)
+      buffer = Buffer.alloc size
       fs.readSync readFd, buffer, 0, size, stat.size - size
       fs.closeSync readFd
 
