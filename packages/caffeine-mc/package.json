@@ -6,7 +6,7 @@
   "dependencies": {
     "art-build-configurator": "*",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
+    "babel-loader": "^8.0.4",
     "babel-preset-env": "^1.7.0",
     "caffeine-eight": "*",
     "cardinal": "^1.0.0",
@@ -17,7 +17,7 @@
     "glob": "^7.0.3",
     "glob-promise": "^3.1.0",
     "mock-fs": "^4.5.0",
-    "prettier": "^1.13.6"
+    "prettier": "^1.15.2"
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "license": "ISC",
