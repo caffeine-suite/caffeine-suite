@@ -2,6 +2,8 @@
 require './Global'
 global.__definingModule = null
 
+throwImportErrors = false
+
 throwImportError = (notFound, importNames, libs) ->
   importFrom = (for lib in libs
     if lib == global
@@ -12,22 +14,25 @@ throwImportError = (notFound, importNames, libs) ->
       'null'
   ).join '\n  '
 
-  for line in (new Error).stack.split("\n") when line.match(/^\s/) && !line.match /caffeine-script-runtime/
-    importFileName = line.match(/\(([^()]+)/)?[1] || line
-    break
+  importFileName = null
+  for line in (stack = (new Error).stack).split("\n") when !line.match /caffeine-script-runtime/
+    if importFileName ?= line.match(/([.\w]*\/[^\/]+)+\.(caf|js)\b/i)?[0]
+      break
 
   console.warn """
-    CaffineScript imports not found:
+    CaffieneScript imports not found:
       #{notFound.join '\n  '}
 
     importing from:
       #{importFrom}
 
     source:
-      #{importFileName}
+      #{importFileName ? stack}
 
     """
-  throw new Error "CaffineScript imports not found: #{notFound.join ', '}"
+
+  if throwImportErrors
+    throw new Error "CaffieneScript imports not found: #{notFound.join ', '}"
 
 module.exports =
   in:  (a, b) -> a in b
@@ -59,7 +64,8 @@ module.exports =
           out[importName] = v
           break
       unless out[importName]?
-        (notFound ||= []).push importName
+        out[importName] = new Error "CaffieneScript import not found: #{importName}"
+        (notFound ?= []).push importName
 
     throwImportError notFound, importNames, libs if notFound?
     out
@@ -92,7 +98,11 @@ module.exports =
         if (v = lib[importName])?
           importValue = v
           break
-      importValue ? (notFound ||= []).push importName
+      if importValue?
+        importValue
+      else
+        (notFound ||= []).push importName
+        new Error "CaffieneScript import not found: #{importName}"
 
     throwImportError notFound, importNames, libs if notFound?
     toInvoke importValues...
