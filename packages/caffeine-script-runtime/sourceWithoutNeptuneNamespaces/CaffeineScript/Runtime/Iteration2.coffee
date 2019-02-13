@@ -10,6 +10,7 @@ returnFirst = (a) -> a
 returnSecond = (a, b) -> b
 
 module.exports =
+  isArrayIterable: isArrayIterable
   find: (source, withClause, whenClause) ->
     if source?
       unless whenClause || withClause
