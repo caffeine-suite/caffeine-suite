@@ -1,4 +1,5 @@
 CaffeineMc = require './index'
+CaffeineEight = require 'caffeine-eight'
 loaderUtils = require 'loader-utils'
 {log, getEnv} = require 'art-standard-lib'
 
@@ -39,7 +40,13 @@ module.exports = (source) ->
     @callback null, js, sourceMap
 
   catch e
-    log.error "CaffeineMc webpack-loader error": e
+    if e instanceof CaffeineEight.CaffeineEightCompileError
+      log.error e.toString()
+      out = new Error e.toString()
+      out.stack = ""
+      throw out
+    else
+      log.error "CaffeineMc webpack-loader error": e
     throw e
 
 module.exports.separable = true
