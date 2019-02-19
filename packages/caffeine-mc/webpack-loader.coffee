@@ -41,7 +41,6 @@ module.exports = (source) ->
 
   catch e
     if e instanceof CaffeineEight.CaffeineEightCompileError
-      log.error e.toString()
       out = new Error e.toString()
       out.stack = ""
       throw out
