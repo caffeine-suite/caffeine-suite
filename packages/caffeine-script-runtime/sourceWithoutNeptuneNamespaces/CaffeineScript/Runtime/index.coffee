@@ -1,6 +1,13 @@
-module.exports = out = {}
-out[k] = v for k, v of require './ArrayCompactFlatten'
-out[k] = v for k, v of require './Iteration'
-out[k] = v for k, v of require './Iteration2'
-out[k] = v for k, v of require './Lib'
-global.CaffeineScriptRuntime ?= out
+merge = (list) ->
+  out = {}
+  for l in list
+    out[k] = v for k, v of l
+  out
+
+module.exports = global.CaffeineScriptRuntime ?= merge [
+ require './ArrayCompactFlatten'
+ require './Iteration'
+ require './Iteration2'
+ require './Lib'
+ require './Import'
+]
