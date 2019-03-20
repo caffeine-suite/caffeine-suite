@@ -5,14 +5,16 @@ defineModule module, suite: ->
   class MyCustomClass
 
   tests = [
-    [(->),  Function]
-    [1,     Number]
-    [{},    Object]
-    ["",    String]
-    [/-/,   RegExp]
-    [[],    Array]
-    [null,  null]
-    [undefined, undefined]
+    [(->),                Function]
+    [1,                   Number]
+    [{},                  Object]
+    ["",                  String]
+    [/-/,                 RegExp]
+    [true,                Boolean]
+    [false,               Boolean]
+    [[],                  Array]
+    [null,                null]
+    [undefined,           undefined]
     [(new MyCustomClass), MyCustomClass]
   ]
   each tests, ([obj, klass]) ->

@@ -3,13 +3,24 @@ require './Global'
 global.__definingModule = null
 
 module.exports =
-  in:  (a, b) -> a in b
+  in:  (a, b) -> 0 <= b.indexOf a
   mod: (a, b) -> a %% b
   div: (a, b) -> a // b
   pow: (a, b) -> a ** b
   existsOr: (a, b) -> a ? b()
   exists: (a) -> a? || undefined
 
+  # NOTE - this failes for built-in types in CaffeineMC's Console,
+  # and if you define a funciton identical to this, within the console,
+  # it WILL work. Why?
+  #   Because there are two JS environments running, and atomic values
+  #   are passed as atomics and their "Type" changes - to an identical
+  #   copy of the same type, but !== to the type you passed in.
+  # e.g.: this returns false in the console: "true is Boolean"
+  # Solution: stop using Node's stupid interactive console, or
+  #   can we ensure that ALL code is evaled in the same environment?
+  # NOTE - this also will fail, differently, across iFrames in the browser- since they
+  #   have different javascript environments.
   is: (a, b) ->
     a == b || (a? && b? && a.constructor == b)
 

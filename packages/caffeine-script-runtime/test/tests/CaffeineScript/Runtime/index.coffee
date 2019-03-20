@@ -6,6 +6,7 @@ module.exports
 .addModules
   Import:       require './Import'      
   ImportInvoke: require './ImportInvoke'
+  In:           require './In'          
   Is:           require './Is'          
   Iteration:    require './Iteration'   
   Iteration2:   require './Iteration2'  
