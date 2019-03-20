@@ -261,7 +261,7 @@ module.exports = Metacompiler = (function(superClass) {
       object:
         compiler: custom compiler instance. Must implement:
           compile: compileFunction
-    
+
     compileFunction: (sourceCode, options) ->
       IN:
         sourceCode: string
@@ -341,12 +341,12 @@ module.exports = Metacompiler = (function(superClass) {
       inlineMap: t/f
       sourceFile:
       sourceDir:
-  
+
   OUT: (an object)
     compiled: extension => output map
       extension: string, ex: "js"
       output: string, ex: "alert();"
-  
+
       If writing to files, we might do:
       for extension, output of compiled
         write originalFileNameWith(extension), output
@@ -1291,9 +1291,9 @@ defineModule(module, ModuleResolver = (function() {
 
   /*
   Notes about "." names-with-dots.
-  
+
     Essentially, dots are treated as word-boundaries.
-  
+
     Files:
       We need to manage extensions. Current rule:
         Full match example: FooCaf matches foo.caf
@@ -1301,26 +1301,26 @@ defineModule(module, ModuleResolver = (function() {
           Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
         PartialMatch must match starting at the first character:
           Foo.BarFood.caf does NOT match BarFood but does match Foo
-  
+
     Dirs:
       Dirs must fully match:
         Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
-  
+
   Future:
     I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
     Basically, this parallels how NeptuneNamespaces interprets them.
     It should work identically to as-if there were nested dirs.
-  
+
     Given these files:
-  
+
       MyFile1.caf
       Foo/Bar/MyFile2.caf
-  
+
     OR these files:
-  
+
       MyFile1.caf
       Foo.Bar/MyFile2.caf
-  
+
     Then:
        * inside MyFile1.caf
        * this works:
@@ -1683,6 +1683,9 @@ defineModule(module, Tools = (function() {
     verbose = options.verbose;
     if (verbose) {
       return log.error(e);
+    } else if (!e.message) {
+      log({wtf: e});
+      throw new Error("wtf");
     } else if ((e.location != null) || (e.sourceFile != null) || e.message.match(/parse|expect/i)) {
       if (e) {
         return log(e.message.replace(/<HERE>/, "<HERE>".red));
