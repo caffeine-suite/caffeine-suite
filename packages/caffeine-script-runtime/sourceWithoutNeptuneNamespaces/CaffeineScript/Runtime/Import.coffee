@@ -1,6 +1,6 @@
 {compactFlatten} = require './ArrayCompactFlatten'
 
-throwImportErrors = isNode = require 'detect-node'
+throwImportErrors = require 'detect-node'
 
 throwImportError = (notFound, importNames, libs) ->
   importFrom = (for lib in libs
@@ -33,33 +33,6 @@ throwImportError = (notFound, importNames, libs) ->
     throw new Error "CaffieneScript imports not found: #{notFound.join ', '}"
 
 module.exports =
-
-  ###
-  Implements the 'import' function.
-
-  IN:
-    importNames: array of strings of identifiers to import
-    libs: array of objects to import from, first has highest priority.
-
-  OUT: and object with one property per importName
-  ###
-  import: _import = (importNames, libs) ->
-    out = {}
-    notFound = null
-    libs = compactFlatten libs
-    for importName in importNames
-      for lib in libs by -1
-        if (v = lib[importName])?
-          out[importName] = v
-          break
-      unless out[importName]?
-        out[importName] = new Error "CaffieneScript import not found: #{importName}"
-        (notFound ?= []).push importName
-
-    throwImportError notFound, importNames, libs if notFound?
-    out
-
-
 
   ###
   IN:
@@ -95,19 +68,3 @@ module.exports =
 
     throwImportError notFound, importNames, libs if notFound?
     toInvoke importValues...
-
-  # CaffeineStyle truth (same as Ruby)
-
-  # returns true if a is anothing other than false, null or undefined
-  isTrue: isTrue = (a) -> a? && a != false
-
-  # returns true if a is false, null or undefined
-  isFalse: isFalse = (a) -> a == false || !a?
-
-  isFunction:           isFunction = (a) -> typeof a is "function"
-  isDirectPrototypeOf:  isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
-
-  #######################
-  # short forms
-  #######################
-  i:    _import

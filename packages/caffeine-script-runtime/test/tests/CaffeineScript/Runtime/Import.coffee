@@ -2,20 +2,20 @@
 Caf = Neptune.CaffeinScript.Runtime
 
 defineModule module, suite: ->
-  test "import basic", ->
-    assert.eq Caf.import(["foo"], [foo:123]), foo: 123
+  test "importInvoke basic", ->
+    assert.eq Caf.importInvoke(["foo"], [foo:123], (foo) -> {foo}), foo: 123
 
   test "imports only requested", ->
-    assert.eq Caf.import(["foo"], [foo:123, bar: 456]), foo: 123
+    assert.eq Caf.importInvoke(["foo"], [foo:123, bar: 456], (foo) -> {foo}), foo: 123
 
-  test "import two", ->
-    assert.eq Caf.import(["foo", "bar"], [foo:123, bar: 456]), foo: 123, bar: 456
+  test "importInvoke two", ->
+    assert.eq Caf.importInvoke(["foo", "bar"], [foo:123, bar: 456], (foo, bar) -> {foo, bar}), foo: 123, bar: 456
 
-  test "import miss", ->
-    assert.rejects -> Caf.import ["foo", "bar"], [foo:123]
+  test "importInvoke miss", ->
+    assert.rejects -> Caf.importInvoke ["foo", "bar"], [foo:123]
 
-  test "import last has priority", ->
-    assert.eq Caf.import(["foo"], [{foo:123}, {foo:456}]), foo: 456
+  test "importInvoke last has priority", ->
+    assert.eq Caf.importInvoke(["foo"], [{foo:123}, {foo:456}], (foo) -> {foo}), foo: 456
 
-  test "import - global has last has priority", ->
-    assert.eq Caf.import(["Math"], [{Math:123}]), Math: 123
+  test "importInvoke - global has last has priority", ->
+    assert.eq Caf.importInvoke(["Math"], [{Math:123}], (Math) -> {Math}), Math: 123

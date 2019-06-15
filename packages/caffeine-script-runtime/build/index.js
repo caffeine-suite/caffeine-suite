@@ -104,158 +104,129 @@ module.exports = __webpack_require__(/*! ./sourceWithoutNeptuneNamespaces/Caffei
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var k, out, ref, ref1, ref2, ref3, v;
+var merge;
 
-module.exports = out = {};
+__webpack_require__(/*! ./Global */ 2);
 
-ref = __webpack_require__(/*! ./ArrayCompactFlatten */ 2);
-for (k in ref) {
-  v = ref[k];
-  out[k] = v;
-}
+merge = function(list) {
+  var i, k, l, len, out, v;
+  out = {};
+  for (i = 0, len = list.length; i < len; i++) {
+    l = list[i];
+    for (k in l) {
+      v = l[k];
+      out[k] = v;
+    }
+  }
+  return out;
+};
 
-ref1 = __webpack_require__(/*! ./Iteration */ 3);
-for (k in ref1) {
-  v = ref1[k];
-  out[k] = v;
-}
-
-ref2 = __webpack_require__(/*! ./Iteration2 */ 5);
-for (k in ref2) {
-  v = ref2[k];
-  out[k] = v;
-}
-
-ref3 = __webpack_require__(/*! ./Lib */ 6);
-for (k in ref3) {
-  v = ref3[k];
-  out[k] = v;
-}
+module.exports = global.CaffeineScriptRuntime != null ? global.CaffeineScriptRuntime : global.CaffeineScriptRuntime = merge([__webpack_require__(/*! ./ArrayCompactFlatten */ 3), __webpack_require__(/*! ./Iteration */ 5), __webpack_require__(/*! ./Iteration2 */ 6), __webpack_require__(/*! ./Lib */ 7), __webpack_require__(/*! ./Import */ 8)]);
 
 
 /***/ }),
 /* 2 */
+/*!*****************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Global.coffee ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var g;
+
+g = typeof window !== "undefined" && window !== null ? window : typeof self !== "undefined" && self !== null ? self : global;
+
+g.global = g;
+
+
+/***/ }),
+/* 3 */
 /*!******************************************************************************************!*\
   !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/ArrayCompactFlatten.coffee ***!
   \******************************************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-var ArrayCompactFlatten, arraySlice, doFlattenInternal, flattenIfNeeded, isArguments, isArrayOrArguments, isPlainArray, keepAll, keepUnlessNullOrUndefined, needsFlatteningOrCompacting;
+var compactFlattenIfNeeded, doFlattenInternal, isPlainArray, needsFlatteningOrCompacting;
 
-arraySlice = Array.prototype.slice;
+isPlainArray = __webpack_require__(/*! ./Types */ 4).isPlainArray;
 
-isArguments = function(o) {
-  return o && (typeof o.callee === "function") && (typeof o.length === "number");
-};
-
-isPlainArray = (function(_this) {
-  return function(o) {
-    return (o != null) && o.constructor === Array;
-  };
-})(this);
-
-isArrayOrArguments = function(o) {
-  return o && (isPlainArray(o) || isArguments(o));
-};
-
-doFlattenInternal = function(array, keepTester, output) {
-  var a, i, len;
-  output || (output = []);
+doFlattenInternal = function(array, output) {
+  var el, i, len;
   for (i = 0, len = array.length; i < len; i++) {
-    a = array[i];
-    if (isArrayOrArguments(a)) {
-      flattenIfNeeded(a, keepTester, output);
-    } else if (keepTester(a)) {
-      output.push(a);
+    el = array[i];
+    if (isPlainArray(el)) {
+      doFlattenInternal(el, output);
+    } else if (el != null) {
+      output.push(el);
     }
   }
   return output;
 };
 
-needsFlatteningOrCompacting = function(array, keepTester) {
-  var a, i, len;
+needsFlatteningOrCompacting = function(array) {
+  var el, i, len;
   for (i = 0, len = array.length; i < len; i++) {
-    a = array[i];
-    if (isArrayOrArguments(a) || !keepTester(a)) {
+    el = array[i];
+    if ((el == null) || isPlainArray(el)) {
       return true;
     }
   }
   return false;
 };
 
-flattenIfNeeded = function(array, keepTester, output) {
-  var i, len, v;
-  if (needsFlatteningOrCompacting(array, keepTester)) {
-    return doFlattenInternal(array, keepTester, output);
-  } else if (output) {
-    for (i = 0, len = array.length; i < len; i++) {
-      v = array[i];
-      output.push(v);
-    }
-    return output;
-  } else if (array.constructor !== Array) {
-    return arraySlice.call(array);
+compactFlattenIfNeeded = function(array) {
+  if (needsFlatteningOrCompacting(array)) {
+    return doFlattenInternal(array, []);
   } else {
     return array;
   }
 };
 
-keepAll = function() {
-  return true;
+module.exports = {
+  compactFlatten: function(array) {
+    return compactFlattenIfNeeded(array);
+  }
 };
-
-keepUnlessNullOrUndefined = function(a) {
-  return a !== null && a !== void 0;
-};
-
-module.exports = ArrayCompactFlatten = (function() {
-  function ArrayCompactFlatten() {}
-
-  ArrayCompactFlatten.isPlainArray = isPlainArray;
-
-  ArrayCompactFlatten.compact = function(array, keepTester) {
-    var a, i, len;
-    if (keepTester == null) {
-      keepTester = keepUnlessNullOrUndefined;
-    }
-    for (i = 0, len = array.length; i < len; i++) {
-      a = array[i];
-      if (!keepTester(a)) {
-        return (function() {
-          var j, len1, results;
-          results = [];
-          for (j = 0, len1 = array.length; j < len1; j++) {
-            a = array[j];
-            if (keepTester(a)) {
-              results.push(a);
-            }
-          }
-          return results;
-        })();
-      }
-    }
-    return array;
-  };
-
-  ArrayCompactFlatten.flatten = function(firstArg) {
-    return flattenIfNeeded(arguments.length === 1 ? isArrayOrArguments(firstArg) ? firstArg : [firstArg] : arguments, keepAll);
-  };
-
-  ArrayCompactFlatten.compactFlatten = function(array, keepTester) {
-    if (keepTester == null) {
-      keepTester = keepUnlessNullOrUndefined;
-    }
-    return flattenIfNeeded(array, keepTester);
-  };
-
-  return ArrayCompactFlatten;
-
-})();
 
 
 /***/ }),
-/* 3 */
+/* 4 */
+/*!****************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Types.coffee ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var isFunction, isNonNegativeInt;
+
+isNonNegativeInt = function(x) {
+  return ((x | 0) === x) && x >= 0;
+};
+
+module.exports = {
+
+  /*
+    https://jsperf.com/array-isarray-vs-instanceof-array/42
+    as-of 2019-6-14
+    Array.isArray vs o.constructor == Array
+    Virtualy the same: Chrome, Safari, FireFox
+    Edge18: constructor-test 6x faster
+   */
+  isPlainArray: function(o) {
+    return (o != null) && o.constructor === Array;
+  },
+  isFunction: isFunction = function(a) {
+    return typeof a === "function";
+  },
+  isArrayIterable: function(source) {
+    return (source != null) && isNonNegativeInt(source.length) && isFunction(source.indexOf) && source.constructor !== Object;
+  }
+};
+
+
+/***/ }),
+/* 5 */
 /*!********************************************************************************!*\
   !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Iteration.coffee ***!
   \********************************************************************************/
@@ -264,7 +235,7 @@ module.exports = ArrayCompactFlatten = (function() {
 
 var each, extendedEach, isArrayIterable;
 
-isArrayIterable = __webpack_require__(/*! ./IterationBase */ 4).isArrayIterable;
+isArrayIterable = __webpack_require__(/*! ./Types */ 4).isArrayIterable;
 
 
 /*
@@ -419,28 +390,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
-/*!************************************************************************************!*\
-  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/IterationBase.coffee ***!
-  \************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var isNonNegativeInt;
-
-isNonNegativeInt = function(x) {
-  return ((x | 0) === x) && x >= 0;
-};
-
-module.exports = {
-  isArrayIterable: function(source) {
-    return source && isNonNegativeInt(source.length) && source.constructor !== Object;
-  }
-};
-
-
-/***/ }),
-/* 5 */
+/* 6 */
 /*!*********************************************************************************!*\
   !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Iteration2.coffee ***!
   \*********************************************************************************/
@@ -449,7 +399,7 @@ module.exports = {
 
 var existsTest, isArrayIterable, returnFirst, returnSecond, returnTrue;
 
-isArrayIterable = __webpack_require__(/*! ./IterationBase */ 4).isArrayIterable;
+isArrayIterable = __webpack_require__(/*! ./Types */ 4).isArrayIterable;
 
 existsTest = function(a) {
   return a != null;
@@ -468,6 +418,7 @@ returnSecond = function(a, b) {
 };
 
 module.exports = {
+  isArrayIterable: isArrayIterable,
   find: function(source, withClause, whenClause) {
     var i, j, k, l, len, len1, len2, result, v;
     if (source != null) {
@@ -644,159 +595,34 @@ module.exports = {
       }
     }
     return into;
-  },
-
-  /*
-  IN:
-    fromValue:  number (required)
-    toValue:    number (required)
-    byValue:    number (optional)
-    into:       object implementing .push(v) (optional)
-    withClause: (v) -> value-to-push
-    whenCluase: (v) -> truish
-    til:        t/f; if true, will stop just before v == toValue
-  
-  What will the efficiency-implimentaiton look like?
-    We know if we have a 'til' or not.
-  
-    Assuming it's 'til' for this example:
-  
-    If we don't know fromValue <> toValue:
-  
-      byValue ?= if fromValue < toValue then 1 else -1
-      while if byValue >= 0 then v <= toValue else v >= toValue
-        into.push withClause v if whenClause v
-        v += byValue
-  
-    else if fromValue < toValue
-  
-      byValue ?= 1
-      while v <= toValue
-        into.push withClause v if whenClause v
-        v += byValue
-  
-    else # the mirror version:
-  
-      byValue ?= -1
-      while v >= toValue
-        into.push withClause v if whenClause v
-        v += byValue
-  
-    We'd have to do performance testing, but it's possible
-    this would be faster - it avoids a CPU jump instruction:
-  
-      byValue ?= if fromValue < toValue then 1 else -1
-      while (byValue >= 0 && v <= toValue) || (byValue < 0 && v >= toValue)
-        into.push withClause v if whenClause v
-        v += byValue
-   */
-  arrayRange: function(fromValue, toValue, withClause, whenClause, byValue, til, into) {
-    var v;
-    if (withClause == null) {
-      withClause = returnFirst;
-    }
-    if (whenClause == null) {
-      whenClause = returnTrue;
-    }
-    if (into == null) {
-      into = [];
-    }
-    if (byValue === 0) {
-      throw new Error("CaffeineScript array-range comprehension: 'by' is zero. (from: " + fromValue + ", to: " + toValue + ")");
-    }
-    if (byValue == null) {
-      byValue = fromValue < toValue ? 1 : -1;
-    }
-    v = fromValue;
-    if (til) {
-      if (byValue > 0) {
-        while (v < toValue) {
-          if (whenClause(v)) {
-            into.push(withClause(v));
-          }
-          v += byValue;
-        }
-      } else {
-        while (v > toValue) {
-          if (whenClause(v)) {
-            into.push(withClause(v));
-          }
-          v += byValue;
-        }
-      }
-    } else {
-      if (byValue > 0) {
-        while (v <= toValue) {
-          if (whenClause(v)) {
-            into.push(withClause(v));
-          }
-          v += byValue;
-        }
-      } else {
-        while (v >= toValue) {
-          if (whenClause(v)) {
-            into.push(withClause(v));
-          }
-          v += byValue;
-        }
-      }
-    }
-    return into;
   }
 };
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /*!**************************************************************************!*\
   !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Lib.coffee ***!
   \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _import, compactFlatten, getSuper, isDirectPrototypeOf, isFalse, isFunction, isPlainArray, isPlainObject, isTrue, ref, throwImportError,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+var __definingModule, getSuper, isDirectPrototypeOf, isFunction, isPlainArray, ref,
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
-ref = __webpack_require__(/*! ./ArrayCompactFlatten */ 2), compactFlatten = ref.compactFlatten, isPlainArray = ref.isPlainArray, isPlainObject = ref.isPlainObject;
+__webpack_require__(/*! ./Global */ 2);
 
-__webpack_require__(/*! ./Global */ 7);
+ref = __webpack_require__(/*! ./Types */ 4), isPlainArray = ref.isPlainArray, isFunction = ref.isFunction;
 
-global.__definingModule = null;
+__definingModule = null;
 
-throwImportError = function(notFound, importNames, libs) {
-  var i, importFileName, importFrom, len, lib, line, ref1, ref2;
-  importFrom = ((function() {
-    var i, len, results;
-    results = [];
-    for (i = 0, len = libs.length; i < len; i++) {
-      lib = libs[i];
-      if (lib === global) {
-        results.push("global");
-      } else if (lib != null) {
-        results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
-      } else {
-        results.push('null');
-      }
-    }
-    return results;
-  })()).join('\n  ');
-  ref1 = (new Error).stack.split("\n");
-  for (i = 0, len = ref1.length; i < len; i++) {
-    line = ref1[i];
-    if (!(line.match(/^\s/) && !line.match(/caffeine-script-runtime/))) {
-      continue;
-    }
-    importFileName = ((ref2 = line.match(/\(([^()]+)/)) != null ? ref2[1] : void 0) || line;
-    break;
-  }
-  console.warn("CaffineScript imports not found:\n  " + (notFound.join('\n  ')) + "\n\nimporting from:\n  " + importFrom + "\n\nsource:\n  " + importFileName + "\n");
-  throw new Error("CaffineScript imports not found: " + (notFound.join(', ')));
+isDirectPrototypeOf = function(o, prototype) {
+  return !isFunction(o) && prototype.constructor === o.constructor;
 };
 
 module.exports = {
   "in": function(a, b) {
-    return indexOf.call(b, a) >= 0;
+    return 0 <= b.indexOf(a);
   },
   mod: function(a, b) {
     return modulo(a, b);
@@ -813,42 +639,190 @@ module.exports = {
   exists: function(a) {
     return (a != null) || void 0;
   },
+
+  /*
+    TOFIX (in Console): this fails for built-in types in CaffeineMC's Console,
+      and if you define a function identical to this, within the console,
+      it WILL work. Why?
+        Because there are two JS environments running, and atomic values
+        are passed as atomics and their "Type" changes - to an identical
+        copy of the same type, but !== to the type you passed in.
+  
+      e.g.: this returns false in the console: "true is Boolean"
+      Solution: stop using Node's stupid interactive console, or
+        can we ensure that ALL code is evaled in the same environment?
+    NOTE - this also will fail, differently, across iFrames in the browser- since they
+      have different javascript environments.
+   */
   is: function(a, b) {
     return a === b || ((a != null) && (b != null) && a.constructor === b);
   },
+  toString: function(a) {
+    if (a != null) {
+      if (isPlainArray(a)) {
+        return a.join('');
+      } else if (isFunction(a != null ? a.toString : void 0)) {
+        return a.toString();
+      } else {
+
+      }
+    } else {
+      return '';
+    }
+  },
 
   /*
-  Implements the 'import' function.
+    All about getSuper in ES6 land:
   
-  IN:
-    importNames: array of strings of identifiers to import
-    libs: array of objects to import from, first has highest priority.
+      class A {}
+      class B extends A {}
+      class C extends B {}
   
-  OUT: and object with one property per importName
+      a = new A
+      b = new B
+      c = new C
+  
+      getSuper(B) == A
+      getSuper(C) == B
+  
+      getSuper(A.prototype) == Object.prototype
+      getSuper(B.prototype) == A.prototype
+      getSuper(C.prototype) == B.prototype
+  
+      getSuper(b) == A.prototype
+      getSuper(c) == B.prototype
+  
+    prototype map:
+  
+    KEY:
+      <->
+         <-- .constructor
+         --> .prototype
+      ^  Object.prototypeOf
+  
+    MAP:
+      A <-> aPrototype
+  
+      ^     ^     ^
+      |     |     a
+      |     |
+  
+      B <-> bPrototype
+  
+      ^     ^     ^
+      |     |     b
+      |     |
+  
+      C <-> cPrototype
+  
+                  ^
+                  c
+  
+    Definition of super:
+  
+      if instance then prototype's prototype
+      else prototype
    */
-  "import": _import = function(importNames, libs) {
-    var i, importName, j, len, lib, notFound, out, v;
-    out = {};
-    notFound = null;
-    libs = compactFlatten(libs);
-    for (i = 0, len = importNames.length; i < len; i++) {
-      importName = importNames[i];
-      for (j = libs.length - 1; j >= 0; j += -1) {
-        lib = libs[j];
-        if ((v = lib[importName]) != null) {
-          out[importName] = v;
-          break;
-        }
-      }
-      if (out[importName] == null) {
-        (notFound || (notFound = [])).push(importName);
-      }
+  getSuper: getSuper = function(o) {
+    var _super, out;
+    if (!((typeof o === "object") || (typeof o === "function"))) {
+      throw new Error("getSuper expecting an object");
     }
-    if (notFound != null) {
-      throwImportError(notFound, importNames, libs);
-    }
+    _super = Object.getPrototypeOf(o);
+    out = _super === Function.prototype && o.__super__ ? o.__super__.constructor : isDirectPrototypeOf(o, _super) ? Object.getPrototypeOf(_super) : _super;
     return out;
   },
+
+  /*
+    IN:
+      klass a new class-function object
+      init: (klass) -> outKlass
+  
+    OUT: if isF outKlass.createWithPostCreate
+      outKlass.createWithPostCreate outKlass
+    OR
+      outKlass (from init)
+  
+    EFFECT:
+      outKlass.createWithPostCreate?(outKlass) ? outKlass
+   */
+  defClass: function(klass, init) {
+    var ref1;
+    if (init != null) {
+      init.call(klass, klass, getSuper(klass), getSuper(klass.prototype));
+    }
+    return (ref1 = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref1 : klass;
+  },
+  getModuleBeingDefined: function() {
+    return __definingModule;
+  },
+
+  /*
+    IN:
+      _module: module form currently defined module
+      defineFunction
+   */
+  defMod: function(_module, a) {
+    var lastModule, result;
+    lastModule = __definingModule;
+    __definingModule = _module;
+    result = _module.exports = a();
+    __definingModule = lastModule;
+    return result;
+  },
+  isFunction: isFunction,
+  isF: isFunction
+};
+
+
+/***/ }),
+/* 8 */
+/*!*****************************************************************************!*\
+  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Import.coffee ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var compactFlatten, throwImportError, throwImportErrors;
+
+compactFlatten = __webpack_require__(/*! ./ArrayCompactFlatten */ 3).compactFlatten;
+
+throwImportErrors = __webpack_require__(/*! detect-node */ 9);
+
+throwImportError = function(notFound, importNames, libs) {
+  var i, importFileName, importFrom, len, lib, line, ref, ref1, stack;
+  importFrom = ((function() {
+    var i, len, results;
+    results = [];
+    for (i = 0, len = libs.length; i < len; i++) {
+      lib = libs[i];
+      if (lib === global) {
+        results.push("global");
+      } else if (lib != null) {
+        results.push(lib.namespacePath || (typeof lib.getName === "function" ? lib.getName() : void 0) || ("{" + (Object.keys(lib).join(', ')) + "}"));
+      } else {
+        results.push('null');
+      }
+    }
+    return results;
+  })()).join('\n  ');
+  importFileName = null;
+  ref = (stack = (new Error).stack).split("\n");
+  for (i = 0, len = ref.length; i < len; i++) {
+    line = ref[i];
+    if (!line.match(/caffeine-script-runtime/)) {
+      if (importFileName != null ? importFileName : importFileName = (ref1 = line.match(/(\/[^\/]+)+\.(caf|js)\b/i)) != null ? ref1[0] : void 0) {
+        break;
+      }
+    }
+  }
+  console.warn("CaffieneScript imports not found:\n  " + (notFound.join('\n  ')) + "\n\nimporting from:\n  " + importFrom + "\n\nsource:\n  " + (importFileName != null ? importFileName : stack) + "\n");
+  if (throwImportErrors) {
+    throw new Error("CaffieneScript imports not found: " + (notFound.join(', ')));
+  }
+};
+
+module.exports = {
 
   /*
   IN:
@@ -884,7 +858,12 @@ module.exports = {
             break;
           }
         }
-        results.push(importValue != null ? importValue : (notFound || (notFound = [])).push(importName));
+        if (importValue != null) {
+          results.push(importValue);
+        } else {
+          (notFound || (notFound = [])).push(importName);
+          results.push(new Error("CaffieneScript import not found: " + importName));
+        }
       }
       return results;
     })();
@@ -892,208 +871,19 @@ module.exports = {
       throwImportError(notFound, importNames, libs);
     }
     return toInvoke.apply(null, importValues);
-  },
-  isTrue: isTrue = function(a) {
-    return (a != null) && a !== false;
-  },
-  isFalse: isFalse = function(a) {
-    return a === false || (a == null);
-  },
-  isFunction: isFunction = function(a) {
-    return typeof a === "function";
-  },
-  isDirectPrototypeOf: isDirectPrototypeOf = function(o, prototype) {
-    return !isFunction(o) && prototype.constructor === o.constructor;
-  },
-  toString: function(a) {
-    if (a != null) {
-      if (isPlainArray(a)) {
-        return a.join('');
-      } else if (isFunction(a != null ? a.toString : void 0)) {
-        return a.toString();
-      } else {
-
-      }
-    } else {
-      return '';
-    }
-  },
-  gt: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a > b;
-    } else {
-      return a.gt(b);
-    }
-  },
-  lt: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a < b;
-    } else {
-      return a.lt(b);
-    }
-  },
-  lte: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a <= b;
-    } else {
-      return a.lte(b);
-    }
-  },
-  gte: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a >= b;
-    } else {
-      return a.gte(b);
-    }
-  },
-  add: function(a, b) {
-    if ((typeof a === "number" && typeof b === "number") || (typeof a === "string" && typeof b === "string")) {
-      return a + b;
-    } else {
-      return a.add(b);
-    }
-  },
-  sub: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a - b;
-    } else {
-      return a.sub(b);
-    }
-  },
-  mul: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a * b;
-    } else {
-      return a.mul(b);
-    }
-  },
-  div: function(a, b) {
-    if (typeof a === "number" && typeof b === "number") {
-      return a / b;
-    } else {
-      return a.div(b);
-    }
-  },
-
-  /*
-  All about getSuper in ES6 land:
-  
-    class A {}
-    class B extends A {}
-    class C extends B {}
-  
-    a = new A
-    b = new B
-    c = new C
-  
-    getSuper(B) == A
-    getSuper(C) == B
-  
-    getSuper(A.prototype) == Object.prototype
-    getSuper(B.prototype) == A.prototype
-    getSuper(C.prototype) == B.prototype
-  
-    getSuper(b) == A.prototype
-    getSuper(c) == B.prototype
-  
-  prototype map:
-  
-  KEY:
-    <->
-       <-- .constructor
-       --> .prototype
-    ^  Object.prototypeOf
-  
-  MAP:
-    A <-> aPrototype
-  
-    ^     ^     ^
-    |     |     a
-    |     |
-  
-    B <-> bPrototype
-  
-    ^     ^     ^
-    |     |     b
-    |     |
-  
-    C <-> cPrototype
-  
-                ^
-                c
-  
-  Definition of super:
-  
-    if instance then prototype's prototype
-    else prototype
-   */
-  getSuper: getSuper = function(o) {
-    var _super, out;
-    if (!((typeof o === "object") || (typeof o === "function"))) {
-      throw new Error("getSuper expecting an object");
-    }
-    _super = Object.getPrototypeOf(o);
-    out = _super === Function.prototype && o.__super__ ? o.__super__.constructor : isDirectPrototypeOf(o, _super) ? Object.getPrototypeOf(_super) : _super;
-    return out;
-  },
-
-  /*
-  IN:
-    klass a new class-function object
-    init: (klass) -> outKlass
-  
-  OUT: if isF outKlass.createWithPostCreate
-    outKlass.createWithPostCreate outKlass
-  OR
-    outKlass (from init)
-  
-  EFFECT:
-    outKlass.createWithPostCreate?(outKlass) ? outKlass
-   */
-  defClass: function(klass, init) {
-    var ref1;
-    if (init != null) {
-      init.call(klass, klass, getSuper(klass), getSuper(klass.prototype));
-    }
-    return (ref1 = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref1 : klass;
-  },
-  getModuleBeingDefined: function() {
-    return global.__definingModule;
-  },
-
-  /*
-  IN:
-    defineFunciton ||
-   */
-  defMod: function(_module, a) {
-    var lastModule, result;
-    lastModule = global.__definingModule;
-    global.__definingModule = _module;
-    result = _module.exports = a();
-    global.__definingModule = lastModule;
-    return result;
-  },
-  i: _import,
-  t: isTrue,
-  f: isFalse,
-  isF: isFunction
+  }
 };
 
 
 /***/ }),
-/* 7 */
-/*!*****************************************************************************!*\
-  !*** ./sourceWithoutNeptuneNamespaces/CaffeineScript/Runtime/Global.coffee ***!
-  \*****************************************************************************/
+/* 9 */
+/*!******************************************************************************!*\
+  !*** external "require('detect-node' /* ABC - not inlining fellow NPM *_/)" ***!
+  \******************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-var g;
-
-g = typeof window !== "undefined" && window !== null ? window : typeof self !== "undefined" && self !== null ? self : global;
-
-g.global = g;
-
+module.exports = require('detect-node' /* ABC - not inlining fellow NPM */);
 
 /***/ })
 /******/ ]);

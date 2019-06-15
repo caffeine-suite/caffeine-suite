@@ -1,5 +1,5 @@
 
-{isArrayIterable} = require './IterationBase'
+{isArrayIterable} = require './Types'
 
 ###
 Notes:

@@ -1,3 +1,5 @@
+require './Global'
+
 merge = (list) ->
   out = {}
   for l in list
