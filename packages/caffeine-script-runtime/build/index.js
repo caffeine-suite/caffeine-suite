@@ -622,7 +622,11 @@ isDirectPrototypeOf = function(o, prototype) {
 
 module.exports = {
   "in": function(a, b) {
-    return 0 <= b.indexOf(a);
+    if (b != null) {
+      return 0 <= b.indexOf(a);
+    } else {
+      return false;
+    }
   },
   mod: function(a, b) {
     return modulo(a, b);
