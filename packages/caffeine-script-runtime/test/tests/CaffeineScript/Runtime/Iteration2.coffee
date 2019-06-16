@@ -114,31 +114,6 @@ defineModule module, suite:
     test "find [] null 2 3", ->
       assert.eq 2, Caf.find [null,2,3]
 
-  arrayRange: ->
-    # Caf.arrayRange:(fromValue, toValue, withClause = returnFirst, whenClause = returnTrue, byValue, til, into = [])
-    test "array from 1 to 3",         -> assert.eq [1,  2,  3           ],    Caf.arrayRange 1, 3
-    test "array to 3",                -> assert.eq [0,  1,  2,  3       ],    Caf.arrayRange 0, 3
-    test "array to -3",               -> assert.eq [0, -1, -2, -3       ],    Caf.arrayRange 0, -3
-    test "array from 5 to 10",        -> assert.eq [5,  6,  7,  8,  9,  10],  Caf.arrayRange 5, 10
-    test "array from 10 to 5",        -> assert.eq [10, 9,  8,  7,  6,  5],   Caf.arrayRange 10, 5
-
-    test "array from 10 to 5 by 2",   -> assert.eq [],          Caf.arrayRange 10, 5, null, null, 2
-    test "array from 10 to 5 by -2",  -> assert.eq [10, 8, 6],  Caf.arrayRange 10, 5, null, null, -2
-    test "array from 5 to 10 by 2",   -> assert.eq [5, 7, 9],   Caf.arrayRange 5, 10, null, null, 2
-    test "array from 5 to 10 by -2",  -> assert.eq [],          Caf.arrayRange 5, 10, null, null, -2
-
-    test "array v to 3 with v * 2",   ->
-      assert.eq [0, 2, 4, 6], Caf.arrayRange 0, 3, (v) -> v * 2
-
-    test "array v to 3 when v %% 3 == 0",   ->
-      assert.eq [0, 3], Caf.arrayRange 0, 3, null, (v) -> v %% 3 == 0
-
-    test "array to 3 into [4, 5, 6]",   ->
-      assert.eq [4, 5, 6, 0, 1, 2, 3], Caf.arrayRange 0, 3, null, null, null, null, [4, 5, 6]
-
-    test "array from 1 til 3",        -> assert.eq [1,  2               ],    Caf.arrayRange 1, 3,  null, null, null, true
-    test "array til 3",               -> assert.eq [0,  1,  2           ],    Caf.arrayRange 0, 3,  null, null, null, true
-    test "array til -3",              -> assert.eq [0, -1, -2           ],    Caf.arrayRange 0, -3, null, null, null, true
 
   reduce: ->
     test "reduce a, v from [1, 2, 3] with a + v",                       -> assert.eq 6, Caf.reduce [1,2,3], (a, v) -> a + v

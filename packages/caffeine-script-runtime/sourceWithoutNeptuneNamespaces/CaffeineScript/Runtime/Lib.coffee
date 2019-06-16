@@ -5,7 +5,7 @@ __definingModule = null
 isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
 
 module.exports =
-  in:       (a, b) -> 0 <= b.indexOf a
+  in:       (a, b) -> if b? then 0 <= b.indexOf a else false
   mod:      (a, b) -> a %% b
   div:      (a, b) -> a // b
   pow:      (a, b) -> a ** b
