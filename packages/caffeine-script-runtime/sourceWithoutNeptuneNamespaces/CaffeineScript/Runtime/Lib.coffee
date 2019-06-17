@@ -1,6 +1,6 @@
 require './Global'
 {isPlainArray, isFunction} = require './Types'
-__definingModule = null
+global.__definingModule = null
 
 isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
 
@@ -127,7 +127,7 @@ module.exports =
   #######################
   # define modules
   #######################
-  getModuleBeingDefined: -> __definingModule
+  getModuleBeingDefined: -> global.__definingModule
 
   ###
     IN:
@@ -135,12 +135,12 @@ module.exports =
       defineFunction
   ###
   defMod: (_module, a) ->
-    lastModule = __definingModule
-    __definingModule = _module
+    lastModule = global.__definingModule
+    global.__definingModule = _module
 
     result = _module.exports = a()
 
-    __definingModule = lastModule
+    global.__definingModule = lastModule
 
     result
 
