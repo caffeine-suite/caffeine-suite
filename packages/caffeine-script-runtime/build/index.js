@@ -607,14 +607,14 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var __definingModule, getSuper, isDirectPrototypeOf, isFunction, isPlainArray, ref,
+var getSuper, isDirectPrototypeOf, isFunction, isPlainArray, ref,
   modulo = function(a, b) { return (+a % (b = +b) + b) % b; };
 
 __webpack_require__(/*! ./Global */ 2);
 
 ref = __webpack_require__(/*! ./Types */ 4), isPlainArray = ref.isPlainArray, isFunction = ref.isFunction;
 
-__definingModule = null;
+global.__definingModule = null;
 
 isDirectPrototypeOf = function(o, prototype) {
   return !isFunction(o) && prototype.constructor === o.constructor;
@@ -758,7 +758,7 @@ module.exports = {
     return (ref1 = typeof klass.createWithPostCreate === "function" ? klass.createWithPostCreate(klass) : void 0) != null ? ref1 : klass;
   },
   getModuleBeingDefined: function() {
-    return __definingModule;
+    return global.__definingModule;
   },
 
   /*
@@ -768,10 +768,10 @@ module.exports = {
    */
   defMod: function(_module, a) {
     var lastModule, result;
-    lastModule = __definingModule;
-    __definingModule = _module;
+    lastModule = global.__definingModule;
+    global.__definingModule = _module;
     result = _module.exports = a();
-    __definingModule = lastModule;
+    global.__definingModule = lastModule;
     return result;
   },
   isFunction: isFunction,
