@@ -1,5 +1,8 @@
 require './Global'
 {isPlainArray, isFunction} = require './Types'
+
+# This DOES need to be global - Art.BaseClass needs it for hot-reloading
+# Should we make a better API?
 global.__definingModule = null
 
 isDirectPrototypeOf = (o, prototype) -> !isFunction(o) and prototype.constructor == o.constructor
