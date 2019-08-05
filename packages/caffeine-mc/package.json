@@ -1,5 +1,5 @@
 {
-  "author": "Shane Brinkman-Davis Delamore, Imikimi LLC",
+  "author": "Shane Brinkman-Davis Delamore, Imikimi LLC\"",
   "bin": {
     "caf": "./caf"
   },
@@ -17,16 +17,16 @@
     "glob": "^7.0.3",
     "glob-promise": "^3.1.0",
     "mock-fs": "^4.5.0",
-    "prettier": "^1.15.2"
+    "prettier": "^1.17.1"
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "license": "ISC",
   "name": "caffeine-mc",
   "scripts": {
     "build": "webpack --progress",
-    "start": "webpack-dev-server --hot --inline --progress",
+    "start": "webpack-dev-server --hot --inline --progress --env.devServer",
     "test": "nn -s;mocha -u tdd",
-    "testInBrowser": "webpack-dev-server --progress"
+    "testInBrowser": "webpack-dev-server --progress --env.devServer"
   },
   "version": "2.12.9"
 }
