@@ -1,1 +1,1 @@
-module.exports = Neptune?.CaffeineMc || require "./source/CaffeineMc"
+module.exports = require "./source"
