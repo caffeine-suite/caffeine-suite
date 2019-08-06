@@ -4,6 +4,8 @@
 {getCaffeineInit} = require './SourceRoots'
 {runInContext, displayError} = CaffeineMc = require './namespace'
 
+Register = require './Register'
+
 repl = require 'repl'
 path = require 'path'
 fs = require 'fs'
@@ -26,7 +28,11 @@ defineModule module, class CafRepl
     .then (init) =>
       showSource = false
       evaluateMode = true
+      verbose = false
       lastOutput = null
+      toggleVerbose = ->
+        Register.verbose = verbose = !verbose
+
       {@compiler, config} = init
 
       logReplInfo "Welcome to the CaffeineMC console."
@@ -176,6 +182,14 @@ defineModule module, class CafRepl
           @cafRepl.displayPrompt()
 
       @addCommand
+        name: "verbose"
+        help: "toggle verbose logging"
+        action: =>
+          toggleVerbose()
+          @cafRepl.outputStream.write "Verbose logging is #{if verbose then 'On' else 'Off'}\n"
+          @cafRepl.displayPrompt()
+
+      @addCommand
         name: "source"
         help: "toggle show-source"
         action: =>
@@ -197,7 +211,7 @@ defineModule module, class CafRepl
     command = command.trim()
     {compiled:{js}} = @compiler.compile command, bare: true, sourceFile: filename, cache: filename != "repl"
     try
-      require("prettier").format js, parser: 'babylon'
+      require("prettier").format js, parser: 'babel'
     catch e
       displayError e
 

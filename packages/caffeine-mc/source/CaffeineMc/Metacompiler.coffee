@@ -140,7 +140,7 @@ module.exports = class Metacompiler extends BaseClass
     if options.prettier
       try
         if out.compiled.js?
-          out.compiled.js = require("prettier").format out.compiled.js, parser: "babylon"
+          out.compiled.js = require("prettier").format out.compiled.js, parser: "babel"
         out.prettier = true
       catch e
         log e.message

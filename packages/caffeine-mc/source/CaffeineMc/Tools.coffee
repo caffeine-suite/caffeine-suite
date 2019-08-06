@@ -27,7 +27,7 @@ defineModule module, class Tools
     {verbose} = options
     if verbose
       log.error e
-    else if e.location? || e.sourceFile? || e.message.match /parse|expect/i
+    else if e.location? || e.sourceFile? # || e.message.match /parse|expect/i
       log e.message.replace /<HERE>/, "<HERE>".red if e
     else
       log.error(
