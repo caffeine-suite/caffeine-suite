@@ -82,12 +82,12 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 40);
+/******/ 	return __webpack_require__(__webpack_require__.s = 41);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 17:
+/***/ 18:
 /*!***************************************************************************!*\
   !*** external "require('fs-extra' /* ABC - not inlining fellow NPM *_/)" ***!
   \***************************************************************************/
@@ -98,7 +98,7 @@ module.exports = require('fs-extra' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 18:
+/***/ 19:
 /*!***********************************************************************!*\
   !*** external "require('path' /* ABC - not inlining fellow NPM *_/)" ***!
   \***********************************************************************/
@@ -109,7 +109,7 @@ module.exports = require('path' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /*!*************************************************************************!*\
   !*** external "require('colors' /* ABC - not inlining fellow NPM *_/)" ***!
   \*************************************************************************/
@@ -120,7 +120,7 @@ module.exports = require('colors' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 23:
+/***/ 24:
 /*!*******************************************************************************!*\
   !*** external "require('glob-promise' /* ABC - not inlining fellow NPM *_/)" ***!
   \*******************************************************************************/
@@ -131,7 +131,7 @@ module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
 
 /***/ }),
 
-/***/ 40:
+/***/ 41:
 /*!****************************!*\
   !*** ./caf-command.coffee ***!
   \****************************/
@@ -142,15 +142,15 @@ var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compil
 
 global.ArtStandardLibMultipleContextTypeSupport = true;
 
-colors = __webpack_require__(/*! colors */ 22);
+colors = __webpack_require__(/*! colors */ 23);
 
-glob = __webpack_require__(/*! glob-promise */ 23);
+glob = __webpack_require__(/*! glob-promise */ 24);
 
-fs = __webpack_require__(/*! fs-extra */ 17);
+fs = __webpack_require__(/*! fs-extra */ 18);
 
-path = __webpack_require__(/*! path */ 18);
+path = __webpack_require__(/*! path */ 19);
 
-__webpack_require__(/*! coffee-script/register */ 41);
+__webpack_require__(/*! coffee-script/register */ 42);
 
 realRequire = eval('require');
 
@@ -158,7 +158,7 @@ ref = CaffeineMc = eval('require')('./index'), version = ref.version, displayErr
 
 ref1 = Neptune.Art.StandardLib, log = ref1.log, dashCase = ref1.dashCase, escapeRegExp = ref1.escapeRegExp, present = ref1.present, isString = ref1.isString, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
 
-commander = __webpack_require__(/*! commander */ 42).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'DEPRICATED - cache is on by default').option('--nocache', 'disable compile cache').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(/*! commander */ 43).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'DEPRICATED - cache is on by default').option('--nocache', 'disable compile cache').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -306,7 +306,7 @@ if (compile) {
 
 /***/ }),
 
-/***/ 41:
+/***/ 42:
 /*!*****************************************************************************************!*\
   !*** external "require('coffee-script/register' /* ABC - not inlining fellow NPM *_/)" ***!
   \*****************************************************************************************/
@@ -317,7 +317,7 @@ module.exports = require('coffee-script/register' /* ABC - not inlining fellow N
 
 /***/ }),
 
-/***/ 42:
+/***/ 43:
 /*!****************************************************************************!*\
   !*** external "require('commander' /* ABC - not inlining fellow NPM *_/)" ***!
   \****************************************************************************/
