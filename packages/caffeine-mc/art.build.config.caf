@@ -9,15 +9,17 @@ package:
     caffeine-eight:       :*
     fs-extra:             :^3.0.0
     colors:               :^1.1.2
-    glob:                 :^7.0.3
     commander:            :^2.9.0
     prettier:             :^1.18.2
     cardinal:             :^1.0.0
     chalk:                :^1.1.3
     glob-promise:         :^3.1.0
-    babel-preset-env:     :^1.7.0
-    babel-loader:         :^8.0.4
-    babel-core:           :^6.26.3
+    # glob:                 :^7.0.3
+    # babel-preset-env:     :^1.7.0
+    # babel-loader:         :^8.0.4
+    # babel-core:           :^6.26.3
+
+  devDependencies:
     mock-fs:              :^4.5.0
 
   bin:
