@@ -1,4 +1,4 @@
-{array, log, ErrorWithInfo, find, Promise, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character} = require 'art-standard-lib'
+{clone, array, compactFlattenAll, ErrorWithInfo, find, Promise, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character} = require 'art-standard-lib'
 {BaseClass} = require 'art-class-system'
 
 fs = require 'fs-extra'
@@ -25,11 +25,16 @@ defineModule module, class Run extends BaseClass
       e.stack = if color then e.message.red else e.message
       throw e
 
+  rewriteArgv = (sourceFile, args) ->
+    process.argvRaw = process.argv
+    process.argv = compactFlattenAll sourceFile, args
+
   @runFile: (sourceFile, options) =>
     {globalCompilerOptions} = Neptune.CaffeineMc
     try
       Neptune.CaffeineMc.globalCompilerOptions = options
       @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
+
       realRequire realRequire.main.filename
     finally
       Neptune.CaffeineMc.globalCompilerOptions = globalCompilerOptions
@@ -59,8 +64,9 @@ defineModule module, class Run extends BaseClass
     {sourceFile} = options
     {main} = realRequire
 
-    main.filename = process.argv[1] =
-      if sourceFile then fs.realpathSync(sourceFile) else '<anonymous>'
+    main.filename =
+      sourceFile = if sourceFile then fs.realpathSync(sourceFile) else '<anonymous>'
+    rewriteArgv sourceFile, options.args
 
     # Clear the module cache.
     main.moduleCache &&= {}

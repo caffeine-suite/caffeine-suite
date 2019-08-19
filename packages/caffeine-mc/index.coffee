@@ -1,1 +1,1 @@
-module.exports = require "./source"
+module.exports = Neptune.CaffeineMc ? require "./source"

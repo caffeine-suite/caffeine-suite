@@ -93,12 +93,11 @@ compileDirectory = (dirname) ->
         .then -> compileFile filename, outputDirectory
 
     serializer
-    # log compileDirectory: {list}
 
 if reset
   CompileCache.reset()
 
-process.argv = 'caf' # [fs.realpathSync 'caf']
+# process.argv = [] 'caf' # [fs.realpathSync 'caf']
 
 #################
 # COMPILE FILES
@@ -141,11 +140,11 @@ if compile
 #################
 # RUN FILE
 #################
-else if commander.args.length == 1
-  [fileToRun] = commander.args
+else if commander.args.length >= 1
+  [fileToRun, args...] = commander.args
 
   CaffeineMc.register()
-  CaffeineMc.runFile fileToRun, {color: true, cache, verbose}
+  CaffeineMc.runFile fileToRun, {color: true, cache, verbose, args}
 
 else if versions
   if isString versions
