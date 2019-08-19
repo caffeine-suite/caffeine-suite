@@ -1,1 +1,1 @@
-module.exports = Neptune.CaffeineMc ? require "./source"
+module.exports = global.Neptune?.CaffeineMc ? require "./source"
