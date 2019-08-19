@@ -93,9 +93,9 @@ module.exports =
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ref;
+var ref, ref1;
 
-module.exports = (ref = Neptune.CaffeineMc) != null ? ref : __webpack_require__(/*! ./source */ 1);
+module.exports = (ref = (ref1 = global.Neptune) != null ? ref1.CaffeineMc : void 0) != null ? ref : __webpack_require__(/*! ./source */ 1);
 
 
 /***/ }),
