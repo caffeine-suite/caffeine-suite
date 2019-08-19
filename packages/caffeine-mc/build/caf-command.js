@@ -138,7 +138,8 @@ module.exports = require('glob-promise' /* ABC - not inlining fellow NPM */);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var CafRepl, CaffeineMc, CompileCache, Promise, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, nocache, obj, output, path, present, prettier, realRequire, ref, ref1, reset, serializer, transpile, verbose, version, versions;
+var CafRepl, CaffeineMc, CompileCache, Promise, args, cache, colors, commander, compile, compileDirectory, compileFile, compiler, dashCase, displayError, each, escapeRegExp, fileCounts, fileToRun, files, formattedInspect, fs, glob, isString, log, nocache, obj, output, path, present, prettier, realRequire, ref, ref1, ref2, reset, serializer, transpile, verbose, version, versions,
+  slice = [].slice;
 
 global.ArtStandardLibMultipleContextTypeSupport = true;
 
@@ -230,8 +231,6 @@ if (reset) {
   CompileCache.reset();
 }
 
-process.argv = 'caf';
-
 if (compile) {
   files = commander.args;
   if (files.length > 0) {
@@ -279,13 +278,14 @@ if (compile) {
   } else {
     commander.outputHelp();
   }
-} else if (commander.args.length === 1) {
-  fileToRun = commander.args[0];
+} else if (commander.args.length >= 1) {
+  ref2 = commander.args, fileToRun = ref2[0], args = 2 <= ref2.length ? slice.call(ref2, 1) : [];
   CaffeineMc.register();
   CaffeineMc.runFile(fileToRun, {
     color: true,
     cache: cache,
-    verbose: verbose
+    verbose: verbose,
+    args: args
   });
 } else if (versions) {
   if (isString(versions)) {

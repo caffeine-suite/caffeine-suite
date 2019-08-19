@@ -93,7 +93,9 @@ module.exports =
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./source */ 1);
+var ref;
+
+module.exports = (ref = Neptune.CaffeineMc) != null ? ref : __webpack_require__(/*! ./source */ 1);
 
 
 /***/ }),
@@ -172,7 +174,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, bin, dependencies, description, devDependencies, license, name, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"author\":\"Shane Brinkman-Davis Delamore, Imikimi LLC\",\"bin\":{\"caf\":\"./caf\"},\"dependencies\":{\"art-build-configurator\":\"*\",\"caffeine-eight\":\"*\",\"cardinal\":\"^1.0.0\",\"chalk\":\"^1.1.3\",\"colors\":\"^1.1.2\",\"commander\":\"^2.9.0\",\"fs-extra\":\"^3.0.0\",\"glob-promise\":\"^3.1.0\",\"prettier\":\"^1.18.2\"},\"description\":\"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.\",\"devDependencies\":{\"art-testbench\":\"*\",\"case-sensitive-paths-webpack-plugin\":\"^2.2.0\",\"chai\":\"^4.2.0\",\"mocha\":\"^6.2.0\",\"mock-fs\":\"^4.5.0\",\"webpack\":\"^4.39.1\",\"webpack-cli\":\"*\",\"webpack-dev-server\":\"^3.7.2\",\"webpack-merge\":\"^4.2.1\",\"webpack-node-externals\":\"^1.7.2\",\"webpack-stylish\":\"^0.1.8\"},\"license\":\"ISC\",\"name\":\"caffeine-mc\",\"scripts\":{\"build\":\"webpack --progress\",\"start\":\"webpack-dev-server --hot --inline --progress --env.devServer\",\"test\":\"nn -s;mocha -u tdd\",\"testInBrowser\":\"webpack-dev-server --progress --env.devServer\"},\"version\":\"3.0.0\"}");
+module.exports = JSON.parse("{\"author\":\"Shane Brinkman-Davis Delamore, Imikimi LLC\",\"bin\":{\"caf\":\"./caf\"},\"dependencies\":{\"art-build-configurator\":\"*\",\"caffeine-eight\":\"*\",\"cardinal\":\"^1.0.0\",\"chalk\":\"^1.1.3\",\"colors\":\"^1.1.2\",\"commander\":\"^2.9.0\",\"fs-extra\":\"^3.0.0\",\"glob-promise\":\"^3.1.0\",\"prettier\":\"^1.18.2\"},\"description\":\"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.\",\"devDependencies\":{\"art-testbench\":\"*\",\"case-sensitive-paths-webpack-plugin\":\"^2.2.0\",\"chai\":\"^4.2.0\",\"mocha\":\"^6.2.0\",\"mock-fs\":\"^4.5.0\",\"webpack\":\"^4.39.1\",\"webpack-cli\":\"*\",\"webpack-dev-server\":\"^3.7.2\",\"webpack-merge\":\"^4.2.1\",\"webpack-node-externals\":\"^1.7.2\",\"webpack-stylish\":\"^0.1.8\"},\"license\":\"ISC\",\"name\":\"caffeine-mc\",\"scripts\":{\"build\":\"webpack --progress\",\"start\":\"webpack-dev-server --hot --inline --progress --env.devServer\",\"test\":\"nn -s;mocha -u tdd\",\"testInBrowser\":\"webpack-dev-server --progress --env.devServer\"},\"version\":\"3.0.1\"}");
 
 /***/ }),
 /* 6 */
@@ -1666,11 +1668,11 @@ module.exports = require('vm' /* ABC - not inlining fellow NPM */);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var BaseClass, CaffeineMc, ErrorWithInfo, Promise, Run, array, defineModule, fileExists, find, formattedInspect, fs, isString, log, merge, path, randomBase62Character, realRequire, ref, upperCamelCase,
+/* WEBPACK VAR INJECTION */(function(module) {var BaseClass, CaffeineMc, ErrorWithInfo, Promise, Run, array, clone, compactFlattenAll, defineModule, fileExists, find, formattedInspect, fs, isString, log, merge, path, randomBase62Character, realRequire, ref, upperCamelCase,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-ref = __webpack_require__(/*! art-standard-lib */ 13), array = ref.array, log = ref.log, ErrorWithInfo = ref.ErrorWithInfo, find = ref.find, Promise = ref.Promise, merge = ref.merge, formattedInspect = ref.formattedInspect, log = ref.log, defineModule = ref.defineModule, isString = ref.isString, upperCamelCase = ref.upperCamelCase, randomBase62Character = ref.randomBase62Character;
+ref = __webpack_require__(/*! art-standard-lib */ 13), clone = ref.clone, array = ref.array, compactFlattenAll = ref.compactFlattenAll, ErrorWithInfo = ref.ErrorWithInfo, find = ref.find, Promise = ref.Promise, merge = ref.merge, formattedInspect = ref.formattedInspect, log = ref.log, defineModule = ref.defineModule, isString = ref.isString, upperCamelCase = ref.upperCamelCase, randomBase62Character = ref.randomBase62Character;
 
 BaseClass = __webpack_require__(/*! art-class-system */ 11).BaseClass;
 
@@ -1687,6 +1689,8 @@ fileExists = function(filename) {
 };
 
 defineModule(module, Run = (function(superClass) {
+  var rewriteArgv;
+
   extend(Run, superClass);
 
   function Run() {
@@ -1714,6 +1718,11 @@ defineModule(module, Run = (function(superClass) {
         }
       })()
     });
+  };
+
+  rewriteArgv = function(sourceFile, args) {
+    process.argvRaw = process.argv;
+    return process.argv = compactFlattenAll(sourceFile, args);
   };
 
   Run.runFile = function(sourceFile, options) {
@@ -1750,7 +1759,8 @@ defineModule(module, Run = (function(superClass) {
     var main, sourceFile;
     sourceFile = options.sourceFile;
     main = realRequire.main;
-    main.filename = process.argv[1] = sourceFile ? fs.realpathSync(sourceFile) : '<anonymous>';
+    main.filename = sourceFile = sourceFile ? fs.realpathSync(sourceFile) : '<anonymous>';
+    rewriteArgv(sourceFile, options.args);
     main.moduleCache && (main.moduleCache = {});
     return main.paths = realRequire('module')._nodeModulePaths(fs.realpathSync(path.dirname(sourceFile || "./anonymous")));
   };
