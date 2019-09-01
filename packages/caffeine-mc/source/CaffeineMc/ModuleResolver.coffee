@@ -3,6 +3,7 @@
   ErrorWithInfo, log, merge, present, find, each, w
   mergeInto
   currentSecond
+  snakeCase
 } = require 'art-standard-lib'
 Path = require 'path'
 
@@ -50,14 +51,12 @@ defineModule module, class ModuleResolver
   ###
   @getNpmPackageName: (moduleBaseName, modulePathArray) ->
     normalizedModuleName = upperCamelCase moduleBaseName
-    try
-      absolutePath = Path.dirname realRequire.resolve name = dashCase moduleBaseName
+    try absolutePath = Path.dirname realRequire.resolve  name = dashCase moduleBaseName
+    try absolutePath ?= Path.dirname realRequire.resolve name = snakeCase moduleBaseName
+    try absolutePath ?= Path.dirname realRequire.resolve name = moduleBaseName
     catch
-      try
-        absolutePath = Path.dirname realRequire.resolve name = moduleBaseName
-      catch
-        throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
-          npmPackageNamesAttempted: [moduleBaseName, dashCase moduleBaseName]
+      throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
+        npmPackageNamesAttempted: [moduleBaseName, dashCase moduleBaseName]
 
     requireString = if modulePathArray?.length > 0
       Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
