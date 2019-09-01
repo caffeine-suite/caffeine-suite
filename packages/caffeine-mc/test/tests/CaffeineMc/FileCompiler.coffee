@@ -17,7 +17,7 @@ defineModule module, suite:
             "caffeine-mc.config.caf loaded"
             'caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined'
             "caffeine-mc.config.caf ran"
-            "caffeine-mc.config.caf custom compiler used on: #{filename}, mySpecialConfig: \"worked!\""
+            "caffeine-mc.config.caf custom compiler used on: #{filename}, mySpecialConfig: :worked!"
           ]
 
   withCache: ->
