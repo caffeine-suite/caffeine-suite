@@ -3,6 +3,7 @@
   "bin": {
     "caf": "./caf"
   },
+  "bugs": "https:/github.com/caffeine-suite/caffeine-mc/issues",
   "dependencies": {
     "art-build-configurator": "*",
     "caffeine-eight": "*",
@@ -33,8 +34,13 @@
     "webpack-node-externals": "^1.7.2",
     "webpack-stylish": "^0.1.8"
   },
+  "homepage": "https://github.com/caffeine-suite/caffeine-mc",
   "license": "ISC",
   "name": "caffeine-mc",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caffeine-suite/caffeine-mc.git"
+  },
   "scripts": {
     "build": "webpack --progress",
     "start": "webpack-dev-server --hot --inline --progress --env.devServer",
