@@ -257,7 +257,7 @@ module.exports = Metacompiler = (function(superClass) {
       object:
         compiler: custom compiler instance. Must implement:
           compile: compileFunction
-    
+
     compileFunction: (sourceCode, options) ->
       IN:
         sourceCode: string
@@ -337,12 +337,12 @@ module.exports = Metacompiler = (function(superClass) {
       inlineMap: t/f
       sourceFile:
       sourceDir:
-  
+
   OUT: (an object)
     compiled: extension => output map
       extension: string, ex: "js"
       output: string, ex: "alert();"
-  
+
       If writing to files, we might do:
       for extension, output of compiled
         write originalFileNameWith(extension), output
@@ -1260,9 +1260,9 @@ defineModule(module, ModuleResolver = (function() {
 
   /*
   Notes about "." names-with-dots.
-  
+
     Essentially, dots are treated as word-boundaries.
-  
+
     Files:
       We need to manage extensions. Current rule:
         Full match example: FooCaf matches foo.caf
@@ -1270,26 +1270,26 @@ defineModule(module, ModuleResolver = (function() {
           Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
         PartialMatch must match starting at the first character:
           Foo.BarFood.caf does NOT match BarFood but does match Foo
-  
+
     Dirs:
       Dirs must fully match:
         Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
-  
+
   Future:
     I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
     Basically, this parallels how NeptuneNamespaces interprets them.
     It should work identically to as-if there were nested dirs.
-  
+
     Given these files:
-  
+
       MyFile1.caf
       Foo/Bar/MyFile2.caf
-  
+
     OR these files:
-  
+
       MyFile1.caf
       Foo.Bar/MyFile2.caf
-  
+
     Then:
        * inside MyFile1.caf
        * this works:
@@ -2200,7 +2200,7 @@ defineModule(module, CafRepl = (function() {
       help: 'Show command history',
       action: (function(_this) {
         return function() {
-          _this.cafRepl.outputStream.write((_this.cafRepl.rli.history.slice(0).reverse().join('\n')) + "\n");
+          _this.cafRepl.outputStream.write((_this.cafRepl.history.slice(0).reverse().join('\n')) + "\n");
           return _this.cafRepl.displayPrompt();
         };
       })(this)
@@ -2217,15 +2217,15 @@ defineModule(module, CafRepl = (function() {
       buffer = Buffer.alloc(size);
       fs.readSync(readFd, buffer, 0, size, stat.size - size);
       fs.closeSync(readFd);
-      this.cafRepl.rli.history = buffer.toString().split('\n').reverse();
+      this.cafRepl.history = buffer.toString().split('\n').reverse();
       if (stat.size > maxSize) {
-        this.cafRepl.rli.history.pop();
+        this.cafRepl.history.pop();
       }
-      if (this.cafRepl.rli.history[0] === '') {
-        this.cafRepl.rli.history.shift();
+      if (this.cafRepl.history[0] === '') {
+        this.cafRepl.history.shift();
       }
-      this.cafRepl.rli.historyIndex = -1;
-      lastLine = this.cafRepl.rli.history[0];
+      this.cafRepl.historyIndex = -1;
+      lastLine = this.cafRepl.history[0];
     } catch (error1) {}
     return lastLine;
   };
@@ -2234,7 +2234,7 @@ defineModule(module, CafRepl = (function() {
     var fd, lastLine;
     fd = fs.openSync(filename, 'a');
     lastLine = this.loadHistory(filename, maxSize);
-    this.cafRepl.rli.addListener('line', function(code) {
+    this.cafRepl.addListener('line', function(code) {
       if (code && code.length && code !== '.history' && code !== '.exit' && lastLine !== code) {
         fs.writeSync(fd, code + "\n");
         return lastLine = code;

@@ -1,6 +1,6 @@
 {defineModule, log, each, merge, isArray} = require 'art-standard-lib'
 
-{findModule, findModuleSync, WorkingCache} = Neptune.CaffeineMc
+{findModule, findModuleSync, WorkingCache, getNpmPackageName} = Neptune.CaffeineMc
 mockFs = require 'mock-fs'
 
 defineModule module, suite:
@@ -137,7 +137,7 @@ defineModule module, suite:
         sourceRoot: "myRoot"
 
       assert.eq found.requireString, "../StandardImport"
-      assert.isString found.absolutePath
+      assert.isString log found.absolutePath
 
     ### regressions to test:
       &testing/testingMin >> testing/testing-min.js
@@ -152,3 +152,17 @@ defineModule module, suite:
 
     ###
 
+  regressions: ->
+    test 'getNpmPackageName', ->
+      assert.eq(
+        getNpmPackageName('three', ['build', 'three.min'])
+        requireString: "three"
+        absolutePath:  require.resolve("three/build/three.min").split(/\/build/)[0]
+      )
+
+    test "findModuleSync 'three/build/threeMin' - should return same as require.resolve", ->
+      assert.eq(
+        requireString: "three/build/three.min"
+        absolutePath: require.resolve("three/build/three.min").split(/\.js$/)[0]
+        findModuleSync "three/build/threeMin"
+      )

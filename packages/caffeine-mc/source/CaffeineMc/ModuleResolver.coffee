@@ -58,10 +58,11 @@ defineModule module, class ModuleResolver
       throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
         npmPackageNamesAttempted: [moduleBaseName, dashCase moduleBaseName]
 
-    requireString = if modulePathArray?.length > 0
-      Path.join name, absolutePath.slice (absolutePath.lastIndexOf name) + name.length
+    if modulePathArray?.length > 0
+      [requireString] = name.split '/'
+      absolutePath = findSourceRootSync absolutePath
     else
-      name
+      requireString = name
     {requireString, absolutePath}
 
   @findModuleSync: (moduleName, options) =>
@@ -80,7 +81,7 @@ defineModule module, class ModuleResolver
           absolutePath  = Path.join absolutePath, matchingName
           requireString = "#{requireString}/#{matchingName}"
         else
-          throw new ErrorWithInfo "Could not find pathed submodule inside npm package.",
+          throw new ErrorWithInfo "Could not find pathed submodule inside npm package: #{requireString}",
             npmPackage: requireString
             localNpmPackageLocation: absolutePath
             submodulePath: sub

@@ -270,7 +270,7 @@ defineModule module, class CafRepl
       name: 'history'
       help: 'Show command history'
       action: =>
-        @cafRepl.outputStream.write "#{@cafRepl.rli.history[..].reverse().join '\n'}\n"
+        @cafRepl.outputStream.write "#{@cafRepl.history[..].reverse().join '\n'}\n"
         @cafRepl.displayPrompt()
 
   @loadHistory: (filename, maxSize) ->
@@ -287,15 +287,15 @@ defineModule module, class CafRepl
       fs.closeSync readFd
 
       # Set the history on the interpreter
-      @cafRepl.rli.history = buffer.toString().split('\n').reverse()
+      @cafRepl.history = buffer.toString().split('\n').reverse()
 
       # If the history file was truncated we should pop off a potential partial line
-      @cafRepl.rli.history.pop() if stat.size > maxSize
+      @cafRepl.history.pop() if stat.size > maxSize
 
       # Shift off the final blank newline
-      @cafRepl.rli.history.shift() if @cafRepl.rli.history[0] is ''
-      @cafRepl.rli.historyIndex = -1
-      lastLine = @cafRepl.rli.history[0]
+      @cafRepl.history.shift() if @cafRepl.history[0] is ''
+      @cafRepl.historyIndex = -1
+      lastLine = @cafRepl.history[0]
 
     lastLine
 
@@ -304,7 +304,7 @@ defineModule module, class CafRepl
 
     lastLine = @loadHistory filename, maxSize
 
-    @cafRepl.rli.addListener 'line', (code) ->
+    @cafRepl.addListener 'line', (code) ->
       if code and code.length and code isnt '.history' and code isnt '.exit' and lastLine isnt code
         # Save the latest command in the file
         fs.writeSync fd, "#{code}\n"
