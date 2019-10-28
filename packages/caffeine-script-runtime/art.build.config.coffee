@@ -5,4 +5,6 @@ module.exports =
 
   webpack:
     common: {}
-    targets: index: {}
+    targets:
+      index: {}
+      v3: {}
