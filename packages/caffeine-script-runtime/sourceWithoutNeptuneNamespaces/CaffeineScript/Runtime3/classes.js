@@ -1,4 +1,4 @@
-{isFunction} = require('./types');
+const {isFunction} = require('./types');
 
 const isDirectPrototypeOf = (o, prototype) => !isFunction(o) && prototype.constructor === o.constructor
 

@@ -3,9 +3,9 @@ require('./global');
 const {find, each} = require('./iteration');
 const {isFunction, isPlainArray} = require('./types');
 const {defModule} = require('./modules');
-const {defClass, getSuper} = require('./modules');
+const {defClass, getSuper} = require('./classes');
 
-model.exports = {
+module.exports = {
   autoImport: require('./autoImport'),   // was importInvoke
 
   isFunction,   // was isF
@@ -20,7 +20,7 @@ model.exports = {
   div:      (a, b) => Math.floor(a / b),
   pow:      (a, b) => a ** b,
 
-  is:       (a, b) => a == b || (a != null && b != null && a.constructor == b),
+  is:       (a, b) => a === b || (a != null && b != null && a.constructor == b),
   toString: (a) =>
       (a != null)
       ?

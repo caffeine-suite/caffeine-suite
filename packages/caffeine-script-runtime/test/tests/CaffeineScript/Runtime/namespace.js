@@ -3,6 +3,5 @@
 
 module.exports = require('../namespace').addNamespace(
   'Runtime',
-  (class Runtime extends Neptune.PackageNamespace {})
-  ._configureNamespace(require('../../../../package.json'))
+  class Runtime extends Neptune.PackageNamespace {}
 );
