@@ -1,0 +1,15 @@
+import &StandardImport, &CaffeineEight, &CafParseNodeBaseClass
+
+class CaffeineScriptParser extends Parser
+  @nodeBaseClass: &CafParseNodeBaseClass
+
+  each mod in &Rules.modules
+    if isFunction mod
+      mod.call @
+    else
+      @rule mod
+
+  parse: (source, options) ->
+    super
+      &Preprocessors.preprocess source
+      options

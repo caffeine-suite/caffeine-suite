@@ -1,0 +1,72 @@
+import &StandardImport, &CaffeineEight, &StnRegistry
+
+##
+  TODO: convert multiline RegExp into a 'block' instead of 'bracketed'
+  Syntax:
+
+    # modifiers come immeidately after the ///
+    # This works, because spaces are already ignored.
+
+    ///i matchthis
+    ///i
+      matchthis
+
+regExpLiteral:
+  "" regExpStart regExpMiddle regExpEnd regExpModifiers?
+  "" '///' regExpBlockModifiers regExpBlock?
+  "" '///' ?/$|\\n/
+  stnFactory: :RegExpStn
+  stnProps:   ~>
+    if @regExpMiddle
+      value: @regExpMiddle.toString(), modifiers: @regExpModifiers?.toString()
+    else
+      modifiers: @regExpBlockModifiers?.regExpModifiers?.toString()
+
+regExpBlockModifiers:
+  :regExpModifiers
+  /(?=[ \n])/ # could match space or EOL
+
+regExpBlock: Extensions.IndentBlocks.getPropsToSubparseToEolAndBlock rule: :regExpBlockPattern
+regExpBlockPattern: "multilineRegExpMiddle*"
+
+##
+  TODO: we could accept many regexps starting with space, / f/,
+
+  if we actually parsed the internals of the regexp and ensured matching (), {} and []
+  The problem cases are listed in the tests under spaceAfterSlashIsNotRegExp - with comments.
+
+regExpStart:      "'/' !/[ \\/]/"
+regExpMiddle:     /// ( [^\/\\\n] | \\. | \#(?!\{) )*
+regExpEnd:        /// /
+regExpModifiers:  /([igmuy]+)/
+
+multilineRegExpMiddle:
+  :multilineRegExpText
+  :multilineRegExpEscape
+  :multilineRegExpForwardSlashes
+  :multilineRegExpInterpolation
+  :multilineRegExpComment
+
+# match as much as we can with no escapes, no comments or end /// marker
+multilineRegExpText:
+  pattern:    /((?!((^|\n|\s)#|#\{))[^\\\/])+/
+  stnFactory: :StringStn
+  stnProps:   ~> value: @text.replace /[\n\s]+/g, ''
+
+multilineRegExpEscape:
+  pattern:    /(\\.)/
+  stnFactory: :StringStn
+  stnProps:   ~> value: if @text == "\\ " then ' ' else @text
+
+multilineRegExpComment:
+  pattern:    "/^|\\n|\\s/ !interpolationStart comment" # /(^|\n|\s)+#(?!\{)[^\n]+[\s\n]*/
+  # stnFactory: :StringStn
+  # stnProps:   ~> value: ""
+
+multilineRegExpInterpolation:
+  pattern: "/(\\n|\\s)*/ interpolationStart expression interpolationEnd"
+
+multilineRegExpForwardSlashes:
+  pattern:    /\/\/?(?!\/)/
+  stnFactory: :StringStn
+  stnProps:   ~> value: @text.replace /\//g, '\\/'

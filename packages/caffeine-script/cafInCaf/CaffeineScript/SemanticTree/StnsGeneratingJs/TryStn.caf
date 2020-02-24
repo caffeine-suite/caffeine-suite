@@ -1,0 +1,25 @@
+import &StandardImport
+
+class TryStn extends &BaseStn
+
+  constructor: ->
+    super
+    unless @labeledChildren.optionalCatch || @labeledChildren.optionalFinally
+      @children[1] = @labeledChildren.optionalCatch ?= StnRegistry.CatchStn()
+      .parent = @
+
+  toSourceNode: (options = {})->
+    {expression} = options
+    {body, optionalCatch, optionalFinally} = @labeledChildren
+
+    base = []
+      "try {"
+      body.toSourceNode returnAction: !!expression
+      "} "
+      optionalCatch?.toSourceNode options
+      optionalFinally?.toSourceNode options
+
+    if expression
+      @doSourceNode null, [] base, ";"
+    else
+      base

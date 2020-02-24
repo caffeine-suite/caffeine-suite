@@ -1,0 +1,11 @@
+class SimpleLiteralStn extends &BaseStn
+
+  toSourceNode: (options) ->
+    {value} = @props
+
+    @createSourceNode
+      value
+
+  @getter
+    propName: -> @props.value
+    canBeUsedInES6Structuring: -> true

@@ -1,0 +1,42 @@
+class JsonParser extends &CaffeineEight.Parser
+
+  @nodeBaseClass:
+    evaluate: (out) -> find m in @matches with m.evaluate? out
+
+  @rule
+    root: :array :object
+
+  @rule
+    array:
+      "" '[' _? ']'
+      "" '[' _? value commaValue* _? ']'
+    {} evaluate: ->
+      array m in @matches when m.evaluate with m.evaluate()
+
+  @rule
+    object:
+      "" '{' _? '}'
+      "" '{' _? pair commaPair* _? '}'
+    {} evaluate: ->
+      each m in @matches into out = {} when m.value? || m.pair?
+        m = m.pair if m.pair?
+        out[m.string.evaluate()] = m.value.evaluate()
+
+  @rule
+    pair:       "" string _? ':' _? value
+    commaValue: "" _? ',' _? value
+    commaPair:  "" _? ',' _? pair
+    value: :object :array :number :string :true :false :null
+
+  @rule
+    string: /"(?:[^"\\]|\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4}))*"/
+    number: /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/
+    true:   /true/
+    false:  /false/
+    null:   /null/
+    {} evaluate: -> eval @text
+
+  @rule
+    _:      /\ +/
+
+.repl()

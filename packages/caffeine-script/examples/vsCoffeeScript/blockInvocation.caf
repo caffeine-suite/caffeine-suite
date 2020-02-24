@@ -1,0 +1,19 @@
+# CoffeeScript
+merge objectWithout(request.data, "bitmap"),
+  toPlainObjects {
+    url
+    templateUrl
+    dimensions:       bitmap.size
+    byteLength:       imageData.length
+    colorInfo:        Neptune.Art.ColorExtractor.extractColors bitmap
+  }
+
+# CaffeineScript
+merge
+  objectWithout request.data, :bitmap
+  toPlainObjects {}
+    url
+    templateUrl
+    dimensions:       bitmap.size
+    byteLength:       imageData.length
+    colorInfo:        Neptune.Art.ColorExtractor.extractColors bitmap

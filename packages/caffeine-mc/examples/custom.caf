@@ -1,0 +1,22 @@
+|CoffeeScript:
+  ###
+  - Because of '|CoffeeScript:' above, this whole block is interpeted as CoffeeScript.
+  - Everything to the end of this indented block runs at compile-time!
+  - this/@ is set to the current CaffeineMc instance.
+  - A new CaffeineMc instance is created for every .caf/.caffeine file compiled.
+  ###
+
+  # Require whatever you want!
+  {upperCamelCase, w, log} = require 'art-standard-lib'
+
+  ###
+  Set @compile to an object with a compile function
+  to define your own custom complier.
+  ###
+  @compiler = compile: (source) ->
+    strings = for word in w source
+      "'#{upperCamelCase word}'"
+
+    "module.exports = [\n  #{strings.join ",\n  "}\n];"
+
+This converts multi-word-words, no_matter_what_they_look_like to upperCamelCase

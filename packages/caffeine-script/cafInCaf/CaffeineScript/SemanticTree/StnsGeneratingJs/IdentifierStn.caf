@@ -1,0 +1,34 @@
+import &StandardImport, {} &UniqueIdentifierHandle
+
+class IdentifierStn extends &BaseStn
+
+  constructor: (props, children) ->
+    if (identifier = children[0]) is String
+      props = merge props, {} identifier
+      children = []
+    super props, children
+    unless @props.identifier
+      @props.identifierHandle ?= new UniqueIdentifierHandle @props.preferredIdentifier, @props.addToLets
+
+  @getter
+    name: -> @props.identifier
+    isIdentifier: -> identifierRegexp.test @identifier
+    identifierHandle: -> @props.identifierHandle
+    isUniqueIdentifier: -> @identifierHandle is UniqueIdentifierHandle
+    propName: -> @identifier
+
+    identifier: -> (@identifierHandle || @props).identifier
+
+    # explicitly in the source-code
+    explicitIdentifier: -> @props.identifier
+    canBeUsedInES6Structuring: -> true
+
+    valueStn: -> &ReferenceStn @
+
+  updateScope: (@scope) ->
+    if @identifierHandle
+      @scope.addUniqueIdentifierHandle @identifierHandle
+    super
+
+  toSourceNode: ->
+    @createSourceNode (@identifierHandle || @props).identifier

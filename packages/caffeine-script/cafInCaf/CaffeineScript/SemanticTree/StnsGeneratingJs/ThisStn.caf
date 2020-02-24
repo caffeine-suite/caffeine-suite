@@ -1,0 +1,25 @@
+import &StandardImport
+
+class ThisStn extends &BaseStn
+
+  @getter
+    identifier: ->
+      if id = @props.identifier
+        if identifierRegexp.test id
+          id
+        else
+          escapeJavascriptString id
+      else
+        peek(@children)?.identifier
+
+    propName: -> @identifier ? "this"
+
+  toSourceNode: ->
+    if id = @identifier
+      if identifierRegexp.test id
+        @createSourceNode :this. id
+      else
+        @createSourceNode "this[" id, "]"
+    else
+      @createSourceNode
+        :this

@@ -1,0 +1,40 @@
+import &StandardImport, &CaffeineEight
+
+->
+  @rule
+    valueList: :simpleValueList, :valueListBlock
+
+  @rule
+    valueListBlock:         Extensions.IndentBlocks.getPropsToSubparseBlock rule: "valueListBlockSubParse"
+    valueListBlockSubParse: "end* listItemStatement+"
+
+  @rule
+    simpleValueList:
+      "element:listItemExpression optionalComma simpleValueList"
+      "element:listItemExpression _comma_ valueListBlock"
+      "element:listItemExpression"
+
+    simpleValueListWithoutImplicitObjects:
+      ""
+        !implicitObjectStart
+        simpleValueListWithoutImplicitObjectOptions
+
+    simpleValueListWithoutImplicitObjectOptions:
+      "element:listItemExpression optionalComma simpleValueListWithoutImplicitObjects"
+      "element:listItemExpression _comma_ valueListBlock"
+      "element:listItemExpression"
+
+  @rule
+    listItemStatement:
+      {}
+        pattern: "statementWithoutEnd newLineStatementExtension* ellipsis end"
+        stnFactory: :ArraySpreadElementStn
+      {}
+        pattern: "lineStartStatementWithoutEnd newLineStatementExtension* _comma_? end"
+
+    listItemExpression:
+      {}
+        pattern: "expression ellipsis"
+        stnFactory: :ArraySpreadElementStn
+      {}
+        pattern: "expression"

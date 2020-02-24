@@ -1,0 +1,160 @@
+import &StandardImport, &CaffeineEight, &StnRegistry, &Lib
+
+blockStringStartChar = /// (\  | \n | [^.\n\s,)\]\}] )
+
+->
+  @rule
+    doubleQuote:            /"/
+    singleQuote:            /'/
+
+    interpolationStart:     /\#\{/
+    interpolationEnd:       /\}/
+
+    # https://mathiasbynens.be/notes/javascript-escapes
+    dqStringMiddle:         /// ( [^"\\#]    | \u[0-9a-f]{4} | \u\{[0-9a-f]+\} | \x[0-9a-f]{2} | \\(?:[1-7][0-7]{0,2}|[0-7]{2,3}) | \\. | \#(?!\{) )*
+    sqStringMiddle:         /// ( [^'\\#]    | \u[0-9a-f]{4} | \u\{[0-9a-f]+\} | \x[0-9a-f]{2} | \\(?:[1-7][0-7]{0,2}|[0-7]{2,3}) | \\. | \#(?!\{) )*
+    blockStringMiddle:      /// ( [^\\#]     | \u[0-9a-f]{4} | \u\{[0-9a-f]+\} | \x[0-9a-f]{2} | \\(?:[1-7][0-7]{0,2}|[0-7]{2,3}) | \\. | \#(?!\{) )*
+
+  @rule
+    stringLiteral:
+      {}
+        pattern: "" /""/ tripple:/"/? &/#{blockStringStartChar.source}/ stringBlock
+        getStn: ~>
+          ret = @stringBlock.getStn()
+          unless @tripple
+            ret.compactNewLines?()
+            ret.trimLeft?()
+
+          ret.trimRight?()
+          ret
+
+
+      {}
+        pattern: "" /''/ tripple:/'/? &/ +[^ \\n]| *\\n/ unparsedBlock
+        getStn: ~>
+          ret = StringStn parseTreeNode: @, value: @unparsedBlock.toString()
+          ret.compactNewLines() unless @tripple
+          ret
+
+      {}
+        pattern: "" /"""|'''/
+        getStn: ~> StringStn parseTreeNode: @, value: ""
+
+      ## :wordString
+        Word-strings start with ':' and are followed by one or more characters
+        of any type EXCEPT:
+
+          close-brackets:   ) } ]
+          comma:            ,
+          white-space:      \s \n \t
+
+        The starting ':' is omitted in the output string.
+
+        Escaping is supported.
+
+        EXCEPTION: '::' is reserved for future use
+
+        Examples:
+          :word
+          > "word"
+
+          # most non-whitespace characters are allowed
+          :https://www.home.com/foo.bar?erg=123
+          > "https://www.home.com/foo.bar?erg=123"
+
+          # escaping is allowed
+          :hi\nthere
+          > "hi\nthere"
+
+          # "::" is reserved for future features
+          ::
+          > Syntax Error
+
+      {}
+        pattern: "" /:(?!:)/ unquotedString
+        getStn: ~> StringStn parseTreeNode: @, value: @toString().slice 1
+
+      ## #hashStrings (primary use: hashtag and colors)
+        Uses the same logic as wordStrings EXCEPT:
+
+        * The starting "#" is INCLUDED in the output string.
+        * "##" is a comment
+
+        Examples:
+          #tagThis
+          > "#tagThis"
+
+          #ff7700
+          > "#ff7700"
+
+          ##hi << double-# followed by anything is a comment
+          > ;
+
+        The starting '#' is preserved.
+        reserved: '##' for comments
+      {}
+        pattern: "" /\#(?!\#)/ unquotedStringWithoutTrailingColon
+        getStn: ~> StringStn parseTreeNode: @, value: @toString()
+
+      # number-with-unit strings
+      {}
+        pattern:
+          ///
+            [-+]?
+            (?!00)
+            [0-9]*
+            \.?
+            [0-9]+
+            ([eE][-+]?[0-9]+)?
+
+            # followed by one or more identifier characters
+            [$\w\u007f-\uffff]+
+
+        getStn: ~> StringStn parseTreeNode: @, value: @toString()
+
+    stringBlock: Extensions.IndentBlocks.getPropsToSubparseToEolAndBlock rule: "stringBlockBody"
+
+  @rule
+    stringLiteral:
+      "bracketStart:doubleQuote mid:dqStringMiddle interpolation:dqStringInterpolation? doubleQuote"
+      "bracketStart:singleQuote mid:sqStringMiddle interpolation:sqStringInterpolation? singleQuote"
+
+    stringBlockBody: "/ *\n/? mid:blockStringMiddle interpolation:blockStringInterpolation?"
+
+    {}
+      getStnChildren: (appendTo = [])~>
+        appendTo.push StringStn parseTreeNode: @, value: @mid.toString() if @mid.matchLength > 0
+        @interpolation?.getStnChildren appendTo
+        appendTo
+
+      getStn: ~>
+        ret = if @interpolation
+          InterpolatedStringStn @getStnChildren()
+        else
+          StringStn parseTreeNode: @, value: @mid.toString()
+
+        if @bracketStart
+          ret.compactNewLines true, true
+        ret
+
+  @rule
+    ##
+      interpolation body should be statements with the last (or only) one
+      optionally ending with a could-match-"}" instead of the normal 'end'
+    interpolation:
+      "interpolationStart interpolationEnd expression:toEolAndBlock"
+      "interpolationStart _OrEnd interpolationEnd"
+      "interpolationStart _? expression:root interpolationEnd"
+      "interpolationStart expression:block end? interpolationEnd"
+
+  @rule
+    dqStringInterpolation:    "interpolation mid:dqStringMiddle interpolationContinues:dqStringInterpolation?"
+    sqStringInterpolation:    "interpolation mid:sqStringMiddle interpolationContinues:sqStringInterpolation?"
+    blockStringInterpolation: "interpolation mid:blockStringMiddle interpolationContinues:blockStringInterpolation?"
+    {}
+      getStnChildren: (appendTo = [])~>
+        if @interpolation extract expression
+          appendTo.push expression.getStn()
+        appendTo.push StringStn parseTreeNode: @, value: @mid.toString() if @mid.matchLength > 0
+        @interpolationContinues?.getStnChildren appendTo
+        appendTo

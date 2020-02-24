@@ -1,0 +1,42 @@
+import &StandardImport
+
+UniqueIdentifierHandle = &UniqueIdentifierHandle
+StnRegistry = &StnRegistry
+
+class ValueBaseCaptureStn extends &BaseStn
+  @abstractClass()
+
+  getValueWithBaseCapture: (accessorStn)->
+    if accessorStn.isAccessor && !accessorStn.children[0].isReference
+      {AssignmentStn, ReferenceStn, IdentifierStn} = StnRegistry
+
+      {value, key} = accessorStn
+      value1: new accessorStn.class accessorStn.props, [
+          AssignmentStn
+            IdentifierStn identifierHandle: baseIdentifierHandle = new UniqueIdentifierHandle "base"
+            value
+          key
+        ]
+
+      value2: new accessorStn.class accessorStn.props, [
+          ReferenceStn identifierHandle: baseIdentifierHandle
+          key
+        ]
+    else if accessorStn.isAccessor || accessorStn.type == "This"
+      value1: accessorStn, value2: accessorStn
+    else
+      @getValueWithCapture accessorStn
+
+  getValueWithCapture: (accessorStn)->
+    if accessorStn.type == "Identifier" || accessorStn.type == "Reference"
+      value1: accessorStn, value2: accessorStn
+
+    else
+      {AssignmentStn, ReferenceStn, IdentifierStn} = StnRegistry
+
+      value1:
+        AssignmentStn
+          IdentifierStn identifierHandle: baseIdentifierHandle = new UniqueIdentifierHandle "base"
+          accessorStn
+
+      value2: ReferenceStn identifierHandle: baseIdentifierHandle

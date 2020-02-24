@@ -1,0 +1,41 @@
+import &StandardImport
+
+->
+  @rule
+    _:            "" / +/ comment?
+    end:          :lineEndComment
+
+    _OrEnd:
+      :_
+      :end
+
+    comment:
+      {} pattern: "/##[^\n]*/ unparsedBlock*"
+      {} pattern: /// \ * \# ( [\ \t] [^\n]* | (?=\n|$) )
+
+    ##
+      Statement-ends are:
+        new-line          "\n"
+        end-of-buffer     ($)
+        semi-column       ";"
+        close-parenthesis ")"
+        close-curly       "}"
+
+      NOTE:   A close-parenthesis can be considered an 'end'
+      WHY?    It's needed to make this parse: (-> 1)
+              Without it, the "1" wouldn't be a statement.
+      NOTE:   close-parens, close-curlies are not 'consumed' by this regexp
+
+    _end:
+      ///
+        (\ * (\n | ;\ * | $) )+
+        |
+        (\ * (?=[\)}]))
+
+    lineStartComment: "comment _end" "_end"
+    lineEndComment:   "_? comment? _end lineStartComment*"
+
+    # commenting this out breaks compiling: LiteralStrings.caf
+    {} getPresent: ~> false
+
+    onlyCommentsRemain: "lineEndComment /$/"
