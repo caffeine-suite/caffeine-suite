@@ -1,0 +1,112 @@
+{
+  "information_for_contributors": [
+    "This file has been adapted from https://github.com/microsoft/vscode/blob/master/extensions/coffeescript/syntaxes/coffeescript.tmLanguage.json"
+  ],
+  "version": "0.1.0",
+  "name": "CaffeineScript",
+  "scopeName": "source.caffeine",
+  "patterns": [
+    {
+      "match": "&(?!\\d)((?:(?!\\s)[-/$\\w\\u007f-\\uffff])+)",
+      "name": "string.quoted.other.caffeine"
+    },
+    {
+      "match": ":(?!:)[^\\n\\s,;{}()\\[\\]]+",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "match": "#(?!#)[^\\n\\s,;{}()\\[\\]]+",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "begin": "(?:^( *))\"\"\"?[^\\n]*\\n",
+      "end": "^(?!\\1 +[^ ])(?= *[^ \\n])",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "begin": "\"\"",
+      "end": "(?:\n)",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "begin": "\"(?!\")",
+      "end": "\"",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "begin": "'",
+      "end": "'",
+      "name": "string.quoted.double.caffeine"
+    },
+    {
+      "match": "([-+]?(?!00)[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?|0b[01]+|0o[0-7]+|0x[0-9a-f]+)(?![$\\w\\u007f-\\uffff])(?!\\.[0-9])",
+      "name": "constant.numeric.caffeine"
+    },
+    {
+      "match": "/[^/\\s]([^\\\\/]|\\\\.)*/[igmuy]*",
+      "name": "string.regexp.caffeine"
+    },
+    {
+      "match": "///[igmuy]?( |(?:\\n|$)) *[^\\n]*",
+      "name": "string.regexp.caffeine"
+    },
+    {
+      "match": "<[\\w\\u007f-\\uffff]+>",
+      "name": "keyword.macro.compileTime.caffeine"
+    },
+    {
+      "match": "((?!\\s)[-~!@\\#$%^&*_+=|\\\\<>?/.$\\w\\u007f-\\uffff])+(?:\\:)",
+      "name": "variable.other.property.caffeine"
+    },
+    {
+      "match": "(?x) \\b ( super | delete | as | extract | import | instanceof | is | return | break | throw | try | catch | if | unless | then | else | switch | and | or | isnt | not | while | until | new | class | extends | (( in | from ) - )? ( array | object ) | reduce | inject | find | each | into | returning | to | til | by | in | from | with | do | with-key | short | skip | when | await | yield | case ) \\b",
+      "name": "keyword.caffeine"
+    },
+    {
+      "match": "\\b(false|true)\\b",
+      "name": "constant.language.boolean.caffeine"
+    },
+    {
+      "match": "\\b(NaN|global|null|undefined)\\b",
+      "name": "constant.language.caffeine"
+    },
+    {
+      "match": "[-+=!%&*|<>?]|==|&&|\\|\\|",
+      "name": "keyword.operator.caffeine"
+    },
+    {
+      "match": "[-=~]>",
+      "name": "storage.type.function.caffeine"
+    },
+    {
+      "match": "[()\\[\\]{}]",
+      "name": "meta.brace.caffeine"
+    },
+    {
+      "match": "\\.",
+      "name": "punctuation.accessor.caffeine"
+    },
+    {
+      "match": "(?!\\d)[\\w\\u007f-\\uffff]+",
+      "name": "entity.identifier.caffeine"
+    },
+    {
+      "match": "\\@(?!\\d)((?:(?!\\s)[$\\w\\u007f-\\uffff])+)?",
+      "name": "variable.other.member.caffeine"
+    },
+    {
+      "match": "\\.[w-￿]+",
+      "name": "punctuation.accessor.caffeine"
+    },
+    {
+      "match": "#([\\x00-\\x20\\x7f\\s;,()\\[\\]{}\\\\]|$)([^\\n]*|(?=\\n|$))",
+      "name": "comment.line.caffeine"
+    },
+    {
+      "begin": "(?:^( *))##",
+      "name": "comment.block.caffeine",
+      "end": "^(?!\\1 +[^ ])(?= *[^ \\n])"
+    }
+  ],
+  "repository": {}
+}

@@ -1,0 +1,9 @@
+import &StandardImport
+
+literal:
+  :keywordLiteral
+  :numberLiteral
+  :stringLiteral
+  :regExpLiteral
+  :bracketedObject
+  :brackedArray

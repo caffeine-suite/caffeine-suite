@@ -1,0 +1,14 @@
+import &StandardImport
+
+class ForInControlStn extends &BaseStn
+
+  @getter
+    varStn:   -> @children[0]
+    fromStn:  -> @children[1]
+
+  toSourceNode: ->
+    @createSourceNode
+      "let " if @props.let
+      @varStn.toSourceNode()
+      " in "
+      @fromStn.toSourceNode expression: true

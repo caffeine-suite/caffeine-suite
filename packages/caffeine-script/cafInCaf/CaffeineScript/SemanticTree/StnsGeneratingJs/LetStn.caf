@@ -1,0 +1,15 @@
+import &StandardImport
+
+class LetStn extends &BaseStn
+
+  updateScope: (@scope) ->
+    each child in @children do child.updateScope @scope, insideLet: true
+
+  toSourceNode: ->
+    @createSourceNode
+      "let "
+      array child, i in @children
+        c = child.toSourceNode()
+        if i > 0
+          [] ", " c
+        else c

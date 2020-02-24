@@ -1,0 +1,37 @@
+import &StandardImport
+
+class FunctionDefinitionArgStn extends &BaseStn
+
+  constructor: (props, children) ->
+    super
+
+    @assignThisProperty = props.assignThisProperty
+    @rest = props.rest
+    @target = @labeledChildren.target || children[0]
+    @defaultValue = children[1]
+
+  @getter
+    identifierStn: ->
+      if @isSimpleIdentifier
+        @target
+
+    argumentName: -> @target.name
+    isSimpleIdentifier: -> @target.type == :Identifier
+    explicitIdentifier: -> @target?.explicitIdentifier
+    propName: -> @target.name
+    valueStn: -> @target.getValueStn()
+
+  toSourceNode: ->
+    @createSourceNode
+      '...' if @rest
+      @target.toSourceNode()
+      [] " = " @defaultValue.toSourceNode() if @defaultValue
+
+  generatePreBodyStatementStn: ->
+    if @assignThisProperty
+      {IdentifierStn, AssignmentStn, ThisStn, ReferenceStn} = &StnRegistry
+      identifierStn = IdentifierStn {identifier} = @target.props
+
+      AssignmentStn
+        ThisStn      identifierStn
+        identifierStn

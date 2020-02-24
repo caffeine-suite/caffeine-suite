@@ -1,0 +1,88 @@
+import &StandardImport, &CaffeineEight, &StnRegistry
+{matchBlock} = Extensions.IndentBlocks
+
+upToButNotEol = /[^\n]*/y
+
+->
+  @rule
+
+    lineStartExpression: "multilineImplicitObject"
+
+    implicitArrayOrExpression:
+      :returnStatement
+      :breakStatement
+      :implicitArray
+      :expression
+
+    implicitArrayWithoutImplicitObjectsOrExpression:
+      :implicitArrayWithoutImplicitObjects
+      :expression
+
+    expression:
+      :binOpExpression
+      :unaryOpExpression
+      :expressionWithoutBinOps
+
+    expressionWithoutBinOps:
+      :controlStatement
+      :comprehension
+      :classDefinition
+      :destructuringAssignment
+      :structuredLiteral
+      :incDecUnaryExpression
+      :throwExpression
+      :functionDefinition
+      :extractExpression
+      :value
+
+    structuredLiteral:
+      :object
+      :array
+
+  @rule
+    incDecUnaryExpression:
+      "prefix:/\\+\\+|--/ assignableValue"
+      "assignableValue postfix:/\\+\\+|--/"
+      stnFactory: :UnaryOperatorStn
+      stnProps: ~>
+        operand:  (@prefix || @postfix).toString()
+        tail:     !!@postfix?.toString()
+
+  @rule
+    throwExpression: "throw _ expressionWithoutBinOps"
+    {} stnFactory: :ThrowStn
+
+
+  oneLessBlockSubparser = (rule) ->
+    (parentNode) ~>
+      {nextOffset, source} = parentNode
+      offset = nextOffset
+      originalOffset = offset
+      upToButNotEol.lastIndex = offset
+      if match = upToButNotEol.exec source
+        [m] = match
+        endOffset = offset += m.length
+
+        while (match = matchBlock source, offset)
+          endOffset = offset
+          offset += match.matchLength
+
+        expressionSource = source.slice originalOffset, endOffset
+        parentNode.subparse
+          expressionSource
+          {}
+            allowPartialMatch:    true
+            rule
+            originalOffset
+            originalMatchLength:  endOffset - originalOffset
+
+  @rule
+    expressionWithOneLessBlock:
+      parse: oneLessBlockSubparser :implicitArrayOrExpression
+
+    lineOfStatementsWithOneLessBlock:
+      parse: oneLessBlockSubparser :lineOfStatementsOrBlock
+
+    keywordLabeledStatementsWithOneLessBlock:
+      :lineOfStatementsWithOneLessBlock
+      :statementBlock

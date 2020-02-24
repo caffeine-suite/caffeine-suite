@@ -1,0 +1,61 @@
+import &StandardImport, &OperatorHelper, &StnRegistry
+
+binOpExpression:
+  pattern: "unaryOpExpression binaryOperatorSequenceExtension?"
+
+binaryOperatorSequenceExtension:
+  pattern: "binaryOperatorAndExpression+"
+  stnExtension: true
+  getStn: (left)~>
+    throw new Error "expecting left" unless left
+    resolveOperatorPrecidence
+
+      array opAndExp in @binaryOperatorAndExpressions
+        getNormalizedOperator opAndExp.binaryOperator
+
+      compactFlatten [] left, array opAndExp in @binaryOperatorAndExpressions
+        opAndExp.rValue.getStn()
+
+      (operandA, operandB, operator) ->
+        BinaryOperatorStn
+          parseTreeNode: @
+          operator: operator
+          operandA
+          operandB
+
+binaryOperatorAndExpression:
+  "binaryOperator rValue:unaryOpExpression"
+  "_? binaryOperator _ rValue:unaryOpExpression"
+  "_? binaryOperator _end rValue:unaryOpExpression"
+  "_? binaryOperator _? rValue:rValueBlock"
+
+lineStartBinaryOperatorAndExpression:
+  {}
+    pattern:      "!/[-+][^ ]/ !regExpLiteral binaryOperator _? binOpExpression"
+    stnProps:     ~> operator: getNormalizedOperator @binaryOperator
+    stnFactory:   "BinaryOperatorStn"
+    stnExtension: true
+
+  {}
+    pattern:      "!/[-+][^ ]/ binaryOperator _? rValueBlock"
+    stnProps:     ~> operator: getNormalizedOperator @binaryOperator
+    stnFactory:   "BinaryOperatorStn"
+    stnExtension: true
+
+unaryOpExpression:
+  pattern:
+    "!literal unaryOperator_+ expressionWithoutBinOps unaryTailOperator*"
+    "expressionWithoutBinOps unaryTailOperator*"
+
+  getStn: ~>
+    stn = @expressionWithoutBinOps.getStn()
+    each operand in @unaryTailOperators || []
+      stn = UnaryOperatorStn
+        operand: operand.toString().trim()
+        tail: true
+        stn
+    each operand in (@unaryOperators_ || []).slice().reverse()
+      stn = UnaryOperatorStn
+        operand: operand.toString().trim()
+        stn
+    stn

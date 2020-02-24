@@ -1,0 +1,5 @@
+import &StandardImport
+
+class GlobalIdentifierStn extends &BaseStn
+
+  toSourceNode: -> @createSourceNode @props.identifier

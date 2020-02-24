@@ -1,0 +1,16 @@
+import &StandardImport
+
+class LabeledDestructuringTargetStn extends &BaseStn
+
+  @getter
+    # converts to object-structuring Stns
+    structuringStn: ->
+      &ObjectPropValueStn
+        &ObjectPropNameStn @children[0]
+        @children[1].getValueStn()
+
+  toSourceNode: (options)->
+    if options?.restructuring
+      @children[1].toSourceNode options
+    else
+      @childrenToSourceNodes ': '

@@ -1,0 +1,32 @@
+import &StandardImport, {} &JavaScriptReservedWords
+
+class DestructuringIdentifierStn extends &BaseStn
+
+  updateScope: (scope, options) ->
+    @scope = scope
+    @scope.addIdentifierAssigned @labeledChildren.identifier.identifier, undefined, options?.insideLet
+    super
+
+  validate: ->
+    if JavaScriptReservedWords[@identifier]
+      throw new Error "'#{@identifier}' is reserved by JavaScript and cannot be used for destructuring."
+
+  @getter
+    identifier: -> @labeledChildren.identifier.identifier
+    structuringStn: ->
+      @labeledChildren.identifier
+
+  # TODO: check that etc is only used on the last element of an array destructure - javascript limitations
+
+  toSourceNode: (options)->
+    {restructuring} = options if options
+
+    {identifier, destructuringDefault} = @labeledChildren
+    if restructuring
+      identifier.toSourceNode()
+
+    else
+      @createSourceNode
+        '...' if @props.ellipsis
+        identifier.toSourceNode()
+        if destructuringDefault then " = #{destructuringDefault.toSourceNode expression: true}"

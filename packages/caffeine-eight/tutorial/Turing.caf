@@ -1,0 +1,79 @@
+import &ArtStandardLib
+
+class Turing extends &CaffeineEight.Parser
+
+  @rule
+    root:
+      :statements
+      evaluate: ->
+        @parser.turingStore ?= {}
+        out = @statements.evaluate()
+        log store: @parser.turingStore
+        out
+
+    statements:
+      "" _expression+ _?
+      evaluate: ->
+        last = null
+        each expression in @_expressions
+          last = expression.evaluate()
+
+        last ? 0
+
+    _expression:
+      "" _? expression
+      evaluate: -> @expression.evaluate()
+
+    expression:
+      :ifExpression
+      :whileExpression
+      :operatorExpression
+      :setExpression
+      :getExpression
+      :value
+      evaluate: -> @matches[0].evaluate()
+
+    ifExpression:
+      "" 'if' test:statements 'then' body:statements 'else' elseBody:statements 'end'
+      "" 'if' test:statements 'then' body:statements 'end'
+      evaluate: ->
+        if @test.evaluate() != 0
+              @body.evaluate() ? 0
+        else  @elseBody?.evaluate() ? 0
+
+    whileExpression:
+      "" 'while' test:statements 'do' body:statements 'end'
+      evaluate: ->
+        while @test.evaluate() != 0
+          @body.evaluate()
+        ? 0
+
+    operatorExpression:
+      "" operator left:_expression right:_expression
+      evaluate: ->
+        v = eval "#{@left.evaluate()} #{@operator} #{@right.evaluate()}"
+        switch
+        when v is Number then v
+        when v is true   then 1
+        else 0
+
+    setExpression:
+      "" address _? '=' value:_expression
+      evaluate: -> @parser.turingStore[@address.getAddress()] = @value.evaluate()
+
+    getExpression:
+      "" address
+      evaluate: -> @parser.turingStore[@address.getAddress()]
+
+    address:
+      "" '[' index:statements ']'
+      "" variable
+      getAddress: -> [@variable ? @index.evaluate() | 0]
+
+    value:
+      /[-]?[0-9]+/
+      evaluate: -> eval @toString()
+
+    variable: ///i (?!(if|while|else|end|do|then)\b) [_a-z] \w*
+    operator: ///  <= | >= | == | && | \|\| | [ - + * / < > ]
+    _:        ///  (\ |\n|$) [\n\ ]*

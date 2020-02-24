@@ -1,0 +1,73 @@
+import &StandardImport, &Lib
+
+class StatementsStn extends &BaseStn
+
+  toSourceNode: (options)->
+    {returnAction, generateStatements, expression, classBody, parentIsStatements} = options if options
+    generateStatements ?= !expression
+    # generateStatements ?= expression ? true
+
+    out = @createSourceNode
+      if expression
+        switch @children.length
+        when 0 then !generateStatements && "undefined"
+        when 1 then @children[0].toSourceNode options
+        else
+          []
+            "("
+            @_getChildrenSourceNodes null, false
+            ")"
+      else
+        @_getChildrenSourceNodes returnAction, generateStatements, classBody, parentIsStatements
+
+    out
+
+  toSourceNodeWithCustomChildren: (children, options) ->
+    oldChildren = @children
+    @children = children
+    out = @toSourceNode options
+    @children = oldChildren
+    out
+
+  @getter
+    statements: -> @children
+    compileTimeValue: ->
+      if @children.length == 1
+        @children[0].compileTimeValue
+
+  ###########
+    PRIVATE
+
+  _getChildrenSourceNodes: (returnAction, generateStatements = true, classBody, parentIsStatements)->
+    returnAction = switch returnAction
+      when true then returnAction = :return
+      when false then null
+      else returnAction
+
+    array c, i in lines = @children into out = []
+      if i > 0
+        out.push if generateStatements then "; " else ", "
+
+      a = if returnAction? && i == lines.length - 1
+        if !c.jsExpressionUsesReturn
+          childExpression = c.toSourceNode expression: true
+
+          if c.type == :ReturnStatement || c.type == :BreakStatement
+            childExpression
+          else if returnAction.length > 0
+            [] returnAction, " ", childExpression
+          else
+            childExpression
+        else
+          # this path doesn't appear to be used
+          throw new Error "what uses this conditional branch?"
+          c.toSourceNode generateReturnStatement: true
+
+      else
+        if generateStatements
+          c.toSourceNode statement: !classBody, generateStatements: true, parentIsStatements: true
+        else
+          c.toSourceNode expression: true, returnValueIsIgnored: i < lines.length - 1
+      a
+    out.push ";" if generateStatements && !parentIsStatements
+    out

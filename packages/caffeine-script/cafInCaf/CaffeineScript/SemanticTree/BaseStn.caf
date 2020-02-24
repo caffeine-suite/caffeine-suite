@@ -1,0 +1,399 @@
+import &StandardImport, &ArtObjectTreeFactory, &CaffeineSourceMap, &ArtBinary
+
+##
+  TODO:
+    I want all Stn constructors to only accept an object.
+    All children are labeled children.
+    Pros
+    - Positional is so fragile.
+    - Property values can be children or arrays of children (for unbounded lists, where order matters)
+    - It'll be much easier for writing code that generates Stns
+    Cons
+    - this refactor is going to be a bear!
+    - code-gen will be slightly more verbose
+
+class BaseStn extends BaseClass
+  ################################################
+    Could go in CaffeineEight standard BaseStn
+  ################################################
+
+  @abstractClass()
+
+  ###
+    IN:
+      props should be a plain-object-structure with an object as the root
+      children should be a compatoJsParenExpressionct, flat array of Stns
+
+    TODO: I'd like to make setting the parseTreeNode cleaner.
+  constructor: (props, @children = [], @pretransformedStn, parseTreeNode) ->
+    super
+    @parseTreeNode = @pretransformedStn?.parseTreeNode ? parseTreeNode ? props.parseTreeNode
+    # throw new Error "no @parseTreeNode (#{@type})" unless @parseTreeNode
+    @pretransformedStn ||= @
+    @_props = objectWithout props, "parseTreeNode"
+
+    try
+      # log "--- #{@parseTreeNode?.offset} --- #{@parseTreeNode}"
+      @_sourceIndex ?= @pretransformedStn?.sourceIndex ? @parseTreeNode?.absoluteOffset
+    catch e
+      log sourceIndexFailure: {@parseTreeNode}
+      throw e
+
+    @initLabeledChildren()
+
+  @setter :parseTreeNode
+  @getter
+    props: -> @_props ?= {}
+    compileTimeValue: -> undefined
+    parseTreeNode: -> @_parseTreeNode ? @parent?.parseTreeNode
+
+  initLabeledChildren: ->
+    @labeledChildren = @children && {}
+    each child in @children
+      child.parent = @
+      {label, pluralLabel} = child
+      @labeledChildren[label] = child
+      if pluralLabel
+        (@labeledChildren[pluralLabel] ||= []).push child
+
+  getInspectedProps: ->
+    objectWithout @props, "label", "pluralLabel"
+
+  @getter
+    sourceOffset: -> @parseTreeNode.offset
+    parser:       -> @parseTreeNode.parser.rootParser
+    sourceFile:   -> @parser.sourceFile
+    label:        -> @props.label
+    pluralLabel:  -> @props.pluralLabel
+    root:         -> @parent?.root ? @
+
+    inspectedObjects: ->
+      {label} = @
+
+      props = @getInspectedProps()
+      name = @class.getName()
+      name = "#{label}.#{name}" if label
+
+      "#{name}":
+        if @children.length == 0
+          toInspectedObjects props
+        else
+          a = []
+          a.push props if objectKeyCount(props) > 0
+          a.concat array c in @children with c.inspectedObjects
+
+    type: -> @class.type
+
+  @postCreate: ->
+    s = @getName().split /Stn$/
+    @type = s[0]
+    super
+
+  # so subclasses can add custom newInstance implementations
+  @newInstance: (props, children) ->
+    new @ props, children
+
+  ##
+    TODO: make props pure-functional everywhere;
+      then we can use:
+
+      emptyProps = {}
+
+    Right now props are mutated (somewhere), so this
+    breaks things.
+
+    This is both a performance and "good code" thing.
+
+    npm run bench suggests emptyChildren improved overall compile
+    speed by 5%!
+
+  emptyProps = {}
+  emptyChildren = []
+  @postCreateConcreteClass: (options)->
+    {classModuleState, hotReloadEnabled} = options
+    super
+    &StnRegistry.register createObjectTreeFactory
+      class: @
+      (props, children) ->
+
+        @newInstance props ? {}, children ? emptyChildren
+
+  findParent: (stnTypePattern) ->
+    {parent} = @
+    found = null
+    while parent && !found
+      if parent.type.match stnTypePattern
+        found = parent
+      else
+        {parent} = parent
+    found
+
+    ## TODO - with "tap", this is just:
+      {parent} = @
+      while parent
+        if parent.type.match stnTypePattern
+          parent tap parent = null
+        else
+          parent extract parent
+
+      # - with "return", this is just:
+      {parent} = @
+      while parent
+        if parent.type.match stnTypePattern
+          return parent
+        else
+          parent extract parent
+
+      # recursion:
+      if parent.type.match stnTypePattern
+        parent
+      else
+        parent.findParent stnTypePattern
+
+  ##
+    OUT:
+      null: if no matches
+      [...]: array of matches if 1 or more
+
+    IN:
+      stnTypePattern: regexp pattern
+        Tests each child's 'type'
+
+      stnTypeStopPattern: regexp (optional)
+        prevents recursing into children that match this pattern
+
+  find: (stnTypePattern, stnTypeStopPattern, _foundList = []) ->
+    each child in @children
+      if stnTypePattern.test child.type
+        _foundList.push child
+      else unless stnTypeStopPattern?.test child.type
+        child.find stnTypePattern, stnTypeStopPattern, _foundList
+
+    if _foundList.length == 0
+      null
+    else
+      _foundList
+
+  ############################################
+    Unique to CafScript
+  ############################################
+
+  ##########################
+    NEW CODE GENERATION
+  ##########################
+    New code-gen generates "SourceNodes" from the 'source-map' npm.
+
+    https://www.npmjs.com/package/source-map
+
+  sourceNodeLineColumnScratch = {}
+
+  @property :sourceIndex
+  @getter
+    source: -> @parseTreeNode.parser.source
+
+    sourceLineColumn: ->
+      @parseTreeNode.parser.getLineColumn @sourceIndex, sourceNodeLineColumnScratch
+
+  @getter
+    sourceFile: -> @parseTreeNode?.sourceFile ? "caffeine-script"
+
+  createSourceNode: (children...) ->
+    # log createSourceNode: {@type, @sourceIndex, offset: @parseTreeNode?.absoluteOffset,children}
+    new SourceNode @sourceIndex, children
+
+  ###
+    IN: options:
+      expression: t/f
+        if true, return JS for an expression
+
+      statement: t/f
+        true: is used as a statement
+
+      dotBase: t/f
+        true: is used as the base for a "." or "[]" accessor.
+
+      returnValueIsIgnored: t/f
+        if true and expression is true, still return
+        an expression, but it's OK to streamline since the
+        return-value is ignored.
+
+        This is for use in expressiong-statement-lists: (expressionStatement1, es2, es3)
+        JavaScript requires they be expressions, but it ignores the return value of all
+        but the last one in the list, in this example, "es3".
+
+      noParens: if true, indicates the parent is already going to wrap
+        this in parens, so don't add our own.
+
+      # see DestructuringAssignmentStn
+      restructuring:
+      restructuringStart:
+
+      # see binary operators
+      subExpression: t/f
+      parentOperatorPrecidence: number
+      isLeftOperand: t/f
+
+  toSourceNode: (options) ->
+    throw new Error "toSourceNode not overridden in #{@class.name}. Falling back to old toJs()."
+    # @createSourceNode @toJs options
+
+  ##
+    options:
+      module:     t/f - generate module-rapper code or not
+      inlineMap:  t/f - return js with inline source-Map at the end
+      sourceMap:  t/f - return {} js, sourceMap
+      filename:   override parser.sourceFile (for inlineMap generation)
+
+    OUT:
+      js:         string
+      sourceMap:  string
+
+  toJsUsingSourceNode: (options = {}) ->
+    {debug, inlineMap, source = @source, sourceMap, sourceRoot, sourceFile = @sourceFile} = options
+    sourceNode = @toSourceNode options
+
+    out = compiled: if inlineMap || sourceMap
+      {js, sourceMap} =
+        sourceNode
+        .generate
+          source
+          {} sourceFile, sourceRoot, inlineMap
+
+    else
+      js: sourceNode.toString()
+
+    out.sourceNode = sourceNode if debug
+    if props = sourceNode.mergedProps
+      out.props = props
+    out
+
+
+  childrenToSourceNodes: (joiner, options)->
+    @stnArrayToSourceNodes @children, joiner, options
+
+  stnArrayToSourceNodes: (stnArray, joiner, options) ->
+    array c, i in stnArray into out = []
+      if joiner? && i > 0
+        out.push joiner
+      c.toSourceNode options
+
+  doSourceNode: (body...) ->
+    @createSourceNode
+      "(() => {"
+      body
+      "})()"
+
+  toInterpolatedBodySourceNode: ->
+    []
+      "${Caf.toString("
+      @toSourceNode expression: true
+      ")}"
+
+  ##########################
+  ### TRANSFORM
+  ##########################
+  ##
+    TODO: this is getting out of hand! We need to convert
+    the whole SematicTree system over to ONLY using labeled children.
+
+    In fact, CaffeineEight should probably strongly discourage using the "@matches"
+    list.
+
+    Labeled children can either be singles or arrays - if more than one child
+    has the same label.
+
+    Labels from CaffeineEight should be explicit labels, if there are any, OR
+    the rule's name. I think right now we have a 'contextual' aspect which is
+    just confusing - if any node in a chain of nodes has a label, that's what
+    is used for the label for that branch.
+
+    We should also refactor BaseStn so that transform ALWAYS
+    transforms children first, then, optionally, the transform override is called,
+    after the children are 'normalized.'
+
+    Rethinking transform:
+
+      I think I want two node-types: 'macros' and 'standard'
+
+      standard: can output JS and are more-or-less 1:1 with JS.
+        Auto-lets will probably still be managed by standard-nodes,
+        but otherwise, the output-JS requires no other preprocessing.
+
+        These nodes do not have a 'transform' method.
+
+      macros:
+        These nodes cannot generate JS, but they can transform themselves
+        into 'standard' nodes.
+
+        Macro nodes expect their children to be standard nodes when
+        their transform-method is called.
+
+  transformChildren: ->
+    ret = null
+    each child, i in @children
+      if child != newChild = child.transform()
+        ret ?= @children.slice()
+        newChild.props.label = child.label
+        ret[i] = newChild
+    ret || @children
+
+  # transform after children have been transformed
+  postTransform: -> @
+
+  ##
+    Called before transforming children.
+
+    Should ONLY be used to ADD props to this node or its children.
+
+    Use this if the children need additional information to properly transform themselves.
+
+    Example:
+      ClassStn uses this to notify the constructor funcitonDefinitionStn
+      that it is, indead, a constructor.
+  decorate: ->
+
+  newTransformedInstance: (newProps, newChildren) ->
+    new @class newProps, newChildren, @
+
+  transform: ->
+    @decorate()
+    if @children != newChildren = @transformChildren()
+      @newTransformedInstance @props, newChildren
+    else
+      @
+    .postTransform()
+    .setDefaultParseTreeNode @parseTreeNode
+
+  setDefaultParseTreeNode: (parseTreeNode)->
+    unless @parseTreeNode
+      @parseTreeNode = parseTreeNode
+      each child in @children
+        child.setDefaultParseTreeNode parseTreeNode
+    @
+
+  ##########################
+    VALIDATION
+  ##########################
+  validate: ->
+
+  validateAll: ->
+    try
+      @validate()
+    catch e
+      ce = @parseTreeNode.parser.generateCompileError {}
+        failureIndex: @sourceOffset
+        errorType:    :Validation
+        e.message
+        e.info
+
+      ce.stack = e.stack
+      throw ce
+
+    each child in @children do child.validateAll()
+    @
+
+  ##########################
+    SCOPE
+  ##########################
+  updateScope: (@scope, options) ->
+    each child in @children do child.updateScope @scope, options

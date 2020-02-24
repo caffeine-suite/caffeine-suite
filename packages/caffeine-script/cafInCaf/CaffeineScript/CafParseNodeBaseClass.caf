@@ -1,0 +1,65 @@
+import &StandardImport, &CaffeineEight, &StnRegistry
+
+StnRegistry = &StnRegistry
+
+class CafParseNodeBaseClass extends Nodes.Node
+
+  @_createSubclassBase: ->
+    class NodeSubclass extends @
+
+  getMatchStns: ->
+    stn = null
+    array m from @matches when stn = m.getStn?() with stn
+
+  getStnFactory: ->
+    StnRegistry.get @stnFactory
+
+  getStnChildren: (left) ->
+    if @stnChildren
+      if isFunction @stnChildren
+        @stnChildren()
+      else
+        @stnChildren
+    else
+      stn = null
+      array m in @nonStnExtensionMatches when stn = m.getStn left with stn
+
+  @getter
+    isStnExtension:         -> @stnExtension || @presentMatches[0]?.isStnExtension
+    stnExtensionMatches:    -> array m in @presentMatches when m.getStn && m.isStnExtension
+    nonStnExtensionMatches: -> array m in @presentMatches when m.getStn && !m.isStnExtension
+
+  getStn: (left) ->
+    stn = if factory = @getStnFactory()
+      new factory.class
+        merge
+          @stnProps?() || @stnProps
+        compactFlattenAllFast
+          left
+          @getStnChildren()
+        null
+        @
+
+    else
+      x = @getStnChildren left
+
+      if x.length == 1 then x[0] else if x.length == 0 then left else x
+
+    each extension in @stnExtensionMatches
+      {sourceIndex} = stn
+      stn = extension.getStn stn
+      stn.sourceIndex = sourceIndex
+
+    if stn?.props
+      currentStnLabel = stn.props.label
+      if !currentStnLabel || @label
+        stn.props.label = @label || @ruleName
+        stn.props.pluralLabel = @pluralLabel || @pluralRuleName
+
+    if @isRoot
+      RootStn stn, parseTreeNode: @
+    else
+      stn
+
+  getTransformedSemanticTree: ->
+    @getStn().transform()

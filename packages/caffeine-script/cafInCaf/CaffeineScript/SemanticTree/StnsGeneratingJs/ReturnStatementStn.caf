@@ -1,0 +1,20 @@
+import &StandardImport
+
+class ReturnStatementStn extends &BaseStn
+
+  validate: ->
+    p = @findParent /^(Class|Comprehension|FunctionDefinition)$/
+    while p && p.type == :Comprehension && p.getGeneratesInlineIteration()
+      p = p.findParent /^(Class|Comprehension|FunctionDefinition)$/
+
+    if !p? then throw new Error "'return' not allowed in root context."
+    else if p.type != :FunctionDefinition
+      throw new Error "'return' must be inside a function context and NOT inside certain comprehesions (any without an 'in/from-array' or 'in/from-object' clause)"
+
+  toSourceNode: ->
+    @createSourceNode
+      if @children[0]
+        []
+          "return "
+          @children[0].toSourceNode()
+      else :return

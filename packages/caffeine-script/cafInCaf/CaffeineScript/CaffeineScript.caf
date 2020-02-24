@@ -1,0 +1,86 @@
+import &ArtStandardLib
+
+&SemanticTree
+
+version: require('../../package.json').version
+
+###
+  IN:
+    source: source-code string
+
+    options:
+      debug:      t/f
+        if there is an error, return max details in error.info
+
+      sourceMap:  t/f
+        Generate source map. Changes OUTput, see below
+
+      inlineMap:  t/f
+        output the source map as a base64-encoded string in a comment at the bottom.
+
+      sourceFile:   (string)
+        source file-name
+        (used by &requires and sourceMap generation)
+
+      sourceRoot:   (string)
+        source file project's root folder
+        (used by &requires)
+
+      bare:       t/f
+        If set, don't generate module-specific code.
+
+      NOTE: options is also passed to the parser
+
+  OUT:
+    compiled:
+      js: (string)
+        js-code
+        if options.inlineMap, sourceMap is appended
+
+      sourceMap:
+        set if options.sourceMap
+
+    All sourceMaps are v3. See:
+      https://www.npmjs.com/package/source-map
+      https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit
+
+compile: (source, options = {}) ->
+  try
+    {bare, inlineMap, sourceMap, sourceFile, sourceRoot} = options
+
+    transformedStn =
+      stn =
+        parseTree = &CaffeineScriptParser.parse source, options
+        .getStn()
+      .validateAll()
+      .transform()
+
+    transformedStn.toJsUsingSourceNode  {}
+      module:     !bare
+      bare
+      inlineMap
+      sourceMap
+      sourceFile
+      sourceRoot
+
+  catch e
+    unless e.location? || e.sourceFile? || e.message.match /parse|expect/i
+      log.error CaffeineScriptBETA: {}
+        message:
+          """
+            Uh-oh! There was an internal error compiling your file. We'd love to fix it. Could you submit an issue with a copy of the code that won't compile?
+
+            Submit issues here: https://github.com/caffeine-suite/caffeine-script/issues
+
+            Sorry for the inconvenience. Thank you so much for trying CaffeineScript!
+
+        options
+        parseTree
+        stn
+        transformedStn
+
+    if options.debug
+      e.info ?= {}
+      mergeInto e.info, {options, parseTree, stn, transformedStn}
+
+    throw e
