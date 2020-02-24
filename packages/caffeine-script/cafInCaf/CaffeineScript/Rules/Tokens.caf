@@ -1,0 +1,297 @@
+##
+  Note that "_" in rule-names is used consistently to indicate one or more spaces will be matched before or after the rule or both.
+  Most rules (rules with no "_" suffix or prefix) do not consume spaces before or after themselves.
+
+->
+  @rule
+    _equals_:       /\ *= */
+    _colon_:        /: *| +:( +|(?=\n))/
+    # _colon_:        /\ *: */
+    _comma_:        /\ *, */
+    _comma_optionalNewLine:        /\ *, *\n*/
+    optionalComma:  /\ *, *\n*|\ */
+    _arrow:         /\ *[-~=]>/
+
+    openParen_:     /\( */
+    _closeParen:    /\ *\)/
+
+    openBracket_:   /\[ *(\n*(?!\s))?/
+    _closeBracket:  /[ \n]*\]/
+
+    openCurly_:     /\{ */
+    _closeCurly:    /\ *\}/
+    _else:          /(( *\n)+| +)else/
+    ellipsis:       "'...'" # etc
+
+    reservedWord:
+      ///
+        (
+
+        ### Modules
+
+        import
+
+        ### Constants
+
+        | true
+        | false
+        | null
+        | undefined
+
+        ### Untranslated JavaScript Globals
+
+        | global
+        | require
+        | module
+        | eval
+        | __dirname
+        | __filename
+
+        ### Object Oriented
+
+        | super
+        | class
+        | new
+        | this
+        | delete
+
+        ### Introspection
+
+        | instanceof
+        | is
+        | isnt
+
+        ### Control Structurs
+
+        | switch
+        | when
+        | then
+        | else
+        | if
+        | until
+        | while
+        | unless
+
+        ### Comprehensions
+
+        | array
+        | each
+        | find
+        | object
+        | from | in
+        | with | do
+        | into | returning
+        | with-key
+        | to | by | til
+
+        ### Error Handling
+
+        | try
+        | catch
+        | finally
+        | throw
+
+        ### Logic
+
+        | and
+        | or
+        | not
+
+        ### Destructuring
+
+        | extract | as
+
+        ### Reserved but not Used (from CoffeeScript)
+
+        | for
+        | return
+        | break
+        | of
+        | yes | on
+        | no | off
+        | typeof
+
+        ### Reserved but not Used (from JavaScript)
+
+        | #{&JavaScriptReservedWordList.join '|'}
+
+        ### Reserved but not Used (future CaffeineScript)
+
+        | reduce | inject
+        | promise | await
+        | short | skip
+        | mixin | tap
+
+        )
+
+        # dashed-name-extensions to reserved-words are... reserved
+        (-[a-z]+)*
+
+        \b
+
+        (?![-])
+
+    identifier:
+      ///
+        (?!\d)
+        ( (?!\s) [$\w\u007f-\uffff] )+
+
+      stnFactory: :IdentifierStn
+      stnProps: ~> identifier: @toString()
+
+    # identifiers plus "-" and "/"
+    pathedRequire:
+      ///
+        ( (?!\s) [-\/$\w\u007f-\uffff] )+
+
+    ##
+      SBD Aug2019: I'm coming to these conclusions:
+      - all except: space, comma, [], (), {}, ;
+        - we could allow [ ( { in most places,
+          but for consistency sake, all brackets
+          must be excaped in unquoted strings.
+
+      USES:
+        :wordStrings    # start with ':', which is ignored in the output string
+        #hashStrings    # start with '#', which is included in the output string
+        propNames: 123  # end with ':',   which is ignored in the output string
+
+      EXCEPTIONS:
+        - propNames: cannot START with a quote (' " `) or escape (\)
+
+        - No double start characters: the first two characters must be different
+          - ## is a comment, not the #hashString "##"
+          - :: is illegal (for now), not the :wordString ":"
+
+      - escaping:       YES
+      - interpolation:  YES (WIP)
+
+    unquotedStringCharacter: unquotedStringCharacter =
+      ///
+        (?:
+
+        (?!     # don't match interpolation here
+          \#
+          \{
+        )
+
+        (?:
+          [^ \s \0-\x20 \x7f ; , () [ \] {} \\ ]
+          |
+          \\ .  # escapes automatically consume next character
+        )
+
+        )
+
+    unquotedString:
+      ///
+        (?:
+
+        #{unquotedStringCharacter.source}
+
+        )+
+
+    unquotedStringWithoutTrailingColon:
+      ///
+        (?:
+
+        (?![:])
+
+        #{unquotedStringCharacter.source}
+
+        |
+
+        : #{unquotedStringCharacter.source}
+
+        )+
+
+    unquotedPropNameToken:
+      ///
+        (?:
+
+        (?![ : ' " ` \\ ])
+
+        #{unquotedStringCharacter.source}
+
+        (?:
+          (?![ : ])
+          # Colons are actually allowed, but they are
+          # matched in the propName rule.
+
+          # (they cannot be consumed here in case they are
+          # the final colon)
+
+          #{unquotedStringCharacter.source}
+        )*
+
+        )
+
+    unaryTailOperator:  /// \?
+    unaryOperator_:
+      ///
+        ([!~] | not\b | delete\b) \ *
+
+        |
+
+        -(?![- :])
+
+    binaryOperator:
+      ///
+
+        # js logic
+        && | \|\| | &(?=\s) | \| | \^ |
+
+        # cs logic
+        \? |
+
+        # cs english logic
+        # is && isnt are no longer supported - in anticipation of probable semantic change to typeof-replacements
+        ((and | or | in | is | isnt | instanceof)\b) |
+
+        # shift
+        << | >>> | >> |
+
+        # comparison
+        == | != | <= | >= | < | > |
+
+        # cs math
+        // | %% | \*\* |
+
+        # js math
+        [-+*/%]
+
+    assignmentOperator: assignmentOperator =
+      ///
+        ( # copy of binaryOperatorRegEx EXCEPT comparison operators
+          # js logic
+          && | \|\| | & | \| | \^ |
+
+          # cs logic
+          \? |
+
+          # cs english logic
+          ((and | or | isnt | is | in)\b) |
+
+          # shift
+          << | >>> | >> |
+
+          # comparison
+          # == | != | <= | >= | < | > |
+
+          # cs math
+          // | %% | \*\* |
+
+          # js math
+          [-+*/%]
+        )?
+        =
+        # \ *
+
+    new: /new\b/
+    throw: /throw\b/
+
+  @rule
+
+    dot: /\./
+    questionMark: /\?/
+    {} stnFactory: :SemanticTokenStn

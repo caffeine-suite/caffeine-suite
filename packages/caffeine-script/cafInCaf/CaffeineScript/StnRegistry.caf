@@ -1,0 +1,14 @@
+import &ArtStandardLib, &ArtClassSystem
+
+class StnRegistry extends BaseClass
+
+  @register: (stn) ->
+    @[stn.class.getName()] = stn
+
+  @get: (stnFactoryName) ->
+    if isFunction stnFactoryName
+      stnFactoryName
+    else if isString stnFactoryName
+      unless out = @[stnFactoryName]
+        throw new Error "stnFactoryName not found: #{formattedInspect stnFactoryName}"
+      out

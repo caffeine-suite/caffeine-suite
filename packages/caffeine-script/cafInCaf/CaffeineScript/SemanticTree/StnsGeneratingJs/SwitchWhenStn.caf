@@ -1,0 +1,29 @@
+import &StandardImport
+
+class SwitchWhenStn extends &BaseStn
+
+  toSourceNode: (options)->
+    {falsifyCases, returnAction} = options
+    {whenValue, thenDo} = @labeledChildren
+
+    @createSourceNode
+      if falsifyCases then "case !" else "case "
+      if whenValue.implicitArray
+        @stnArrayToSourceNodes
+          whenValue.children
+          if falsifyCases
+            ': case !'
+          else
+            ': case '
+          dotBase: falsifyCases
+
+      else
+        []
+          whenValue.toSourceNode dotBase: falsifyCases
+
+      ": "
+
+      if thenDo
+        thenDo.toSourceNode {returnAction}
+      else
+        :undefined

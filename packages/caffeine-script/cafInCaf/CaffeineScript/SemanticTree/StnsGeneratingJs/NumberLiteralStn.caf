@@ -1,0 +1,20 @@
+import &StandardImport
+
+class NumberLiteralStn extends &BaseStn
+
+  toSourceNode: (options) ->
+    {value} = @props
+
+    @createSourceNode
+      if options?.dotBase
+        []
+          "("
+          "#{value}"
+          ")"
+      else
+        "#{value}"
+
+  @getter
+    propName: -> @props.value
+    canBeUsedInES6Structuring: -> true
+    compileTimeValue: -> parseFloat @props.value

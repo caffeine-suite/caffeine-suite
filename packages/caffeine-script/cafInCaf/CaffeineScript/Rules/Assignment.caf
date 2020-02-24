@@ -1,0 +1,13 @@
+import &StandardImport, &CaffeineEight
+
+->
+  @rule
+    assignmentExtension:
+      "_? assignmentOperator singleValueOrImplicitArray"
+
+    {}
+      stnFactory:   :AssignmentStn
+      stnExtension: true
+      stnProps: ~>
+        rawOp = @assignmentOperator.toString()
+        operator: (match = rawOp.match /(\S*)=/) && match[1]

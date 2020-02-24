@@ -1,0 +1,37 @@
+import &StandardImport, &Lib
+
+class RegExpStn extends &BaseStn
+
+  toSourceNode: ->
+    {value, modifiers} = @props
+
+    childrenNodes = if @children?.length > 0
+      hasInterpolation = find child in @children with !isString child.props.value
+      array child in @children
+        if isString v = child.props.value
+          if hasInterpolation
+            v.replace /([`$\\])/g, "\\$1"
+          else
+            v
+        else
+          child.toInterpolatedBodySourceNode()
+
+    else
+      value
+
+    if !childrenNodes || childrenNodes.length == 0
+      @createSourceNode "/(?:)/"
+    else if hasInterpolation
+      @createSourceNode
+        "RegExp(`"
+        childrenNodes
+        "`"
+        ", '", modifiers, "'" if modifiers
+        ")"
+    else
+      @createSourceNode
+        "/"
+        childrenNodes
+        "/"
+        modifiers
+

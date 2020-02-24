@@ -1,0 +1,274 @@
+import &StandardImport
+
+UniqueIdentifierHandle = &UniqueIdentifierHandle
+
+(toExtend) -> class ScopeStnMixin extends toExtend
+  @abstractClass()
+  @normalizePerferredName: normalizePerferredName = (preferredName = "temp") -> preferredName
+    # lowerCamelCase if preferredName.match /^caf/i
+    #   preferredName
+    # else
+    #   "caf #{preferredName}"
+
+  constructor: ->
+    super
+    @_uniqueIdentifierHandles =
+    @_boundUniqueIdentifiers =
+
+    @_identifiersUsedButNotAssigned =
+    @_argumentNames =
+    @_identifiersUsed =
+    @_identifiersAssigned =
+    @_childScopes =
+    @_identifiersInScope = null
+
+    @_scopeUpdated = false
+
+  @getter
+    childScopes:         -> @_childScopes ||= []
+
+    argumentNames:       -> @_argumentNames ||= {}
+    identifiersUsed:     -> @_identifiersUsed ||= {}
+    identifiersAssigned: -> @_identifiersAssigned ||= {}
+    identifiersInScope:  -> @_identifiersInScope ||= {}
+
+  getInspectedProps: ->
+    merge
+      super
+      scope: merge {}
+        @argumentNames
+        @identifiersUsed
+        @identifiersAssigned
+        @identifiersInScope
+
+
+  addExplicitlyDeclared: addExplicitlyDeclared = (identifier) ->
+    @identifiersInScope[identifier] = true
+    @argumentNames[identifier] = true
+
+  addIdentifierUsed: (identifier)->
+    throw new Error "bindUniqueIdentifier must be called AFTER all calls to addIdentifierUsed" if @_boundUniqueIdentifiers
+    @identifiersInScope[identifier] = true
+    @identifiersUsed[identifier] = true
+
+  addIdentifierLet: (identifier) ->
+    if identifier
+      @addExplicitlyDeclared identifier
+
+  addIdentifierAssigned: (identifier, initializer, insideLet)->
+    if identifier
+      if insideLet
+        @addIdentifierLet identifier
+      else
+        throw new Error "bindUniqueIdentifier must be called AFTER all calls to addIdentifierAssigned" if @_boundUniqueIdentifiers
+        @identifiersInScope[identifier] = true
+        @identifiersAssigned[identifier] = initializer || true
+
+  @getter
+    # call during toJs
+    uniqueIdentifier: (preferredName) ->
+      @getUniqueIdentifierHandle(preferredName).identifier
+
+    # call during transform
+    uniqueIdentifierHandle: (preferredName, addToLets) ->
+      preferredName = normalizePerferredName preferredName
+      @addUniqueIdentifierHandle new UniqueIdentifierHandle preferredName, addToLets
+
+  addUniqueIdentifierHandle: (uih) ->
+    unless uih.scope
+      uih.scope = @
+      @uniqueIdentifierHandles.push uih
+      uih
+
+  # must be called after all calls to addIdentifierAssigned && addIdentifierUsed
+  bindUniqueIdentifier: (preferredName, uniqueIdentifierHandle, addToLets = true) ->
+    preferredName = normalizePerferredName preferredName
+    identifier = @getAvailableIdentifierName preferredName
+    @boundUniqueIdentifiers[identifier] = uniqueIdentifierHandle
+    @identifiersInScope[identifier] = true
+    @identifiersAssigned[identifier] = true if addToLets
+    identifier
+
+  requireScopeUpdated: ->
+    unless @_scopeUpdated
+      throw new Error "Scope must be fully updated. #{@className}"
+
+  getAvailableIdentifierName: (preferredName) ->
+    preferredName = normalizePerferredName preferredName
+    @requireScopeUpdated()
+    blockedIndentifiers = @identifiersInSelfParentAndChildScopes
+    unless blockedIndentifiers[preferredName]
+      preferredName
+    else
+      count = 0
+      name while blockedIndentifiers[name = "#{preferredName}#{count+=1}"]
+      name
+
+  addChildScope: (child) ->
+    unless child == @
+      @childScopes.push child
+
+  bindAllUniqueIdentifiersRequested: ->
+    if @_uniqueIdentifierHandles
+      each uniqueIdentifierHandle in @_uniqueIdentifierHandles
+        uniqueIdentifierHandle.identifier
+
+  getSourceNodeForAutoLetsWithStatements: (statementsStn, toSourceNodeOptions) ->
+    toSourceNodeOptions extract? returnAction
+
+    ##
+      This isn't quite ready for prime-time yet. The problem is
+      we need to detect if the rValue of the assign has dependencies on
+      variables we haven't let yet.
+
+      Ex: while a do b = c; c = 0
+        Bad code, I know, but it should generate legal JS:
+          while (a) {let b, c; b = c; c = 0;}
+
+      Another special case problem: while a do b = c = 0
+
+      if (statementsStn extract statements)[0]?.type == :Assignment && @haveAutoLets
+        autoLetIdentifiers = object @requiredIdentifierLets with true
+        assignedAutoLetStns = []
+        find statement, i in statements
+          statement extract type, propName
+          if type == :Assignment && autoLetIdentifiers[propName] && (!returnAction || i < statements.length - 1)
+            assignedAutoLetStns.push statement
+            autoLetIdentifiers[propName] = false
+            false
+          else true # 'found' a non-match; stop
+
+    if false # 0 < numAssignsConsumed = assignedAutoLetStns?.length
+      # letSourceNodes =
+      #   array v, k in autoLetIdentifiers when v with k into
+      #     array v in assignedAutoLetStns with v.toSourceNode()
+
+      # []
+      #   "let "
+
+      #   array letSourceNode, i in letSourceNodes into out = []
+      #     out.push ', ' if i > 0
+      #     letSourceNode
+
+      #   if statements.length - numAssignsConsumed > 0
+      #     []
+      #       "; "
+      #       statementsStn.toSourceNodeWithCustomChildren
+      #         statements.slice numAssignsConsumed, statementsStn.length
+      #         toSourceNodeOptions
+      #   else
+      #     ";"
+
+    else
+      []
+        @autoLetsForSourceNode
+        statementsStn.toSourceNode toSourceNodeOptions
+
+
+  @getter
+    autoLetsForSourceNode: -> lets + "; " if lets = @getAutoLets()
+
+    haveAutoLets: ->
+      @bindAllUniqueIdentifiersRequested()
+      @_identifiersAssigned && @requiredIdentifierLets.length > 0
+
+    autoLets: ->
+      @bindAllUniqueIdentifiersRequested()
+      if @_identifiersAssigned && (identifiers = @requiredIdentifierLets).length > 0
+        "let #{identifiers.join ', '}"
+
+  getBareInitializers: ->
+    @bindAllUniqueIdentifiersRequested()
+    if @_identifiersAssigned && (identifiers = @requiredIdentifierLets).length > 0
+      identifiers = array identifier from identifiers when identifier.match /=/
+      if identifiers.length > 0
+        "#{identifiers.join '; '}"
+
+  # return-value ignored
+  updateScope: (@scope)->
+    @bindAllUniqueIdentifiersRequested()
+    @scope.addChildScope @
+    each child in @getChildrenToUpdateScope() do child.updateScope @
+    @_scopeUpdated = true
+
+  generateImportMap: (map = {}, assignedInParentScope = @identifiersAssignedInParentScopes)->
+    assignedInThisOrParentScope = merge
+      assignedInParentScope
+      @_identifiersAssigned
+      @_argumentNames
+
+    object v, identifier from @_identifiersUsed into map when
+      !assignedInThisOrParentScope[identifier]
+
+    each childScope in @_childScopes when !childScope.isImports
+      childScope.generateImportMap map, assignedInThisOrParentScope
+
+    map
+
+  @getter
+    childrenToUpdateScope: -> @children
+
+    uniqueIdentifierHandles: -> @_uniqueIdentifierHandles ||= []
+
+    boundUniqueIdentifiers: ->
+      @_boundUniqueIdentifiers ||= {}
+
+    requiredIdentifierLets: ->
+      {identifiersAssignedInParentScopes} = @
+      array initializer, identifier from @identifiersAssigned when !identifiersAssignedInParentScopes || !identifiersAssignedInParentScopes[identifier]
+        if isString initializer
+          "#{identifier} = #{initializer}"
+        else if initializer.toJsExpression?
+          "#{identifier} = #{initializer.toJsExpression()}"
+        else
+          identifier
+
+
+    identifiersInParentScopes: (out = {})->
+      @ extract scope
+      while scope
+        mergeInto out, scope.identifiersInScope
+        scope = if scope.scope != scope then scope.scope else null
+
+      out
+
+    identifiersInChildScopes: (out = {})->
+      each childScope in @_childScopes into out
+        mergeInto out, childScope.identifiersInScope
+        childScope.getIdentifiersInChildScopes out
+
+    identifiersInSelfParentAndChildScopes: ->
+      @getIdentifiersInParentScopes @getIdentifiersInChildScopes merge @identifiersInScope
+
+    # includes parents
+    identifiersActiveInScope: ->
+      out = merge @_identifiersInScope
+      {scope} = @
+
+      notDone = true
+      while scope && notDone
+        mergeInto out, scope.identifiersAssigned
+        if scope == scope.scope
+          notDone = false
+        else
+          {scope} = scope
+
+      out
+
+    identifiersUsedInThisScopeButNotAssigned: ->
+      assigned = @identifiersAssignedInThisOrParentScopes
+      object v, k from @identifiersUsed when !assigned[k] with true
+
+    identifiersUsedButNotAssigned: ->
+      assigned = @identifiersAssignedInThisOrParentScopes
+      ret = object v, k from @identifiersUsed when !assigned[k] with true
+
+      each childScope in @_childScopes
+        mergeInto ret, childScope.identifiersUsedButNotAssigned
+
+      @_identifiersUsedButNotAssigned = ret
+
+    identifiersAssignedInThisOrParentScopes: -> merge @_argumentNames, @_identifiersAssigned, @identifiersAssignedInParentScopes
+    identifiersAssignedInParentScopes: ->
+      if @scope && @scope != @
+        merge @scope.identifiersAssignedInParentScopes, @scope._identifiersAssigned, @_argumentNames

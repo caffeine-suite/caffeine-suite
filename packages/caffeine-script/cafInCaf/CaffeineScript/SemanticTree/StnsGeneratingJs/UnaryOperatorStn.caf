@@ -1,0 +1,40 @@
+import &StandardImport
+
+class UnaryOperatorStn extends &BaseStn
+
+  @getter
+    normalizedOperand: ->
+      switch op = @props.operand
+        when "delete" then "delete "
+        # when "and" then "&&"
+        # when "or"  then "||"
+        # when "==", "is"   then "==="
+        # when "!=", "isnt" then "!=="
+        when "not" then "!"
+        when "?" then " != null"
+        else op
+
+    isJsNativeUnaryOperand: -> /^(not|[-!~])$/.test @props.operand
+
+  @getter
+    tail: -> @props.tail || @props.operand == "?"
+
+  toSourceNode: (options) ->
+    {dotBase, forUnaryOpeartor} = options if options
+
+    childNode = @children[0].toSourceNode
+      dotBase: true
+      forUnaryOpeartor: true
+      expression: true
+
+    base = if @tail
+      childNode, @normalizedOperand
+    else
+      @normalizedOperand, childNode
+
+    if dotBase &&
+        !forUnaryOpeartor or !@isJsNativeUnaryOperand
+      @createSourceNode "(", base, ")"
+
+    else
+      @createSourceNode base

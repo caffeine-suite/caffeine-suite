@@ -1,0 +1,11 @@
+import &StandardImport
+StnRegistry = &StnRegistry
+
+tagMacro:
+  pattern: '/</ identifier />/ actualToEolAndBlock'
+  getStnFactory: ~>
+    throw new Error "TagMacros are DEPRICATED"
+    # factoryName = upperCamelCase @identifier.text
+    # factory = StnRegistry[factoryName] || StnRegistry[factoryName + "Stn"]
+    # throw new Error "TagMacro: cannot find factory for: #{@identifier.text}" unless factory
+    # factory

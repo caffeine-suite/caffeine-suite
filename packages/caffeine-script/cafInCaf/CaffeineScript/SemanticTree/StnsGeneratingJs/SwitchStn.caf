@@ -1,0 +1,39 @@
+import &StandardImport
+
+class SwitchStn extends &BaseStn
+
+  toSourceNode: (options) ->
+    {expression} = options if options
+    {condition, switchWhens, switchElse} = @labeledChildren
+    falsifyCases = !condition
+
+    childOptions = {} falsifyCases, returnAction: expression
+
+    cases = array clause in switchWhens with clause.toSourceNode childOptions
+    if switchElse
+      cases.push []
+        "default: "
+        switchElse.toSourceNode childOptions
+
+    conditionSourceNode =
+      condition?.toSourceNode expression: true
+      ? "false"
+
+    if expression
+
+      @createSourceNode
+        "(() => {"
+        "switch ("
+        conditionSourceNode
+        ") {"
+        arrayBetweenEach cases, ' '
+        "}"
+        ";})()"
+
+    else
+      @createSourceNode
+        "switch ("
+        conditionSourceNode
+        ") {"
+        arrayBetweenEach cases, ' break; '
+        "}"

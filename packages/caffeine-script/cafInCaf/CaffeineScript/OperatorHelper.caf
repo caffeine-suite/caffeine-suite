@@ -1,0 +1,116 @@
+import &StandardImport
+
+class OperatorHelper
+  @CoffeeScriptGlobal: CoffeeScriptGlobal = "Caf"
+
+  @operatorMap:
+    **: (a, b)   -> "#{CoffeeScriptGlobal}.pow(#{a}, #{b})"
+    //: (a, b)   -> "#{CoffeeScriptGlobal}.div(#{a}, #{b})"
+    %%: (a, b)   -> "#{CoffeeScriptGlobal}.mod(#{a}, #{b})"
+    in: (a, b)   -> "#{CoffeeScriptGlobal}.in(#{a}, #{b})"
+    is: (a, b)   -> "#{CoffeeScriptGlobal}.is(#{a}, #{b})"
+    isnt: (a, b) -> "!#{CoffeeScriptGlobal}.is(#{a}, #{b})"
+
+    ?:  (a, b) ->
+      if a.match /^@?[_a-z0-9]+$/i
+        "#{a} != null ? #{a} : #{b}"
+      else
+        "#{CoffeeScriptGlobal}.existsOr(#{a}, (() => {return #{b}})())"
+
+  @infix: infix = (a, b, op) -> "#{a} #{op} #{b}"
+
+  @precidence:
+    :left  :?
+    :right :**
+    :left  :*     :/    :%    ://   :%%
+    :left  :+     :-
+    :left  :<<    :>>   :>>>
+    :left  :<     :<=   :>    :>=   :instanceof :in :is :isnt
+    :left  :===   :!==  :!=   :== # :!== and :== are included only for internal use
+    :left  :&
+    :left  :^
+    :left  :|
+    :left  :&&
+    :left  :||    :?
+  @opsToPrecidence: {}
+
+  @leftAssociativityByPrecidence = array v, i in @precidence
+    [leftAssociativityByPrecidence, operators...] = v
+    each op in operators
+      @opsToPrecidence[op] = i
+    leftAssociativityByPrecidence == :left
+
+  @validateOperator: validateOperator = (operator) =>
+    throw new Error "OperatorHelper: operator '#{operator}' is not defined" unless @opsToPrecidence[operator]
+    operator
+
+  @getNormalizedOperator: (operator)->
+    switch operator = operator.toString().trim()
+    when :and       then :&&
+    when :or        then :||
+    when :==        then :===
+    when :!=        then :!==
+    else
+      validateOperator operator
+
+  @binaryOperatorToJs: (operand, a, b) ->
+    f = OperatorHelper.operatorMap[operand] || infix
+    f a, b, operand
+
+  @binaryOperatorToSourceNodeArray: (operand, a, b, aStn) ->
+    switch operand
+    when :**    then [] "#{ CoffeeScriptGlobal}.pow(", a, ", ", b, ")"
+    when ://    then [] "#{ CoffeeScriptGlobal}.div(", a, ", ", b, ")"
+    when :%%    then [] "#{ CoffeeScriptGlobal}.mod(", a, ", ", b, ")"
+    when :in    then [] "#{ CoffeeScriptGlobal}.in(",  a, ", ", b, ")"
+    when :is    then [] "#{ CoffeeScriptGlobal}.is(",  a, ", ", b, ")"
+    when :isnt  then [] "!#{CoffeeScriptGlobal}.is(",  a, ", ", b, ")"
+
+    when :?
+      switch aStn.type
+      when :This, :Identifier, :Reference
+        [] a, " != null ? ", a, " : ", b
+      else
+        [] CoffeeScriptGlobal, ".existsOr(", a, ", (() => {return ", b, "})())"
+
+    else [] a, " #{operand} ", b
+
+  @getOpPrecidence: (op) =>
+    unless (p = @opsToPrecidence[op])?
+      throw new Error "OperatorHelper: operator '#{op}' not defined"
+    p
+
+  @getPrecidenceLevelIsLeftAssociative: (p) => @leftAssociativityByPrecidence[p]
+
+  @operatorIsInfixJs: (operator) => !@operatorMap[operator]
+
+  @resolveOperatorPrecidence: (operators, operands, combinerOverride) =>
+    throw new Error "expecting: operands.length:#{operands.length} == operators.length:#{operators.length} + 1" unless operands.length == operators.length + 1
+    while operators.length > 0
+
+      lowestPrecidence = @getOpPrecidence operators[0]
+      firstOccurance = lastOccurance = 0
+      p = null
+      each op, i in operators
+        if lowestPrecidence > p = @getOpPrecidence op
+          firstOccurance = lastOccurance = i
+          lowestPrecidence = p
+        else if lowestPrecidence == p
+          lastOccurance = i
+
+      opIndexToResolve = if @getPrecidenceLevelIsLeftAssociative(p) then firstOccurance else lastOccurance
+
+      opsBefore = operators
+      operandsBefore = operands
+
+      op = operators[opIndexToResolve]
+      operandA = operands[opIndexToResolve]
+      operandB = operands[opIndexToResolve + 1]
+      operators = arrayWithout operators, opIndexToResolve
+
+      operands = arrayWithout operands, opIndexToResolve
+      combiner = combinerOverride || @operatorMap[op] || infix
+      operands[opIndexToResolve] = combiner operandA, operandB, op
+
+    throw new Error unless operands.length == 1
+    operands[0]

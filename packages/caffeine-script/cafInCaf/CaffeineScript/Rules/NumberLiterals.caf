@@ -1,0 +1,34 @@
+import &StandardImport
+
+->
+  @rule
+    numberLiteral:
+      ///i
+        (
+          # decimal number
+          [-+]?
+          # (?!00)
+          [0-9]*
+          \.?
+          [0-9]+
+          ([eE][-+]?[0-9]+)?
+
+          | # binary
+          0b[01]+
+
+          | # octal
+          0o[0-7]+
+
+          | # octal
+          0x[0-9a-f]+
+        )
+
+        # not immediatly followed by a legal identifier character
+        (?![$\w\u007f-\uffff])
+
+        (?!\.[0-9])
+
+    {}
+      stnFactory: :NumberLiteralStn
+      stnProps: ~>
+        value: @toString().replace /^(-?)0+(\d)/, "$1$2"

@@ -1,0 +1,524 @@
+import &StandardImport
+
+class ComprehensionStn extends &ScopeStnMixin &BaseStn
+
+  ###
+    TODO explicit iterationTypes:
+      ExampleA: object v from-array a
+      ExampleB: object v from-object a
+      ExampleC: object v from-iter a
+
+      UPDATE 2018-5-4:
+        Currently, chrome is full-speed with closureless functions,
+        but if there is a closure, even if there is no escape, there is a 7x
+        speed penaltiy: https://jsbench.me/1nj5v4npva
+
+        Safari is much worse - it's a 30x difference between using
+        an existing function vs a newly created one, no matter
+        the structure of the funciton.
+
+        FireFox: no-closure is fast, but w-closure is 60x slower!
+
+        However, all three ARE full-speed with an external function vs
+        inlining.
+
+        All of which means, elliminating function creation is still a big
+        win.
+
+      My plan is to actually make inline loops for explicit from-type iteration.
+
+  getComprehensionsFound = (labeledClauses) ->
+    "" (clauses found: #{(array clause in labeledClauses when clause with clause.clauseType).join ', '})
+
+  supportedClauseLabels = object in []
+      :byClause
+
+      :fromClause
+      :fromArrayClause
+      :fromObjectClause
+
+      :intoClause
+
+      :shortClause
+      :skipClause
+
+      :tilClause
+      :toClause
+
+      :withClause
+      :withKeyClause
+      :whenClause
+
+      :injectClause
+    true
+
+  validate: ->
+    {valueClauses, variableDefinition} = @labeledChildren
+    {comprehensionType} = @
+    if variableDefinition?.children.length > maxVarDefs = if isReduce = (comprehensionType == 'reduce') then 3 else 2
+      throw new Error
+        ""
+          Can define at most #{maxVarDefs} variables for #{comprehensionType} comprehensions.
+          Allowed variables: #{if isReduce then "accumulator, "}"value and key", in that order.
+          You defined: #{variableDefinition.parseTreeNode?.toString()}."
+
+    find __, clauseName in @labeledClauses when !supportedClauseLabels[clauseName]
+      throw new Error "" Invalid Comprehension clause: #{clauseName}
+
+    @labeledClauses extract
+
+      toClause, byClause, tilClause
+
+      fromClause
+      fromArrayClause
+      fromObjectClause
+
+      withKeyClause, skipClause, shortClause
+
+    if fromArrayClause
+      switch comprehensionType
+        when :array, :object, :each, :find then null
+        else throw new Error "" Invalid Comprehension: The 'from-array' clause is only compatible with 'array' or 'object' comprehensions #{getComprehensionsFound @labeledClauses}
+
+    if (toClause || tilClause) && (skipClause || shortClause)
+      throw new Error "" Invalid Comprehension: 'skip' and 'short' clauses are not supported for 'to' and 'til' comprehensions (yet)'
+
+    if withKeyClause && comprehensionType != :object
+      throw new Error "" Invalid Comprehension: The 'with-key' clause is only compatbile with 'object' comprehensions #{getComprehensionsFound @labeledClauses}
+
+    # if (toClause || byClause || tilClause) && (comprehensionType != :array && comprehensionType != :each)
+    #   throw new Error "" Invalid Comprehension: 'from-array', 'to', 'by' and 'til' clauses not supported for '#{comprehensionType}' comprehensions #{getComprehensionsFound @labeledClauses}
+
+    sourceCounts = 0
+    sourceCounts++ if fromClause || toClause || tilClause
+    sourceCounts++ if fromArrayClause
+    sourceCounts++ if fromObjectClause
+    unless sourceCounts == 1
+      throw new Error "" Invalid Comprehension: Exactly one 'from/to/til', 'to/from-array' or 'to/from-object' clause expected #{getComprehensionsFound @labeledClauses}
+
+    if toClause && tilClause
+      throw new Error "" Invalid Comprehension: only one 'to' or 'til' clause allowed  #{getComprehensionsFound @labeledClauses}
+
+    if !(toClause || tilClause) && byClause && !byClause.compileTimeValue?
+      throw new Error "" Comprehension not supported: Non-constant by-clauses with array-iteration are not supported yet. Try making it a range iteration: array i in 0 til myArray.length by myByClause with v = myArray[i]"
+
+    if (byClause || skipClause || shortClause) && !(tilClause || toClause || fromClause || fromArrayClause)
+      throw new Error "" Invalid Comprehension: 'to', 'til', 'from' or 'from-array' clauses required when using 'by', 'skip' or 'short' clauses.  #{getComprehensionsFound @labeledClauses}
+
+  clauseAliases =
+    returning:  :into
+    in:         :from
+    do:         :with
+
+  @getter
+    comprehensionType: -> @labeledChildren.outputType.props.token
+
+    labeledClauses: ->
+      unless @_labeledClauses
+        {iterable, body} = @labeledChildren
+        @_labeledClauses = labeledClauses = {}
+
+        each {type, value} in @labeledChildren.valueClauses
+          type = clauseAliases[type] ? type
+          name = lowerCamelCase type + :Clause
+          if labeledClauses[name]
+            throw new Error "" no more than one '#{type}' clause allowed
+          value.clauseType = type
+          labeledClauses[name] = value
+
+        labeledClauses.fromClause ?= iterable
+        labeledClauses.withClause ?= body
+
+      @_labeledClauses
+
+    generatesInlineIteration: ->
+      unless @_generatesInlineIteration
+        @ extract labeledClauses
+
+        raw =
+          labeledClauses.byClause
+          ? labeledClauses.shortClause
+          ? labeledClauses.skipClause
+          ? labeledClauses.fromObjectClause
+          ? labeledClauses.toClause
+          ? labeledClauses.tilClause
+          ? labeledClauses.fromArrayClause
+
+        @_generatesInlineIteration = !!raw
+
+      @_generatesInlineIteration
+
+
+  postTransform: ->
+    @initLabeledChildren()
+
+    {labeledClauses, comprehensionType} = @
+    {byClause, shortClause, skipClause, fromObjectClause, toClause, tilClause, fromArrayClause} = labeledClauses
+
+    if byClause || shortClause || skipClause || fromObjectClause || toClause || tilClause || fromArrayClause
+      @generateInlineIteration comprehensionType, labeledClauses
+
+    else
+      switch comprehensionType
+      when :each, :array, :object, :reduce
+        @generateRuntimeBackedIteration
+          if comprehensionType == :each then :each2 else comprehensionType
+          labeledClauses
+
+      when :find
+        @generateFind
+          labeledClauses
+
+  resolveStnParams: (params...) ->
+    {variableDefinition} = @labeledChildren
+
+    lastNonNulIndex = 0
+    params = array p, i in params
+      p = switch
+      when p is Object
+        {f} = p
+        if f
+          FunctionDefinitionStn
+            bound: true
+            variableDefinition
+            f
+      when p is String
+        SimpleLiteralStn value: p
+
+      else p
+
+      lastNonNulIndex = i if p?
+      p
+
+    Null = null
+    params = params.slice 0, lastNonNulIndex + 1
+    array p in params
+      p ? Null ?= SimpleLiteralStn value: :null
+
+  autoDestructuringAssignment = (toChild, fromChild) ->
+    stn = if toChild.children?[0]?.type == :ObjectDestructuring
+      [toChild] = toChild.children
+      DestructuringAssignmentStn
+
+    else AssignmentStn
+
+    stn
+      toChild.identifierStn ? toChild
+      fromChild
+
+  generateInlineIteration: (comprehensionType, {fromArrayClause, shortClause, skipClause, fromClause, tilClause, toClause, byClause, fromObjectClause, intoClause, withClause, whenClause, withKeyClause})->
+    {variableDefinition} = @labeledChildren
+    variableDefinition = variableDefinition?.children
+
+    if toClause || tilClause
+      fromClause ?= NumberLiteralStn value: :0
+      toClauseEquality = if tilClause
+        toClause = tilClause
+        ""
+      else
+        "="
+
+      if skipClause
+        throw new Error "skip-clause not supported (yet) in to/til iteration"
+
+      if shortClause
+        throw new Error "short-clause not supported (yet) in to/til iteration"
+
+      byClauseCompileTimeValue = byClause?.compileTimeValue
+      fromCompileTimeValue = fromClause.compileTimeValue
+      toCompileTimeValue = toClause.compileTimeValue
+
+      if fromCompileTimeValue? && toCompileTimeValue?
+        unless byClause
+          byClauseCompileTimeValue = switch
+          when fromCompileTimeValue < toCompileTimeValue then 1
+          when fromCompileTimeValue > toCompileTimeValue then -1
+          else                                                0
+
+    else
+      if byClause || shortClause || skipClause
+        byClauseCompileTimeValue = byClause?.compileTimeValue
+        shortClauseCompileTimeValue = shortClause?.compileTimeValue
+        skipClauseCompileTimeValue = skipClause?.compileTimeValue
+        fromArrayClause ?= fromClause
+        if byClauseCompileTimeValue? && byClauseCompileTimeValue < 0
+          unless shortClause && !shortClauseCompileTimeValue?
+            toCompileTimeValue = shortClauseCompileTimeValue ? 0
+            shortClause = null
+
+          reverseArray = true
+
+      if fromArrayClause
+        if skipClause
+          if skipClauseCompileTimeValue?
+            skipClause = null
+            fromCompileTimeValue = skipClauseCompileTimeValue
+        else
+          fromCompileTimeValue = 0
+
+
+      fromId  = IdentifierStn preferredIdentifier: :from
+
+    toId = IdentifierStn preferredIdentifier: :to unless toCompileTimeValue?
+
+    if byClauseCompileTimeValue?
+      switch
+        when byClauseCompileTimeValue < 0 then byClauseIsNegative = true
+        when byClauseCompileTimeValue > 0 then byClauseIsPositive = true
+        when byClauseCompileTimeValue == 0 then byClauseIsZero = true
+    else if toClause || byClause
+      byId = IdentifierStn preferredIdentifier: :by
+
+    intoId      = IdentifierStn preferredIdentifier: :into unless comprehensionType == 'each' && toClause && !intoClause
+    iId         = IdentifierStn
+      preferredIdentifier: if fromObjectClause then :k else :i
+      addToLets: !fromObjectClause
+
+    unless variableDefinition
+      variableDefinition = [] IdentifierStn preferredIdentifier: :v # , addToLets: false
+
+    [valueId] = variableDefinition
+
+    withClauseProvided = !!withClause
+    returnNullIfFalse = false
+
+    withClause ?= valueId extract valueStn
+    if fromObjectClause
+      keyValueStn ?= iId.valueStn
+      withKeyClause ?= keyValueStn
+
+
+    intoId && intoClause = AssignmentStn intoId, intoClause ?
+      switch comprehensionType
+      when :object  then PureJsStn "{}"
+      when :each    then fromId || toClause
+      when :array   then PureJsStn "[]"
+      else PureJsStn "null"
+
+    invokeWithClauseAndPush = if comprehensionType == :each
+      withClause
+
+    else
+
+      switch comprehensionType
+      when :array
+        FunctionInvocationStn
+          AccessorStn intoId, IdentifierStn "push"
+          withClause
+
+      when :object
+        AssignmentStn
+          AccessorStn intoId, withKeyClause ? valueStn
+          withClause
+
+      when :find
+        if whenClause || !withClauseProvided
+          whenClause ?= withClause
+          StatementsStn
+            AssignmentStn
+              intoId
+              withClause
+
+            PureJsStn :break
+        else
+          returnNullIfFalse = true
+          IfStn
+            AssignmentStn
+              intoId
+              withClause
+
+            PureJsStn :break
+
+      else throw new Error "comprehensionType: #{comprehensionType} not supported (yet?) with from-array clauses"
+
+
+    StatementsStn
+      fromId && AssignmentStn fromId, fromArrayClause ? fromObjectClause
+
+      intoClause
+
+      if true
+        skippableStns = []
+          toId && switch
+          when toCompileTimeValue? then AssignmentStn toId, NumberLiteralStn value: toCompileTimeValue
+          when fromObjectClause then null
+          when fromArrayClause
+            AssignmentStn
+              toId
+              if shortClause
+                if reverseArray
+                  shortClause
+                else
+                  BinaryOperatorStn
+                    operator: "-"
+                    AccessorStn fromId, IdentifierStn :length
+                    shortClause
+              else
+                AccessorStn fromId, IdentifierStn :length
+
+          when toClause
+            AssignmentStn toId, toClause
+
+          switch
+            when fromArrayClause
+              AssignmentStn
+                iId
+                if reverseArray
+                  BinaryOperatorStn
+                    operator: "-"
+                    AccessorStn fromId, IdentifierStn :length
+                    if skipClause
+                      BinaryOperatorStn
+                        operator: "+"
+                        skipClause
+                        NumberLiteralStn value: 1
+                    else
+                      NumberLiteralStn value: 1 + (skipClauseCompileTimeValue ? 0)
+                else
+                  skipClause ? NumberLiteralStn value: fromCompileTimeValue
+
+            when toClause then AssignmentStn iId, fromClause ?= NumberLiteralStn value: :0
+
+          # by = byClause || if fromValue < toValue then 1 else -1
+          byId && AssignmentStn byId, byClause ||
+            IfStn
+              BinaryOperatorStn
+                operator: "<"
+                iId
+                toId
+              NumberLiteralStn value: :1
+              NumberLiteralStn value: :-1
+
+          if !byClauseIsZero
+            loopStn = if fromObjectClause then ForStn else WhileStn
+            loopStn
+              captureResultsAs: intoId
+              if fromObjectClause
+                ForInControlStn
+                  let: true
+                  keyValueStn ?= iId.valueStn
+                  fromId
+              else if fromArrayClause
+                BinaryOperatorStn
+                  operator: if reverseArray then ">=" else "<"
+                  iId
+                  toId ? NumberLiteralStn value: toCompileTimeValue
+
+              else # to/til
+                # (byValue >= 0 && v <= toValue) || (byValue < 0 && v >= toValue)
+                positiveByTest = BinaryOperatorStn {operator: "<#{toClauseEquality}"}, iId, toId || NumberLiteralStn value: toCompileTimeValue
+                negativeByTest = BinaryOperatorStn {operator: ">#{toClauseEquality}"}, iId, toId || NumberLiteralStn value: toCompileTimeValue
+
+                switch
+                when byClauseIsPositive then positiveByTest
+                when byClauseIsNegative then negativeByTest
+                else # unknown by-value
+                  BinaryOperatorStn
+                    operator: :||
+                    BinaryOperatorStn
+                      operator: :&&
+                      BinaryOperatorStn {operator: :>}, byId, NumberLiteralStn value: :0
+                      positiveByTest
+
+                    BinaryOperatorStn
+                      operator: :&&
+                      BinaryOperatorStn {operator: :<}, byId, NumberLiteralStn value: :0
+                      negativeByTest
+
+              StatementsStn
+                if variableDefinition?.length > 0
+                  if fromObjectClause
+                    array v, i in variableDefinition
+                      autoDestructuringAssignment
+                        v.identifierStn ? v
+                        if i == 0
+                          AccessorStn
+                            fromId
+                            keyValueStn
+                        else
+                          iId
+
+                  else
+                    array v, i in variableDefinition
+                      autoDestructuringAssignment
+                        v.identifierStn ? v
+                        if !toClause && i == 0 then AccessorStn fromId, iId.getValueStn()
+                        else iId
+
+                if whenClause
+                  IfStn whenClause, invokeWithClauseAndPush
+                else
+                  invokeWithClauseAndPush
+
+                unless fromObjectClause
+                  if byId || byClauseCompileTimeValue? && !floatEq 1, Math.abs byClauseCompileTimeValue
+                    if byClauseCompileTimeValue && byClauseCompileTimeValue < 0
+                      AssignmentStn
+                        operator: :-
+                        iId
+                        NumberLiteralStn value: Math.abs byClauseCompileTimeValue
+                    else
+                      AssignmentStn
+                        operator: :+
+                        iId
+                        byId || NumberLiteralStn value: byClauseCompileTimeValue
+                  else if byClauseCompileTimeValue < 0
+                    UnaryOperatorStn
+                      operand: :--
+                      tail: true
+                      iId
+                  else
+                    UnaryOperatorStn
+                      operand: :++
+                      tail: true
+                      iId
+
+        if fromId
+          IfStn
+            UnaryOperatorStn
+              operand: :?
+              fromId
+            StatementsStn skippableStns
+        else skippableStns
+
+      if returnNullIfFalse
+        BinaryOperatorStn
+          operator: :||
+          intoId
+          PureJsStn :null
+      else
+        intoId || toId || NumberLiteralStn value: toCompileTimeValue
+
+  # Caf.find(source, withClause, whenClause) ->
+  generateFind: ({fromClause, withClause, whenClause})->
+    {iterable, variableDefinition} = @labeledChildren
+
+    FunctionInvocationStn
+      IdentifierStn identifier: "" Caf.find
+
+      @resolveStnParams
+        fromClause
+        {} f: withClause
+        {} f: whenClause
+
+  # Caf.array( source, withClause = returnFirst, whenClause = returnTrue, into = []) ->
+  # Caf.object(source, withClause = returnFirst, whenClause = returnTrue, into = {}) ->
+  # Caf.each2( source, withClause = returnFirst, whenClause = returnTrue, into)
+  generateRuntimeBackedIteration: (method, {fromClause, intoClause, injectClause, withClause, whenClause, withKeyClause})->
+    {variableDefinition} = @labeledChildren
+
+    # if the value-variable is defined, it's a destructuring set the special default withClause
+    # Example: array {a}        # default: with {a}
+    # Example: array extract a  # default: with a     - extract not impleneted as-of this writing
+    if variableDefinition?.children?.length > 0 && !variableDefinition.children[0].isSimpleIdentifier
+      withClause ?= StatementsStn variableDefinition.children[0]
+
+    FunctionInvocationStn
+      IdentifierStn identifier: "" Caf.#{method}
+
+      @resolveStnParams
+        fromClause
+        {} f: withClause
+        {} f: whenClause
+        intoClause ? injectClause
+        {} f: withKeyClause

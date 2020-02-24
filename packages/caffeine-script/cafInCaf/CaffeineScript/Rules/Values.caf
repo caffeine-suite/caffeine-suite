@@ -1,0 +1,221 @@
+import &StandardImport, &CaffeineEight
+
+->
+  ##
+      assignmentAccess cannot come directly after a functionAccessor
+
+      it must come after:
+        baseAccessor:
+          identifier
+          '@' identifier
+        propertyAccessor
+        bracketAccessor
+
+      2017-12-02
+      Thoughts on doing Existance-Checks without Transforms:
+
+        I'm thinking this is the right answer. Parse it into
+        the right structure to start with. Which is:
+
+          Function, property and bracket accessors are left-associative:
+
+            a.b.c becomes (((a).b).c)
+
+            The right-most accessor is the root.
+
+          Existance-checks have lower priority and are right-associative:
+
+            The left-most existance-check in an accessor chain
+            becomes the root.
+
+            a?.b.c becomes ((a)?((.b).c)
+
+            The second-left-most existance-check becomes the first-most's
+            direct right-child.
+
+            Etc.
+
+        Assignment:
+
+          Assignment throws a small wrench in the works.
+
+          If there is an existance-check in its left-children accessor
+          chain, that existance-check needs to be able to abort
+          the assignment.
+
+          Assignment is right-associative:
+
+            a=b=c becomes (a=(b=c))
+
+        Assuming we can get the parsing right, the magic happens at code-generation:
+
+          An existance-check Stn will perform value-capture with a temp variable.
+
+          Then it will pass the name of the temp-variable down to its right-child.
+
+          Accessors which get a value-capture-temp variable passed in for code-generation
+          pass it down to their left-child UNLESS they have no left-child. In that case,
+          the value-capture-temp becomes the left-child.
+
+  ## @rule
+
+      valueWithoutExistanceCheck:
+
+      valueWithExistanceCheck:
+        "" valueWithoutExistanceCheck '?' accessorChain?
+
+      accessorChain:
+        :accessorChainWithExistanceCheck
+        :accessorChainWithoutExistanceCheck
+
+      accessorChainWithExistanceCheck:
+        "" accessorChainWithoutExistanceCheck '?' accessorChain?
+
+      accessorChainWithoutExistanceCheck:
+        "" accessor+
+
+      accessor:
+        :propertyAccessor
+        :bracketAccessor
+        :functionAccessor
+        :assignmentAccessor
+
+      value:
+        :valueWithExistanceCheck
+        :valueWithoutExistanceCheck
+
+  @rule
+    value:
+      "" valueBase blockValueExtension*"
+      "" newInstance valueExtension*
+
+    valueBase:
+      "" nonAssignableValue !accessorExtension
+      "" assignableValue assignmentExtension?
+
+    simpleAssignableValue:
+      :thisProperty
+      :identifierReference
+
+    assignableValue:
+      "" simpleAssignableValue accessorExtension* !functionInvocationExtension
+      "" '(' _? assignableValue _? ')' accessorExtension* !functionInvocationExtension
+      "" parentheticalExpression accessorExtension+
+      "" nonAssignableValue accessorExtension+
+
+    accessorExtension: :dotAccessor :bracketAccessor
+    nonAssignableValue:
+      :functionInvocation
+      :parentheticalExpression
+      :simpleNonAssignableValue
+
+    simpleValue:
+      :simpleNonAssignableValue
+      :simpleAssignableValue
+
+    simpleNonAssignableValue:
+      :require
+      :tagMacro
+      :globalIdentifier
+      :this
+      :literal
+      :super
+
+    simpleInvocableValue:
+      :require
+      :tagMacro
+      :globalIdentifier
+      :this
+      :super
+      :thisProperty
+      :identifierReference
+
+    functionInvocation:
+      "" simpleInvocableValue extendedFunctionInvocationExtension+
+      "" literal accessorExtension extendedFunctionInvocationExtension+
+      "" parentheticalExpression extendedFunctionInvocationExtension+
+
+    extendedFunctionInvocationExtension:
+      "" accessorExtension* functionInvocationExtension
+
+  @rule
+    simpleNewValue:
+      :this
+      :thisProperty
+      :globalIdentifier
+      :identifierReference
+      :classDefinition
+      :require
+
+    newValue:
+      "" simpleNewValue accessorExtension*
+      "" parentheticalExpression accessorExtension*
+
+    explicitNewFunctionInvocation:
+      "newValue functionInvocationExtension"
+
+    # TODO: I think we need to convert this to a functionInvocation
+    #  i.e. functionInvocation can take an optional 'new ' at the start
+    newInstance:
+      "new _ explicitNewFunctionInvocation"
+      "new _ newValue"
+      stnFactory: :NewInstanceStn
+
+  @rule
+    parentheticalExpression: "" '(' _? expression _? ')'
+    valueExtension: :dotAccessor :bracketAccessor :functionInvocationExtension :blockValueExtension
+
+  @rule
+    identifierReference:
+      pattern:    "" !reservedWord identifier
+      stnFactory: :ReferenceStn
+
+  @rule
+    this:         "/@/ !identifier"
+    thisProperty: "/@/ identifier assignmentExtension?"
+    {} stnFactory: :ThisStn
+
+  @rule
+    globalIdentifier:
+      pattern:    /(global|require|module|eval|this|__dirname|__filename)\b/
+      stnFactory: :GlobalIdentifierStn
+      stnProps: ~> identifier: @text
+
+  @rule
+    super:
+      pattern:    "/super\\b/ superFunctionInvocation"
+      stnFactory: :SuperStn
+
+  @rule
+    super:
+      pattern:    /super\b/
+      stnFactory: :SuperStn
+      stnProps:   passArguments: true
+
+  @rule
+    blockValueExtension: "" _? blockValueExtensionBlock
+    blockValueExtensionBlock: Extensions.IndentBlocks.getPropsToSubparseBlock rule: :blockValueExtensionSubparse
+    blockValueExtensionSubparse:
+      "" lineStartComment* &dotOrQuestionDot valueExtension+ binaryOperatorSequenceExtension? newLineStatementExtension* end
+      "" lineStartComment* lineStartBinaryOperatorAndExpression newLineStatementExtension* end
+
+    dotOrQuestionDot: /\??\./
+
+  @rule
+    singleValueOrImplicitArray:
+      "" _? _end? implicitArrayOrExpression
+      "" / */ comment? rValueBlock
+
+    singleValueOrImplicitArrayWithoutImplicitObjects:
+      "" _? _end? implicitArrayWithoutImplicitObjectsOrExpression
+      "" / */ comment? rValueBlock
+
+    rValueBlock: Extensions.IndentBlocks.getPropsToSubparseBlock rule: :rValueBlockSubParse
+    rValueBlockSubParse:
+      pattern: "root"
+      getStn: ~>
+        {statements} = @root
+        if statements.length == 1
+          statements[0].getStn()
+        else
+          &StnRegistry.ArrayStn @root.getMatchStns()

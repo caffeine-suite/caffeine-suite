@@ -1,0 +1,13 @@
+import &StandardImport
+
+class DoStn extends &BaseStn
+
+  toSourceNode: ->
+    {functionDefinition} = @labeledChildren
+
+    @createSourceNode
+      "("
+      functionDefinition.toSourceNode()
+      ")("
+      (Object.keys functionDefinition.argumentNames).join ', '
+      ")"
