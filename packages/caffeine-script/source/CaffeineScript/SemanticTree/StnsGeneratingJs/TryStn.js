@@ -25,6 +25,11 @@ Caf.defMod(module, () => {
           }
         },
         function(TryStn, classSuper, instanceSuper) {
+          this.getter({
+            isDotReferenceAnchor: function() {
+              return true;
+            }
+          });
           this.prototype.toSourceNode = function(options = {}) {
             let expression, body, optionalCatch, optionalFinally, base;
             ({ expression } = options);

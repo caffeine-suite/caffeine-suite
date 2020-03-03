@@ -1,5 +1,6 @@
 import &StandardImport
 StnRegistry = &StnRegistry
+# DotReferenceStn = &TransformOnlyStns/DotReferenceStn
 
 ##
   Thinking.
@@ -7,9 +8,9 @@ StnRegistry = &StnRegistry
   I want a FunctionDefinitionStn which is scopeless.
   - It doesn't act like a scope for variables which are only assigned within it.
     - Those variables are letted in the enclosing scope.
-  - If it has args, it calls @scope.addIdentifierAssigned for each using the parent scope.
-  - The generated javascript uses temp variables for each of the args and then at the start
-    of the function, it assigns those args to the actual-named variables bound in the enclosing
+  - If it has arguments, it calls @scope.addIdentifierAssigned for each using the parent scope.
+  - The generated javascript uses temp variables for each of the arguments and then at the start
+    of the function, it assigns those arguments to the actual-named variables bound in the enclosing
     scope.
 
   WHY? There are 2 or more places where I am adding new control-structures which don't define scope
@@ -45,24 +46,64 @@ class FunctionDefinitionStn extends &ScopeStnMixin &BaseStn
 
   @getter
     childrenToUpdateScope:  -> compactFlatten [@statements]
-    body:                   -> @children[1]
-    args:                   -> @children[0]
+    body:                   -> @statements
     statementStns:          -> @body?.children
-    argumentStns:           -> @args?.children
+    argumentStns:           -> @arguments?.children
+    isDotReferenceAnchor:   -> true
 
   updateScope: ->
     super
     if @arguments
-      object name from @arguments.argumentNameList with @addExplicitlyDeclared name
       @_updatingArgumentScope = true
       @arguments.updateScope @
       @_updatingArgumentScope = false
+      object name from @arguments.argumentNameList with @addExplicitlyDeclared name
 
   addIdentifierAssigned: (identifier) ->
     if @_updatingArgumentScope
       @addExplicitlyDeclared identifier
     else
       super
+
+  findDotReferences: (node, found) ->
+    if node.constructor.type == :DotReference
+      found.push node
+    unless node.isDotReferenceAnchor
+      each child in node.children
+        @findDotReferences child, found
+    found
+
+  preferredArgNames = :abcdefghijklmnopqrstuvwxyz
+
+  extendArgumentsToAtLeast: (count) ->
+    @arguments extract children
+    if count > children.length
+      children = [] children...
+      while count > children.length
+        children.push
+          StnRegistry.FunctionDefinitionArgStn
+            rest: false, assignThisProperty: false
+            StnRegistry.IdentifierStn preferredIdentifier: preferredArgNames[children.length]
+
+      @children = []
+        @arguments = new @arguments.class
+          @arguments.props
+          children
+        @statements
+
+  getDotReferenceIdentifierStn: (dotCount) ->
+    @arguments.children[dotCount-1].identifierStn
+
+  transform: ->
+    if @statementStns?.length > 0
+      dotRefs = @findDotReferences @statementStns[0], []
+      maxDotCount = 0
+      each dotRef in @findDotReferences @statementStns[0], []
+        maxDotCount = max maxDotCount, dotRef.dotCount
+
+      @extendArgumentsToAtLeast maxDotCount
+      # log {} maxDotCount, @arguments
+    super
 
   postTransform: ->
     if @props.bound == "auto"
@@ -83,7 +124,7 @@ class FunctionDefinitionStn extends &ScopeStnMixin &BaseStn
         else
           merge @props, returnIgnored: true
 
-        @children[0]
+        @arguments
         StatementsStn newStatementStns
 
     else
@@ -180,7 +221,7 @@ class FunctionDefinitionStn extends &ScopeStnMixin &BaseStn
     {statement, isOperand} = options if options
     returnAction = !(isConstructor || returnIgnored)
 
-    argsSourceNode = @args?.toSourceNode() ? "()"
+    argsSourceNode = @arguments?.toSourceNode() ? "()"
     bodySourceNode = if @simpleBound
       @body.children[0].toSourceNode expression: true
     else

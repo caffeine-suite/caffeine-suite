@@ -9,7 +9,7 @@
     # _colon_:        /\ *: */
     _comma_:        /\ *, */
     _comma_optionalNewLine:        /\ *, *\n*/
-    optionalComma:  /\ *, *\n*|\ */
+    optionalComma:  /\ *, *\n*|\ +/
     _arrow:         /\ *[-~=]>/
 
     openParen_:     /\( */

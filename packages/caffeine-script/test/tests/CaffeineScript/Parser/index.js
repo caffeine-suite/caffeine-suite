@@ -14,6 +14,7 @@
   ComprehensionsEfficient: require('./ComprehensionsEfficient'),
   ControlStructures:       require('./ControlStructures'),
   Destructuring:           require('./Destructuring'),
+  DotReference:            require('./DotReference'),
   Extract:                 require('./Extract'),
   FunctionDefinition:      require('./FunctionDefinition'),
   FunctionInvocation:      require('./FunctionInvocation'),

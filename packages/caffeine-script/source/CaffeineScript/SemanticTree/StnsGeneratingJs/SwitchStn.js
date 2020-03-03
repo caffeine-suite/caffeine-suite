@@ -9,6 +9,11 @@ Caf.defMod(module, () => {
       return (SwitchStn = Caf.defClass(
         class SwitchStn extends require("../BaseStn") {},
         function(SwitchStn, classSuper, instanceSuper) {
+          this.getter({
+            isDotReferenceAnchor: function() {
+              return true;
+            }
+          });
           this.prototype.toSourceNode = function(options) {
             let expression,
               condition,

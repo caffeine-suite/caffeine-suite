@@ -1,0 +1,36 @@
+import &StandardImport
+SemanticTree = &StnRegistry
+
+class DotReferenceStn extends &BaseStn
+
+  @getter
+    dotCount: -> @props.dotCount
+    accessIdentifier: -> @props.accessIdentifier
+    identifierStn: ->
+
+      {parent} = child = @
+      while parent
+        if parent.type == :Statements
+          dotReferenceAnchor = parent.parent
+          position = parent.children.indexOf child
+          if position > 0
+            throw new Error "Dot references only supported in the first statement of a block (for now)"
+          unless dotReferenceAnchor.getDotReferenceIdentifierStn
+            throw new Error "Dot references cannot be used inside #{upperCamelCase dotReferenceAnchor.type, " "}s (yet)"
+          return dotReferenceAnchor.getDotReferenceIdentifierStn(@dotCount)
+
+        else
+          {parent} = child = parent
+      return
+
+  transform: ->
+    @ extract identifierStn
+
+    dotRefIdentifier = SemanticTree.IdentifierStn @identifierStn.props
+    if @accessIdentifier
+      SemanticTree.AccessorStn
+        dotRefIdentifier
+        SemanticTree.IdentifierStn identifier: @accessIdentifier
+
+    else
+      dotRefIdentifier

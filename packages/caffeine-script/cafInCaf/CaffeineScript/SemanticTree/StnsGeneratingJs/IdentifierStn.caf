@@ -11,7 +11,7 @@ class IdentifierStn extends &BaseStn
       @props.identifierHandle ?= new UniqueIdentifierHandle @props.preferredIdentifier, @props.addToLets
 
   @getter
-    name: -> @props.identifier
+    name: -> @props.identifier ? @identifierHandle.toString()
     isIdentifier: -> identifierRegexp.test @identifier
     identifierHandle: -> @props.identifierHandle
     isUniqueIdentifier: -> @identifierHandle is UniqueIdentifierHandle

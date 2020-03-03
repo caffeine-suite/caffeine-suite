@@ -21,6 +21,8 @@ class ControlOperatorStn extends &BaseStn
     @validate()
 
   @getter
+    isDotReferenceAnchor:   -> true
+
     whileReturnTempVar: ->
       @_whileReturnTempVar ?= @scope.uniqueIdentifier
 

@@ -34,7 +34,7 @@ Caf.defMod(module, () => {
             pattern:
               "try _? body:lineOfStatementsOrBlock optionalCatch:catchClause? optionalFinally:finallyClause?"
           },
-          { stnFactory: "DoStn", pattern: "/do/ _ functionDefinition" },
+          { stnFactory: "DoStn", pattern: "/do\\b/ _ functionDefinition" },
           {
             stnFactory: "SwitchStn",
             pattern: [

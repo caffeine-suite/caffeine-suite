@@ -1,6 +1,8 @@
 import &StandardImport
 
 class TryStn extends &BaseStn
+  @getter
+    isDotReferenceAnchor:   -> true
 
   constructor: ->
     super

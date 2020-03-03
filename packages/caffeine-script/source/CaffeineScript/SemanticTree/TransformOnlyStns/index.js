@@ -6,6 +6,7 @@
 .addModules({
   CaptureStn:             require('./CaptureStn'),
   ComprehensionStn:       require('./ComprehensionStn'),
+  DotReferenceStn:        require('./DotReferenceStn'),
   ExtractStn:             require('./ExtractStn'),
   ExtractToIdentifierStn: require('./ExtractToIdentifierStn'),
   StandardImport:         require('./StandardImport')

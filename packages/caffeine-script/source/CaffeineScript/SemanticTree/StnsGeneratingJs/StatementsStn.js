@@ -65,6 +65,9 @@ Caf.defMod(module, () => {
             return out;
           };
           this.getter({
+            isDotReferenceAnchor: function() {
+              return true;
+            },
             statements: function() {
               return this.children;
             },

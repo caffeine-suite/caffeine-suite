@@ -105,6 +105,8 @@ import &StandardImport, &CaffeineEight
 
     accessorExtension: :dotAccessor :bracketAccessor
     nonAssignableValue:
+      :dotReference
+
       :functionInvocation
       :parentheticalExpression
       :simpleNonAssignableValue

@@ -32,7 +32,10 @@ Caf.defMod(module, () => {
         function(IdentifierStn, classSuper, instanceSuper) {
           this.getter({
             name: function() {
-              return this.props.identifier;
+              let temp;
+              return (temp = this.props.identifier) != null
+                ? temp
+                : this.identifierHandle.toString();
             },
             isIdentifier: function() {
               return identifierRegexp.test(this.identifier);

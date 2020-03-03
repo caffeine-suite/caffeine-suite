@@ -70,7 +70,7 @@ Caf.defMod(module, () => {
         ],
         functionInvocationExtension: [
           "existanceTest:questionMark? openParen_ values:simpleValueList? _closeParen",
-          "existanceTest:questionMark? !/[-+]/ _? values:valueList",
+          "existanceTest:questionMark? !/[-+.]/ _? values:valueList",
           {
             stnFactory: "FunctionInvocationStn",
             stnExtension: true,

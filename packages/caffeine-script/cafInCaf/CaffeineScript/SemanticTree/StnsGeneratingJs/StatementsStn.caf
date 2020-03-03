@@ -30,6 +30,7 @@ class StatementsStn extends &BaseStn
     out
 
   @getter
+    isDotReferenceAnchor:   -> true
     statements: -> @children
     compileTimeValue: ->
       if @children.length == 1

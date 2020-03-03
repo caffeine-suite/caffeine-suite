@@ -2,6 +2,9 @@ import &StandardImport
 
 class SwitchStn extends &BaseStn
 
+  @getter
+    isDotReferenceAnchor:   -> true
+
   toSourceNode: (options) ->
     {expression} = options if options
     {condition, switchWhens, switchElse} = @labeledChildren

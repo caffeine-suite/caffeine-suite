@@ -35,6 +35,9 @@ Caf.defMod(module, () => {
         },
         function(WhileStn, classSuper, instanceSuper) {
           this.getter({
+            isDotReferenceAnchor: function() {
+              return true;
+            },
             captureResultsAs: function() {
               return this.props.captureResultsAs;
             },

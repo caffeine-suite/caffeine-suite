@@ -2,9 +2,9 @@
 let Caf = require("caffeine-script-runtime");
 Caf.defMod(module, () => {
   return Caf.importInvoke(
-    ["compactFlatten", "merge", "Error"],
+    ["compactFlatten", "max", "merge", "Error"],
     [global, require("../../StandardImport")],
-    (compactFlatten, merge, Error) => {
+    (compactFlatten, max, merge, Error) => {
       let StnRegistry, FunctionDefinitionStn;
       StnRegistry = require("../../StnRegistry");
       return (FunctionDefinitionStn = Caf.defClass(
@@ -43,15 +43,13 @@ Caf.defMod(module, () => {
           }
         },
         function(FunctionDefinitionStn, classSuper, instanceSuper) {
+          let preferredArgNames;
           this.getter({
             childrenToUpdateScope: function() {
               return compactFlatten([this.statements]);
             },
             body: function() {
-              return this.children[1];
-            },
-            args: function() {
-              return this.children[0];
+              return this.statements;
             },
             statementStns: function() {
               let base;
@@ -59,24 +57,82 @@ Caf.defMod(module, () => {
             },
             argumentStns: function() {
               let base;
-              return Caf.exists((base = this.args)) && base.children;
+              return Caf.exists((base = this.arguments)) && base.children;
+            },
+            isDotReferenceAnchor: function() {
+              return true;
             }
           });
           this.prototype.updateScope = function() {
             instanceSuper.updateScope.apply(this, arguments);
             return this.arguments
-              ? (Caf.object(this.arguments.argumentNameList, name =>
-                  this.addExplicitlyDeclared(name)
-                ),
-                (this._updatingArgumentScope = true),
+              ? ((this._updatingArgumentScope = true),
                 this.arguments.updateScope(this),
-                (this._updatingArgumentScope = false))
+                (this._updatingArgumentScope = false),
+                Caf.object(this.arguments.argumentNameList, name =>
+                  this.addExplicitlyDeclared(name)
+                ))
               : undefined;
           };
           this.prototype.addIdentifierAssigned = function(identifier) {
             return this._updatingArgumentScope
               ? this.addExplicitlyDeclared(identifier)
               : instanceSuper.addIdentifierAssigned.apply(this, arguments);
+          };
+          this.prototype.findDotReferences = function(node, found) {
+            if (node.constructor.type === "DotReference") {
+              found.push(node);
+            }
+            if (!node.isDotReferenceAnchor) {
+              Caf.each2(node.children, child =>
+                this.findDotReferences(child, found)
+              );
+            }
+            return found;
+          };
+          preferredArgNames = "abcdefghijklmnopqrstuvwxyz";
+          this.prototype.extendArgumentsToAtLeast = function(count) {
+            let children;
+            children = this.arguments.children;
+            return count > children.length
+              ? ((children = [...children]),
+                (() => {
+                  while (count > children.length) {
+                    children.push(
+                      StnRegistry.FunctionDefinitionArgStn(
+                        { rest: false, assignThisProperty: false },
+                        StnRegistry.IdentifierStn({
+                          preferredIdentifier:
+                            preferredArgNames[children.length]
+                        })
+                      )
+                    );
+                  }
+                })(),
+                (this.children = [
+                  (this.arguments = new this.arguments.class(
+                    this.arguments.props,
+                    children
+                  )),
+                  this.statements
+                ]))
+              : undefined;
+          };
+          this.prototype.getDotReferenceIdentifierStn = function(dotCount) {
+            return this.arguments.children[dotCount - 1].identifierStn;
+          };
+          this.prototype.transform = function() {
+            let dotRefs, maxDotCount, base;
+            if ((Caf.exists((base = this.statementStns)) && base.length) > 0) {
+              dotRefs = this.findDotReferences(this.statementStns[0], []);
+              maxDotCount = 0;
+              Caf.each2(
+                this.findDotReferences(this.statementStns[0], []),
+                dotRef => (maxDotCount = max(maxDotCount, dotRef.dotCount))
+              );
+              this.extendArgumentsToAtLeast(maxDotCount);
+            }
+            return instanceSuper.transform.apply(this, arguments);
           };
           this.prototype.postTransform = function() {
             let foundParent, newStatementStns, StatementsStn, base;
@@ -99,7 +155,7 @@ Caf.defMod(module, () => {
                   (Caf.exists((base = this.body)) && base.children.length) > 0
                     ? this.props
                     : merge(this.props, { returnIgnored: true }),
-                  this.children[0],
+                  this.arguments,
                   StatementsStn(newStatementStns)
                 ))
               : instanceSuper.postTransform.apply(this, arguments);
@@ -207,7 +263,8 @@ Caf.defMod(module, () => {
             }
             returnAction = !(isConstructor || returnIgnored);
             argsSourceNode =
-              (temp = Caf.exists((base = this.args)) && base.toSourceNode()) !=
+              (temp =
+                Caf.exists((base = this.arguments)) && base.toSourceNode()) !=
               null
                 ? temp
                 : "()";

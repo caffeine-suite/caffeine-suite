@@ -23,7 +23,7 @@ controlStatement:
 
   {}
     stnFactory: :DoStn
-    pattern: "/do/ _ functionDefinition"
+    pattern: "/do\\b/ _ functionDefinition"
 
   {}
     stnFactory: :SwitchStn

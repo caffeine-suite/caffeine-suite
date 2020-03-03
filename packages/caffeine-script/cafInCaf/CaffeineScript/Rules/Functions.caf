@@ -42,7 +42,7 @@ superFunctionInvocation:
 
 functionInvocationExtension:
   "existanceTest:questionMark? openParen_ values:simpleValueList? _closeParen"
-  "existanceTest:questionMark? !/[-+]/ _? values:valueList"
+  "existanceTest:questionMark? !/[-+.]/ _? values:valueList"
   stnFactory:   "FunctionInvocationStn"
   stnExtension: true
   stnProps:     ~> existanceTest: !!@existanceTest

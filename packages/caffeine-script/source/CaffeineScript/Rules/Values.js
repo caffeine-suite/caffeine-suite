@@ -24,6 +24,7 @@ Caf.defMod(module, () => {
           ],
           accessorExtension: ["dotAccessor", "bracketAccessor"],
           nonAssignableValue: [
+            "dotReference",
             "functionInvocation",
             "parentheticalExpression",
             "simpleNonAssignableValue"

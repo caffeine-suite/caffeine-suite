@@ -35,6 +35,9 @@ Caf.defMod(module, () => {
         },
         function(ControlOperatorStn, classSuper, instanceSuper) {
           this.getter({
+            isDotReferenceAnchor: function() {
+              return true;
+            },
             whileReturnTempVar: function() {
               let temp;
               return (temp = this._whileReturnTempVar) != null
