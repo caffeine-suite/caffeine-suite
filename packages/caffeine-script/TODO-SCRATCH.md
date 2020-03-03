@@ -40,6 +40,18 @@ Syntax Highlighting
 double = 123 # wrongly gets matched as "do"
 ```
 
+If a file is not in a package, it should still be loadable with the require('caffeine-script/register')
+```
+> require("/Users/shanebdavis/.git-genui.prefs")
+Error: no sourceRoot
+    at module.exports.SourceRoots.getCaffeineInitSync (./node_modules/caffeine-mc/build/index.js:932:13)
+    at Function.module.exports.FileCompiler.compileFileSync (./node_modules/caffeine-mc/build/index.js:1518:20)
+    at Object.<computed>.base.<computed> [as .caf] (./node_modules/caffeine-mc/build/index.js:1817:31)
+    at Module.load (./node_modules/coffee-script/lib/coffee-script/register.js:45:36)
+    at Function.Module._load (internal/modules/cjs/loader.js:723:14)
+    at Module.require (internal/modules/cjs/loader.js:848:19)
+```
+
 ```
 # parse-with-one-less-subblock doesn't work here:
 # Caf:
