@@ -1,0 +1,68 @@
+import &StandardImport
+SemanticTree = &StnRegistry
+
+##
+  ObjectStn
+    ObjectPropValueStn
+      ObjectPropNameStn
+        value:            "source"
+
+    ObjectPropValueStn
+      ObjectPropNameStn:
+        - value:            "value"
+        - str.IdentiferStn: identifier: "value"
+
+      - propValue.ReferenceStn: - identifier.IdentiferStn: identifier: "foo"
+
+class ExtractStn extends &BaseStn
+
+  @getter
+    extractSource:  -> @labeledChildren.extractSource
+    extractActions: -> @labeledChildren.extractActions
+
+  transform: (extractSourceFromParent)->
+    {StatementsStn, AssignmentStn, AccessorStn, IdentifierStn, FunctionInvocationStn, ControlOperatorStn} = SemanticTree
+    @ extract extractSource, extractActions
+    extractSource = extractSourceFromParent ? extractSource?.transform()
+    {conditional} = @props
+
+    StatementsStn
+      if (conditional || extractActions.length > 1) &&
+          extractSource.type != :Reference && extractSource.type != :Identifier
+        complexSource = extractSource
+        captureBase = AssignmentStn
+          extractSource = IdentifierStn()
+          complexSource
+
+        if conditional
+          conditionalSource = captureBase
+          null
+        else
+          captureBase
+
+      if true
+        doExtract = array child, i in extractActions
+          extractToIdentifier = if child is ExtractStn then (extractChild = child).extractSource else child
+
+          doSingleExtract =
+            AssignmentStn
+              extractToIdentifier.assignToIdentifierStn
+              extractToIdentifier.getTransformedExtractionStns extractSource
+
+          if extractChild
+            []
+              doSingleExtract
+              extractChild.transform extractToIdentifier.assignToIdentifierStn
+
+          else
+            doSingleExtract
+
+        if conditional
+          ControlOperatorStn
+            FunctionInvocationStn
+              IdentifierStn identifier: "Caf.exists"
+              conditionalSource ? extractSource
+
+            StatementsStn doExtract
+        else
+          doExtract

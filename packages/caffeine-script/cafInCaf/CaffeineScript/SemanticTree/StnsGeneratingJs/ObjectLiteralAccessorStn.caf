@@ -1,0 +1,18 @@
+import &StandardImport
+
+class ObjectLiteralAccessorStn extends &BaseStn
+
+  constructor: (props, children) ->
+    super
+    @key = children[0]
+
+  @getter
+    existanceTest: -> @props.existanceTest
+    isAccessor: -> true
+
+  toSourceNode: ->
+    @createSourceNode
+      @value?.toSourceNode dotBase: true
+      "["
+      @key.toSourceNode expression: true
+      "]"

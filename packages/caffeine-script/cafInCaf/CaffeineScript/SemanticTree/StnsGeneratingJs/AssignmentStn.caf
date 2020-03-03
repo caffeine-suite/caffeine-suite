@@ -1,0 +1,60 @@
+import &StandardImport
+SemanticTree = &StnRegistry
+
+supportedOperatorsRegExp = /^([-+*\/%^|]|<<|>>|>>>|)$/
+
+class AssignmentStn extends &AccessorChainStn
+  constructor: (props, children) ->
+    super
+    @operator =  props.operator || ""
+    @lValue = children[0]
+    @rValue = children[1]
+    throw new Error "AssignmentStn: expected lValue and rValue: #{formattedInspect {@operator, @lValue, @rValue}}" unless @lValue && @rValue
+
+  # value and key are for compatibility with ValueBaseCaptureStn
+  @getter
+    value:  -> @lValue
+    key:    -> @rValue
+    propName: -> @lValue?.propName
+
+  updateScope: (@scope, options) ->
+    @scope.addIdentifierAssigned @lValue?.explicitIdentifier, undefined, options?.insideLet
+    super
+
+  postTransform: ->
+    unless supportedOperatorsRegExp.test @operator
+      {value1, value2} = @getValueWithBaseCapture @lValue
+
+      SemanticTree.BinaryOperatorStn
+        {@operator}
+        value1
+        SemanticTree.AssignmentStn
+          {@parseTreeNode}
+          value2
+          @rValue
+    else
+      @
+
+  toSourceNode: (options) ->
+    out = if supportedOperatorsRegExp.test @operator
+      @createSourceNode
+        @lValue.toSourceNode()
+        " #{@operator}= "
+        @rValue.toSourceNode expression:true
+
+    else
+      @createSourceNode
+        @lValue.toSourceNode expression:true
+        " #{@operator} "
+        @lValue.toSourceNode()
+        " = "
+        @rValue.toSourceNode expression:true
+
+
+    if options?.dotBase || options?.subExpression
+      @createSourceNode
+        "("
+        out
+        ")"
+    else
+      out

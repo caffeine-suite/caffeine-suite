@@ -1,0 +1,5 @@
+import &StandardImport
+
+class UndefinedStn extends &BaseStn
+
+  toSourceNode: -> @createSourceNode :undefined

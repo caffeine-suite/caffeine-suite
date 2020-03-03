@@ -1,0 +1,16 @@
+|
+  var
+    Babel   = require('babel-core'),
+    es2015  = require('babel-preset-es2015');
+
+  this.compiler = class BabelWrapper {
+    static compile(source) {
+      return Babel.transform(source, {
+        presets: [es2015]
+      });
+    }
+  };
+
+module.exports = class Foo {
+  static bar() {return "Hello from ES6 => ES5 curtesy of Babel."}
+}.bar();

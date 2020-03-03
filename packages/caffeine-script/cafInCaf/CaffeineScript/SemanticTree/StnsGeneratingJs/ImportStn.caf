@@ -1,0 +1,75 @@
+import &StandardImport
+
+###
+  Refactor strategy:
+
+  don't overrid updateScope
+
+  instead, in toJs, we traverse the scope sub-tree:
+    importMap = {}
+    for each child-scope when child isnt ImportStn
+      mergeInto importMap, @identifiersUsedButNotAssigned
+
+
+class ImportStn extends &BaseStn
+
+  @getter
+    nonImportScope: ->
+      {scope} = @
+      {scope} = scope while scope.type == "Import"
+      # {scope} = scope while scope.class == ImportStn
+      scope
+
+    importFromCaptureIdentifier: ->
+      @_importFromCaptureIdentifier ||= @nonImportScope.bindUniqueIdentifier "parentImports"
+
+    parentImport: -> @findParent /^Import$/
+
+  toSourceNode: (options = {})->
+    importFromCaptureIdentifier = null
+    if p = @parentImport
+      {importFromCaptureIdentifier} = p
+      true
+
+    {importBody} = @labeledChildren
+    importFromList = arrayWithoutLast @children
+
+    if importBody
+      identifiersToImport = Object.keys importBody.generateImportMap()
+
+      # needs to before getAutoLets - WhileStn may need to define a let
+      bodyMainNodes = importBody.toSourceNode returnAction: true
+
+      # needs to be called first since it might cause @_importFromCaptureIdentifier to be set
+      bodySourceNodes =
+        []
+          lets + "; " if lets = importBody.getAutoLets()
+
+          bodyMainNodes
+
+      if identifiersToImport.length > 0
+
+        importsSourceNodes = compactFlatten []
+          importFromCaptureIdentifier || :global
+          ", "
+          @stnArrayToSourceNodes importFromList, ", "
+
+        @createSourceNode
+          "" Caf.importInvoke(["
+          identifiersToImport.join '", "'
+          '"], '
+          if @_importFromCaptureIdentifier then
+            [] @_importFromCaptureIdentifier, " = "
+          "" [
+          importsSourceNodes
+          "" ], (
+          identifiersToImport.join ', '
+          "" ) => {
+          bodySourceNodes
+          "" })
+
+      else
+        @createSourceNode
+          @doSourceNode bodySourceNodes
+    else
+      "undefined"

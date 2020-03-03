@@ -1,0 +1,111 @@
+import &StandardImport
+
+class Preprocessors
+
+  mixedIndentationRegexp = /(^|\n)( +\t|\t+ )/
+  tabIndentationRegexp = /(^|\n)\t/
+  spaceIndentationRegexp = /(^|\n) /
+
+  @hasMixedIndentation: (source) =>
+    mixedIndentationRegexp.test source
+    || (tabIndentationRegexp.test(source) && spaceIndentationRegexp.test source)
+
+  @normalizeIndentation: (source) =>
+    if @hasMixedIndentation source
+      e = new Error "file must only contain spaces OR tabs for indentation, not both"
+      e.failureIndex = 0 # make it look like a parse-error (TODO: HACK)
+      throw e
+
+    source.replace /\t/g, ' '
+
+  lineWithOnlyCommentRegexp = /(^|\n) *#([^{\n$\w\u007f-\uffff]+[^\n]*|(?=\n|$))/
+  blockCommentStartRegexp = /(^|\n) *##/
+  nonBlankLineRegexp = /[^ ]/
+
+  fixCommentLines = (lines, indentLevel, commentLineIndex, stopIndex) ->
+    # log fixCommentLines: {indentLevel, commentLineIndex, stopIndex}
+    # info = []
+    if commentLineIndex >= 0
+      indentChange = 0
+      padding = null
+      blockCommentIndentLevel = -1
+      inBlockComment = false
+      i = commentLineIndex
+      while i < stopIndex
+        line = lines[i]
+        if nonBlankLineRegexp.test line
+          lineIndentLevel = getIndentLevel line
+          inBlockComment = false if lineIndentLevel <= blockCommentIndentLevel
+
+          unless inBlockComment
+            if commentOnlyLine = lineWithOnlyCommentRegexp.test line
+              indentChange = indentLevel - lineIndentLevel
+              padding = if indentChange > 0 then getPadding indentChange else null
+
+            if inBlockComment = blockCommentStartRegexp.test line
+              blockCommentIndentLevel = lineIndentLevel
+          # info.push {i, line, inBlockComment, lineIndentLevel, indentChange, blockCommentIndentLevel}
+
+          if indentChange != 0
+            lines[i] = if indentChange > 0
+              padding + line
+            else
+              line.slice -indentChange, line.length
+        i++
+    # log info
+
+  getIndentLevel = (line) -> line.search /[^\ ]/
+  # find all lines which start with a comment and:
+  #   fix there indentation to match the max indentation level
+  #   of the previous and next non-comment, non-blank lines
+  # FUTURE - this is ALMOST perfect, but, if there are lines that look like
+  #   comments inside block-comments, they get moved out of the block comment.
+  #   This shouldn't effect parsing, but it changes the comment.
+  #   This'll need to be fixed if we ever start outputting comments.
+  @normalizeComments: (source) =>
+    if lineWithOnlyCommentRegexp.test source
+      previousIndentLevel = 0
+      blockCommentIndentLevel = 0
+      lastCommentLineStartIndex = -1
+      inBlockComment = false
+      each line, i in lines = source.split "\n" when nonBlankLineRegexp.test line
+        indentLevel = getIndentLevel line
+        inBlockComment = false if indentLevel <= blockCommentIndentLevel
+        # log {}
+        #   i
+        #   line
+        #   previousIndentLevel
+        #   blockCommentIndentLevel
+        #   lastCommentLineStartIndex
+        #   inBlockComment
+
+        unless inBlockComment
+          if commentOnlyLine = lineWithOnlyCommentRegexp.test line
+
+            lastCommentLineStartIndex = i unless lastCommentLineStartIndex >= 0
+
+            if inBlockComment = blockCommentStartRegexp.test line
+              blockCommentIndentLevel = indentLevel
+
+          else # non-comment-line
+            if lastCommentLineStartIndex >= 0
+              fixCommentLines
+                lines
+                max indentLevel, previousIndentLevel
+                lastCommentLineStartIndex
+                i
+
+              lastCommentLineStartIndex = -1
+
+            previousIndentLevel = indentLevel
+
+      fixCommentLines lines, previousIndentLevel, lastCommentLineStartIndex, lines.length
+
+      lines.join '\n'
+    else
+      source
+
+  @preprocess: (source) =>
+    # DISABLED - this needs to be applied at the block level
+    # @normalizeComments
+    @normalizeIndentation source

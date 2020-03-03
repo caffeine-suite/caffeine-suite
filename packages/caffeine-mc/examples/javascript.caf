@@ -1,0 +1,4 @@
+|JavaScript
+
+// this is JavaScript
+module.exports = (function(){return "Hello from JavaScript!"})()

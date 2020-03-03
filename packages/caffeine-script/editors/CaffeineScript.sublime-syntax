@@ -1,0 +1,201 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+# See http://www.sublimetext.com/docs/3/scope_naming.html
+name: CaffeineScript
+file_extensions:
+  - caf
+  - caffeine
+scope: source.caffeine
+contexts:
+  main:
+
+    # # function invocation
+    # - match: '\. *(?!\d)[\w\u007f-\uffff]+( +(?=[^\n,])|\( *\))'
+    #   scope: variable.function
+
+    # regexp
+    - match: '/[^/\s]([^\\/]|\\.)*/[igmuy]*'
+      scope: string.regexp.caffeine
+
+    # block regexp
+    - match: '///[igmuy]?( |(?:\n|$)) *[^\n]*'
+      scope: string.regexp.caffeine
+
+    # block regexp
+    - match: '(?:^( *))///[igmuy]* *\n'
+      scope: string.regexp.caffeine
+      push: block_regexp
+
+    # macro
+    - match: '<[\w\u007f-\uffff]+>'
+      scope: keyword.macro.compileTime.caffeine
+
+    # comment
+    - match: '(?:^( *))##'
+      push: block_comment
+
+    # block-string
+    - match: '(?:^( *))"""? *\n'
+      scope: string.quoted.double.caffeine
+      push: block_string
+
+    # to-eol-string
+    - match: '""'
+      scope: string.quoted.double.caffeine
+      push: to_eol_string
+
+    # CaffeineMC block
+    - match: '^\|'
+      push: caffeine_mc_block
+
+    # object-literal function names:
+    # - match: '((?!\s)[-~!@\#$%^&*_+=|\\<>?/.$\w\u007f-\uffff])+(?=(\:| *=)[ \n]*[^\n]*\) *[-~=]>)'
+    #   scope: entity.name.function.caffeine
+
+    # object-literal property names:
+    - match: '((?!\s)[-~!@\#$%^&*_+=|\\<>?/.$\w\u007f-\uffff])+(?:\:)'
+      scope: variable.other.property.caffeine
+
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(((in|from)-)?(array|object)|super|await|delete|short|skip|reduce|inject|as|with-key|extract|instanceof|return|break|into|returning|try|catch|promise|then|and|or|is|isnt|not|if|else|switch|unless|until|throw|new|while|class|extends|find|each|to|til|by|in|from|with|do|case|when|import)\b'
+      scope: keyword.caffeine
+
+    - match: '\b(false|true)\b'
+      scope: constant.language.boolean.caffeine
+
+    - match: '\b(NaN|global|null|undefined)\b'
+      scope: constant.language.caffeine
+
+    # identifier
+    - match: '(?!\d)[\w\u007f-\uffff]+'
+      scope: entity.identifier.caffeine
+
+    # Numbers
+    - match: '([-+]?(?!00)[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?|0b[01]+|0o[0-7]+|0x[0-9a-f]+)(?![$\w\u007f-\uffff])(?!\.[0-9])'
+      scope: constant.numeric.caffeine
+
+    # word-string
+    - match: ':(?!:)[^\n\s,;{}()\[\]]+'
+      scope: string.quoted.double.caffeine
+
+    # hash-string
+    - match: '#(?!#)[^\n\s,;{}()\[\]]+'
+      scope: string.quoted.double.caffeine
+
+    # number
+    - match : '[-+]?(?!00)[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?[$\w\u007f-\uffff]+'
+      scope: string.quoted.double.caffeine
+
+    # Auto-Require
+    - match : '&(?!\d)((?:(?!\s)[-/$\w\u007f-\uffff])+)'
+      scope: string.quoted.other.caffeine
+
+    # Function Declaration
+    - match: '[-=~]>'
+      scope: storage.type.function.caffeine
+
+    - match: '[-+=!%&*|<>?]|==|&&|\|\|'
+      scope: keyword.operator.caffeine
+
+    - match: '[()\[\]{}]'
+      scope: meta.brace.caffeine
+
+    # this-member: @foo
+    - match: '\@(?!\d)((?:(?!\s)[$\w\u007f-\uffff])+)?'
+      scope: variable.other.member.caffeine
+
+    # to-eol-comment
+    - match: '#([\x00-\x20\x7f\s;,()\[\]{}\\]|$)([^\n]*|(?=\n|$))'
+      scope: comment.line.caffeine
+
+    # - match: '"".*'
+    #   scope: string.quoted.double.caffeine
+
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"(?!")'
+      scope: string.quoted.double.caffeine
+      push: double_quoted_string
+
+    - match: "'"
+      scope: string.quoted.double.caffeine
+      push: single_quoted_string
+
+    - match: '\.[\w\u007f-\uffff]+'
+      scope: punctuation.accessor.caffeine
+
+    - match: '\.'
+      scope: punctuation.accessor.caffeine
+
+  interpolation:
+    - match: "\\}"
+      scope: string.quoted.double.caffeine
+      pop: true
+    - include: main
+
+  interpolatable:
+    - match: "\\#\\{"
+      scope: string.quoted.double.caffeine
+      push: interpolation
+
+  caffeine_mc_block:
+    - meta_scope: comment.block
+    - match: '^(?=[^ \s])'
+      pop: true
+
+  block_comment:
+    - meta_scope: comment.block
+    - match: '^(?!\1 +[^ ])(?= *[^ \n])'
+      pop: true
+
+  block_string:
+    - match: '^(?!\1 +[^ ])(?= *[^ \n])'
+      pop: true
+    - include: interpolatable
+    - match: "."
+      scope: string.quoted.double.caffeine
+
+  block_regexp:
+    - match: '^(?!\1 +[^ ])(?= *[^ \n])'
+      pop: true
+    - include: interpolatable
+    # to-eol-comment
+    - match: '#([^\n$\w\u007f-\uffff]+[^\n]*|(?=\n|$))'
+      scope: comment.line.caffeine
+    - match: "."
+      scope: string.regexp.caffeine
+
+  to_eol_string:
+    - match: '(?:\n)'
+      pop: true
+    - include: interpolatable
+    - match: "."
+      scope: string.quoted.double.caffeine
+
+  double_quoted_string:
+    - match: '\\.'
+      scope: constant.character.escape.caffeine
+    - match: '"'
+      scope: string.quoted.double.caffeine
+      pop: true
+    - include: interpolatable
+    - match: "."
+      scope: string.quoted.double.caffeine
+
+  single_quoted_string:
+    - meta_scope: string.quoted.double.caffeine
+    - match: '\\.'
+      scope: constant.character.escape.caffeine
+    - match: "'"
+      scope: string.quoted.double.caffeine
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.caffeine
+    - match: $
+      pop: true

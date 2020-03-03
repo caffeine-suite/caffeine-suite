@@ -1,0 +1,15 @@
+|CoffeeScript
+  CoffeeScript = require 'coffee-script'
+  path = require 'path'
+  {formattedInspect} = require 'art-standard-lib'
+  CaffeineMcTestHelper.log "caffeine-mc.config.caf loaded"
+
+  @compiler = class ItWorkedCompiler
+    @version: "1.2.3"
+    @compile: (source, options) ->
+      {sourceFile, mySpecialConfig} = options
+      CaffeineMcTestHelper.log "caffeine-mc.config.caf custom compiler used on: #{path.basename sourceFile}, mySpecialConfig: #{formattedInspect mySpecialConfig}"
+      CoffeeScript.compile source, options
+
+CaffeineMcTestHelper.log "caffeine-mc.config.caf ran"
+module.exports = mySpecialConfig: "worked!"

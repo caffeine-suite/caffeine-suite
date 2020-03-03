@@ -1,0 +1,24 @@
+import &StandardImport
+
+
+class DestructuringAssignmentStn extends &BaseStn
+
+  @getter
+    structuringStn: -> @labeledChildren.structure.getStructuringStn()
+
+  toSourceNode: (options) ->
+    {expression, returnValueIsIgnored, noParens} = options if options
+    {structure, value} = @labeledChildren
+    expression = null if returnValueIsIgnored
+
+    structure ?= @children[0]
+    value     ?= @children[1]
+
+    @createSourceNode
+      "(" unless noParens
+      structure.toSourceNode()
+      " = "
+      value.toSourceNode expression: true
+      expression && ", "
+      expression && structure.toSourceNode restructuringStart: true
+      ")" unless noParens

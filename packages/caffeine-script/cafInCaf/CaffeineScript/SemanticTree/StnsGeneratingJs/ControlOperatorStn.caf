@@ -1,0 +1,110 @@
+import &StandardImport
+
+class ControlOperatorStn extends &BaseStn
+
+  constructor: (props, children) ->
+    super
+    @operand    = props.operand ? :if
+    if @labeledChildren.expression
+      @expression = @labeledChildren.expression
+      @body       = @labeledChildren.body       ? StnRegistry.UndefinedStn()
+      @elseBody   = @labeledChildren.elseBody
+    else
+      @expression = children[0]
+      @body       = children[1] ? StnRegistry.UndefinedStn()
+      @elseBody   = children[2]
+
+    unless @body.type == "Statements"
+      @body = StnRegistry.StatementsStn @body
+      .parent = @
+
+    @validate()
+
+  @getter
+    whileReturnTempVar: ->
+      @_whileReturnTempVar ?= @scope.uniqueIdentifier
+
+  validate: ->
+    switch @operand
+    when "while", "until", "for"
+      throw new Error "else not expected after #{@operand}" if @elseBody
+    when "if", "unless"
+      null
+    else
+      throw new Error "INTERNAL: invalid control-operator: #{formattedInspect @operand}"
+
+  toSourceNode: (options = {})->
+    {expression, returnValueIsIgnored, noParens} = options
+    {operand} = @
+
+    applyParens = false
+
+    unaryOperator = ""
+
+    jsKeyword = operand
+
+    switch operand
+    when :for
+      jsKeyword = :for
+      operand = :while
+    when :until, :unless
+      jsKeyword = operand = if operand == :until
+        :while
+      else
+        :if
+
+      unaryOperator = "!"
+
+    parts = if expression
+      switch operand
+      when :while
+        if returnValueIsIgnored
+          @doSourceNode
+            jsKeyword
+            " ("
+            unaryOperator
+            @expression.toSourceNode noParens: true, expression: true, dotBase: !!unaryOperator
+            ") {"
+            @body.toSourceNode()
+            "};"
+
+        else
+          tempVarIdentifier = @whileReturnTempVar
+          @doSourceNode
+            jsKeyword
+            " ("
+            unaryOperator
+            @expression.toSourceNode noParens: true, expression: true, dotBase: !!unaryOperator
+            ") {"
+            @body.toSourceNode returnAction: "#{tempVarIdentifier} ="
+            "}; return #{tempVarIdentifier};"
+
+      when :if
+        applyParens = options.subExpression || options.dotBase
+
+        []
+          unaryOperator
+          @expression.toSourceNode dotBase: true, expression: true
+          " ? "
+          @body.toSourceNode expression: true
+          " : "
+          @elseBody?.toSourceNode(expression: true) || 'undefined'
+
+    else
+      []
+        jsKeyword
+        " ("
+        unaryOperator
+        @expression.toSourceNode noParens: true, expression: true, dotBase: !!unaryOperator
+        ") {"
+        @body.toSourceNode()
+        "}"
+        if @elseBody then []
+          " else {"
+          @elseBody.toSourceNode()
+          "}"
+
+    @createSourceNode
+      "(" if applyParens && !noParens
+      parts
+      ")" if applyParens && !noParens

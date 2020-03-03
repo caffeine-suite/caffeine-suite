@@ -1,0 +1,68 @@
+import &StandardImport, &CaffeineEight, &StnRegistry
+
+# statement:
+#   "statementWithoutEnd newLineStatementExtension* end"
+#   :importStatement
+
+lineStartStatement:
+  "lineStartStatementWithoutEnd newLineStatementExtension* end"
+  :importStatement
+
+tailControlOperator: /\ *\b(if|while|until|unless) +/
+tailControlOperatorComplexExpression: "tailControlOperator implicitArrayOrExpression"
+
+lineStartStatementWithoutEnd:
+  :lineStartExpression
+  :statementWithoutEnd
+
+returnStatement:
+  "" /return\\b/ _ implicitArrayOrExpression
+  "" /return\\b/
+  stnFactory: :ReturnStatementStn
+
+breakStatement:
+  "" /break\\b/ _ implicitArrayOrExpression
+  "" /break\\b/
+  stnFactory: :BreakStatementStn
+
+
+statementWithoutEnd:
+  "" implicitArrayOrExpression !tailControlOperator _? comment?
+
+  "" implicitArrayOrExpression tailControlOperatorComplexExpression+
+  getStn: ~>
+    stn = @implicitArrayOrExpression.getStn()
+    each tco in @tailControlOperatorComplexExpressions
+      stn = ControlOperatorStn
+        operand: tco.tailControlOperator.toString().trim()
+        tco.implicitArrayOrExpression.getStn()
+        stn
+    stn
+
+newLineStart:
+  pattern: /( *\n)+/
+  getPresent: ~> false
+
+importStatement:
+  pattern: '/import/ _? importFromList:valueList end importBody'
+  stnFactory: :ImportStn
+
+importBody:
+  'root'
+  stnFactory: :ImportBodyStn
+
+newLineStatementExtension:
+  "end lineStartBinaryOperatorAndExpression"
+  "end &/\\??\\.(?!\\d)/ valueExtension+ binaryOperatorSequenceExtension?"
+
+lineOfStatements:
+  pattern:
+    "statementSemi+ statementWithoutEnd"
+    :statementWithoutEnd
+  stnFactory: :StatementsStn
+
+lineOfStatementsOrBlock:
+  :lineOfStatements
+  :statementBlock
+
+statementSemi: "statementWithoutEnd _? ';' _?"

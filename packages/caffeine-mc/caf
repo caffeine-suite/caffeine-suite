@@ -1,0 +1,9 @@
+#!/usr/bin/env node --trace-warnings
+
+if (require('./use-build')) { // use build
+  require('./build/caf-command.js');
+} else { // for dev, use uncompiled files
+  console.log("caf-command: dev-mode (not using caffeine-mc/build)");
+  require('coffee-script/register');
+  require('./caf-command');
+}
