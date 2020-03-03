@@ -1,7 +1,12 @@
 const glob = require("glob-promise");
 const fs = require('fs-extra');
 
-const readJson = (file) => JSON.parse(fs.readFileSync(file));
+const readJson = (file) => {
+  if (fs.existsSync(file))
+    return JSON.parse(fs.readFileSync(file));
+  else
+    return {}
+}
 
 const currentPackage = readJson("package.json");
 currentPackage.dependencies = {};
