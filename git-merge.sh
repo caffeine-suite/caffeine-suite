@@ -1,4 +1,4 @@
-
+#!/bin/bash
 REPO_NAME=caffeine-source-map
 SOURCE_REPO=~/dev/imikimi/npm/$REPO_NAME
 TARGET_FOLDER=packages/$REPO_NAME
