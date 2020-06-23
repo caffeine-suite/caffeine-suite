@@ -3,7 +3,7 @@
   "dependencies": {
     "art-build-configurator": "*",
     "art-standard-lib": "*",
-    "caffeine-eight": "*"
+    "caffeine-eight": "^2.6.0"
   },
   "description": "Caffeine.SourceMap",
   "license": "ISC",

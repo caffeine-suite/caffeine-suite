@@ -667,18 +667,18 @@ module.exports = Parser = (function(superClass) {
       [all of @parse's options plus:]
       parentNode: (required)
         the resulting Node's parent
-  
+
       originalMatchLength: (required)
         matchLength from @source that subsource was generated from.
-  
+
       originalOffset: starting offset in parentParser.source
-  
+
       sourceMap: (subsourceOffset) -> parentSourceOffset
-  
+
     The original source we are sub-parsing from must be:
-  
+
       parentNode.getNextText originalMatchLength
-  
+
   OUT: a Node with offset and matchLength
    */
 
@@ -947,7 +947,7 @@ module.exports = Parser = (function(superClass) {
 
       /*
       I know how to do this right!
-      
+
       1) I want to add all the non-match nodes to the parse-tree
       2) I want to further improve the parse-tree inspect
         - it may be time to do a custom inspect
@@ -1133,7 +1133,7 @@ module.exports = Parser = (function(superClass) {
       rule: <Rule>
       ruleName: <String>
       variantDefinitions: <Array<Object:definition>>
-  
+
     definition:
       pattern: <String|RegExp>
       ... additional props are added to the Rule's Node class
@@ -1279,7 +1279,7 @@ module.exports = Rule = (function(superClass) {
         parentNode.source:      the source string
         parentNode.nextOffset:  the index in the source where parsing starts
         parentNode.parser:      access to the parser object
-  
+
   EFFECT: If returning a new Node, it is expected that node's parent is already set to parentNode
   OUT: Node instance if parsing was successful
    */
@@ -1476,10 +1476,10 @@ module.exports = RuleVariant = (function(superClass) {
 
   /*
   OPTIONS:
-  
+
     node / nodeClass
       TODO: pick one, I like 'node' today
-  
+
     extends / baseClass / nodeBaseClass
       TODO: pick one, I like 'extends' today
    */
@@ -1744,10 +1744,10 @@ module.exports = PatternElement = (function(superClass) {
   /*
   NOTE: regExp.test is 3x faster than .exec in Safari, but about the
     same in node/chrome. Safari is 2.5x faster than Chrome/Node in this.
-  
+
     Regexp must have the global flag set, even if we are using the y-flag,
     to make .test() set .lastIndex correctly.
-  
+
   SEE: https://jsperf.com/regex-match-length
    */
 
@@ -2653,9 +2653,9 @@ defineModule(module, function() {
     /*
     TODO:
       for matchBlock and matchToEolAndBlock
-    
+
       We also need a source-offset mapper from the new source back to the old-source.
-    
+
       I think the map should just be part of the returned object
      */
 

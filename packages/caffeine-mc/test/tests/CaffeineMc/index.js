@@ -8,7 +8,7 @@
   CaffeineMcTestHelper: require('./CaffeineMcTestHelper'),
   CompileCache:         require('./CompileCache'),
   FileCompiler:         require('./FileCompiler'),
-  Metacompiler:         require('./Metacompiler'),
+  MetaCompiler:         require('./MetaCompiler'),
   ModuleResolver:       require('./ModuleResolver'),
   SourceRoots:          require('./SourceRoots')
 });
