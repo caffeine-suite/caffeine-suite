@@ -1,10 +1,11 @@
 {
   "dependencies": {
-    "art-binary": "*",
-    "art-build-configurator": "*",
-    "art-object-tree-factory": "*",
-    "art-standard-lib": "*",
-    "art-testbench": "*",
+    "@art-suite/monorepo": "^1.1.1",
+    "art-binary": "^1.1.3",
+    "art-build-configurator": "^1.26.8",
+    "art-object-tree-factory": "^2.0.0",
+    "art-standard-lib": "^1.64.0",
+    "art-testbench": "^1.17.2",
     "caffeine-eight": "file:packages/caffeine-eight",
     "caffeine-mc": "file:packages/caffeine-mc",
     "caffeine-script": "file:packages/caffeine-script",
@@ -37,23 +38,8 @@
     "webpack-node-externals": "^1.7.2",
     "webpack-stylish": "^0.1.8"
   },
-  "devDependencies": {
-    "art-testbench": "*",
-    "case-sensitive-paths-webpack-plugin": "^2.2.0",
-    "chai": "^4.2.0",
-    "coffee-loader": "^0.7.3",
-    "css-loader": "^3.0.0",
-    "json-loader": "^0.5.7",
-    "mocha": "^6.2.0",
-    "mock-fs": "^4.10.0",
-    "script-loader": "^0.7.2",
-    "style-loader": "^1.0.0",
-    "three": "^0.109.0",
-    "webpack": "^4.39.1",
-    "webpack-cli": "*",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2",
-    "webpack-stylish": "^0.1.8"
+  "scripts": {
+    "sync": "art-monorepo sync",
+    "test": "art-monorepo test"
   }
 }
