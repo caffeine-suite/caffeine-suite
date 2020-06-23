@@ -2,11 +2,11 @@
   "author": "Shane Brinkman-Davis Delamore, Imikimi LLC",
   "bugs": "https:/github.com/caffeine-suite/caffeine-script-runtime/issues",
   "dependencies": {
-    "art-build-configurator": "*"
+    "art-build-configurator": "^1.26.8"
   },
   "description": "Runtime library for CaffeineScript",
   "devDependencies": {
-    "art-testbench": "*",
+    "art-testbench": "^1.17.2",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chai": "^4.2.0",
     "coffee-loader": "^0.7.3",
