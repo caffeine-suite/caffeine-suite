@@ -13,7 +13,39 @@
 
 # block
 ""
-  hi #{hi}
+  hi
+
+"" hi
+  hi
 
 """
   bye
+
+# escapes
+'this\nwas'
+#hi\nthere
+
+# interpolation
+""
+  hi #{foo.bar}
+  #{} this.is.code
+  to EOL: #{} this.is.code
+
+normal.code
+
+"" there #{bar.foo}
+  hi #{foo.bar}
+normal.code
+
+"" hi #{foo.bar}
+"hi #{foo.bar}"
+'hi #{foo.bar}'
+
+/// asdhfi
+///
+  haisdf
+  ahsdif
+  #{foo.bar}
+  #{} this is ok
+    hisadfsadf is oks
+  asdfhioasdf

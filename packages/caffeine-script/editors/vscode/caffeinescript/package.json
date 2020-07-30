@@ -1,5 +1,5 @@
 {
-	"name": "caffeinescript",
+	"name": "caffeinescript-vscode",
 	"version": "0.1.0",
 	"license": "MIT",
 	"engines": {
@@ -10,7 +10,8 @@
 	"displayName": "Official CaffeineScript Language Support",
 	"description": "Syntax highlighting support for CaffeineScript.",
 	"scripts": {
-		"build": "caf source/buildExtension"
+    "build": "caf source/buildExtension",
+    "watch": "npm-watch"
 	},
 	"categories": [
 		"Programming Languages"
@@ -46,5 +47,17 @@
 				"path": "./snippets/caffeinescript.snippets.json"
 			}
 		]
+	},
+	"watch": {
+		"build": {
+			"extensions": "caf",
+			"patterns": [
+				"source"
+			],
+			"quiet": false
+		}
+	},
+	"dependencies": {
+		"npm-watch": "^0.6.0"
 	}
 }

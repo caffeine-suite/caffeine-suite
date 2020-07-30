@@ -1,7 +1,7 @@
 &fs.writeFileSync
   out = "syntaxes/caffeinescript.tmLanguage.json"
   json = JSON.stringify
-    &caffeinescriptTmLanguage
+    &ArtStandardLib.log &caffeinescriptTmLanguage
     null
     "  "
 
