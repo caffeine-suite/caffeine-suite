@@ -24,14 +24,14 @@ Caf.defMod(module, () => {
             let base;
             return (
               Caf.exists((base = this.children[0])) &&
-              (Caf.isF(base.trimLeft) && base.trimLeft())
+              Caf.isF(base.trimLeft) && base.trimLeft()
             );
           };
           this.prototype.trimRight = function() {
             let base;
             return (
               Caf.exists((base = peek(this.children))) &&
-              (Caf.isF(base.trimRight) && base.trimRight())
+              Caf.isF(base.trimRight) && base.trimRight()
             );
           };
           this.prototype.toSourceNode = function() {

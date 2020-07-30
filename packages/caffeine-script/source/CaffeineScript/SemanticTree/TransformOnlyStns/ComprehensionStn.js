@@ -370,7 +370,7 @@ Caf.defMod(module, () => {
             let stn, base, base1, temp;
             stn =
               (Caf.exists((base = toChild.children)) &&
-                (Caf.exists((base1 = base[0])) && base1.type)) ===
+                Caf.exists((base1 = base[0])) && base1.type) ===
               "ObjectDestructuring"
                 ? (([toChild] = toChild.children), DestructuringAssignmentStn)
                 : AssignmentStn;
@@ -878,8 +878,8 @@ Caf.defMod(module, () => {
             ({ variableDefinition } = this.labeledChildren);
             if (
               (Caf.exists(variableDefinition) &&
-                (Caf.exists((base = variableDefinition.children)) &&
-                  base.length)) > 0 &&
+                Caf.exists((base = variableDefinition.children)) &&
+                  base.length) > 0 &&
               !variableDefinition.children[0].isSimpleIdentifier
             ) {
               withClause != null

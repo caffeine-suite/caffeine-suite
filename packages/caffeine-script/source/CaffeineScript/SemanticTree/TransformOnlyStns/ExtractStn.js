@@ -48,8 +48,8 @@ Caf.defMod(module, () => {
           ({ conditional } = this.props);
           return StatementsStn(
             (conditional || extractActions.length > 1) &&
-              (extractSource.type !== "Reference" &&
-                extractSource.type !== "Identifier")
+              extractSource.type !== "Reference" &&
+                extractSource.type !== "Identifier"
               ? ((complexSource = extractSource),
                 (captureBase = AssignmentStn(
                   (extractSource = IdentifierStn()),
