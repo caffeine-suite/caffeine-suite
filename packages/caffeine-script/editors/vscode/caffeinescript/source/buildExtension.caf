@@ -1,5 +1,5 @@
 &fs.writeFileSync
-  out = "../syntaxes/caffeinescript.tmLanguage.json"
+  out = "syntaxes/caffeinescript.tmLanguage.json"
   json = JSON.stringify
     &caffeinescriptTmLanguage
     null

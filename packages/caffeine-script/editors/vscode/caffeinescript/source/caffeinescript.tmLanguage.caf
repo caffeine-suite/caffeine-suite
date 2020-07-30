@@ -47,6 +47,19 @@ patterns:
       end:    "" '
       name:   :string.quoted.double.caffeine
 
+    # {}
+    #   begin:    "\\#\\{"
+    #   captures: 0:          name: :punctuation.section.embedded.caffeine
+    #   end:      "\\}"
+    #   name:     :source.caffeine.embedded.source
+    #   patterns: [] include: :$self
+
+    #############################
+    # Unit-Strings
+    {}
+      match:  '([-+]?(?!00)[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?|0b[01]+|0o[0-7]+|0x[0-9a-f]+)[$\\w\\u007f-\\uffff]+'
+      name:   :string.quoted.double.caffeine
+
     #############################
     # Numbers
     {}
@@ -149,9 +162,9 @@ patterns:
       IDENTIFIERS
     #############################
     # identifier
-    {}
-      match: '(?!\\d)[\\w\\u007f-\\uffff]+'
-      name: :entity.identifier.caffeine
+    # {}
+    #   match: '(?!\\d)[\\w\\u007f-\\uffff]+'
+    #   name: :entity.identifier.caffeine
 
     # this-member: @foo
     {}

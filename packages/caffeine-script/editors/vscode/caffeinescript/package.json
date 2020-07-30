@@ -2,29 +2,49 @@
 	"name": "caffeinescript",
 	"version": "0.1.0",
 	"license": "MIT",
-	"engines": { "vscode": "*" },
-  "publisher": "caffeine-script-publisher",
-  "repository": "https://github.com/caffeine-suite/caffeine-script",
-  "displayName": "Official CaffeineScript Language Support",
-  "description": "Syntax highlighting support for CaffeineScript.",
-  "scripts": {"build": "cd source;caf ./buildExtension"},
-  "categories": ["Programming Languages"],
-  "icon": "assets/caffeine-logo.png",
+	"engines": {
+		"vscode": "*"
+	},
+	"publisher": "caffeine-script-publisher",
+	"repository": "https://github.com/caffeine-suite/caffeine-script",
+	"displayName": "Official CaffeineScript Language Support",
+	"description": "Syntax highlighting support for CaffeineScript.",
+	"scripts": {
+		"build": "caf source/buildExtension"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"icon": "assets/caffeine-logo.png",
 	"contributes": {
-		"languages": [{
-			"id": "caffeinescript",
-			"extensions": [ ".caf", ".caffeine" ],
-			"aliases": [ "CaffeineScript", "caffeinescript", "caffeine", "caf" ],
-			"configuration": "./language-configuration.json"
-		}],
-		"grammars": [{
-			"language": "caffeinescript",
-			"scopeName": "source.caffeine",
-			"path": "./syntaxes/caffeinescript.tmLanguage.json"
-		}],
-		"snippets": [{
-			"language": "caffeinescript",
-			"path": "./snippets/caffeinescript.snippets.json"
-		}]
+		"languages": [
+			{
+				"id": "caffeinescript",
+				"extensions": [
+					".caf",
+					".caffeine"
+				],
+				"aliases": [
+					"CaffeineScript",
+					"caffeinescript",
+					"caffeine",
+					"caf"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "caffeinescript",
+				"scopeName": "source.caffeine",
+				"path": "./syntaxes/caffeinescript.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "caffeinescript",
+				"path": "./snippets/caffeinescript.snippets.json"
+			}
+		]
 	}
 }

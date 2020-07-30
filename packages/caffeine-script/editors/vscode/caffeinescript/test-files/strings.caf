@@ -1,0 +1,19 @@
+# word-strings
+#abc
+:def
+123df
+123
+
+# bracketed
+"hi"
+'that'
+
+# to EOL
+"" sdf
+
+# block
+""
+  hi #{hi}
+
+"""
+  bye
