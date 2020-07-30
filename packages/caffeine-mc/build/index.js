@@ -174,7 +174,7 @@ module.exports = require('neptune-namespaces' /* ABC - not inlining fellow NPM *
 /*! exports provided: author, bin, bugs, dependencies, description, devDependencies, homepage, license, name, repository, scripts, version, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"author\":\"Shane Brinkman-Davis Delamore, Imikimi LLC\",\"bin\":{\"caf\":\"./caf\"},\"bugs\":\"https:/github.com/caffeine-suite/caffeine-mc/issues\",\"dependencies\":{\"art-build-configurator\":\"*\",\"caffeine-eight\":\"*\",\"cardinal\":\"^1.0.0\",\"chalk\":\"^1.1.3\",\"colors\":\"^1.1.2\",\"commander\":\"^2.9.0\",\"fs-extra\":\"^3.0.0\",\"glob-promise\":\"^3.1.0\",\"prettier\":\"^1.18.2\"},\"description\":\"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.\",\"devDependencies\":{\"art-testbench\":\"*\",\"case-sensitive-paths-webpack-plugin\":\"^2.2.0\",\"chai\":\"^4.2.0\",\"coffee-loader\":\"^0.7.3\",\"css-loader\":\"^3.0.0\",\"json-loader\":\"^0.5.7\",\"mocha\":\"^6.2.0\",\"mock-fs\":\"^4.5.0\",\"script-loader\":\"^0.7.2\",\"style-loader\":\"^1.0.0\",\"webpack\":\"^4.39.1\",\"webpack-cli\":\"*\",\"webpack-dev-server\":\"^3.7.2\",\"webpack-merge\":\"^4.2.1\",\"webpack-node-externals\":\"^1.7.2\",\"webpack-stylish\":\"^0.1.8\"},\"homepage\":\"https://github.com/caffeine-suite/caffeine-mc\",\"license\":\"ISC\",\"name\":\"caffeine-mc\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/caffeine-suite/caffeine-mc.git\"},\"scripts\":{\"build\":\"webpack --progress\",\"start\":\"webpack-dev-server --hot --inline --progress --env.devServer\",\"test\":\"nn -s;mocha -u tdd\",\"testInBrowser\":\"webpack-dev-server --progress --env.devServer\"},\"version\":\"3.0.2\"}");
+module.exports = JSON.parse("{\"author\":\"Shane Brinkman-Davis Delamore, Imikimi LLC\",\"bin\":{\"caf\":\"./caf\"},\"bugs\":\"https:/github.com/caffeine-suite/caffeine-suite/issues\",\"dependencies\":{\"art-build-configurator\":\"*\",\"caffeine-eight\":\"*\",\"cardinal\":\"^1.0.0\",\"chalk\":\"^1.1.3\",\"colors\":\"^1.1.2\",\"commander\":\"^2.9.0\",\"fs-extra\":\"^3.0.0\",\"glob-promise\":\"^3.1.0\",\"prettier\":\"^1.18.2\"},\"description\":\"Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.\",\"devDependencies\":{\"art-testbench\":\"*\",\"case-sensitive-paths-webpack-plugin\":\"^2.2.0\",\"chai\":\"^4.2.0\",\"coffee-loader\":\"^0.7.3\",\"css-loader\":\"^3.0.0\",\"json-loader\":\"^0.5.7\",\"mocha\":\"^6.2.0\",\"mock-fs\":\"^4.5.0\",\"script-loader\":\"^0.7.2\",\"style-loader\":\"^1.0.0\",\"three\":\"^0.109.0\",\"webpack\":\"^4.39.1\",\"webpack-cli\":\"*\",\"webpack-dev-server\":\"^3.7.2\",\"webpack-merge\":\"^4.2.1\",\"webpack-node-externals\":\"^1.7.2\",\"webpack-stylish\":\"^0.1.8\"},\"homepage\":\"https://github.com/caffeine-suite/caffeine-suite\",\"license\":\"ISC\",\"name\":\"caffeine-mc\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/caffeine-suite/caffeine-suite.git\"},\"scripts\":{\"build\":\"webpack --progress\",\"start\":\"webpack-dev-server --hot --inline --progress --env.devServer\",\"test\":\"nn -s;mocha -u tdd\",\"testInBrowser\":\"webpack-dev-server --progress --env.devServer\"},\"version\":\"3.0.4\"}");
 
 /***/ }),
 /* 6 */
@@ -257,7 +257,7 @@ module.exports = Metacompiler = (function(superClass) {
       object:
         compiler: custom compiler instance. Must implement:
           compile: compileFunction
-
+    
     compileFunction: (sourceCode, options) ->
       IN:
         sourceCode: string
@@ -337,12 +337,12 @@ module.exports = Metacompiler = (function(superClass) {
       inlineMap: t/f
       sourceFile:
       sourceDir:
-
+  
   OUT: (an object)
     compiled: extension => output map
       extension: string, ex: "js"
       output: string, ex: "alert();"
-
+  
       If writing to files, we might do:
       for extension, output of compiled
         write originalFileNameWith(extension), output
@@ -803,13 +803,13 @@ defineModule(module, CompileCache = (function(superClass) {
 
 })(BaseClass));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 16 */
-/*!*************************************************!*\
-  !*** ../node_modules/webpack/buildin/module.js ***!
-  \*************************************************/
+/*!***********************************!*\
+  !*** (webpack)/buildin/module.js ***!
+  \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -1035,7 +1035,7 @@ defineModule(module, SourceRoots = (function(superClass) {
 
 })(BaseClass));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 18 */
@@ -1141,7 +1141,12 @@ defineModule(module, ModuleResolver = (function() {
         npmPackageNamesAttempted: [moduleBaseName, dashCase(moduleBaseName)]
       });
     }
-    requireString = (modulePathArray != null ? modulePathArray.length : void 0) > 0 ? Path.join(name, absolutePath.slice((absolutePath.lastIndexOf(name)) + name.length)) : name;
+    if ((modulePathArray != null ? modulePathArray.length : void 0) > 0) {
+      requireString = name.split('/')[0];
+      absolutePath = findSourceRootSync(absolutePath);
+    } else {
+      requireString = name;
+    }
     return {
       requireString: requireString,
       absolutePath: absolutePath
@@ -1173,7 +1178,7 @@ defineModule(module, ModuleResolver = (function() {
           absolutePath = Path.join(absolutePath, matchingName);
           requireString = requireString + "/" + matchingName;
         } else {
-          throw new ErrorWithInfo("Could not find pathed submodule inside npm package.", {
+          throw new ErrorWithInfo("Could not find pathed submodule inside npm package: " + requireString, {
             npmPackage: requireString,
             localNpmPackageLocation: absolutePath,
             submodulePath: sub,
@@ -1260,9 +1265,9 @@ defineModule(module, ModuleResolver = (function() {
 
   /*
   Notes about "." names-with-dots.
-
+  
     Essentially, dots are treated as word-boundaries.
-
+  
     Files:
       We need to manage extensions. Current rule:
         Full match example: FooCaf matches foo.caf
@@ -1270,26 +1275,26 @@ defineModule(module, ModuleResolver = (function() {
           Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
         PartialMatch must match starting at the first character:
           Foo.BarFood.caf does NOT match BarFood but does match Foo
-
+  
     Dirs:
       Dirs must fully match:
         Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
-
+  
   Future:
     I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
     Basically, this parallels how NeptuneNamespaces interprets them.
     It should work identically to as-if there were nested dirs.
-
+  
     Given these files:
-
+  
       MyFile1.caf
       Foo/Bar/MyFile2.caf
-
+  
     OR these files:
-
+  
       MyFile1.caf
       Foo.Bar/MyFile2.caf
-
+  
     Then:
        * inside MyFile1.caf
        * this works:
@@ -1343,7 +1348,7 @@ defineModule(module, ModuleResolver = (function() {
 
 })());
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 21 */
@@ -1579,7 +1584,7 @@ defineModule(module, FileCompiler = (function() {
 
 })());
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 30 */
@@ -1654,7 +1659,7 @@ defineModule(module, Tools = (function() {
 
 })());
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 31 */
@@ -1775,7 +1780,7 @@ defineModule(module, Run = (function(superClass) {
 
 })(BaseClass));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 33 */
@@ -1852,7 +1857,7 @@ defineModule(module, Register = (function() {
 
 })());
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 34 */
@@ -2258,7 +2263,7 @@ defineModule(module, CafRepl = (function() {
 
 })());
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/module.js */ 16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../node_modules/webpack/buildin/module.js */ 16)(module)))
 
 /***/ }),
 /* 35 */

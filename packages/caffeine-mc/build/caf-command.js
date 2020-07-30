@@ -151,15 +151,13 @@ fs = __webpack_require__(/*! fs-extra */ 18);
 
 path = __webpack_require__(/*! path */ 19);
 
-__webpack_require__(/*! coffee-script/register */ 41);
-
 realRequire = eval('require');
 
 ref = CaffeineMc = eval('require')('./index'), version = ref.version, displayError = ref.displayError, CafRepl = ref.CafRepl, CompileCache = ref.CompileCache;
 
 ref1 = Neptune.Art.StandardLib, log = ref1.log, dashCase = ref1.dashCase, escapeRegExp = ref1.escapeRegExp, present = ref1.present, isString = ref1.isString, Promise = ref1.Promise, formattedInspect = ref1.formattedInspect, each = ref1.each, escapeRegExp = ref1.escapeRegExp;
 
-commander = __webpack_require__(/*! commander */ 42).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'DEPRICATED - cache is on by default').option('--nocache', 'disable compile cache').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
+commander = __webpack_require__(/*! commander */ 41).version(version).usage('[options] <input files and directories>').option('-o, --output <directory>', "where to write output files").option('-c, --compile', 'compile files').option('-C, --cache', 'DEPRICATED - cache is on by default').option('--nocache', 'disable compile cache').option('-p, --prettier', 'apply "prettier" to any js output').option('-t, --transpile [presets...]', 'transpile with babel').option('-d, --debug', 'show debug info').option('-v, --verbose', 'show more output').option('-r, --reset', 'reset cache').option('-M, --inlineMap', 'generate source map and include it directly in output').option('--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version").on("--help", function() {
   return console.log("An output directory is required if more than one input file is specified.\n\nDefault action, if a file is provided, is to execute it.");
 }).parse(process.argv);
 
@@ -307,17 +305,6 @@ if (compile) {
 /***/ }),
 
 /***/ 41:
-/*!*****************************************************************************************!*\
-  !*** external "require('coffee-script/register' /* ABC - not inlining fellow NPM *_/)" ***!
-  \*****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require('coffee-script/register' /* ABC - not inlining fellow NPM */);
-
-/***/ }),
-
-/***/ 42:
 /*!****************************************************************************!*\
   !*** external "require('commander' /* ABC - not inlining fellow NPM *_/)" ***!
   \****************************************************************************/

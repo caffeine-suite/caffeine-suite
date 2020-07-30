@@ -3,10 +3,10 @@
   "bin": {
     "caf": "./caf"
   },
-  "bugs": "https:/github.com/caffeine-suite/caffeine-mc/issues",
+  "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "art-build-configurator": "^1.26.8",
-    "caffeine-eight": "^2.6.0",
+    "art-build-configurator": "*",
+    "caffeine-eight": "*",
     "cardinal": "^1.0.0",
     "chalk": "^1.1.3",
     "colors": "^1.1.2",
@@ -17,14 +17,14 @@
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "devDependencies": {
-    "art-testbench": "^1.17.2",
+    "art-testbench": "*",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chai": "^4.2.0",
     "coffee-loader": "^0.7.3",
     "css-loader": "^3.0.0",
     "json-loader": "^0.5.7",
     "mocha": "^6.2.0",
-    "mock-fs": "^4.10.0",
+    "mock-fs": "^4.5.0",
     "script-loader": "^0.7.2",
     "style-loader": "^1.0.0",
     "three": "^0.109.0",
@@ -35,12 +35,12 @@
     "webpack-node-externals": "^1.7.2",
     "webpack-stylish": "^0.1.8"
   },
-  "homepage": "https://github.com/caffeine-suite/caffeine-mc",
+  "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "license": "ISC",
   "name": "caffeine-mc",
   "repository": {
     "type": "git",
-    "url": "https://github.com/caffeine-suite/caffeine-mc.git"
+    "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
     "build": "webpack --progress",
@@ -48,5 +48,5 @@
     "test": "nn -s;mocha -u tdd",
     "testInBrowser": "webpack-dev-server --progress --env.devServer"
   },
-  "version": "3.0.3"
+  "version": "3.0.4"
 }
