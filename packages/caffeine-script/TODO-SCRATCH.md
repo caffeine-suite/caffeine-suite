@@ -36,6 +36,14 @@ Syntax Highlighting
 
 
 # To Sort
+
+WRONG PRECEDENCE!!!:
+```
+length <= wordWrapLength ? 120
+# should be the same as
+length <= (wordWrapLength ? 120)
+```
+
 ```
 double = 123 # wrongly gets matched as "do"
 ```
