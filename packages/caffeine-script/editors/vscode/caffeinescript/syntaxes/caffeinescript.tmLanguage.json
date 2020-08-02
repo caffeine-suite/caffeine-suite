@@ -182,7 +182,7 @@
         },
         {
           "begin": "\\#\\{\\}",
-          "end": "^",
+          "end": "(?=\n)",
           "name": "source.caffeine.embedded.source",
           "patterns": [
             {
