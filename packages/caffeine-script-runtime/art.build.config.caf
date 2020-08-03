@@ -15,3 +15,16 @@ package: (abcPackage) ->
       build-clean:  "" npm run clean; npm run build
       clean:        "" rm -rf source/*
       watch:        :npm-watch
+
+  jest:
+    testEnvironment: :node
+    collectCoverageFrom:
+      :source/**/*.js
+      :!source/Jest/**/*.js
+      :!source/test/**/*.js
+
+  watch:
+    build:
+      extensions: "" caf coffee
+      patterns:   [] :source-source
+      quiet:      false
