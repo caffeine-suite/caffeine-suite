@@ -1,0 +1,6 @@
+import &ArtStandardLib
+
+&ArtStandardLib.mergeWithSelf
+  &ArtClassSystem
+  &ArtTestbench
+  &source

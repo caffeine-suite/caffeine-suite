@@ -99,6 +99,7 @@ class SourceMapGenerator extends BaseClass
   advance: (generatedString) ->
     index = -1
     lineAdded = false
+    lastStartIndex = null
     while 0 <= index = generatedString.indexOf "\n", lastStartIndex = index + 1
       lineAdded = true
       @addLine()
