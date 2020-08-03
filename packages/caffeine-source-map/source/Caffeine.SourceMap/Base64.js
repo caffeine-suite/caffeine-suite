@@ -77,10 +77,10 @@ Caf.defMod(module, () => {
         string,
         resultObject = { index: 0 }
       ) {
-        let out;
+        let out, result;
         out = [];
+        result = null;
         while ((result = readVlq(string, resultObject))) {
-          let result;
           out.push(result.value);
         }
         return out;

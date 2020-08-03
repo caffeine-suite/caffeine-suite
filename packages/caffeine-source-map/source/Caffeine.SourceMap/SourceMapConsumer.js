@@ -40,10 +40,10 @@ Caf.defMod(module, () => {
               };
             },
             decodedMappings: function() {
-              let out;
+              let out, result;
               out = [];
+              result = null;
               while ((result = this.readMapping(this.mappings, result))) {
-                let result;
                 if (result.mapping) {
                   out.push(result.mapping);
                 }

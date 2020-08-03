@@ -12,7 +12,7 @@ generated =
 sourceFile = "test.caf"
 generatedFile = "test.js"
 
-module.exports = suite:
+describe
   basics: ->
     standard =
       sourceContent:  [source]

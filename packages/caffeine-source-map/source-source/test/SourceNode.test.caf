@@ -1,6 +1,6 @@
 import &StandardImport
 
-suite:
+describe
   children: ->
     test "none", ->
       n = new SourceNode

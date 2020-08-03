@@ -109,6 +109,7 @@ import &ArtStandardLib
 
   readVlqSequence = (string, resultObject = index: 0) ->
     out = []
+    result = null
     while result = readVlq string, resultObject
       out.push result.value
     out
