@@ -24,6 +24,14 @@
     "webpack-stylish": "^0.1.8"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-eight",
+  "jest": {
+    "collectCoverageFrom": [
+      "source/**/*.js",
+      "!source/Jest/**/*.js",
+      "!source/test/**/*.js"
+    ],
+    "testEnvironment": "node"
+  },
   "license": "ISC",
   "name": "caffeine-eight",
   "repository": {
@@ -31,10 +39,20 @@
     "url": "https://github.com/caffeine-suite/caffeine-eight.git"
   },
   "scripts": {
-    "build": "webpack --progress",
-    "start": "webpack-dev-server --hot --inline --progress --env.devServer",
-    "test": "nn -s;mocha -u tdd",
-    "testInBrowser": "webpack-dev-server --progress --env.devServer"
+    "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\nnn -s",
+    "build-clean": "npm run clean; npm run build",
+    "clean": "rm -rf source/*",
+    "test": "jest",
+    "watch": "npm-watch"
   },
-  "version": "2.6.0"
+  "version": "2.6.0",
+  "watch": {
+    "build": {
+      "extensions": "caf coffee",
+      "patterns": [
+        "source-source"
+      ],
+      "quiet": false
+    }
+  }
 }
