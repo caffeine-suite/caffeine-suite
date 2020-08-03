@@ -5,7 +5,7 @@
     "art-build-configurator": "^1.26.14",
     "art-object-tree-factory": "^2.2.2",
     "art-standard-lib": "^1.69.4",
-    "art-testbench": "^2.2.1",
+    "art-testbench": "^2.2.2",
     "caffeine-eight": "file:packages/caffeine-eight",
     "caffeine-mc": "file:packages/caffeine-mc",
     "caffeine-script": "file:packages/caffeine-script",

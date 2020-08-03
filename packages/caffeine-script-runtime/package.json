@@ -4,7 +4,7 @@
   "description": "Runtime library for CaffeineScript",
   "devDependencies": {
     "art-build-configurator": "^1.26.14",
-    "art-testbench": "^2.2.1"
+    "art-testbench": "^2.2.2"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {

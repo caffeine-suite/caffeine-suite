@@ -17,7 +17,7 @@
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "devDependencies": {
-    "art-testbench": "^2.2.1",
+    "art-testbench": "^2.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chai": "^4.2.0",
     "coffee-loader": "^0.7.3",
