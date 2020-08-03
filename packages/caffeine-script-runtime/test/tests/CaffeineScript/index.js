@@ -2,4 +2,3 @@
 // file: tests/CaffeineScript/index.js
 
 module.exports = require('./namespace');
-require('./Runtime');

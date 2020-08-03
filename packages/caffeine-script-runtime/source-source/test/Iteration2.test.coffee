@@ -1,10 +1,11 @@
 {defineModule, log} = require "art-standard-lib"
-Caf = Neptune.CaffeinScript.Runtime
+{describe, test} = require "art-testbench"
+Caf = require "../../"
 
 array123 = [1, 2, 3]
 objectAbc = a: 1, b: 2, c: 3
 
-defineModule module, suite:
+describe
   each2: ->
     test "array123/objectAbc: each2 ...", ->
       assert.same array123,  Caf.each2 array123

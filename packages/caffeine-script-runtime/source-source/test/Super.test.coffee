@@ -1,8 +1,9 @@
 {defineModule, log} = require "art-standard-lib"
 {BaseClass} = require 'art-class-system'
-Caf = Neptune.CaffeinScript.Runtime
+{describe, test} = require "art-testbench"
+Caf = require "../../"
 
-defineModule module, suite:
+describe
   "coffeeScript classes": ->
     class Foo extends BaseClass
       ;

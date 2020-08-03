@@ -2,4 +2,3 @@
 // file: tests/CaffeineScript/namespace.js
 
 module.exports = module.exports =  require('../namespace').vivifySubnamespace('CaffeineScript');
-require('./Runtime/namespace');
