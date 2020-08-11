@@ -1,8 +1,7 @@
 import &ArtStandardLib
-target: node: true
 package: (abcPackage) -> merge &package,
   scripts:
-    test:         abcPackage.scripts.test # :jest
+    test:         "nn -s;mocha -u tdd" # :jest
     build:
       """
         coffee --output source --compile source-source &

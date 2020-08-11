@@ -15,7 +15,6 @@
     "caffeinescript-vscode": "file:packages/caffeine-script/editors/vscode/caffeinescript",
     "caffeinescriptcolors": "file:packages/caffeine-script/editors/vscode/caffeinescriptcolors",
     "cardinal": "^2.0.0",
-    "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chai": "^4.2.0",
     "chalk": "^4.0.0",
     "coffee-loader": "^0.7.3",
@@ -33,13 +32,7 @@
     "script-loader": "^0.7.2",
     "source-map": "^0.7.2",
     "style-loader": "^1.2.1",
-    "three": "^0.119.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2",
-    "webpack-stylish": "^0.1.8"
+    "three": "^0.119.1"
   },
   "scripts": {
     "sync": "art-monorepo sync",

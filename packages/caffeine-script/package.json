@@ -7,8 +7,9 @@
     }
   },
   "dependencies": {
+    "art-class-system": "1.11.6",
+    "art-standard-lib": "^1.69.4",
     "art-binary": "^1.1.7",
-    "art-build-configurator": "^1.26.14",
     "art-object-tree-factory": "^2.2.2",
     "caffeine-eight": "^2.6.0",
     "caffeine-mc": "^3.0.5",
@@ -18,8 +19,8 @@
   },
   "description": "CaffeineScript makes programming more wonderful, code more beautiful and programmers more productive. It is a lean, high-level language that empowers you to get the most out of any JavaScript runtime.",
   "devDependencies": {
+    "art-build-configurator": "^1.26.14",
     "art-testbench": "^2.2.2",
-    "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chai": "^4.2.0",
     "coffee-loader": "^0.7.3",
     "css-loader": "^3.6.0",
@@ -27,15 +28,16 @@
     "mocha": "^6.2.3",
     "mock-fs": "^4.12.0",
     "script-loader": "^0.7.2",
-    "style-loader": "^1.2.1",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2",
-    "webpack-stylish": "^0.1.8"
+    "style-loader": "^1.2.1"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-script",
+  "jest": {
+    "collectCoverageFrom": [
+      "source/**/*.js",
+      "!source/_?[Jjt]est/**/*.js"
+    ],
+    "testEnvironment": "node"
+  },
   "license": "ISC",
   "name": "caffeine-script",
   "repository": {
@@ -44,10 +46,23 @@
   },
   "scripts": {
     "build": "caf -v -p -c cafInCaf -o source",
+    "build-clean": "npm run clean; npm run build",
+    "clean": "rm -rf source/*",
     "perf": "nn -s;mocha -u tdd perf",
-    "start": "webpack-dev-server --hot --inline --progress --env.devServer",
     "test": "nn -s;mocha -u tdd",
-    "testInBrowser": "webpack-dev-server --progress --env.devServer"
+    "watch": "npm-watch"
   },
-  "version": "0.72.2"
+  "version": "0.72.2",
+  "watch": {
+    "build": {
+      "extensions": [
+        "caf",
+        "coffee"
+      ],
+      "patterns": [
+        "source-source"
+      ],
+      "quiet": false
+    }
+  }
 }
