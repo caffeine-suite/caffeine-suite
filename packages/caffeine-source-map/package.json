@@ -8,7 +8,7 @@
   "description": "Caffeine.SourceMap",
   "devDependencies": {
     "art-testbench": "^2.2.2",
-    "jest": "^26.2.2"
+    "jest": "^26.3.0"
   },
   "jest": {
     "collectCoverageFrom": [
