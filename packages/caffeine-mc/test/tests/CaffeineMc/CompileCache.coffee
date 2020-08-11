@@ -60,8 +60,7 @@ module.exports = suite:
       )
 
   FileCompiler: ->
-    suiteSetup ->
-      mockFs initialFs
+    suiteSetup -> mockFs initialFs
     suiteTeardown -> mockFs.restore()
 
     setup -> WorkingCache.resetWorkingCache()
@@ -70,7 +69,7 @@ module.exports = suite:
     .thenTest "initial", ->
       FileCompiler.compileFile sourceFile, cache: true
       .then ({output}) ->
-        assert.false output.fromCache
+        assert.jsFalse output.fromCache
 
     .thenTest "cached", ->
       FileCompiler.compileFile sourceFile, cache: true
@@ -84,4 +83,4 @@ module.exports = suite:
         WorkingCache.resetWorkingCache()
         FileCompiler.compileFile sourceFile, cache: true
       .then ({output}) ->
-        assert.false output.fromCache
+        assert.jsFalse output.fromCache
