@@ -36,6 +36,13 @@
     "webpack-stylish": "^0.1.8"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
+  "jest": {
+    "collectCoverageFrom": [
+      "source/**/*.js",
+      "!source/_?[Jjt]est/**/*.js"
+    ],
+    "testEnvironment": "node"
+  },
   "license": "ISC",
   "name": "caffeine-mc",
   "repository": {
@@ -43,10 +50,23 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "webpack --progress",
-    "start": "webpack-dev-server --hot --inline --progress --env.devServer",
+    "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\nnn -s",
+    "build-clean": "npm run clean; npm run build",
+    "clean": "rm -rf source/*",
     "test": "nn -s;mocha -u tdd",
-    "testInBrowser": "webpack-dev-server --progress --env.devServer"
+    "watch": "npm-watch"
   },
-  "version": "3.0.5"
+  "version": "3.0.5",
+  "watch": {
+    "build": {
+      "extensions": [
+        "caf",
+        "coffee"
+      ],
+      "patterns": [
+        "source-source"
+      ],
+      "quiet": false
+    }
+  }
 }
