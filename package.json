@@ -22,7 +22,7 @@
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "css-loader": "^3.6.0",
-    "fs-extra": "^3.0.0",
+    "fs-extra": "^9.0.0",
     "glob-promise": "^3.1.0",
     "jest": "^26.3.0",
     "json-loader": "^0.5.7",
