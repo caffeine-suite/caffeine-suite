@@ -5,6 +5,7 @@ Caf.defMod(module, () => {
     [
       "SourceRoots",
       "beforeEach",
+      "afterEach",
       "CaffeineMcTestHelper",
       "WorkingCache",
       "test",
@@ -18,11 +19,13 @@ Caf.defMod(module, () => {
       {
         path: require("path"),
         CaffeineMcTestHelper: require("./CaffeineMcTestHelper"),
+        fs: require("fs"),
       },
     ],
     (
       SourceRoots,
       beforeEach,
+      afterEach,
       CaffeineMcTestHelper,
       WorkingCache,
       test,
@@ -36,7 +39,11 @@ Caf.defMod(module, () => {
       _resetSourceRoots = SourceRoots._resetSourceRoots;
       beforeEach(function () {
         WorkingCache.resetWorkingCache();
+        CaffeineMcTestHelper.mockFileSystem();
         return CaffeineMcTestHelper.reset();
+      });
+      afterEach(function () {
+        return CaffeineMcTestHelper.unmockFileSystem();
       });
       Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
         test(`findSourceRoot ${Caf.toString(

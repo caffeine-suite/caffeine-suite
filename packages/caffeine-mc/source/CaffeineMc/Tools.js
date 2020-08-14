@@ -17,6 +17,10 @@
       return /\.(caf|caffeine)$/.test(filename);
     };
 
+    Tools.__preloadCoffeeScriptForTests = function() {
+      return require("coffee-script");
+    };
+
     Tools.runInContext = function(js, context, filename) {
       if (context === global) {
         return vm.runInThisContext(js, filename);

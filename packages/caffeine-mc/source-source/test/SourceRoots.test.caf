@@ -1,11 +1,15 @@
-import &StandardImport, {} &path, &CaffeineMcTestHelper
+import &StandardImport, {} &path, &CaffeineMcTestHelper, &fs
 
 SourceRoots extract
   getCaffeineInit, findSourceRoot, _resetSourceRoots
 
 beforeEach ->
   WorkingCache.resetWorkingCache()
+  CaffeineMcTestHelper.mockFileSystem()
   CaffeineMcTestHelper.reset()
+
+afterEach ->
+  CaffeineMcTestHelper.unmockFileSystem()
 
 each file from CaffeineMcTestHelper.testFiles
   test "findSourceRoot #{path.basename file}", ->
@@ -16,14 +20,12 @@ each file from CaffeineMcTestHelper.testFiles
 each file from CaffeineMcTestHelper.testFiles
   test "getCaffeineInit #{path.basename file}", ->
     findSourceRoot file
-    .then (sourceRoot) ->
-      getCaffeineInit sourceRoot
+    .then (sourceRoot) -> getCaffeineInit sourceRoot
     .then (caffeineInit) ->
-      assert.eq CaffeineMcTestHelper.testLog, [
+      assert.eq CaffeineMcTestHelper.testLog, []
         "caffeine-mc.config.caf loaded"
         'caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined'
         "caffeine-mc.config.caf ran"
-      ]
 
       assert.eq caffeineInit.config, mySpecialConfig: "worked!"
       assert.isFunction caffeineInit.compiler.compile

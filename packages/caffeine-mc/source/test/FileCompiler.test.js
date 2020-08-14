@@ -5,6 +5,7 @@ Caf.defMod(module, () => {
     [
       "describe",
       "beforeEach",
+      "afterEach",
       "CaffeineMcTestHelper",
       "test",
       "path",
@@ -23,6 +24,7 @@ Caf.defMod(module, () => {
     (
       describe,
       beforeEach,
+      afterEach,
       CaffeineMcTestHelper,
       test,
       path,
@@ -32,7 +34,11 @@ Caf.defMod(module, () => {
     ) => {
       return describe({
         basic: function () {
-          beforeEach(() => CaffeineMcTestHelper.reset());
+          beforeEach(() => {
+            CaffeineMcTestHelper.mockFileSystem();
+            return CaffeineMcTestHelper.reset();
+          });
+          afterEach(() => CaffeineMcTestHelper.unmockFileSystem());
           return Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
             test(`compileFile ${Caf.toString(path.basename(file))}`, () =>
               compileFile(file).then((out) => {
@@ -51,9 +57,11 @@ Caf.defMod(module, () => {
         },
         withCache: function () {
           beforeEach(() => {
-            CaffeineMcTestHelper.reset();
-            return CompileCache.reset();
+            CompileCache.reset();
+            CaffeineMcTestHelper.mockFileSystem();
+            return CaffeineMcTestHelper.reset();
           });
+          afterEach(() => CaffeineMcTestHelper.unmockFileSystem());
           return Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
             test(`compileFile ${Caf.toString(path.basename(file))}`, () => {
               let firstCompileOutput;

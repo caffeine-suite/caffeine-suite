@@ -5,9 +5,10 @@ Caf.defMod(module, () => {
     [
       "describe",
       "beforeEach",
+      "afterEach",
       "CaffeineMcTestHelper",
-      "test",
       "WorkingCache",
+      "test",
       "assert",
       "findModule",
       "afterAll",
@@ -17,7 +18,6 @@ Caf.defMod(module, () => {
       "Object",
       "merge",
       "findModuleSync",
-      "log",
       "getNpmPackageName",
     ],
     [
@@ -31,9 +31,10 @@ Caf.defMod(module, () => {
     (
       describe,
       beforeEach,
+      afterEach,
       CaffeineMcTestHelper,
-      test,
       WorkingCache,
+      test,
       assert,
       findModule,
       afterAll,
@@ -43,15 +44,16 @@ Caf.defMod(module, () => {
       Object,
       merge,
       findModuleSync,
-      log,
       getNpmPackageName
     ) => {
       return describe({
         findModule: function () {
           beforeEach(() => {
             WorkingCache.resetWorkingCache();
+            CaffeineMcTestHelper.mockFileSystem();
             return CaffeineMcTestHelper.reset();
           });
+          afterEach(() => CaffeineMcTestHelper.unmockFileSystem());
           Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
             test(`'sub-awesome' in absolutePath.basename('${Caf.toString(
               file
@@ -142,7 +144,7 @@ Caf.defMod(module, () => {
                 findModule("DotCaffeineRootPeer.caf", { sourceFile: file })
               ))
           );
-          Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
+          return Caf.each2(CaffeineMcTestHelper.testFiles, (file) =>
             test(`'SourceRoots' in absolutePath.basename('${Caf.toString(
               file
             )}') should not match because it is the parent of the root`, () =>
@@ -150,6 +152,8 @@ Caf.defMod(module, () => {
                 findModule("SourceRoots", { sourceFile: file })
               ))
           );
+        },
+        npmModules: function () {
           test("npm module", () =>
             findModule("ArtStandardLib", { sourceDir: "." }).then(
               ({ requireString, absolutePath }) => {
@@ -251,7 +255,7 @@ Caf.defMod(module, () => {
               sourceRoot: "myRoot",
             });
             assert.eq(found.requireString, "../StandardImport");
-            return assert.isString(log(found.absolutePath));
+            return assert.isString(found.absolutePath);
           });
         },
         regressions: function () {

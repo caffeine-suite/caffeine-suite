@@ -4,7 +4,11 @@ describe
   findModule: ->
     beforeEach ->
       WorkingCache.resetWorkingCache()
+      CaffeineMcTestHelper.mockFileSystem()
       CaffeineMcTestHelper.reset()
+
+    afterEach ->
+      CaffeineMcTestHelper.unmockFileSystem()
 
     each file from CaffeineMcTestHelper.testFiles
       test "'sub-awesome' in absolutePath.basename('#{file}')", ->
@@ -49,6 +53,7 @@ describe
       test "'SourceRoots' in absolutePath.basename('#{file}') should not match because it is the parent of the root", ->
         assert.rejects -> findModule "SourceRoots", sourceFile: file
 
+  npmModules: ->
     test "npm module", ->
       findModule "ArtStandardLib", sourceDir: "."
       .then ({requireString, absolutePath}) ->
@@ -133,7 +138,7 @@ describe
         sourceRoot: "myRoot"
 
       assert.eq found.requireString, "../StandardImport"
-      assert.isString log found.absolutePath
+      assert.isString found.absolutePath
 
     ### regressions to test:
         &testing/testingMin >> testing/testing-min.js

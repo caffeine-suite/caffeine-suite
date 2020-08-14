@@ -3,7 +3,11 @@ import &StandardImport, {} &path, &CaffeineMcTestHelper
 describe
   basic: ->
     beforeEach ->
+      CaffeineMcTestHelper.mockFileSystem()
       CaffeineMcTestHelper.reset()
+
+    afterEach ->
+      CaffeineMcTestHelper.unmockFileSystem()
 
     each file from CaffeineMcTestHelper.testFiles
       test "compileFile #{path.basename file}", ->
@@ -18,8 +22,12 @@ describe
 
   withCache: ->
     beforeEach ->
-      CaffeineMcTestHelper.reset()
       CompileCache.reset()
+      CaffeineMcTestHelper.mockFileSystem()
+      CaffeineMcTestHelper.reset()
+
+    afterEach ->
+      CaffeineMcTestHelper.unmockFileSystem()
 
     each file from CaffeineMcTestHelper.testFiles
       test "compileFile #{path.basename file}", ->
