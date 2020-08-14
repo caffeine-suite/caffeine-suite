@@ -1,16 +1,12 @@
-{defineModule, log, each, merge, isArray} = require 'art-standard-lib'
+import &StandardImport, {} &mockFs, &CaffeineMcTestHelper
 
-{findModule, findModuleSync, WorkingCache, getNpmPackageName} = Neptune.CaffeineMc
-mockFs = require 'mock-fs'
-
-defineModule module, suite:
-
+describe
   findModule: ->
-    setup ->
+    beforeEach ->
       WorkingCache.resetWorkingCache()
       CaffeineMcTestHelper.reset()
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'sub-awesome' in absolutePath.basename('#{file}')", ->
         if /HurlockAlpha\.caf/.test file
           assert.rejects findModule "hurlock-alpha", sourceFile: file
@@ -20,36 +16,36 @@ defineModule module, suite:
             assert.match requireString, /\..*HurlockAlpha/, "requireString"
             assert.match absolutePath, /\/.*\/HurlockAlpha/, "absolutePath"
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'sub-awesome/betaRelease' in absolutePath.basename('#{file}')", ->
         findModule "sub-awesome/betaRelease", sourceFile: file
         .then ({requireString, absolutePath}) ->
           assert.match requireString, /\..*\/BetaRelease$/, "requireString"
           assert.match absolutePath, /\/.*\/SubAwesome\/BetaRelease$/, "absolutePath"
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'hurlock-alpha.caf' in absolutePath.basename('#{file}')", ->
         findModule "hurlock-alpha.caf", sourceFile: file
         .then ({requireString, absolutePath}) ->
           assert.match requireString, /\.\/HurlockAlpha\.caf$/, "requireString"
           assert.match absolutePath, /DotCaffeineRoot\/HurlockAlpha\.caf$/, "absolutePath"
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'DotCaffeineRoot' in absolutePath.basename('#{file}')", ->
         findModule "DotCaffeineRoot", sourceFile: file
         .then ({requireString, absolutePath}) ->
           assert.match requireString, /\.\/$/, "requireString"
           assert.match absolutePath, /DotCaffeineRoot$/, "absolutePath"
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'hurlock' in absolutePath.basename('#{file}') should not match because it is only partial", ->
         assert.rejects -> findModule "hurlock", sourceFile: file
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'DotCaffeineRootPeer.caf' in absolutePath.basename('#{file}') should not match because it is a peer of the root", ->
         assert.rejects -> findModule "DotCaffeineRootPeer.caf", sourceFile: file
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "'SourceRoots' in absolutePath.basename('#{file}') should not match because it is the parent of the root", ->
         assert.rejects -> findModule "SourceRoots", sourceFile: file
 
@@ -67,23 +63,23 @@ defineModule module, suite:
 
   stubbedFindModule: ->
     # setup -> mockFs initialFs
-    setup ->
+    beforeEach ->
       WorkingCache.resetWorkingCache()
 
-    teardown -> mockFs.restore()
+    afterAll -> mockFs.restore()
 
     dirReaderFromDirMap = (structure) ->
-      find = (dir, current = structure) ->
+      findDir = (dir, current = structure) ->
         return current if dir.length == 0
         [first, rest...] = if isArray dir then dir else dir.split "/"
-        find rest, structure[first]
+        findDir rest, structure[first]
 
       dirReader:
         read: (dir) ->
-          found = find dir
+          found = findDir dir
           throw new Error "missing dir: #{dir}" unless found
           Object.keys found
-        isDir: (dir) -> !!find dir
+        isDir: (dir) -> !!findDir dir
         resolve: (dir) -> dir
 
     test "stubbed", ->
@@ -140,29 +136,25 @@ defineModule module, suite:
       assert.isString log found.absolutePath
 
     ### regressions to test:
-      &testing/testingMin >> testing/testing-min.js
-      should become:
-      &testing/build/testing-min
+        &testing/testingMin >> testing/testing-min.js
+        should become:
+        &testing/build/testing-min
 
-    - &ArtSuite
-      should NOT resolve a parent directory named: Art.Suite.Demos
-    - &indexeddb-promised
-      should resolve to 'indexeddb-promised'
-      even though the actual file is: indexeddb-promised/js/indexeddb-promised.js
-
-    ###
+      - &ArtSuite
+        should NOT resolve a parent directory named: Art.Suite.Demos
+      - &indexeddb-promised
+        should resolve to 'indexeddb-promised'
+        even though the actual file is: indexeddb-promised/js/indexeddb-promised.js
 
   regressions: ->
     test 'getNpmPackageName', ->
-      assert.eq(
+      assert.eq
         getNpmPackageName('three', ['build', 'three.min'])
         requireString: "three"
         absolutePath:  require.resolve("three/build/three.min").split(/\/build/)[0]
-      )
 
     test "findModuleSync 'three/build/threeMin' - should return same as require.resolve", ->
-      assert.eq(
+      assert.eq
         requireString: "three/build/three.min"
         absolutePath: require.resolve("three/build/three.min").split(/\.js$/)[0]
         findModuleSync "three/build/threeMin"
-      )

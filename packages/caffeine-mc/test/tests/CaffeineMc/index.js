@@ -4,6 +4,5 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  CaffeineMcTestHelper: require('./CaffeineMcTestHelper'),
-  ModuleResolver:       require('./ModuleResolver')
+  CaffeineMcTestHelper: require('./CaffeineMcTestHelper')
 });

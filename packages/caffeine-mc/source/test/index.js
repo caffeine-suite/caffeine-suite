@@ -13,6 +13,8 @@
   FileCompilerTest:     require('./FileCompiler.test'),
   MetaCompiler:         require('./MetaCompiler'),
   MetaCompilerTest:     require('./MetaCompiler.test'),
+  ModuleResolver:       require('./ModuleResolver'),
+  ModuleResolverTest:   require('./ModuleResolver.test'),
   SourceRoots:          require('./SourceRoots'),
   SourceRootsTest:      require('./SourceRoots.test'),
   StandardImport:       require('./StandardImport'),
