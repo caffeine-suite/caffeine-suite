@@ -30,6 +30,12 @@
       return new Metacompiler().compile(code, options);
     };
 
+    Metacompiler.classGetter({
+      CaffeineScript: function() {
+        return require('caffeine-script');
+      }
+    });
+
     Metacompiler.getter("compiler lastMetacompilerResult", {
       current: function() {
         return this.compiler;
@@ -81,7 +87,7 @@
       Metacompiler.__super__.constructor.apply(this, arguments);
       this._metaParser = new CaffeineMcParser;
       this._metaCompiler = this;
-      this._compiler = require('caffeine-script');
+      this._compiler = this["class"].CaffeineScript;
       this.compilers = {};
     }
 

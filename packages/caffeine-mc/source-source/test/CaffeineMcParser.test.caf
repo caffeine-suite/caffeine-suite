@@ -1,7 +1,6 @@
-{CaffeineMcParser} = require 'caffeine-mc'
-{log} = Neptune.Art.StandardLib
+import &ArtStandardLib, &ArtTestbench, &CaffeineMc
 
-module.exports = suite:
+describe
   noMetaCode: ->
     test "'hi'", ->
       parser = new CaffeineMcParser
@@ -27,7 +26,7 @@ module.exports = suite:
   illegal: ->
     test "|AwesomeScript some meta code on one line without column after compiler-name", ->
       parser = new CaffeineMcParser
-      assert.throws -> parser.parse "|AwesomeScript some meta code on one line without column after compiler-name"
+      assert.rejects -> parser.parse "|AwesomeScript some meta code on one line without column after compiler-name"
 
   degenerate: ->
     test "|", ->
@@ -112,23 +111,26 @@ module.exports = suite:
 
       test "multi lines", ->
         parser = new CaffeineMcParser
-        {metaCode, compilerName, code} = parser.parse """
-          |AwesomeScript
+        {metaCode, compilerName, code} = parser.parse
+          """
+            |AwesomeScript
+              # comment
+
+              # blank line above
+              some code
+                indented
+                  and some more
+
+        assert.eq code, '', "code should be empty"
+        assert.eq
+          metaCode
+          """
             # comment
 
             # blank line above
             some code
               indented
                 and some more
-          """
-        assert.eq code, ""
-        assert.eq metaCode,   """
-          # comment
 
-          # blank line above
-          some code
-            indented
-              and some more
-          """
         assert.eq compilerName, "AwesomeScript"
 

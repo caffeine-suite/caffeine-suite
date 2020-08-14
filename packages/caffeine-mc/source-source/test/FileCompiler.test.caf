@@ -1,31 +1,27 @@
-{defineModule, log, each} = require 'art-standard-lib'
-path = require 'path'
+import &StandardImport, {} &path, &CaffeineMcTestHelper
 
-{compileFile, CompileCache} = Neptune.CaffeineMc
-
-defineModule module, suite:
+describe
   basic: ->
-    setup ->
+    beforeEach ->
       CaffeineMcTestHelper.reset()
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "compileFile #{path.basename file}", ->
         compileFile file
         .then (out) ->
           filename = path.basename file
-          assert.eq CaffeineMcTestHelper.testLog, [
+          assert.eq CaffeineMcTestHelper.testLog, []
             "caffeine-mc.config.caf loaded"
             'caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined'
             "caffeine-mc.config.caf ran"
             "caffeine-mc.config.caf custom compiler used on: #{filename}, mySpecialConfig: :worked!"
-          ]
 
   withCache: ->
-    setup ->
+    beforeEach ->
       CaffeineMcTestHelper.reset()
       CompileCache.reset()
 
-    each CaffeineMcTestHelper.testFiles, (file) ->
+    each file from CaffeineMcTestHelper.testFiles
       test "compileFile #{path.basename file}", ->
         firstCompileOutput = null
         compileFile file, cache: true
@@ -38,11 +34,11 @@ defineModule module, suite:
           compileFile file, cache: true
 
         .then (secondCompileOutput) ->
-          assert.eq CaffeineMcTestHelper.testLog, [
+          assert.eq CaffeineMcTestHelper.testLog, []
             "caffeine-mc.config.caf loaded"
             "caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined"
             "caffeine-mc.config.caf ran"
-          ]
+
           assert.ok secondCompileOutput.output.fromCache
           assert.eq secondCompileOutput.output.compiled, firstCompileOutput.output.compiled
 

@@ -19,6 +19,9 @@ module.exports = class Metacompiler extends BaseClass
   @compile: (code, options = {})=>
     new @().compile code, options
 
+  @classGetter
+    CaffeineScript: -> require 'caffeine-script'
+
   @getter "compiler lastMetacompilerResult",
     current: -> @compiler
 
@@ -57,7 +60,7 @@ module.exports = class Metacompiler extends BaseClass
     super
     @_metaParser = new CaffeineMcParser
     @_metaCompiler = @
-    @_compiler = require 'caffeine-script' #Compilers.JavaScript
+    @_compiler = @class.CaffeineScript
     @compilers = {}
 
   normalizeCompilerResult: (result) ->

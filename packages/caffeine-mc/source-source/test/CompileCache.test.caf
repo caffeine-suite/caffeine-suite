@@ -1,11 +1,7 @@
-{merge, log, objectWithout} = require 'art-standard-lib'
-{SourceRoots, CompileCache, FileCompiler, WorkingCache} = Neptune.CaffeineMc
-mockFs = require 'mock-fs'
-fs = require 'fs-extra'
-{ChainedTest} = require 'art-testbench'
-require "caffeine-script"
-require "art-standard-lib/Core"
-path = require 'path'
+import &ArtStandardLib, &CaffeineMc, &ArtTestbench, &CaffeineScript, {}
+  &mockFs
+  &path
+  fs: &fsExtra
 
 sourceRootName = "AliceInLove"
 sourceRoot = "/home/alice/#{sourceRootName}"
@@ -21,10 +17,10 @@ initialFs =
       Lib: "#{sourceFileName}.caf": "&standard_import"
       "StandardImport.caf": ":foo"
 
-module.exports = suite:
+describe
   basic: ->
-    setup -> mockFs initialFs
-    teardown -> mockFs.restore()
+    beforeAll -> mockFs initialFs
+    afterAll -> mockFs.restore()
 
     fakeInfo =
       compiler:
@@ -48,39 +44,40 @@ module.exports = suite:
       assert.eq fakeInfo.compiled, CompileCache.fetch(objectWithout fakeInfo, "compiled").compiled
 
     test "different compilerOptions generates different cache filenames", ->
-      assert.neq(
+      assert.neq
         CompileCache.getFileName merge fakeInfo, compilerOptions: {}
         CompileCache.getFileName merge fakeInfo, compilerOptions: transpile: true
-      )
 
     test "compilerOptions with different order still generates same cache filenames", ->
-      assert.eq(
+      assert.eq
         CompileCache.getFileName merge fakeInfo, compilerOptions: a: 1, b: 2
         CompileCache.getFileName merge fakeInfo, compilerOptions: b: 2, a: 1
-      )
 
   FileCompiler: ->
-    suiteSetup -> mockFs initialFs
-    suiteTeardown -> mockFs.restore()
+    beforeAll ->
+      # have to preload caffeineScript because of mockFs
+      Metacompiler.CaffeineScript
+      mockFs initialFs
 
-    setup -> WorkingCache.resetWorkingCache()
+    afterAll -> mockFs.restore()
 
-    ChainedTest.setup()
-    .thenTest "initial", ->
-      FileCompiler.compileFile sourceFile, cache: true
-      .then ({output}) ->
-        assert.jsFalse output.fromCache
-
-    .thenTest "cached", ->
-      FileCompiler.compileFile sourceFile, cache: true
-      .then ({output}) ->
-        assert.true output.fromCache
-
-    .thenTest "move moduleDependency triggers recompile", ->
-      outputFilename = path.join path.dirname(sourceFile), "StandardImport.caf"
-      fs.writeFile outputFilename, ":bar"
-      .then ->
-        WorkingCache.resetWorkingCache()
+    chainedTest "init" -> WorkingCache.resetWorkingCache()
+    .thenTest
+      "initial", ->
         FileCompiler.compileFile sourceFile, cache: true
-      .then ({output}) ->
-        assert.jsFalse output.fromCache
+        .then ({output}) ->
+          assert.jsFalse output.fromCache
+
+      "cached", ->
+        FileCompiler.compileFile sourceFile, cache: true
+        .then ({output}) ->
+          assert.true output.fromCache
+
+      "move moduleDependency triggers recompile", ->
+        outputFilename = path.join path.dirname(sourceFile), "StandardImport.caf"
+        fs.writeFile outputFilename, ":bar"
+        .then ->
+          WorkingCache.resetWorkingCache()
+          FileCompiler.compileFile sourceFile, cache: true
+        .then ({output}) ->
+          assert.jsFalse output.fromCache
