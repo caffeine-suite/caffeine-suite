@@ -101,6 +101,15 @@ patterns:
         {} include: #escape
         {} include: :#interpolation
 
+    # block regexp
+    {}
+      begin:  "" ///[igmuy]*( |\\t)*
+      end:    "" ($|\\n)
+      name: :string.regexp.caffeine
+      patterns: []
+        {} include: #escape
+        {} include: :#interpolation
+
     #############################
     # macro
     {}
