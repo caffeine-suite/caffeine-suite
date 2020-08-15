@@ -18,15 +18,15 @@ crypto = require 'crypto'
 os = require 'os'
 path = require 'path'
 ###
-cachedFileKey: (object)
-  compiler:   (required, object) compiler
-  source:     (required, string) source-code
-  sourceFile: (required, string) source file path & name
-  compilerOptions: (object) all options which affect the generated output
+  cachedFileKey: (object)
+    compiler:   (required, object) compiler
+    source:     (required, string) source-code
+    sourceFile: (required, string) source file path & name
+    compilerOptions: (object) all options which affect the generated output
 
-cachedFileKeyWithCompilerResults: (object)
-  all the cachedFileKey fields
-  compiled: (required, object) the compiler's results
+  cachedFileKeyWithCompilerResults: (object)
+    all the cachedFileKey fields
+    compiled: (required, object) the compiler's results
 ###
 
 defineModule module, class CompileCache extends BaseClass
