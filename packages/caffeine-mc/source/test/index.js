@@ -4,19 +4,12 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  CaffeineMcParser:     require('./CaffeineMcParser'),
   CaffeineMcParserTest: require('./CaffeineMcParser.test'),
   CaffeineMcTestHelper: require('./CaffeineMcTestHelper'),
-  CompileCache:         require('./CompileCache'),
   CompileCacheTest:     require('./CompileCache.test'),
-  FileCompiler:         require('./FileCompiler'),
   FileCompilerTest:     require('./FileCompiler.test'),
-  MetaCompiler:         require('./MetaCompiler'),
   MetaCompilerTest:     require('./MetaCompiler.test'),
-  ModuleResolver:       require('./ModuleResolver'),
   ModuleResolverTest:   require('./ModuleResolver.test'),
-  SourceRoots:          require('./SourceRoots'),
   SourceRootsTest:      require('./SourceRoots.test'),
-  StandardImport:       require('./StandardImport'),
-  TestCompiler:         require('./TestCompiler')
+  StandardImport:       require('./StandardImport')
 });

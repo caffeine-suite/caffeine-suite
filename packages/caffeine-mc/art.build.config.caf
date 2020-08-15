@@ -5,7 +5,11 @@ package: (abcPackage) ->
       coffee --output #{target} --compile source-source &
       caf -p -c source-source -o #{target} &
       wait
+      cd source-source
+      find . -name '*.js' | cpio -pdm ../#{target}
+      cd ..
       nn -s
+
   merge &package,
     scripts:
       test:         "nn -s;mocha -u tdd" # :jest
@@ -14,9 +18,11 @@ package: (abcPackage) ->
       build-clean:
         """
           rm -rf source-building
+          mkdir source-building
           #{} buildScript :source-building
           rm -rf source
           mv source-building source
+          nn -s
 
       watch:        :npm-watch
 
