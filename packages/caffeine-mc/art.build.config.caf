@@ -6,13 +6,13 @@ package: (abcPackage) ->
       caf -p -c source-source -o #{target} &
       wait
       cd source-source
-      find . -name '*.js' | cpio -pdm ../#{target}
+      find . -name '*.js' | cpio -vpdm ../#{target}
       cd ..
       nn -s
 
   merge &package,
     scripts:
-      test:         "nn -s;mocha -u tdd" # :jest
+      test:         "jest" # :jest
       build: buildScript :source
 
       build-clean:

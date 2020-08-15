@@ -40,9 +40,9 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\ncd source-source\nfind . -name '*.js' | cpio -pdm ../source\ncd ..\nnn -s",
-    "build-clean": "rm -rf source-building\nmkdir source-building\ncoffee --output source-building --compile source-source &\ncaf -p -c source-source -o source-building &\nwait\ncd source-source\nfind . -name '*.js' | cpio -pdm ../source\ncd ..\nnn -s\nrm -rf source\nmv source-building source\nnn -s",
-    "test": "nn -s;mocha -u tdd",
+    "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source\ncd ..\nnn -s",
+    "build-clean": "rm -rf source-building\nmkdir source-building\ncoffee --output source-building --compile source-source &\ncaf -p -c source-source -o source-building &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source-building\ncd ..\nnn -s\nrm -rf source\nmv source-building source\nnn -s",
+    "test": "jest",
     "watch": "npm-watch"
   },
   "version": "3.0.5",
