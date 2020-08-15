@@ -36,7 +36,6 @@ defineModule module, class SourceRoots extends BaseClass
   # OUT: promise.then (caffeineInit) ->
   #   caffeineInit is a js string or false
   @getCaffeineInit: (sourceRoot = process.cwd()) =>
-    # log getCaffeineInit: {sourceRoot}
     if (res = @caffeineInits[sourceRoot])?
       Promise.resolve res
     else

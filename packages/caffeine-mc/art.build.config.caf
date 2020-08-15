@@ -1,26 +1,33 @@
 import &ArtStandardLib
-package: (abcPackage) -> merge &package,
-  scripts:
-    test:         "nn -s;mocha -u tdd" # :jest
-    build:
-      """
-        coffee --output source --compile source-source &
-        caf -p -c source-source -o source &
-        wait
-        nn -s
+package: (abcPackage) ->
+  buildScript = (target) ->
+    """
+      coffee --output #{target} --compile source-source &
+      caf -p -c source-source -o #{target} &
+      wait
+      nn -s
+  merge &package,
+    scripts:
+      test:         "nn -s;mocha -u tdd" # :jest
+      build: buildScript :source
 
-    build-clean:  "" npm run clean; npm run build
-    clean:        "" rm -rf source/*
-    watch:        :npm-watch
+      build-clean:
+        """
+          rm -rf source-building
+          #{} buildScript :source-building
+          rm -rf source
+          mv source-building source
 
-  jest:
-    testEnvironment: :node
-    collectCoverageFrom:
-      "source/**/*.js",
-      "!source/_?[Jjt]est/**/*.js"
+      watch:        :npm-watch
 
-  watch:
-    build:
-      extensions: :caf :coffee
-      patterns:   [] :source-source
-      quiet:      false
+    jest:
+      testEnvironment: :node
+      collectCoverageFrom:
+        "source/**/*.js",
+        "!source/_?[Jjt]est/**/*.js"
+
+    watch:
+      build:
+        extensions: :caf :coffee
+        patterns:   [] :source-source
+        quiet:      false

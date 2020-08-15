@@ -41,8 +41,7 @@
   },
   "scripts": {
     "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\nnn -s",
-    "build-clean": "npm run clean; npm run build",
-    "clean": "rm -rf source/*",
+    "build-clean": "rm -rf source-building\ncoffee --output source-building --compile source-source &\ncaf -p -c source-source -o source-building &\nwait\nnn -s\nrm -rf source\nmv source-building source",
     "test": "nn -s;mocha -u tdd",
     "watch": "npm-watch"
   },

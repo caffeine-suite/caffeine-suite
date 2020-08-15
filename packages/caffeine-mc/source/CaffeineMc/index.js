@@ -17,6 +17,7 @@
   SourceRoots:      require('./SourceRoots'),
   StandardImport:   require('./StandardImport'),
   Tools:            require('./Tools'),
+  Tools2:           require('./Tools2'),
   WorkingCache:     require('./WorkingCache')
 });
 require('./Compilers');
