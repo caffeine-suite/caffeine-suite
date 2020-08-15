@@ -1,4 +1,4 @@
-import &StandardImport, {} &path, fs: &fsExtra
+import &StandardImport
 
 fileExists = (filename) -> fs.existsSync(filename) && filename
 

@@ -1,0 +1,20 @@
+import &StandardImport
+workingCache = {}
+
+cacheExpiresIn = 1 # seconds
+workingCacheLastResetAt = currentSecond() - cacheExpiresIn * 10
+
+{}
+  checkWorkingCacheExpiration: ->
+    if currentSecond() - workingCacheLastResetAt > cacheExpiresIn
+      resetWorkingCache()
+
+  resetWorkingCache = -> workingCache = {}
+
+  cacheRead:  cacheRead   = (key, p)    -> workingCache[key]?[p]
+  cacheWrite: cacheWrite  = (key, p, v) -> (workingCache[key]?={})[p] = v
+
+  cacheable: (key, f) ->
+    (p) ->
+      cacheRead key, p
+      ? cacheWrite key, p, f p

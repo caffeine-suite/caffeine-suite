@@ -1,0 +1,5 @@
+import &StandardImport, &WorkingCache
+
+isDir:    cacheable :isDir    (p) -> fs.statSync(p).isDirectory()
+read:     cacheable :read     fs.readdirSync
+resolve:  cacheable :resolve  path.resolve

@@ -14,11 +14,7 @@ Caf.defMod(module, () => {
       "Neptune",
       "path",
     ],
-    [
-      global,
-      require("./StandardImport"),
-      { path: require("path"), fs: require("fs-extra") },
-    ],
+    [global, require("./StandardImport")],
     (
       BaseClass,
       fs,
