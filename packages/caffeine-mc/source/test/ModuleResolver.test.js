@@ -7,11 +7,11 @@ Caf.defMod(module, () => {
       "beforeEach",
       "afterEach",
       "CaffeineMcTestHelper",
-      "WorkingCache",
       "test",
       "assert",
       "findModule",
       "afterAll",
+      "WorkingCache",
       "mockFs",
       "isArray",
       "Error",
@@ -33,11 +33,11 @@ Caf.defMod(module, () => {
       beforeEach,
       afterEach,
       CaffeineMcTestHelper,
-      WorkingCache,
       test,
       assert,
       findModule,
       afterAll,
+      WorkingCache,
       mockFs,
       isArray,
       Error,
@@ -49,7 +49,6 @@ Caf.defMod(module, () => {
       return describe({
         findModule: function () {
           beforeEach(() => {
-            WorkingCache.resetWorkingCache();
             CaffeineMcTestHelper.mockFileSystem();
             return CaffeineMcTestHelper.reset();
           });

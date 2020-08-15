@@ -5,7 +5,8 @@ global.CaffeineMcTestHelper = class CaffeineMcTestHelper extends BaseObject
 
   @log: (str) => @testLog.push str
   @reset: =>
-    Neptune.CaffeineMc.SourceRoots._resetSourceRoots()
+    WorkingCache.resetWorkingCache()
+    CaffeineMc.SourceRoots._resetSourceRoots()
     @testLog = []
 
   @testFiles:

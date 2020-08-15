@@ -4,7 +4,6 @@ SourceRoots extract
   getCaffeineInit, findSourceRoot, _resetSourceRoots
 
 beforeEach ->
-  WorkingCache.resetWorkingCache()
   CaffeineMcTestHelper.mockFileSystem()
   CaffeineMcTestHelper.reset()
 

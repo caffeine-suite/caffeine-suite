@@ -15,6 +15,7 @@
   Register:         require('./Register'),
   Run:              require('./Run'),
   SourceRoots:      require('./SourceRoots'),
+  StandardImport:   require('./StandardImport'),
   Tools:            require('./Tools'),
   WorkingCache:     require('./WorkingCache')
 });

@@ -6,7 +6,8 @@ Caf.defMod(module, () => {
       "BaseObject",
       "path",
       "process",
-      "Neptune",
+      "WorkingCache",
+      "CaffeineMc",
       "Tools",
       "Metacompiler",
       "mockFs",
@@ -16,7 +17,16 @@ Caf.defMod(module, () => {
       require("./StandardImport"),
       { path: require("path"), mockFs: require("mock-fs") },
     ],
-    (BaseObject, path, process, Neptune, Tools, Metacompiler, mockFs) => {
+    (
+      BaseObject,
+      path,
+      process,
+      WorkingCache,
+      CaffeineMc,
+      Tools,
+      Metacompiler,
+      mockFs
+    ) => {
       let CaffeineMcTestHelper;
       return (global.CaffeineMcTestHelper = CaffeineMcTestHelper = Caf.defClass(
         class CaffeineMcTestHelper extends BaseObject {},
@@ -24,7 +34,8 @@ Caf.defMod(module, () => {
           this.classProperty({ testLog: [] });
           this.log = (str) => this.testLog.push(str);
           this.reset = () => {
-            Neptune.CaffeineMc.SourceRoots._resetSourceRoots();
+            WorkingCache.resetWorkingCache();
+            CaffeineMc.SourceRoots._resetSourceRoots();
             return (this.testLog = []);
           };
           this.testFiles = {

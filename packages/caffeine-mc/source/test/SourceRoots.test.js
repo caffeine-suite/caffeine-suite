@@ -7,7 +7,6 @@ Caf.defMod(module, () => {
       "beforeEach",
       "afterEach",
       "CaffeineMcTestHelper",
-      "WorkingCache",
       "test",
       "path",
       "assert",
@@ -27,7 +26,6 @@ Caf.defMod(module, () => {
       beforeEach,
       afterEach,
       CaffeineMcTestHelper,
-      WorkingCache,
       test,
       path,
       assert,
@@ -38,7 +36,6 @@ Caf.defMod(module, () => {
       findSourceRoot = SourceRoots.findSourceRoot;
       _resetSourceRoots = SourceRoots._resetSourceRoots;
       beforeEach(function () {
-        WorkingCache.resetWorkingCache();
         CaffeineMcTestHelper.mockFileSystem();
         return CaffeineMcTestHelper.reset();
       });

@@ -27,23 +27,23 @@ module.exports = class Metacompiler extends BaseClass
 
   @setter
     ###
-    IN:
-      string: configure to use one of the CaffeineCompiler classes
-      function: compileFunction
-      object:
-        compiler: custom compiler instance. Must implement:
-          compile: compileFunction
-
-    compileFunction: (sourceCode, options) ->
       IN:
-        sourceCode: string
-        options: {}
-      ERROR: throw errors
-      OUT:
-        evalable-js-string
-        OR
-        object with at least:
-          compiled: js: evalable-js-string
+        string: configure to use one of the CaffeineCompiler classes
+        function: compileFunction
+        object:
+          compiler: custom compiler instance. Must implement:
+            compile: compileFunction
+
+      compileFunction: (sourceCode, options) ->
+        IN:
+          sourceCode: string
+          options: {}
+        ERROR: throw errors
+        OUT:
+          evalable-js-string
+          OR
+          object with at least:
+            compiled: js: evalable-js-string
     ###
     compiler: (arg, options) ->
       @_compiler = if isString arg
@@ -77,22 +77,22 @@ module.exports = class Metacompiler extends BaseClass
       throw new Error "CaffeineMc: expected @compiler result to be: (string), {js: string}, or {compiled: {js: string}}. Was: #{formattedInspect result}"
 
   ###
-  IN:
-    code: string
-    options:
-      sourceMap: t/f
-      inlineMap: t/f
-      sourceFile:
-      sourceDir:
+    IN:
+      code: string
+      options:
+        sourceMap: t/f
+        inlineMap: t/f
+        sourceFile:
+        sourceDir:
 
-  OUT: (an object)
-    compiled: extension => output map
-      extension: string, ex: "js"
-      output: string, ex: "alert();"
+    OUT: (an object)
+      compiled: extension => output map
+        extension: string, ex: "js"
+        output: string, ex: "alert();"
 
-      If writing to files, we might do:
-      for extension, output of compiled
-        write originalFileNameWith(extension), output
+        If writing to files, we might do:
+        for extension, output of compiled
+          write originalFileNameWith(extension), output
   ###
   compile: (code, options)->
     checkWorkingCacheExpiration()

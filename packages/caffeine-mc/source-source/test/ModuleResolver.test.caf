@@ -3,7 +3,6 @@ import &StandardImport, {} &mockFs, &CaffeineMcTestHelper
 describe
   findModule: ->
     beforeEach ->
-      WorkingCache.resetWorkingCache()
       CaffeineMcTestHelper.mockFileSystem()
       CaffeineMcTestHelper.reset()
 

@@ -1,0 +1,60 @@
+import &StandardImport, {} &path, fs: &fsExtra
+
+fileExists = (filename) -> fs.existsSync(filename) && filename
+
+class Run extends BaseClass
+
+  @_resolveSourceFile: (options) ->
+    {sourceFile, color} = options
+    merge options, sourceFile:
+      if fs.existsSync sourceFile
+        sourceFile
+      else if found = find v, k in require.extensions with fileExists "#{sourceFile}#{k}"
+        found
+      else
+        e = new Error "No matching file found: #{formattedInspect {sourceFile, extensions: Object.keys(require.extensions).join ' '}}"
+        e.stack = if color then e.message.red else e.message
+        throw e
+
+  rewriteArgv = (sourceFile, args) ->
+    process.argvRaw = process.argv
+    process.argv = compactFlattenAll sourceFile, args
+
+  @runFile: (sourceFile, options) =>
+    {globalCompilerOptions} = Neptune.CaffeineMc
+    try
+      Neptune.CaffeineMc.globalCompilerOptions = options
+      @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
+
+      require require.main.filename
+
+    finally
+      Neptune.CaffeineMc.globalCompilerOptions = globalCompilerOptions
+
+  ###
+    Do all the things NODE needs to make it look like
+    we ran the file like "> node souceFile"
+  @runJs: (js, options = {}) =>
+    @setupNodeForRun options
+    {main} = require
+
+    ## interesting -
+      run it this way and it shows the source-line if there an error
+      setTimeout (-> main._compile js, main.filename), 0
+
+      run it this way, and it doesn't:
+    main._compile js, main.filename
+
+  @setupNodeForRun: (options) ->
+    {sourceFile} = options
+    {main} = require
+
+    main.filename =
+      sourceFile = if sourceFile then fs.realpathSync(sourceFile) else '<anonymous>'
+    rewriteArgv sourceFile, options.args
+
+    # Clear the module cache.
+    main.moduleCache &&= {}
+
+    # Get the correct node_module paths for sourceFile or the current directory
+    main.paths = require('module')._nodeModulePaths fs.realpathSync path.dirname sourceFile || "./anonymous"
