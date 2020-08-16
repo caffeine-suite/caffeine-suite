@@ -1,0 +1,90 @@
+import &StandardImport, require :@art-suite/source-root-finder
+
+caffeineInitFileName = :caffeine-mc.config.caf
+
+caffeineProjectSourceRootFinder = new SourceRootFinder
+  indicatorFiles: :package.json :.git caffeineInitFileName
+
+class SourceRoots extends BaseClass
+
+  @classGetter
+    :caffeineInits
+    sourceRootIndicatorFiles: -> caffeineProjectSourceRootFinder.indicatorFiles
+    caffeineInitFileName: -> caffeineInitFileName
+
+  _Metacompiler = null
+  newMetacompiler = -> new (_Metacompiler ?= &Metacompiler)
+
+  # TODO - capture and report syntax errors in source better
+  evalCapturingModuleExports = (source) ->
+    global.__caffeineMcModule = {}
+    try
+      eval "" (function(module){#{source}})(__caffeineMcModule);
+
+    catch e
+      log.error "ERROR evalCapturingModuleExports":
+        source: source
+        error: e
+
+      throw e
+
+    {exports} = global.__caffeineMcModule || {}
+    global.__caffeineMcModule = null
+    exports
+
+  # OUT: promise.then (caffeineInit) ->
+  #   caffeineInit is a js string or false
+  @getCaffeineInit: (sourceRoot = process.cwd()) =>
+    if (res = @caffeineInits[sourceRoot])?
+      Promise.resolve res
+    else
+      fs.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
+      .then (exists) ->
+        contentsPromise = if exists
+          fs.readFile sourceFile
+          .then (contents) ->
+            contents = contents.toString()
+        else
+          Promise.resolve false
+
+        contentsPromise.then (contents) ->
+          metacompiler = newMetacompiler()
+          @caffeineInits[sourceRoot] =
+            compiler: metacompiler
+            config:
+              if result = contents && metacompiler.compile contents, {sourceFile, sourceRoot}
+                evalCapturingModuleExports result.compiled.js
+              else
+                {}
+
+  @getCaffeineInitSync: (sourceRoot) =>
+    throw new Error "no sourceRoot" unless sourceRoot
+    if (res = @caffeineInits[sourceRoot])?
+      res
+    else
+      if fs.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
+        contents = fs.readFileSync(sourceFile).toString()
+
+        metacompiler = newMetacompiler()
+        result = metacompiler.compile contents, {sourceFile, sourceRoot}
+
+        @caffeineInits[sourceRoot] =
+          compiler: metacompiler.compiler
+          config: evalCapturingModuleExports result.compiled.js
+
+      else
+        false
+
+  @findSourceRoot:      (directory) -> caffeineProjectSourceRootFinder.findSourceRoot directory
+  @findSourceRootSync:  (directory) -> caffeineProjectSourceRootFinder.findSourceRootSync directory
+
+  ######################
+  # PRIVATE
+  ######################
+
+  # keyed by sourceRoot
+  @_caffeineInits: {}
+
+  # for testing
+  @_resetSourceRoots: =>
+    @_caffeineInits = {}

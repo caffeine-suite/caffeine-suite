@@ -5,6 +5,7 @@
   },
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
+    "@art-suite/source-root-finder": "^1.0.0",
     "art-class-system": "1.11.6",
     "art-standard-lib": "^1.69.4",
     "caffeine-eight": "^2.6.0",
