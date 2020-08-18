@@ -6,4 +6,4 @@ Most of the core Syntax is supported.
 
 Example:
 
-![](demo.png)
+![](https://github.com/caffeine-suite/caffeine-suite/raw/master/packages/caffeine-script/editors/vscode/caffeinescript/demo.png)
