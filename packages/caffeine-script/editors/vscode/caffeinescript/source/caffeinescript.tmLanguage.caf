@@ -13,23 +13,35 @@ patterns:
       name: :string.quoted.other.caffeine
 
     #############################
+    # object-literal property names:
+    {}
+      match: '((?!\\s)[-~!@\\#$%^&*_+=|\\\\<>?/.$\\w\\u007f-\\uffff])+(?:\\:)'
+      name: :variable.other.property.caffeine
+
+    {}
+      match: '["]([^\\"]|(\\.))*["](?:\\:)'
+      name: :variable.other.property.caffeine
+
+    #############################
       STRINGs
     #############################
     # word-string
     {}
-      match:  ':(?!:)[^\\n\\s,;{}()\\[\\]]+'
+      begin:  ':(?!:)'
+      end:    '(?=[ \\n\\s,;{}()\\[\\]])'
       name:   :string.quoted.double.word-string.caffeine
       # TODO: escape is supported by the language, but we need a begin: end: pattern instead of match:
-      # patterns: []
-      #   {} include: :#escape
+      patterns: []
+        {} include: :#escape
 
     # hash-string
     {}
-      match:  '#(?!#)[^\\n\\s,;{}()\\[\\]]+'
+      begin:  '#(?![# ])'
+      end:    '(?=[ \\n\\s,;{}()\\[\\]])'
       name:   :string.quoted.double.hash-string.caffeine
       # TODO: escape is supported by the language, but we need a begin: end: pattern instead of match:
-      # patterns: []
-      #   {} include: :#escape
+      patterns: []
+        {} include: :#escape
 
     # block-string
     {}
@@ -49,6 +61,7 @@ patterns:
         {} include: :#escape
         {} include: :#interpolation
 
+    # quoted strings
     {}
       begin:  "" "(?!")
       end:    "" "
@@ -99,7 +112,9 @@ patterns:
       name: :string.regexp.caffeine
       patterns: []
         {} include: #escape
-        {} include: :#interpolation
+        {} include: #interpolation
+        {} include: #comment
+        {} include: #blockComment
 
     # block regexp
     {}
@@ -108,19 +123,13 @@ patterns:
       name: :string.regexp.caffeine
       patterns: []
         {} include: #escape
-        {} include: :#interpolation
+        {} include: #interpolation
 
     #############################
     # macro
     {}
       match: '<[\\w\\u007f-\\uffff]+>'
       name: :keyword.macro.compileTime.caffeine
-
-    #############################
-    # object-literal property names:
-    {}
-      match: '((?!\\s)[-~!@\\#$%^&*_+=|\\\\<>?/.$\\w\\u007f-\\uffff])+(?:\\:)'
-      name: :variable.other.property.caffeine
 
     #############################
       KEYWORDS
@@ -222,6 +231,15 @@ patterns:
       end: "" ^(?!\\1 +[^ ])(?= *[^ \\n])
 
 repository:
+  comment:
+    match: "" #([\\x00-\\x20\\x7f\\s;,()\\[\\]{}\\\\]|$)([^\\n]*|(?=\\n|$))
+    name: :comment.line.caffeine
+
+  blockComment:
+    begin: "" (?:^( *))##
+    name: :comment.block.caffeine
+    end: "" ^(?!\\1 +[^ ])(?= *[^ \\n])
+
   escape:
     match: "" (\\\\)(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)
     name: :constant.character.escape.caffeine

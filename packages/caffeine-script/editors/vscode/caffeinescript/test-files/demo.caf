@@ -1,0 +1,52 @@
+# to-eol-comment
+## block comment
+  Cupcake ipsum dolor sit. Amet chocolate bar soufflé oat cake tootsie
+  roll liquorice. Chocolate cake chocolate cake macaroon caramels
+  chocolate cake. Chocolate bar chocolate bar toffee icing.
+
+# word-strings
+  :word-string
+  #hash-string
+  123unit_string
+
+# bracketed
+  "hi"
+  'that'
+
+# to EOL
+  "" sdf
+
+# block
+  ""
+    Cupcake ipsum dolor sit. Amet chocolate bar soufflé oat cake tootsie
+    roll liquorice. Chocolate cake chocolate cake macaroon caramels
+    chocolate cake. Chocolate bar chocolate bar toffee icing.
+
+# escapes
+  'this\nwas'
+  :hi\nthere
+
+# interpolation
+  "" hi #{foo.bar}
+
+# Regular Expressions
+/ignore case/i
+///i ignore \_ case # and space
+///
+  abc
+  #{foo.bar}
+  #{} 2**64
+  def
+
+# object literal
+abc:        123
+a-b-c:      123
+.abc:       123
+"hi there": 123
+http://www.somewhere.com: "" is a legal propery name
+
+# property access
+abc.foo
+
+# keywords
+array til 10 by 2
