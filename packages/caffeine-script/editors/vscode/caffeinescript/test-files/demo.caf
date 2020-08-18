@@ -1,52 +1,63 @@
-# to-eol-comment
-## block comment
+
+
+# to-eol-comments
+## block-comments
   Cupcake ipsum dolor sit. Amet chocolate bar soufflé oat cake tootsie
   roll liquorice. Chocolate cake chocolate cake macaroon caramels
   chocolate cake. Chocolate bar chocolate bar toffee icing.
 
-# word-strings
-  :word-string
-  #hash-string
-  123unit_string
+  ## Block-comment a block-comment without breaking code.
 
-# bracketed
+# word-strings (terminated before: space, (), [] or ','
+  :ali    # word-string == "alice"
+  #ff7f00 # hash-string == "#ff7f00"
+  123px   # unit-string == "123px"
+
+# bracketed, "traditional" strings
   "hi"
   'that'
 
-# to EOL
+# to-EOL-strings
   "" sdf
 
-# block
+# block-strings
   ""
     Cupcake ipsum dolor sit. Amet chocolate bar soufflé oat cake tootsie
     roll liquorice. Chocolate cake chocolate cake macaroon caramels
     chocolate cake. Chocolate bar chocolate bar toffee icing.
 
-# escapes
+    ""
+      Wrap a string in another string without escaping.
+
+# string escapes
   'this\nwas'
   :hi\nthere
 
-# interpolation
+# string interpolation
   "" hi #{foo.bar}
 
-# Regular Expressions
+# regular expressions
 /ignore case/i
-///i ignore \_ case # and space
+///i ignore \_ case
 ///
+  # block regex can have comments
+  # and white-space is ignored...
   abc
   #{foo.bar}
   #{} 2**64
   def
 
-# object literal
-abc:        123
-a-b-c:      123
-.abc:       123
-"hi there": 123
-http://www.somewhere.com: "" is a legal propery name
+# object literal properties
+abc:                123
+a-b-c:              123
+.abc:               123
+"hi there":         123
+support@home.com:   "" emails are fine
+http://home.com:    "" URLs are fine
 
 # property access
 abc.foo
 
 # keywords
 array til 10 by 2
+
