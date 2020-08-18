@@ -1,63 +1,63 @@
 {
-	"name": "caffeinescript-vscode",
-	"version": "0.1.0",
-	"license": "MIT",
-	"engines": {
-		"vscode": "*"
-	},
-	"publisher": "caffeine-script-publisher",
-	"repository": "https://github.com/caffeine-suite/caffeine-script",
-	"displayName": "Official CaffeineScript Language Support",
-	"description": "Syntax highlighting support for CaffeineScript.",
-	"scripts": {
+  "name": "caffeinescript-vscode",
+  "version": "0.1.1",
+  "license": "MIT",
+  "engines": {
+    "vscode": "*"
+  },
+  "publisher": "caffeine-script-publisher",
+  "repository": "https://github.com/caffeine-suite/caffeine-script",
+  "displayName": "Official CaffeineScript Language Support",
+  "description": "Syntax highlighting support for CaffeineScript.",
+  "scripts": {
     "build": "caf source/buildExtension",
     "watch": "npm-watch"
-	},
-	"categories": [
-		"Programming Languages"
-	],
-	"icon": "assets/caffeine-logo.png",
-	"contributes": {
-		"languages": [
-			{
-				"id": "caffeinescript",
-				"extensions": [
-					".caf",
-					".caffeine"
-				],
-				"aliases": [
-					"CaffeineScript",
-					"caffeinescript",
-					"caffeine",
-					"caf"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "caffeinescript",
-				"scopeName": "source.caffeine",
-				"path": "./syntaxes/caffeinescript.tmLanguage.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "caffeinescript",
-				"path": "./snippets/caffeinescript.snippets.json"
-			}
-		]
-	},
-	"watch": {
-		"build": {
-			"extensions": "caf",
-			"patterns": [
-				"source"
-			],
-			"quiet": false
-		}
-	},
-	"dependencies": {
-		"npm-watch": "^0.6.0"
-	}
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "icon": "assets/caffeine-logo.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "caffeinescript",
+        "extensions": [
+          ".caf",
+          ".caffeine"
+        ],
+        "aliases": [
+          "CaffeineScript",
+          "caffeinescript",
+          "caffeine",
+          "caf"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "caffeinescript",
+        "scopeName": "source.caffeine",
+        "path": "./syntaxes/caffeinescript.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "caffeinescript",
+        "path": "./snippets/caffeinescript.snippets.json"
+      }
+    ]
+  },
+  "watch": {
+    "build": {
+      "extensions": "caf",
+      "patterns": [
+        "source"
+      ],
+      "quiet": false
+    }
+  },
+  "dependencies": {
+    "npm-watch": "^0.6.0"
+  }
 }
