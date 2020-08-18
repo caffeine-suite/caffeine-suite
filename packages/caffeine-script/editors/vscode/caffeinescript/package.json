@@ -7,7 +7,7 @@
 	},
 	"publisher": "caffeine-script-publisher",
 	"repository": "https://github.com/caffeine-suite/caffeine-suite",
-	"displayName": "Official CaffeineScript Language Support",
+	"displayName": "CaffeineScript Language Support (official)",
 	"description": "Syntax highlighting support for CaffeineScript.",
 	"scripts": {
 		"build": "caf source/buildExtension",
