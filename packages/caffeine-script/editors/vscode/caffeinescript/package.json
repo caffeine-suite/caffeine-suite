@@ -1,16 +1,18 @@
 {
 	"name": "caffeinescript-vscode",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"license": "MIT",
 	"engines": {
 		"vscode": "*"
 	},
 	"publisher": "caffeine-script-publisher",
-	"repository": "https://github.com/caffeine-suite/caffeine-script",
+	"repository": "https://github.com/caffeine-suite/caffeine-suite",
 	"displayName": "Official CaffeineScript Language Support",
 	"description": "Syntax highlighting support for CaffeineScript.",
 	"scripts": {
-		"build": "caf source/buildExtension",
+    "build": "caf source/buildExtension",
+    "package": "vsce package",
+    "publish": "open https://marketplace.visualstudio.com/manage/publishers/caffeine-script-publisher",
 		"watch": "npm-watch"
 	},
 	"categories": [
