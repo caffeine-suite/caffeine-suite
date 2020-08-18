@@ -37,6 +37,17 @@ Syntax Highlighting
 
 # To Sort
 
+WRONG CODEGEN!!!
+```
+(->).foo
+
+# Generates:
+function() {}.foo;
+
+# Should Generate:
+(function() {}).foo;
+```
+
 WRONG PRECEDENCE!!!:
 ```
 length <= wordWrapLength ? 120

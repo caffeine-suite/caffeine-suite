@@ -7,12 +7,12 @@
     }
   },
   "dependencies": {
-    "art-class-system": "1.11.6",
-    "art-standard-lib": "^1.69.4",
     "art-binary": "^1.1.7",
+    "art-class-system": "1.11.6",
     "art-object-tree-factory": "^2.2.2",
+    "art-standard-lib": "^1.69.4",
     "caffeine-eight": "^2.6.0",
-    "caffeine-mc": "^3.0.5",
+    "caffeine-mc": "^3.0.6",
     "caffeine-script-runtime": "^1.13.3",
     "caffeine-source-map": "^2.0.0",
     "source-map": "^0.7.2"
