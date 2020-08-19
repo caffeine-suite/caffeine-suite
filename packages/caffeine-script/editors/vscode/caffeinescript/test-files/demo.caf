@@ -1,5 +1,3 @@
-
-
 # to-eol-comments
 ## block-comments
   Cupcake ipsum dolor sit. Amet chocolate bar soufflé oat cake tootsie
@@ -9,7 +7,7 @@
   ## Block-comment a block-comment without breaking code.
 
 # word-strings (terminated before: space, (), [] or ','
-  :ali    # word-string == "alice"
+  :alice  # word-string == "alice"
   #ff7f00 # hash-string == "#ff7f00"
   123px   # unit-string == "123px"
 
