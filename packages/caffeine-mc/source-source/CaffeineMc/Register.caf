@@ -1,0 +1,35 @@
+import &StandardImport
+realRequire = eval :require
+CaffeineMc = require :./namespace
+
+class Register
+  @verbose: false
+
+  ## register
+    Register compiler with NODEjs for all CaffeineMc.fileExtensions
+    OUT: CaffeineMc
+  @register: =>
+    each ext in CaffeineMc.fileExtensions
+      realRequire.extensions[".#{ext}"] ?= (module, filename) ->
+        try
+          @verbose && log caffeine-mc-compile-loading: filename
+
+          answer = CaffeineMc.compileFileSync filename, inlineMap: true, sourceRoot: "", cache: true
+
+        catch error
+          CaffeineMc.displayError error
+          # process.exit 1
+          if @verbose
+            module._compile "throw new Error('CaffeineMc: error compiling #{filename}');", filename
+
+        if answer?
+          try
+            module._compile answer.compiled.js, filename
+          catch error
+            CaffeineMc.displayError error
+            # process.exit 1
+            if @verbose
+              log caffeine-mc-compile: {} filename,  answer
+              module._compile "\nthrow new Error('CaffeineMc: error evaluating: #{filename}');\n", filename
+
+    CaffeineMc
