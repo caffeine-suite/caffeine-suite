@@ -2,7 +2,7 @@ import &StandardImport, &SourceRoots, &moduleResolver, {} &crypto, &os
 
 &chalk
 
-###
+## NOTES
   cachedFileKey: (object)
     compiler:   (required, object) compiler
     source:     (required, string) source-code
@@ -12,35 +12,27 @@ import &StandardImport, &SourceRoots, &moduleResolver, {} &crypto, &os
   cachedFileKeyWithCompilerResults: (object)
     all the cachedFileKey fields
     compiled: (required, object) the compiler's results
-###
-defineModule module, class CompileCache extends BaseClass
-  @compileCacheFileNameRoot: "CaffineMcCompileCache"
+class CompileCache extends BaseClass
+  @compileCacheFileNameRoot: :CaffineMcCompileCache
 
   @classGetter
     compileCachePathRoot: -> os.tmpdir()
-    compileCacheFilePathRoot: ->
-      @_compileCacheFilePathRoot ||= path.join @compileCachePathRoot, @compileCacheFileNameRoot
+    compileCacheFilePathRoot: -> @_compileCacheFilePathRoot ?= path.join @compileCachePathRoot, @compileCacheFileNameRoot
 
-  @compilerSupportsCaching: (compiler) ->
-    isString(compiler.version) && @getCompilerName compiler
-
-  @getCompilerName: (compiler) -> compiler.getName?() || compiler.name
-
-  @getCompilerSignature: (compiler) ->
-    "#{@getCompilerName compiler}-#{compiler.version}"
-
-  @makeSha256FilenameFriendly: (sha256String) -> sha256String.replace /[\/+=]/g, "-"
+  @compilerSupportsCaching:     (compiler)      -> isString(compiler.version) && @getCompilerName compiler
+  @getCompilerName:             (compiler)      -> compiler.getName?() || compiler.name
+  @getCompilerSignature:        (compiler)      -> "" #{@getCompilerName compiler}-#{compiler.version}
+  @makeSha256FilenameFriendly:  (sha256String)  -> sha256String.replace /[\/+=]/g, "-"
 
   @hashSource: (source) ->
     @makeSha256FilenameFriendly
-      crypto.createHmac 'sha256', "no need for a real secret"
+      crypto.createHmac :sha256 "" no need for a real secret
       .update source
-      .digest 'base64'
+      .digest :base64
       .split("=")[0]
 
-  ###
+  ## getFileName
     IN: cachedFileKey (see above)
-  ###
   @getFileName: (cachedFileKey) ->
     {compiler, source, sourceFile, compilerOptions} = cachedFileKey
     unless compiler && sourceFile && source?
@@ -51,23 +43,22 @@ defineModule module, class CompileCache extends BaseClass
     sourceRoot = findSourceRootSync sourceFile
     relativeSourceFile = path.relative sourceRoot, sourceFile
 
-    source = """
-      # sourceFile: #{relativeSourceFile}
-      # compilerOptions: #{consistentJsonStringify compilerOptions ? null}
-      #{source}
+    source =
       """
+        # sourceFile: #{relativeSourceFile}
+        # compilerOptions: #{consistentJsonStringify compilerOptions ? null}
+        #{source}
 
     []
       @compileCacheFilePathRoot
-      path.basename(sourceRoot).replace /\./g, "-"
-      path.basename(sourceFile).replace /\./g, "-"
+      path.basename(sourceRoot).replace /\./g :-
+      path.basename(sourceFile).replace /\./g :-
       @getCompilerSignature compiler
       @hashSource source
-    .join("_") + ".json"
+    .join("_") + :.json
 
-  ###
+  ## cache
     IN: cachedFileKey (see above), but also with {source, compiled and props}
-  ###
   @cache: (cachedFileKey) ->
     if fileName = @getFileName cachedFileKey
       {source, compiled, props} = cachedFileKey
@@ -76,27 +67,27 @@ defineModule module, class CompileCache extends BaseClass
 
     cachedFileKey
 
-  ###
+  ## fetch
     IN: cachedFileKey (see above)
-  ###
   @fetch: (cachedFileKey) ->
     start = currentSecond()
     if (fileName = @getFileName cachedFileKey) &&
         fs.existsSync(fileName)
       if (cacheContents = try JSON.parse fs.readFileSync fileName) &&
           cacheContents.source == cachedFileKey.source &&
-          @verifyDependencies cachedFileKey, cacheContents.props
+          @dependenciesUnchanged cachedFileKey, cacheContents.props
+
         cacheContents.fromCache = true
-        log cached: "#{(currentSecond() - start) * 1000 | 0}ms " + cachedFileKey.sourceFile if cachedFileKey.verbose
         cacheContents
 
-  @verifyDependencies: (cachedFileKey, props) ->
+  @dependenciesUnchanged: (cachedFileKey, props) ->
     !find cachedRequireString, sourceString from props?.moduleDependencies
       findModuleSync sourceString, {} cachedFileKey.sourceFile
       .requireString
       != cachedRequireString
 
-  # NOTE: for some reason when using mock-fs, we need to apply (Promise.resolve item) to glob's results
+  ## reset
+    NOTE: for some reason when using mock-fs, we need to apply (Promise.resolve item) to glob's results
   @reset: (verbose) ->
     glob @compileCacheFilePathRoot + "*"
     .then (list) ->
