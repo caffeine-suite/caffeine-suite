@@ -1,4 +1,7 @@
 &ArtStandardLib
 .mergeWithSelf
   &ArtClassSystem
-  {} &path, fs: &fsExtra
+  {}
+    &path
+    fs:   &fs-extra
+    glob: &glob-promise

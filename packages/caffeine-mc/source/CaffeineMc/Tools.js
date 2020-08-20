@@ -10,6 +10,7 @@ Caf.defMod(module, () => {
     ],
     (vm, console, log, RegExp, escapeRegExp, process, path) => {
       let Tools;
+      require("chalk");
       return (Tools = Caf.defClass(class Tools extends Object {}, function (
         Tools,
         classSuper,
@@ -49,7 +50,6 @@ Caf.defMod(module, () => {
           if (!(e != null)) {
             return;
           }
-          require("colors");
           return options.verbose
             ? log.error(e)
             : e.location != null || e.sourceFile != null

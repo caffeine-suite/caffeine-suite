@@ -1,22 +1,7 @@
-{
-  array, merge, formattedInspect, log, defineModule, isString, upperCamelCase, randomBase62Character
-  consistentJsonStringify
-  Promise
-  currentSecond
-} = require 'art-standard-lib'
-{BaseClass} = require 'art-class-system'
-{findSourceRootSync} = require './SourceRoots'
+import &StandardImport, &SourceRoots, &moduleResolver, {} &crypto, &os
 
-{findModuleSync} = require './ModuleResolver'
+&chalk
 
-require 'colors'
-
-fs = require 'fs-extra'
-glob = require 'glob-promise'
-
-crypto = require 'crypto'
-os = require 'os'
-path = require 'path'
 ###
   cachedFileKey: (object)
     compiler:   (required, object) compiler
@@ -28,7 +13,6 @@ path = require 'path'
     all the cachedFileKey fields
     compiled: (required, object) the compiler's results
 ###
-
 defineModule module, class CompileCache extends BaseClass
   @compileCacheFileNameRoot: "CaffineMcCompileCache"
 
@@ -48,15 +32,14 @@ defineModule module, class CompileCache extends BaseClass
   @makeSha256FilenameFriendly: (sha256String) -> sha256String.replace /[\/+=]/g, "-"
 
   @hashSource: (source) ->
-    @makeSha256FilenameFriendly(
+    @makeSha256FilenameFriendly
       crypto.createHmac 'sha256', "no need for a real secret"
       .update source
       .digest 'base64'
       .split("=")[0]
-    )
 
   ###
-  IN: cachedFileKey (see above)
+    IN: cachedFileKey (see above)
   ###
   @getFileName: (cachedFileKey) ->
     {compiler, source, sourceFile, compilerOptions} = cachedFileKey
@@ -74,16 +57,16 @@ defineModule module, class CompileCache extends BaseClass
       #{source}
       """
 
-    [
+    []
       @compileCacheFilePathRoot
       path.basename(sourceRoot).replace /\./g, "-"
       path.basename(sourceFile).replace /\./g, "-"
       @getCompilerSignature compiler
       @hashSource source
-    ].join("_") + ".json"
+    .join("_") + ".json"
 
   ###
-  IN: cachedFileKey (see above), but also with {source, compiled and props}
+    IN: cachedFileKey (see above), but also with {source, compiled and props}
   ###
   @cache: (cachedFileKey) ->
     if fileName = @getFileName cachedFileKey
@@ -94,7 +77,7 @@ defineModule module, class CompileCache extends BaseClass
     cachedFileKey
 
   ###
-  IN: cachedFileKey (see above)
+    IN: cachedFileKey (see above)
   ###
   @fetch: (cachedFileKey) ->
     start = currentSecond()
@@ -106,40 +89,18 @@ defineModule module, class CompileCache extends BaseClass
         cacheContents.fromCache = true
         log cached: "#{(currentSecond() - start) * 1000 | 0}ms " + cachedFileKey.sourceFile if cachedFileKey.verbose
         cacheContents
-      # # debug caching:
-      # else
-      #   log CompileCache:
-      #     cacheFileInvalid:
-      #       cacheContents: cacheContents
-      #       sourceMatch: cacheContents && cacheContents.source == cachedFileKey.source
-      #       verifyDependencies: cacheContents && @verifyDependencies cachedFileKey, cacheContents.props
-
-      #   null
 
   @verifyDependencies: (cachedFileKey, props) ->
-    if moduleDependencies = props?.moduleDependencies
-      for sourceString, cachedRequireString of moduleDependencies
-        {requireString} = findModuleSync sourceString, sourceFile: cachedFileKey.sourceFile
-        if requireString != cachedRequireString
-          props.verbose && log CompileCache:
-            message:      "moduleDependencies changed"
-            sourceString: sourceString
-            sourceFile:   cachedFileKey.sourceFile
-            require:
-              old: cachedRequireString
-              new: requireString
-
-          return false
-      true
-    else
-      true
+    !find cachedRequireString, sourceString from props?.moduleDependencies
+      findModuleSync sourceString, {} cachedFileKey.sourceFile
+      .requireString
+      != cachedRequireString
 
   # NOTE: for some reason when using mock-fs, we need to apply (Promise.resolve item) to glob's results
   @reset: (verbose) ->
     glob @compileCacheFilePathRoot + "*"
     .then (list) ->
-      Promise.all array list, (item) ->
+      Promise.all array item from list
         Promise.resolve item
         .then (item) -> fs.unlink item
         .tap -> log "cache-reset: ".gray + item.green + " (deleted)".gray if verbose
-
