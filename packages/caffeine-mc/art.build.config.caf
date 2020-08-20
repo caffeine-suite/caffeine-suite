@@ -2,6 +2,7 @@ import &ArtStandardLib
 package: (abcPackage) ->
   buildScript = (target) ->
     """
+      git checkout source/
       coffee --output #{target} --compile source-source &
       caf -p -c source-source -o #{target} &
       wait
