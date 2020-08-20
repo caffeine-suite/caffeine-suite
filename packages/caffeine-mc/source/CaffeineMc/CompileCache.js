@@ -156,7 +156,7 @@
             sourceFile: cachedFileKey.sourceFile
           }).requireString;
           if (requireString !== cachedRequireString) {
-            log({
+            props.verbose && log({
               CompileCache: {
                 message: "moduleDependencies changed",
                 sourceString: sourceString,

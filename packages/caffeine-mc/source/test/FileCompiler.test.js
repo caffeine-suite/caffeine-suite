@@ -11,7 +11,6 @@ Caf.defMod(module, () => {
       "path",
       "compileFile",
       "assert",
-      "CompileCache",
     ],
     [
       global,
@@ -29,8 +28,7 @@ Caf.defMod(module, () => {
       test,
       path,
       compileFile,
-      assert,
-      CompileCache
+      assert
     ) => {
       return describe({
         basic: function () {
@@ -57,7 +55,6 @@ Caf.defMod(module, () => {
         },
         withCache: function () {
           beforeEach(() => {
-            CompileCache.reset();
             CaffeineMcTestHelper.mockFileSystem();
             return CaffeineMcTestHelper.reset();
           });

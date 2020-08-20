@@ -121,7 +121,7 @@ defineModule module, class CompileCache extends BaseClass
       for sourceString, cachedRequireString of moduleDependencies
         {requireString} = findModuleSync sourceString, sourceFile: cachedFileKey.sourceFile
         if requireString != cachedRequireString
-          log CompileCache:
+          props.verbose && log CompileCache:
             message:      "moduleDependencies changed"
             sourceString: sourceString
             sourceFile:   cachedFileKey.sourceFile
