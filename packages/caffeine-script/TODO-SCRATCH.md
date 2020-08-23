@@ -37,6 +37,21 @@ Syntax Highlighting
 
 # To Sort
 
+WRONG SEMANTICS
+```
+foo = []
+  :bar :baz
+# should be
+foo = [["bar", "baz"]]
+# Why? Because adding a second item, when using [] explicitly,
+# shouldn't change the object structure:
+foo = []
+  :bar :baz
+  :boo :bob
+# correctly outputs:
+foo = [["bar", "baz"], ["boo", "bob"]]
+```
+
 WRONG CODEGEN!!!
 ```
 (->).foo
