@@ -1,14 +1,14 @@
 {
   "author": "Shane Brinkman-Davis Delamore, Imikimi LLC",
   "dependencies": {
-    "art-build-configurator": "^1.26.14",
-    "art-standard-lib": "^1.69.4",
-    "caffeine-eight": "^2.6.0"
+    "art-build-configurator": "^1.26.17",
+    "art-standard-lib": "^1.69.8",
+    "caffeine-eight": "^2.6.1"
   },
   "description": "Caffeine.SourceMap",
   "devDependencies": {
-    "art-testbench": "^2.2.2",
-    "jest": "^26.4.0"
+    "art-testbench": "^2.2.5",
+    "jest": "^26.4.2"
   },
   "jest": {
     "collectCoverageFrom": [

@@ -1,70 +1,70 @@
 {
-	"name": "caffeinescript-vscode",
-	"version": "0.2.0",
-	"license": "MIT",
-	"engines": {
-		"vscode": "*"
-	},
-	"publisher": "caffeine-script-publisher",
-	"repository": "https://github.com/caffeine-suite/caffeine-suite",
-	"displayName": "CaffeineScript Language Support (official)",
-	"description": "Syntax highlighting support for CaffeineScript.",
-	"scripts": {
-		"build": "caf source/buildExtension",
-		"package": "vsce package",
-		"publish": "open https://marketplace.visualstudio.com/manage/publishers/caffeine-script-publisher",
-		"watch": "npm-watch"
-	},
-	"categories": [
-		"Programming Languages"
-	],
-	"icon": "assets/caffeine-logo.png",
-	"contributes": {
-		"languages": [
-			{
-				"id": "caffeinescript",
-				"extensions": [
-					".caf",
-					".caffeine"
-				],
-				"aliases": [
-					"CaffeineScript",
-					"caffeinescript",
-					"caffeine",
-					"caf"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "caffeinescript",
-				"scopeName": "source.caffeine",
-				"path": "./syntaxes/caffeinescript.tmLanguage.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "caffeinescript",
-				"path": "./snippets/caffeinescript.snippets.json"
-			}
-		]
-	},
-	"watch": {
-		"build": {
-			"extensions": "caf",
-			"patterns": [
-				"source"
-			],
-			"quiet": false
-		}
-	},
-	"dependencies": {
-		"npm-watch": "^0.6.0"
-	},
-	"__metadata": {
-		"id": "d0fd5b56-68e0-4806-a2da-f8dfe939affc",
-		"publisherDisplayName": "caffeine-script-publisher",
-		"publisherId": "d130b147-0721-43af-8cda-f1c8aab7c198"
-	}
+  "__metadata": {
+    "id": "d0fd5b56-68e0-4806-a2da-f8dfe939affc",
+    "publisherDisplayName": "caffeine-script-publisher",
+    "publisherId": "d130b147-0721-43af-8cda-f1c8aab7c198"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "grammars": [
+      {
+        "language": "caffeinescript",
+        "path": "./syntaxes/caffeinescript.tmLanguage.json",
+        "scopeName": "source.caffeine"
+      }
+    ],
+    "languages": [
+      {
+        "aliases": [
+          "CaffeineScript",
+          "caffeinescript",
+          "caffeine",
+          "caf"
+        ],
+        "configuration": "./language-configuration.json",
+        "extensions": [
+          ".caf",
+          ".caffeine"
+        ],
+        "id": "caffeinescript"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "caffeinescript",
+        "path": "./snippets/caffeinescript.snippets.json"
+      }
+    ]
+  },
+  "dependencies": {
+    "npm-watch": "^0.7.0"
+  },
+  "description": "Syntax highlighting support for CaffeineScript.",
+  "displayName": "CaffeineScript Language Support (official)",
+  "engines": {
+    "vscode": "*"
+  },
+  "icon": "assets/caffeine-logo.png",
+  "license": "MIT",
+  "name": "caffeinescript-vscode",
+  "publisher": "caffeine-script-publisher",
+  "repository": "https://github.com/caffeine-suite/caffeine-suite",
+  "scripts": {
+    "build": "caf source/buildExtension",
+    "package": "vsce package",
+    "publish": "open https://marketplace.visualstudio.com/manage/publishers/caffeine-script-publisher",
+    "watch": "npm-watch"
+  },
+  "version": "0.2.0",
+  "watch": {
+    "build": {
+      "extensions": "caf",
+      "patterns": [
+        "source"
+      ],
+      "quiet": false
+    }
+  }
 }

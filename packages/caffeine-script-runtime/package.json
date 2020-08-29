@@ -3,8 +3,8 @@
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "description": "Runtime library for CaffeineScript",
   "devDependencies": {
-    "art-build-configurator": "^1.26.14",
-    "art-testbench": "^2.2.2"
+    "art-build-configurator": "^1.26.17",
+    "art-testbench": "^2.2.5"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {

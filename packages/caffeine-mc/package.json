@@ -5,26 +5,26 @@
   },
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "@art-suite/source-root-finder": "^1.0.0",
-    "art-class-system": "1.11.6",
-    "art-standard-lib": "^1.69.4",
-    "caffeine-eight": "^2.6.0",
+    "@art-suite/source-root-finder": "^1.0.4",
+    "art-class-system": "^1.11.10",
+    "art-standard-lib": "^1.69.8",
+    "caffeine-eight": "^2.6.1",
     "cardinal": "^2.0.0",
     "chalk": "^4.0.0",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "fs-extra": "^9.0.0",
     "glob-promise": "^3.1.0",
-    "prettier": "^2.0.0"
+    "prettier": "^2.1.1"
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "devDependencies": {
-    "art-build-configurator": "^1.26.14",
-    "art-testbench": "^2.2.2",
+    "art-build-configurator": "^1.26.17",
+    "art-testbench": "^2.2.5",
     "chai": "^4.2.0",
     "mocha": "^6.2.3",
-    "mock-fs": "^4.12.0",
-    "three": "^0.119.1"
+    "mock-fs": "^4.13.0",
+    "three": "^0.120.0"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {
