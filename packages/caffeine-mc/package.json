@@ -22,7 +22,7 @@
     "art-build-configurator": "^1.26.17",
     "art-testbench": "^2.2.5",
     "chai": "^4.2.0",
-    "mocha": "^6.2.3",
+    "mocha": "^7.2.0",
     "mock-fs": "^4.13.0",
     "three": "^0.120.0"
   },
