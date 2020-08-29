@@ -35,7 +35,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "2.6.1",
+  "version": "2.6.2",
   "watch": {
     "build": {
       "extensions": "caf coffee",
