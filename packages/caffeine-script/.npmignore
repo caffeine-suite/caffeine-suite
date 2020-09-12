@@ -1,0 +1,13 @@
+cafInCaf/
+editors/
+perf/
+*.caf
+*.coffee
+examples/
+source/
+assets/
+test/
+webpack.config.js
+register.js
+TODO*.md
+*.tgz
