@@ -63,7 +63,7 @@ Caf.defMod(module, () => {
         };
         rewriteArgv = function (sourceFile, args) {
           process.argvRaw = process.argv;
-          return (process.argv = compactFlattenAll(sourceFile, args));
+          return (process.argv = compactFlattenAll("caf", sourceFile, args));
         };
         this.runFile = (sourceFile, options) => {
           let globalCompilerOptions;

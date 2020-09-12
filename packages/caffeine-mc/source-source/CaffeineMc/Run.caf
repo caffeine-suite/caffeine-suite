@@ -18,7 +18,7 @@ class Run extends BaseClass
 
   rewriteArgv = (sourceFile, args) ->
     process.argvRaw = process.argv
-    process.argv = compactFlattenAll sourceFile, args
+    process.argv = compactFlattenAll :caf sourceFile, args
 
   @runFile: (sourceFile, options) =>
     {globalCompilerOptions} = Neptune.CaffeineMc
@@ -51,6 +51,7 @@ class Run extends BaseClass
 
     main.filename =
       sourceFile = if sourceFile then fs.realpathSync(sourceFile) else '<anonymous>'
+
     rewriteArgv sourceFile, options.args
 
     # Clear the module cache.
