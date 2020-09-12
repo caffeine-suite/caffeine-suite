@@ -16,6 +16,7 @@
     "fs-extra": "^9.0.0",
     "glob": "^7.1.6",
     "glob-promise": "^3.1.0",
+    "neptune-namespaces-runtime": "^3.2.6",
     "prettier": "^2.1.1"
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
