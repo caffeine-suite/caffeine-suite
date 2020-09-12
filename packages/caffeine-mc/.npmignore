@@ -1,0 +1,8 @@
+coverage/
+examples/
+source-source/
+*.tgz
+webpack.config.js
+TODO*
+*.caf
+register.js
