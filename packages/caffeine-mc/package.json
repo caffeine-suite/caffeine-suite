@@ -8,7 +8,7 @@
     "@art-suite/source-root-finder": "^1.0.4",
     "art-class-system": "^1.11.10",
     "art-standard-lib": "^1.69.8",
-    "caffeine-eight": "^2.6.1",
+    "caffeine-eight": "^2.6.2",
     "cardinal": "^2.0.0",
     "chalk": "^4.0.0",
     "colors": "^1.1.2",
@@ -24,7 +24,7 @@
     "chai": "^4.2.0",
     "mocha": "^7.2.0",
     "mock-fs": "^4.13.0",
-    "three": "^0.120.0"
+    "three": "^0.120.1"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {

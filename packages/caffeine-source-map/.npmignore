@@ -1,0 +1,5 @@
+coverage/
+webpack.config.js
+register.js
+art.build.config.caf
+*.tgz

@@ -1,12 +1,12 @@
 {
   "author": "Shane Brinkman-Davis Delamore, Imikimi LLC",
   "dependencies": {
-    "art-build-configurator": "^1.26.17",
     "art-standard-lib": "^1.69.8",
-    "caffeine-eight": "^2.6.1"
+    "caffeine-eight": "^2.6.2"
   },
   "description": "Caffeine.SourceMap",
   "devDependencies": {
+    "art-build-configurator": "^1.26.17",
     "art-testbench": "^2.2.5",
     "jest": "^26.4.2"
   },
@@ -27,7 +27,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "2.0.2",
+  "version": "2.0.3",
   "watch": {
     "build": {
       "extensions": "caf",
