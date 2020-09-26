@@ -3,7 +3,7 @@
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
     "art-standard-lib": "^1.69.9",
-    "caffeine-eight": "^2.6.3",
+    "caffeine-eight": "^2.6.4",
     "neptune-namespaces-runtime": "^3.2.6"
   },
   "description": "Caffeine.SourceMap",
@@ -34,7 +34,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "2.0.4",
+  "version": "2.0.5",
   "watch": {
     "build": {
       "extensions": "caf",
