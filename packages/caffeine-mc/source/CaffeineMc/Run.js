@@ -11,7 +11,6 @@ Caf.defMod(module, () => {
       "Object",
       "process",
       "compactFlattenAll",
-      "Neptune",
       "path",
     ],
     [global, require("./StandardImport")],
@@ -24,10 +23,10 @@ Caf.defMod(module, () => {
       Object,
       process,
       compactFlattenAll,
-      Neptune,
       path
     ) => {
-      let fileExists, Run;
+      let CaffeineMc, fileExists, Run;
+      CaffeineMc = require("./namespace");
       fileExists = function (filename) {
         return fs.existsSync(filename) && filename;
       };
@@ -67,10 +66,10 @@ Caf.defMod(module, () => {
         };
         this.runFile = (sourceFile, options) => {
           let globalCompilerOptions;
-          ({ globalCompilerOptions } = Neptune.CaffeineMc);
+          ({ globalCompilerOptions } = CaffeineMc);
           return (() => {
             try {
-              Neptune.CaffeineMc.globalCompilerOptions = options;
+              CaffeineMc.globalCompilerOptions = options;
               this.setupNodeForRun(
                 this._resolveSourceFile(
                   (options = merge(options, { sourceFile }))
@@ -78,7 +77,7 @@ Caf.defMod(module, () => {
               );
               return require(require.main.filename);
             } finally {
-              Neptune.CaffeineMc.globalCompilerOptions = globalCompilerOptions;
+              CaffeineMc.globalCompilerOptions = globalCompilerOptions;
             }
           })();
         };

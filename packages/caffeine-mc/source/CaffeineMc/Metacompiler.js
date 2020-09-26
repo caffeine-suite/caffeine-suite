@@ -144,7 +144,7 @@
 
     Metacompiler.prototype.compile = function(code, options) {
       checkWorkingCacheExpiration();
-      options = merge(Neptune.CaffeineMc.globalCompilerOptions, options);
+      options = merge(CaffeineMc.globalCompilerOptions, options);
       if (options.prettier && (options.inlineMap || options.sourceMap)) {
         throw new Error("prettier does not support sourcemaps");
       }

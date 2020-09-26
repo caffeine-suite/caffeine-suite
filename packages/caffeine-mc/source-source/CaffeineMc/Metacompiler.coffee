@@ -96,7 +96,7 @@ module.exports = class Metacompiler extends BaseClass
   ###
   compile: (code, options)->
     checkWorkingCacheExpiration()
-    options = merge Neptune.CaffeineMc.globalCompilerOptions, options
+    options = merge CaffeineMc.globalCompilerOptions, options
     throw new Error "prettier does not support sourcemaps" if options.prettier && (options.inlineMap || options.sourceMap)
 
     if options.cache && options.sourceFile

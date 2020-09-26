@@ -1,5 +1,7 @@
 import &StandardImport
 
+CaffeineMc = require :./namespace
+
 fileExists = (filename) -> fs.existsSync(filename) && filename
 
 class Run extends BaseClass
@@ -21,15 +23,15 @@ class Run extends BaseClass
     process.argv = compactFlattenAll :caf sourceFile, args
 
   @runFile: (sourceFile, options) =>
-    {globalCompilerOptions} = Neptune.CaffeineMc
+    {globalCompilerOptions} = CaffeineMc
     try
-      Neptune.CaffeineMc.globalCompilerOptions = options
+      CaffeineMc.globalCompilerOptions = options
       @setupNodeForRun @_resolveSourceFile options = merge options, {sourceFile}
 
       require require.main.filename
 
     finally
-      Neptune.CaffeineMc.globalCompilerOptions = globalCompilerOptions
+      CaffeineMc.globalCompilerOptions = globalCompilerOptions
 
   ###
     Do all the things NODE needs to make it look like
