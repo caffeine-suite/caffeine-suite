@@ -4,6 +4,8 @@
     "publisherDisplayName": "caffeine-script-publisher",
     "publisherId": "d130b147-0721-43af-8cda-f1c8aab7c198"
   },
+  "author": "Shane Brinkman-Davis Delamore",
+  "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "categories": [
     "Programming Languages"
   ],
@@ -46,11 +48,15 @@
   "engines": {
     "vscode": "*"
   },
+  "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "icon": "assets/caffeine-logo.png",
-  "license": "MIT",
+  "license": "ISC",
   "name": "caffeinescript-vscode",
   "publisher": "caffeine-script-publisher",
-  "repository": "https://github.com/caffeine-suite/caffeine-suite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caffeine-suite/caffeine-suite.git"
+  },
   "scripts": {
     "build": "caf source/buildExtension",
     "package": "vsce package",

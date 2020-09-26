@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "@art-suite/monorepo": "^1.4.0",
+    "@art-suite/module-resolver": "file:packages/@caffeine-suite/module-resolver",
+    "@art-suite/monorepo": "^1.4.1",
     "@art-suite/source-root-finder": "^1.0.4",
     "art-binary": "^1.1.11",
     "art-build-configurator": "^1.26.17",
@@ -31,11 +32,18 @@
     "npm-watch": "^0.7.0",
     "prettier": "^2.1.2",
     "source-map": "^0.7.2",
-    "three": "^0.120.1",
-    "undefined": "file:packages/@caffeine-suite/module-resolver"
+    "three": "^0.120.1"
   },
   "scripts": {
     "sync": "art-monorepo sync",
     "test": "art-monorepo test"
+  },
+  "author": "Shane Brinkman-Davis Delamore",
+  "license": "ISC",
+  "homepage": "https://github.com/caffeine-suite/caffeine-suite",
+  "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   }
 }

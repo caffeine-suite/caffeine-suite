@@ -1,24 +1,33 @@
 {
-  "name": "caffeinescriptcolors",
-  "publisher": "caffeine-script-publisher",
-  "repository": "https://github.com/caffeine-suite/caffeine-script",
-  "displayName": "Caffeine Script Colors",
-  "description": "Official CaffeineScript color scheme",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.38.0"
-  },
+  "author": "Shane Brinkman-Davis Delamore",
+  "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "categories": [
     "Themes"
   ],
-  "scripts": {"build":"vsce package"},
   "contributes": {
     "themes": [
       {
         "label": "CaffeineScriptColors",
-        "uiTheme": "vs-dark",
-        "path": "./themes/CaffeineScriptColors-color-theme.json"
+        "path": "./themes/CaffeineScriptColors-color-theme.json",
+        "uiTheme": "vs-dark"
       }
     ]
-  }
+  },
+  "description": "Official CaffeineScript color scheme",
+  "displayName": "Caffeine Script Colors",
+  "engines": {
+    "vscode": "^1.38.0"
+  },
+  "homepage": "https://github.com/caffeine-suite/caffeine-suite",
+  "license": "ISC",
+  "name": "caffeinescriptcolors",
+  "publisher": "caffeine-script-publisher",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caffeine-suite/caffeine-suite.git"
+  },
+  "scripts": {
+    "build": "vsce package"
+  },
+  "version": "0.0.1"
 }
