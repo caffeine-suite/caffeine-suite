@@ -3,7 +3,7 @@
   "bugs": "https:/github.com/caffeine-suite/caffeine-eight/issues",
   "dependencies": {
     "art-class-system": "^1.11.10",
-    "art-standard-lib": "^1.69.8",
+    "art-standard-lib": "^1.69.9",
     "neptune-namespaces-runtime": "^3.2.6"
   },
   "description": "a 'runtime' parsing expression grammar parser",

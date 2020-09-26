@@ -37,6 +37,11 @@ Syntax Highlighting
 
 # To Sort
 ```
+# The & operator should require space after to reduce confusion with:
+import &ArtStandardLib, &@fs
+```
+
+```
 # INTERNAL ERROR COMPILING
 fac = (a) -> reduce t, v from 1 to a by 1 inject 1 with t * v
 ```
