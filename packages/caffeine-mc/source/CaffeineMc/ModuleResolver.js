@@ -21,24 +21,24 @@
 
 
   /*
-  2018-07-21 Optimization TODO:
+    2018-07-21 Optimization TODO:
   
-  I think if we simplify the semantics such that matches are defined as:
-    normalizeName(dirName) == normalizeName(moduleName)
-  AND
-     * this is the change:
-    normalizeName(fileName.split(".")[0]) == normalizeName(moduleName)
+    I think if we simplify the semantics such that matches are defined as:
+      normalizeName(dirName) == normalizeName(moduleName)
+    AND
+       * this is the change:
+      normalizeName(fileName.split(".")[0]) == normalizeName(moduleName)
   
-  Then we can probably make much better use of caching:
-    Read the dir in and create a map:
-      normalizedName: name
-    (where normalizedName here means for files, we strip the extensions)
+    Then we can probably make much better use of caching:
+      Read the dir in and create a map:
+        normalizedName: name
+      (where normalizedName here means for files, we strip the extensions)
   
-  Then, we don't have to scan the dir every time!
+    Then, we don't have to scan the dir every time!
   
-  NOTE: I think if we have >= 2 files which map to the same noramlized name
-  we encode that in the map somehow and can therefore raise the same
-  exception we already do.
+    NOTE: I think if we have >= 2 files which map to the same noramlized name
+    we encode that in the map somehow and can therefore raise the same
+    exception we already do.
    */
 
   defineModule(module, ModuleResolver = (function() {
@@ -48,12 +48,12 @@
 
 
     /*
-    IN:
-      moduleBaseName: the string before the first '/'
-      modulePathArray: every other sub-string, split by '/'
-        This is only used to determine if there is addutional pathing
-        that must be resolved. It makes a difference what the
-        require path looks like.
+      IN:
+        moduleBaseName: the string before the first '/'
+        modulePathArray: every other sub-string, split by '/'
+          This is only used to determine if there is addutional pathing
+          that must be resolved. It makes a difference what the
+          require path looks like.
      */
 
     ModuleResolver.getNpmPackageName = function(moduleBaseName, modulePathArray) {
@@ -199,41 +199,43 @@
 
 
     /*
-    Notes about "." names-with-dots.
+      Notes about "." names-with-dots.
     
-      Essentially, dots are treated as word-boundaries.
+        Essentially, dots are treated as word-boundaries.
     
-      Files:
-        We need to manage extensions. Current rule:
-          Full match example: FooCaf matches foo.caf
-          PartialMatch must fully match on dot-boundaries:
-            Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
-          PartialMatch must match starting at the first character:
-            Foo.BarFood.caf does NOT match BarFood but does match Foo
+        Files:
+          We need to manage extensions. Current rule:
+            Full match example: FooCaf matches foo.caf
+            PartialMatch must fully match on dot-boundaries:
+              Foo.BarFood.caf does NOT match FooBar, but does match FooBarFood
+            PartialMatch must match starting at the first character:
+              Foo.BarFood.caf does NOT match BarFood but does match Foo
     
-      Dirs:
-        Dirs must fully match:
-          Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
+        Dirs:
+          Dirs must fully match:
+            Art.Foo.Bar matches ArtFooBar BUT NOT ArtFoo
     
-    Future:
-      I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
-      Basically, this parallels how NeptuneNamespaces interprets them.
-      It should work identically to as-if there were nested dirs.
+      Future:
+        I'd like to be able to treat "."s in dir-names as-if they were '/' (slashes)
+        Basically, this parallels how NeptuneNamespaces interprets them.
+        It should work identically to as-if there were nested dirs.
     
-      Given these files:
+        Given these files:
     
-        MyFile1.caf
-        Foo/Bar/MyFile2.caf
+          MyFile1.caf
+          Foo/Bar/MyFile2.caf
     
-      OR these files:
+        OR these files:
     
-        MyFile1.caf
-        Foo.Bar/MyFile2.caf
+          MyFile1.caf
+          Foo.Bar/MyFile2.caf
     
-      Then:
-         * inside MyFile1.caf
-         * this works:
-        &Foo/Bar/MyFile2
+        Then:
+           * inside MyFile1.caf
+           * this works:
+          &Foo/Bar/MyFile2
+    
+      returns false or name, if it matches
      */
 
     ModuleResolver.getMatchingName = getMatchingName = function(normalizedModuleName, name, isDir) {

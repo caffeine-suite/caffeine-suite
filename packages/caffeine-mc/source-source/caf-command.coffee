@@ -6,8 +6,6 @@ glob = require "glob-promise"
 fs = require 'fs-extra'
 path = require 'path'
 
-# require 'coffee-script/register'
-
 # webpack hack
 realRequire = eval 'require'
 
@@ -97,18 +95,11 @@ compileDirectory = (dirname) ->
 if reset
   CompileCache.reset()
 
-# process.argv = [] 'caf' # [fs.realpathSync 'caf']
-
 #################
 # COMPILE FILES
 #################
 if compile
   files = commander.args
-
-  # if !output and files.length == 1
-  #   [filename] = files
-  #   unless fs.statSync(filename).isDirectory()
-  #     output = path.dirname filename
 
   if files.length > 0 #&& output
     verbose && log compile:
@@ -159,5 +150,3 @@ else if versions
 #################
 else
   CafRepl.start()
-  # commander.outputHelp()
-
