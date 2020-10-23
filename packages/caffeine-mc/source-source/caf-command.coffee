@@ -43,7 +43,7 @@ displayError = (e) ->
 
 {reset, output, compile, prettier, transpile, verbose, versions, cache, nocache} = commander
 
-cache = !nocache
+CaffeineMc.cacheEnabled = cache = !nocache
 
 fileCounts =
   read: 0

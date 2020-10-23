@@ -29,7 +29,7 @@
 
   reset = commander.reset, output = commander.output, compile = commander.compile, prettier = commander.prettier, transpile = commander.transpile, verbose = commander.verbose, versions = commander.versions, cache = commander.cache, nocache = commander.nocache;
 
-  cache = !nocache;
+  CaffeineMc.cacheEnabled = cache = !nocache;
 
   fileCounts = {
     read: 0,

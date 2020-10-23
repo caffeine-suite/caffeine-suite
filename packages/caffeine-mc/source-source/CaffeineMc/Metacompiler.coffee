@@ -4,6 +4,8 @@ CaffeineMcParser = require './CaffeineMcParser'
 CaffeineMc = require './namespace'
 CompileCache = require './CompileCache'
 
+CaffeineMc.cacheEnabled = true
+
 realRequire = eval 'require'
 
 { dashCase, formattedInspect, present, isFunction, log, isString, lowerCamelCase, upperCamelCase, merge
@@ -99,7 +101,7 @@ module.exports = class Metacompiler extends BaseClass
     options = merge CaffeineMc.globalCompilerOptions, options
     throw new Error "prettier does not support sourcemaps" if options.prettier && (options.inlineMap || options.sourceMap)
 
-    if options.cache && options.sourceFile
+    if CaffeineMc.cacheEnabled && options.cache && options.sourceFile
       @_compileWithCaching code, options
     else
       @_postprocess options, @_compileWithMetacompiler code, options

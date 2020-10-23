@@ -12,6 +12,8 @@
 
   CompileCache = require('./CompileCache');
 
+  CaffeineMc.cacheEnabled = true;
+
   realRequire = eval('require');
 
   ref = require('art-standard-lib'), dashCase = ref.dashCase, formattedInspect = ref.formattedInspect, present = ref.present, isFunction = ref.isFunction, log = ref.log, isString = ref.isString, lowerCamelCase = ref.lowerCamelCase, upperCamelCase = ref.upperCamelCase, merge = ref.merge, objectWithout = ref.objectWithout, isArray = ref.isArray, isObject = ref.isObject;
@@ -148,7 +150,7 @@
       if (options.prettier && (options.inlineMap || options.sourceMap)) {
         throw new Error("prettier does not support sourcemaps");
       }
-      if (options.cache && options.sourceFile) {
+      if (CaffeineMc.cacheEnabled && options.cache && options.sourceFile) {
         return this._compileWithCaching(code, options);
       } else {
         return this._postprocess(options, this._compileWithMetacompiler(code, options));
