@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "SourceMap.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/Caffeine.SourceMap/SourceMap.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,0CAEP,aACE,qBACA,iCACA"
+}

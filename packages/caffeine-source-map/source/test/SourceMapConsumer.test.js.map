@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "SourceMapConsumer.test.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/test/SourceMapConsumer.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oGAAO,oEAEP,YAAK,2BAEH,IAAI,IAAI,mBAAkB,UAAU,iBACpC,UAAU,qBACR,eAAiB,GACjB,iBAAiB,GACjB,QAAiB,GACjB,YAAiB,GACjB,cAAiB"
+}

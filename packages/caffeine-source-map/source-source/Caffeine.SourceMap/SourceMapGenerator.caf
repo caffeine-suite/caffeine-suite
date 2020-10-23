@@ -61,6 +61,7 @@ class SourceMapGenerator extends BaseClass
     @_nextGeneratedColumn = 0
     @_firstSegment = true
     @_lastSourceIndex = -1
+    @_currentSourceIndex = 0
 
     @_sourceLineColumnMap = new SourceLineColumnMap @source
 
@@ -70,11 +71,17 @@ class SourceMapGenerator extends BaseClass
     @_firstSegment = true
 
   reusableColLine = {}
-  addSegment: (sourceIndex) ->
-    if sourceIndex? && sourceIndex != @_lastSourceIndex
-      @_lastSourceIndex = sourceIndex
+  addSegment: ->
+    if @_currentSourceIndex > @_lastSourceIndex
+      @_lastSourceIndex = @_currentSourceIndex
 
-      {line, column} = @_sourceLineColumnMap.getLineColumn sourceIndex, reusableColLine
+      {line, column} = @_sourceLineColumnMap.getLineColumn @_currentSourceIndex, reusableColLine
+
+      if @_firstSegment && column > 0
+        @_firstSegment = false
+        @_mappings +=
+          e0 = encodeVlq 0
+          + :A + e0 + e0
 
       out =
         encodeVlq @_nextGeneratedColumn - @_lastGeneratedColumn # generated column
@@ -94,6 +101,8 @@ class SourceMapGenerator extends BaseClass
       @_mappings += out
 
   advance: (generatedString) ->
+    return unless generatedString.length > 0
+    @addSegment()
     index = -1
     lineAdded = false
     lastStartIndex = null
@@ -114,7 +123,7 @@ class SourceMapGenerator extends BaseClass
 
     when output?.children
       {sourceIndex, children} = output
-      @addSegment sourceIndex
+      @_currentSourceIndex = sourceIndex if sourceIndex? && sourceIndex > @_currentSourceIndex
       @add children
 
     when output is Array

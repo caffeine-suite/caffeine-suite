@@ -37,12 +37,6 @@ describe
       assert.eq sm.rawSourceMap, merge standard,
         mappings: ";"
 
-    test "addSegment", ->
-      sm = new SourceMapGenerator source, {} sourceFile
-      sm.addSegment 1
-      assert.eq sm.rawSourceMap, merge standard,
-        mappings: "AAAC"
-
   advance: ->
     test "one char", ->
       sm = new SourceMapGenerator source, {} sourceFile
@@ -59,7 +53,7 @@ describe
         lastSourceColumn:    0
         lastGeneratedColumn: 0
         nextGeneratedColumn: 1
-        mappings: ''
+        mappings: :AAAA
 
     test "one new-line", ->
       sm = new SourceMapGenerator source, {} sourceFile
@@ -70,7 +64,7 @@ describe
         lastSourceColumn:    0
         lastGeneratedColumn: 0
         nextGeneratedColumn: 0
-        mappings: ';'
+        mappings: 'AAAA;'
 
     test "code then one new-line", ->
       sm = new SourceMapGenerator source, {} sourceFile
@@ -81,7 +75,7 @@ describe
         lastSourceColumn:    0
         lastGeneratedColumn: 0
         nextGeneratedColumn: 0
-        mappings: ';'
+        mappings: 'AAAA;'
 
     test "code after one new-line", ->
       sm = new SourceMapGenerator source, {} sourceFile
@@ -92,7 +86,7 @@ describe
         lastSourceColumn:    0
         lastGeneratedColumn: 0
         nextGeneratedColumn: 4
-        mappings: ';'
+        mappings: 'AAAA;'
 
     test "multiple new-lines followed by code", ->
       sm = new SourceMapGenerator source, {} sourceFile
@@ -103,7 +97,7 @@ describe
         lastSourceColumn:    0
         lastGeneratedColumn: 0
         nextGeneratedColumn: 9
-        mappings: ';;;'
+        mappings: 'AAAA;;;'
 
   add: ->
     test "add once", ->

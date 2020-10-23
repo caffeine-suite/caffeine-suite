@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Lib.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/Caffeine.SourceMap/Lib.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,qEAAO,8BAAoB,oCAE3B,kCAAkB,CAAC,YAAY,aAAc,OACxC,aACD,aAAa,YAAY,cAEzB,cAEJ,kCAA0B,CAAC,YAAY,aAAc,OAChD,aACD,cAAc,2BAElB,qCAA6B,CAAC,YAAY,aAAc,OACnD,eAAc,cACf,cACE,aAAa,aACb,cACC,MAEP,qCAA6B,CAAC,YAAY,aAAc,OACnD,eAAc,cACf,cACE,YACA,cACC,cAEP,2BAAmB,CAAC,YAAY,YAAa,kBAC3C,kCAAoB,UAAU"
+}
