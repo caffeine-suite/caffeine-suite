@@ -253,11 +253,10 @@ class BaseStn extends BaseClass
     sourceNode = @toSourceNode options
 
     out = compiled: if inlineMap || sourceMap
-      {js, sourceMap} =
-        sourceNode
-        .generate
-          source
-          {} sourceFile, sourceRoot, inlineMap
+      sourceNode
+      .generate
+        source
+        {} sourceFile, sourceRoot, inlineMap, sourceMap
 
     else
       js: sourceNode.toString()
@@ -265,8 +264,8 @@ class BaseStn extends BaseClass
     out.sourceNode = sourceNode if debug
     if props = sourceNode.mergedProps
       out.props = props
-    out
 
+    out
 
   childrenToSourceNodes: (joiner, options)->
     @stnArrayToSourceNodes @children, joiner, options

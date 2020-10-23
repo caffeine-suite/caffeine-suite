@@ -4,7 +4,7 @@ Caf.defMod(module, () => {
   return Caf.importInvoke(
     ["merge"],
     [global, require("./StandardImport")],
-    merge => {
+    (merge) => {
       return merge(
         require("./Base64"),
         require("./SourceMapGenerator"),

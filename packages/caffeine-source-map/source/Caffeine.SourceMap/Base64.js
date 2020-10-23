@@ -23,16 +23,16 @@ Caf.defMod(module, () => {
         ""
       )),
       charMapToInt: (charMapToInt = Caf.object(intToCharMap, (v, k) => k)),
-      getBase64char: (getBase64char = function(number) {
+      getBase64char: (getBase64char = function (number) {
         return intToCharMap[number];
       }),
-      toVlqSigned: (toVlqSigned = function(value) {
+      toVlqSigned: (toVlqSigned = function (value) {
         return value < 0 ? (-value << 1) + 1 : value << 1;
       }),
-      fromVlqSigned: (fromVlqSigned = function(value) {
+      fromVlqSigned: (fromVlqSigned = function (value) {
         return value & 1 ? 0 - (value >> 1) : value >> 1;
       }),
-      encodeVlq: (encodeVlq = function(value) {
+      encodeVlq: (encodeVlq = function (value) {
         let encoded, vlq;
         return value === 0
           ? "A"
@@ -51,7 +51,7 @@ Caf.defMod(module, () => {
             })(),
             encoded);
       }),
-      readVlq: (readVlq = function(string, resultObject = { index: 0 }) {
+      readVlq: (readVlq = function (string, resultObject = { index: 0 }) {
         let index, number, shiftAmount, read;
         ({ index } = resultObject);
         number = 0;
@@ -73,7 +73,7 @@ Caf.defMod(module, () => {
             resultObject)
           : undefined;
       }),
-      readVlqSequence: (readVlqSequence = function(
+      readVlqSequence: (readVlqSequence = function (
         string,
         resultObject = { index: 0 }
       ) {
@@ -84,7 +84,7 @@ Caf.defMod(module, () => {
           out.push(result.value);
         }
         return out;
-      })
+      }),
     };
   })();
 });

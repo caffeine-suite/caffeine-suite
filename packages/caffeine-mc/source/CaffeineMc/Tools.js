@@ -46,6 +46,7 @@ Caf.defMod(module, () => {
             }
           })();
         };
+        this.stackTraceIgnoreLineRegExp = /(\/caffeine-(script-runtime|mc)\/|internal\/modules\/cjs\/\w+\.js)/;
         this.displayError = function (e, options = {}) {
           if (!(e != null)) {
             return;
@@ -57,8 +58,11 @@ Caf.defMod(module, () => {
               ? log(e.message.replace(/<HERE>/, "<HERE>".red))
               : undefined
             : log.error(
-                e.stack
-                  .split("\n")
+                Caf.array(
+                  e.stack.split("\n"),
+                  null,
+                  (line) => !this.stackTraceIgnoreLineRegExp.test(line)
+                )
                   .slice(0, 30)
                   .join("\n")
                   .replace(

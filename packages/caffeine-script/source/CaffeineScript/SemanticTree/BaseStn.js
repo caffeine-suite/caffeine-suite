@@ -249,7 +249,6 @@ Caf.defMod(module, () => {
               sourceFile,
               sourceNode,
               out,
-              js,
               props;
             ({
               debug,
@@ -263,12 +262,12 @@ Caf.defMod(module, () => {
             out = {
               compiled:
                 inlineMap || sourceMap
-                  ? (({ js, sourceMap } = sourceNode.generate(source, {
+                  ? sourceNode.generate(source, {
                       sourceFile,
                       sourceRoot,
                       inlineMap,
-                    })),
-                    { js, sourceMap })
+                      sourceMap,
+                    })
                   : { js: sourceNode.toString() },
             };
             if (debug) {

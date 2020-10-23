@@ -33,7 +33,7 @@ module.exports = suite:
 
       source = "foo = bar\nbaz"
       sourceFile = "myFile.caf"
-      {compiled:{js, sourceMap}} = out = CaffeineScript.compile source,
+      {compiled:{js, "js.map": sourceMap}} = out = CaffeineScript.compile source,
         sourceFile: sourceFile
         sourceMap:  true
 
@@ -55,7 +55,7 @@ module.exports = suite:
       """
       sourceFile = "myFile.caf"
 
-      {compiled:{js, sourceMap, sourceNode}} = out = CaffeineScript.compile source,
+      {compiled:{js, "js.map": sourceMap, sourceNode}} = out = CaffeineScript.compile source,
         sourceFile: sourceFile
         sourceMap:  true
         debug: true
@@ -76,7 +76,7 @@ module.exports = suite:
         """
       sourceFile = "myFile.caf"
 
-      {compiled:{js, sourceMap, sourceNode}} = out = CaffeineScript.compile source,
+      {compiled:{js, "js.map": sourceMap, sourceNode}} = out = CaffeineScript.compile source,
         sourceFile: sourceFile
         sourceMap:  true
         debug: true

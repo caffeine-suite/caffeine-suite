@@ -12,6 +12,7 @@ Caf.defMod(module, () => {
       "findSourceRoot",
       "getCaffeineInit",
       "Promise",
+      "present",
       "log",
     ],
     [global, require("./StandardImport"), require("./SourceRoots")],
@@ -25,6 +26,7 @@ Caf.defMod(module, () => {
       findSourceRoot,
       getCaffeineInit,
       Promise,
+      present,
       log
     ) => {
       let CaffeineMc, FileCompiler;
@@ -84,24 +86,28 @@ Caf.defMod(module, () => {
                     );
                     result.readCount++;
                     return Promise.all(
-                      Caf.array(result.output.compiled, (text, extension) => {
-                        let basename, outputFilename;
-                        basename = path.basename(
-                          sourceFile,
-                          path.extname(sourceFile)
-                        );
-                        result.outputFiles.push(outputFilename);
-                        return outputDirectory
-                          ? (result.writeCount++,
-                            (outputFilename = path.join(
-                              outputDirectory,
-                              `${Caf.toString(basename)}.${Caf.toString(
-                                extension
-                              )}`
-                            )),
-                            fs.writeFile(outputFilename, text))
-                          : Promise.resolve(text);
-                      })
+                      Caf.array(
+                        result.output.compiled,
+                        (text, extension) => {
+                          let basename, outputFilename;
+                          basename = path.basename(
+                            sourceFile,
+                            path.extname(sourceFile)
+                          );
+                          result.outputFiles.push(outputFilename);
+                          return outputDirectory
+                            ? (result.writeCount++,
+                              (outputFilename = path.join(
+                                outputDirectory,
+                                `${Caf.toString(basename)}.${Caf.toString(
+                                  extension
+                                )}`
+                              )),
+                              fs.writeFile(outputFilename, text))
+                            : Promise.resolve(text);
+                        },
+                        (text, extension) => present(text)
+                      )
                     );
                   })
                 )

@@ -6,7 +6,7 @@ Caf.defMod(module, () => {
     [global, require("./StandardImport")],
     (describe, test, SourceNode, assert, merge) => {
       return describe({
-        children: function() {
+        children: function () {
           test("none", () => {
             let n;
             n = new SourceNode();
@@ -33,7 +33,7 @@ Caf.defMod(module, () => {
             return assert.eq("hi", n.toString());
           });
         },
-        outputProps: function() {
+        outputProps: function () {
           test("basic", () => {
             let n, props;
             n = new SourceNode().withProps((props = { foo: 123 }));
@@ -47,7 +47,7 @@ Caf.defMod(module, () => {
             ).withProps((props2 = { foo: 123 }));
             return assert.eq(merge(props1, props2), n.mergedProps);
           });
-        }
+        },
       });
     }
   );

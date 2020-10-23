@@ -21,15 +21,14 @@ commander = require "commander"
 .usage('[options] <input files and directories>')
 .option '-o, --output <directory>', "where to write output files"
 .option '-c, --compile', 'compile files'
-.option '-C, --cache', 'DEPRICATED - cache is on by default'
 .option '--nocache', 'disable compile cache'
 .option '-p, --prettier', 'apply "prettier" to any js output'
 .option '-t, --transpile [presets...]', 'transpile with babel'
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
 .option '-r, --reset', 'reset cache'
-# .option '-m, --map',        'generate source map and save as .js.map files'
-.option '-M, --inlineMap', 'generate source map and include it directly in output'
+.option '-m, --map',        'generate source map and save as .js.map files'
+.option '-M, --inline-map',  'generate source map and include it directly in output'
 .option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
 .on "--help", ->
   console.log """
@@ -58,7 +57,8 @@ compileFile = (filename, outputDirectory) ->
     prettier
     transpile
     cache
-    inlineMap: commander.inlineMap
+    sourceMap: commander.map
+    inlineMap: commander.inlineMap || commander["inline-map"]
   })
   .then ({readCount, writeCount, output}) ->
 

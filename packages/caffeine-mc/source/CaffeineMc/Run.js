@@ -65,7 +65,7 @@ Caf.defMod(module, () => {
           return (process.argv = compactFlattenAll("caf", sourceFile, args));
         };
         this.runFile = (sourceFile, options) => {
-          let globalCompilerOptions;
+          let globalCompilerOptions, error;
           ({ globalCompilerOptions } = CaffeineMc);
           return (() => {
             try {
@@ -76,6 +76,10 @@ Caf.defMod(module, () => {
                 )
               );
               return require(require.main.filename);
+            } catch (error1) {
+              error = error1;
+              require("./Tools").displayError(error);
+              return process.exit(1);
             } finally {
               CaffeineMc.globalCompilerOptions = globalCompilerOptions;
             }

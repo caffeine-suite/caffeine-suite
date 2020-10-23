@@ -136,8 +136,8 @@ module.exports = class Metacompiler extends BaseClass
 
     {prettier, inlineMap, transpile} = options
 
-    if prettier? ? inlineMap? ? transpile?
-      cacheInfo.compilerOptions = {prettier, inlineMap, transpile}
+    if prettier || inlineMap || transpile
+      cacheInfo.compilerOptions = merge {prettier, inlineMap, transpile}
 
     if cachedCompile = CompileCache.fetch cacheInfo
       cachedCompile

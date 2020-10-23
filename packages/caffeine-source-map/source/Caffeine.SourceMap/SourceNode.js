@@ -10,14 +10,18 @@ Caf.defMod(module, () => {
       "deepMerge",
       "SourceMapGenerator",
       "binary",
-      "String"
+      "getSourceMapPath",
+      "getRelativeSourceMapPath",
+      "getOutputFileName",
+      "String",
     ],
     [
       global,
       require("art-standard-lib"),
       require("art-class-system"),
       require("art-binary"),
-      { SourceMapGenerator: require("./SourceMapGenerator") }
+      require("./Lib"),
+      { SourceMapGenerator: require("./SourceMapGenerator") },
     ],
     (
       BaseClass,
@@ -27,6 +31,9 @@ Caf.defMod(module, () => {
       deepMerge,
       SourceMapGenerator,
       binary,
+      getSourceMapPath,
+      getRelativeSourceMapPath,
+      getOutputFileName,
       String
     ) => {
       let SourceNode;
@@ -40,71 +47,84 @@ Caf.defMod(module, () => {
             this._flattenedChildren = null;
           }
         },
-        function(SourceNode, classSuper, instanceSuper) {
+        function (SourceNode, classSuper, instanceSuper) {
           this.property("sourceIndex", "children", "props");
           this.getter({
-            inspectedObjects: function() {
+            inspectedObjects: function () {
               return {
                 sourceIndex: this.sourceIndex,
                 props: this.props,
-                children: toInspectedObjects(this.children)
+                children: toInspectedObjects(this.children),
               };
-            }
+            },
           });
           this.getter({
-            flattenedChildren: function() {
+            flattenedChildren: function () {
               let temp;
               return (temp = this._flattenedChildren) != null
                 ? temp
                 : (this._flattenedChildren = compactFlatten(this.children));
             },
-            mergedProps: function() {
+            mergedProps: function () {
               let out;
               if (this._props) {
                 out = merge(this._props);
               }
-              Caf.each2(this.flattenedChildren, child => {
+              Caf.each2(this.flattenedChildren, (child) => {
                 let mergedProps;
                 return (mergedProps = child.mergedProps)
                   ? (out = out ? deepMerge(out, mergedProps) : mergedProps)
                   : undefined;
               });
               return out;
-            }
+            },
           });
-          this.prototype.withProps = function(_props) {
+          this.prototype.withProps = function (_props) {
             this._props = _props;
             return this;
           };
-          this.prototype.generate = function(source, options) {
+          this.prototype.generate = function (source, options) {
             let sourceFile, sourceRoot, inlineMap, js, sourceMap, out;
-            ({ sourceFile, sourceRoot, inlineMap } = options);
+            sourceFile = options.sourceFile;
+            sourceRoot = options.sourceRoot;
+            inlineMap = options.inlineMap;
             ({ js, sourceMap } = out = new SourceMapGenerator(
               source,
               options
             ).add(this));
             return inlineMap
               ? {
-                  sourceMap,
                   js: [
                     js,
                     `//# sourceMappingURL=${Caf.toString(
                       binary(sourceMap).toDataUri("application/json", true)
                     )}`,
                     sourceFile
-                      ? (sourceRoot
-                          ? (sourceFile =
-                              "./" +
-                              require("path").relative(sourceRoot, sourceFile))
-                          : undefined,
-                        `//# sourceURL=${Caf.toString(sourceFile)}`)
-                      : undefined
-                  ].join("\n")
+                      ? `//# sourceURL=${Caf.toString(
+                          getSourceMapPath(sourceRoot, sourceFile)
+                        )}`
+                      : undefined,
+                    "",
+                  ].join("\n"),
                 }
-              : out;
+              : options.sourceMap
+              ? {
+                  "js.map": sourceMap,
+                  js: [
+                    js,
+                    `//# sourceMappingURL=${Caf.toString(
+                      getRelativeSourceMapPath(
+                        sourceRoot,
+                        getOutputFileName(sourceFile, ".js.map")
+                      )
+                    )}`,
+                    "",
+                  ].join("\n"),
+                }
+              : { js };
           };
-          this.prototype.toString = function(output = { js: "" }) {
-            Caf.each2(this.flattenedChildren, child =>
+          this.prototype.toString = function (output = { js: "" }) {
+            Caf.each2(this.flattenedChildren, (child) =>
               Caf.is(child, String)
                 ? (output.js += child)
                 : child.toString(output)

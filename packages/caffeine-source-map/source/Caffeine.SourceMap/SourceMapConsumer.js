@@ -8,7 +8,7 @@ Caf.defMod(module, () => {
       require("art-standard-lib"),
       require("art-class-system"),
       require("caffeine-eight"),
-      require("./Base64")
+      require("./Base64"),
     ],
     (BaseClass, readVlqSequence, Error, String, JSON) => {
       let SourceMapConsumer;
@@ -22,24 +22,24 @@ Caf.defMod(module, () => {
             this.sourceMap = sourceMap;
           }
         },
-        function(SourceMapConsumer, classSuper, instanceSuper) {
+        function (SourceMapConsumer, classSuper, instanceSuper) {
           this.getter({
-            mappings: function() {
+            mappings: function () {
               return this.sourceMap.mappings;
             },
-            sources: function() {
+            sources: function () {
               return this.sourceMap.sources;
             },
-            names: function() {
+            names: function () {
               return this.sourceMap.names;
             },
-            inspectedObjects: function() {
+            inspectedObjects: function () {
               return {
                 sourceMap: this.sourceMap,
-                decodedMappings: this.decodedMappings
+                decodedMappings: this.decodedMappings,
               };
             },
-            decodedMappings: function() {
+            decodedMappings: function () {
               let out, result;
               out = [];
               result = null;
@@ -49,9 +49,9 @@ Caf.defMod(module, () => {
                 }
               }
               return out;
-            }
+            },
           });
-          this.prototype.readMapping = function(
+          this.prototype.readMapping = function (
             mappings = this.mappings,
             result
           ) {
@@ -73,7 +73,7 @@ Caf.defMod(module, () => {
                     sourceColumn: 0,
                     source: 0,
                     sourceNameIndex: 0,
-                    mapping: null
+                    mapping: null,
                   }));
             result.mapping = null;
             return index < mappings.length
@@ -91,7 +91,7 @@ Caf.defMod(module, () => {
                         srcDelta,
                         srcLineDelta,
                         srcColDelta,
-                        nameDelta
+                        nameDelta,
                       ] = readVlqSequence(mappings, result);
                       if (!(genColDelta != null)) {
                         throw new Error(

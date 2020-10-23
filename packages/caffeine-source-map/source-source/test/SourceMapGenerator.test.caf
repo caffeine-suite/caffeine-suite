@@ -15,13 +15,12 @@ generatedFile = "test.js"
 describe
   basics: ->
     standard =
-      sourceContent:  [source]
       names:          []
-      file:           ""
+      file:           :test.js
       sourceRoot:     ""
       mappings:       ""
       version:        3
-      sources:        ["test.caf"]
+      sources:        [] :test.caf
 
     test "new SourceMapGenerator limited", ->
       sm = new SourceMapGenerator source, {} sourceFile

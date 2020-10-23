@@ -44,7 +44,7 @@ class FileCompiler
           result.output = compiler.compile source, merge config, options, {} sourceFile, sourceRoot
           result.readCount++
 
-          Promise.all array text, extension from result.output.compiled
+          Promise.all array text, extension from result.output.compiled when present text
             basename = path.basename sourceFile, path.extname sourceFile
             result.outputFiles.push outputFilename
 

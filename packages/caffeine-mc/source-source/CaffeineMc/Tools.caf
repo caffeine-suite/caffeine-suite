@@ -24,6 +24,14 @@ class Tools
       console.error "" <--->
       throw e
 
+  @stackTraceIgnoreLineRegExp:
+    ///
+      (
+        /caffeine-(script-runtime|mc)/
+      |
+        internal/modules/cjs/\w+\.js
+      )
+
   @displayError: (e, options = {}) ->
     return unless e?
     if options.verbose
@@ -34,8 +42,7 @@ class Tools
 
     else
       log.error
-        e.stack
-        .split  "\n"
+        array line in e.stack.split :\n when !@stackTraceIgnoreLineRegExp.test line
         .slice  0, 30
         .join   "\n"
         .replace new RegExp(escapeRegExp(process.cwd() + "/"), "g"), './'

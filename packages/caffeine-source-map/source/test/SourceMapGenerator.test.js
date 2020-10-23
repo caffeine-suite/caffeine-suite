@@ -9,7 +9,7 @@ Caf.defMod(module, () => {
       "assert",
       "merge",
       "SourceNode",
-      "SourceMapConsumer"
+      "SourceMapConsumer",
     ],
     [global, require("./StandardImport")],
     (
@@ -27,16 +27,15 @@ Caf.defMod(module, () => {
       sourceFile = "test.caf";
       generatedFile = "test.js";
       return describe({
-        basics: function() {
+        basics: function () {
           let standard;
           standard = {
-            sourceContent: [source],
             names: [],
-            file: "",
+            file: "test.js",
             sourceRoot: "",
             mappings: "",
             version: 3,
-            sources: ["test.caf"]
+            sources: ["test.caf"],
           };
           test("new SourceMapGenerator limited", () => {
             let sm;
@@ -70,7 +69,7 @@ Caf.defMod(module, () => {
             );
           });
         },
-        advance: function() {
+        advance: function () {
           test("one char", () => {
             let sm;
             sm = new SourceMapGenerator(source, { sourceFile });
@@ -79,7 +78,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 0,
-              mappings: ""
+              mappings: "",
             });
             sm.advance("!");
             return assert.eq(sm.status, {
@@ -87,7 +86,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 1,
-              mappings: ""
+              mappings: "",
             });
           });
           test("one new-line", () => {
@@ -99,7 +98,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 0,
-              mappings: ";"
+              mappings: ";",
             });
           });
           test("code then one new-line", () => {
@@ -111,7 +110,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 0,
-              mappings: ";"
+              mappings: ";",
             });
           });
           test("code after one new-line", () => {
@@ -123,7 +122,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 4,
-              mappings: ";"
+              mappings: ";",
             });
           });
           return test("multiple new-lines followed by code", () => {
@@ -135,11 +134,11 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 9,
-              mappings: ";;;"
+              mappings: ";;;",
             });
           });
         },
-        add: function() {
+        add: function () {
           test("add once", () => {
             let sm;
             sm = new SourceMapGenerator(source, { sourceFile });
@@ -149,7 +148,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 0,
               lastGeneratedColumn: 0,
               nextGeneratedColumn: 3,
-              mappings: "AACA"
+              mappings: "AACA",
             });
           });
           test("add twice", () => {
@@ -162,7 +161,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 2,
               lastGeneratedColumn: 2,
               nextGeneratedColumn: 3,
-              mappings: "AACA,EAAE"
+              mappings: "AACA,EAAE",
             });
           });
           return test("full example", () => {
@@ -182,7 +181,7 @@ Caf.defMod(module, () => {
               lastSourceColumn: 10,
               lastGeneratedColumn: 17,
               nextGeneratedColumn: 21,
-              mappings: "AACA,aAAI,IAAM"
+              mappings: "AACA,aAAI,IAAM",
             });
             return assert.eq(smc.decodedMappings, [
               {
@@ -190,25 +189,25 @@ Caf.defMod(module, () => {
                 generatedColumn: 0,
                 source: 0,
                 sourceLine: 1,
-                sourceColumn: 0
+                sourceColumn: 0,
               },
               {
                 generatedLine: 0,
                 generatedColumn: 13,
                 source: 0,
                 sourceLine: 1,
-                sourceColumn: 4
+                sourceColumn: 4,
               },
               {
                 generatedLine: 0,
                 generatedColumn: 17,
                 source: 0,
                 sourceLine: 1,
-                sourceColumn: 10
-              }
+                sourceColumn: 10,
+              },
             ]);
           });
-        }
+        },
       });
     }
   );

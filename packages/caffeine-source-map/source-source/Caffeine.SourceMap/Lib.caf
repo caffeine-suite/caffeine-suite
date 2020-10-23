@@ -1,0 +1,28 @@
+import &StandardImport, {} &path
+
+getSourceMapPath: (sourceRoot, sourceFile) ->
+  if sourceRoot
+    path.resolve sourceRoot, sourceFile
+  else
+    sourceFile
+
+getRelativeSourceMapPath: (sourceRoot, sourceFile) ->
+  if sourceFile
+    path.basename sourceFile
+
+getRelativePathToSourceRoot: (sourceRoot, sourceFile) ->
+  if sourceFile && sourceRoot
+    path.relative
+      path.dirname sourceFile
+      sourceRoot
+  else ""
+
+getRelativePathToSourceFile: (sourceRoot, sourceFile) ->
+  if sourceFile && sourceRoot
+    path.relative
+      sourceRoot
+      sourceFile
+  else sourceFile
+
+getOutputFileName: (sourceFile, extension) ->
+  sourceFile?.replace /\.\w+$/, extension

@@ -187,7 +187,7 @@
     };
 
     Metacompiler.prototype._compileWithCaching = function(code, options) {
-      var cacheInfo, cachedCompile, inlineMap, prettier, ref1, ref2, transpile;
+      var cacheInfo, cachedCompile, inlineMap, prettier, transpile;
       options = objectWithout(options, "cache");
       cacheInfo = {
         compiler: this.compiler,
@@ -196,12 +196,12 @@
         sourceFile: options.sourceFile
       };
       prettier = options.prettier, inlineMap = options.inlineMap, transpile = options.transpile;
-      if ((ref1 = (ref2 = prettier != null) != null ? ref2 : inlineMap != null) != null ? ref1 : transpile != null) {
-        cacheInfo.compilerOptions = {
+      if (prettier || inlineMap || transpile) {
+        cacheInfo.compilerOptions = merge({
           prettier: prettier,
           inlineMap: inlineMap,
           transpile: transpile
-        };
+        });
       }
       if (cachedCompile = CompileCache.fetch(cacheInfo)) {
         return cachedCompile;

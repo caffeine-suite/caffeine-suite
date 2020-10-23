@@ -5,6 +5,7 @@
 .includeInNamespace(require('./SourceMap'))
 .addModules({
   Base64:             require('./Base64'),
+  Lib:                require('./Lib'),
   SourceMapConsumer:  require('./SourceMapConsumer'),
   SourceMapGenerator: require('./SourceMapGenerator'),
   SourceNode:         require('./SourceNode'),

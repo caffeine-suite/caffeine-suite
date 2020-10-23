@@ -43,12 +43,13 @@
   "scripts": {
     "build": "caf -v -p -c cafInCaf -o source",
     "build-clean": "npm run clean; npm run build",
+    "build-stable": "npm run build; cp -R source/* source-stable/",
     "clean": "rm -rf source/*",
     "perf": "nn -s;mocha -u tdd perf",
     "test": "nn -s;mocha -u tdd",
     "watch": "npm-watch"
   },
-  "version": "0.72.9",
+  "version": "0.72.10",
   "watch": {
     "build": {
       "extensions": [
@@ -56,7 +57,8 @@
         "coffee"
       ],
       "patterns": [
-        "source-source"
+        "source-source",
+        "cafInCaf"
       ],
       "quiet": false
     }

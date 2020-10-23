@@ -1,4 +1,4 @@
-import &ArtStandardLib, &ArtClassSystem, &CaffeineEight, &Base64
+import &ArtStandardLib, &ArtClassSystem, &CaffeineEight, &Base64, &Lib
 
 # https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit
 
@@ -25,21 +25,18 @@ class SourceMapGenerator extends BaseClass
         @nextGeneratedColumn
         @mappings
 
-    sourceMap:    -> JSON.stringify @rawSourceMap
-    sourceFile: ->
-      if @_sourceRoot
-        './' + &path.relative @_sourceRoot, @_sourceFile
-      else
-        @_sourceFile
+    sourceMap:  -> JSON.stringify @rawSourceMap, null, "  "
+    sourceFile: -> getSourceMapPath @_sourceRoot, @_sourceFile
+    file: -> getOutputFileName @sourceFile, :.js
 
     rawSourceMap: ->
       merge
         {}
           version:        3
-          file:           @generatedFile ? ""
-          sourceRoot:     @sourceFile && ""
-          sources:        @sourceFile && [] @sourceFile
-          sourceContent:  [] @source
+          file:           getRelativeSourceMapPath @sourceRoot, @file
+          sourceRoot:     getRelativePathToSourceRoot @sourceRoot, @file
+          sources:        [] getRelativePathToSourceFile @sourceRoot, @sourceFile
+          # sourceContent:  [] @source
           names:          []
           @mappings # Example: "" A,AAAB;;ABCDE;
 

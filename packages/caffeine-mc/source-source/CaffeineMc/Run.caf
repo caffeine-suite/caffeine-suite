@@ -30,6 +30,10 @@ class Run extends BaseClass
 
       require require.main.filename
 
+    catch error
+      &Tools.displayError error
+      process.exit 1
+
     finally
       CaffeineMc.globalCompilerOptions = globalCompilerOptions
 

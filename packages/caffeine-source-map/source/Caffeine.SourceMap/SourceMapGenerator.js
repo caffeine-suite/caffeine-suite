@@ -5,20 +5,39 @@ Caf.defMod(module, () => {
     [
       "BaseClass",
       "JSON",
+      "getSourceMapPath",
+      "getOutputFileName",
       "merge",
+      "getRelativeSourceMapPath",
+      "getRelativePathToSourceRoot",
+      "getRelativePathToSourceFile",
       "encodeVlq",
       "String",
       "Array",
-      "SourceLineColumnMap"
+      "SourceLineColumnMap",
     ],
     [
       global,
       require("art-standard-lib"),
       require("art-class-system"),
       require("caffeine-eight"),
-      require("./Base64")
+      require("./Base64"),
+      require("./Lib"),
     ],
-    (BaseClass, JSON, merge, encodeVlq, String, Array, SourceLineColumnMap) => {
+    (
+      BaseClass,
+      JSON,
+      getSourceMapPath,
+      getOutputFileName,
+      merge,
+      getRelativeSourceMapPath,
+      getRelativePathToSourceRoot,
+      getRelativePathToSourceFile,
+      encodeVlq,
+      String,
+      Array,
+      SourceLineColumnMap
+    ) => {
       let SourceMapGenerator;
       return (SourceMapGenerator = Caf.defClass(
         class SourceMapGenerator extends BaseClass {
@@ -36,7 +55,7 @@ Caf.defMod(module, () => {
             this._sourceLineColumnMap = new SourceLineColumnMap(this.source);
           }
         },
-        function(SourceMapGenerator, classSuper, instanceSuper) {
+        function (SourceMapGenerator, classSuper, instanceSuper) {
           let reusableColLine;
           this.property("source", "sourceFile", "generatedFile", "sourceRoot");
           this.getter(
@@ -47,51 +66,54 @@ Caf.defMod(module, () => {
             "lastGeneratedColumn",
             "nextGeneratedColumn",
             {
-              status: function() {
+              status: function () {
                 return {
                   lastSourceLine: this.lastSourceLine,
                   lastSourceColumn: this.lastSourceColumn,
                   lastGeneratedColumn: this.lastGeneratedColumn,
                   nextGeneratedColumn: this.nextGeneratedColumn,
-                  mappings: this.mappings
+                  mappings: this.mappings,
                 };
               },
-              sourceMap: function() {
-                return JSON.stringify(this.rawSourceMap);
+              sourceMap: function () {
+                return JSON.stringify(this.rawSourceMap, null, "  ");
               },
-              sourceFile: function() {
-                return this._sourceRoot
-                  ? "./" +
-                      require("path").relative(
-                        this._sourceRoot,
-                        this._sourceFile
-                      )
-                  : this._sourceFile;
+              sourceFile: function () {
+                return getSourceMapPath(this._sourceRoot, this._sourceFile);
               },
-              rawSourceMap: function() {
-                let temp;
+              file: function () {
+                return getOutputFileName(this.sourceFile, ".js");
+              },
+              rawSourceMap: function () {
                 return merge({
                   version: 3,
-                  file: (temp = this.generatedFile) != null ? temp : "",
-                  sourceRoot: this.sourceFile && "",
-                  sources: this.sourceFile && [this.sourceFile],
-                  sourceContent: [this.source],
+                  file: getRelativeSourceMapPath(this.sourceRoot, this.file),
+                  sourceRoot: getRelativePathToSourceRoot(
+                    this.sourceRoot,
+                    this.file
+                  ),
+                  sources: [
+                    getRelativePathToSourceFile(
+                      this.sourceRoot,
+                      this.sourceFile
+                    ),
+                  ],
                   names: [],
-                  mappings: this.mappings
+                  mappings: this.mappings,
                 });
               },
-              inspectedObjects: function() {
+              inspectedObjects: function () {
                 return this.rawSourceMap;
-              }
+              },
             }
           );
-          this.prototype.addLine = function() {
+          this.prototype.addLine = function () {
             this._mappings += ";";
             this._lastGeneratedColumn = 0;
             return (this._firstSegment = true);
           };
           reusableColLine = {};
-          this.prototype.addSegment = function(sourceIndex) {
+          this.prototype.addSegment = function (sourceIndex) {
             let line, column, out;
             return sourceIndex != null && sourceIndex !== this._lastSourceIndex
               ? ((this._lastSourceIndex = sourceIndex),
@@ -115,7 +137,7 @@ Caf.defMod(module, () => {
                 (this._mappings += out))
               : undefined;
           };
-          this.prototype.advance = function(generatedString) {
+          this.prototype.advance = function (generatedString) {
             let index, lineAdded, lastStartIndex;
             index = -1;
             lineAdded = false;
@@ -135,7 +157,7 @@ Caf.defMod(module, () => {
                   generatedString.length - lastStartIndex)
               : (this._nextGeneratedColumn += generatedString.length);
           };
-          this.prototype.add = function(output) {
+          this.prototype.add = function (output) {
             let sourceIndex, children;
             switch (false) {
               case !Caf.is(output, String):
@@ -150,8 +172,8 @@ Caf.defMod(module, () => {
               case !Caf.is(output, Array):
                 Caf.each2(
                   output,
-                  child => this.add(child),
-                  child => child != null
+                  (child) => this.add(child),
+                  (child) => child != null
                 );
             }
             return this;
