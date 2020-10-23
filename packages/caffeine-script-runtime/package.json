@@ -3,8 +3,8 @@
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "description": "Runtime library for CaffeineScript",
   "devDependencies": {
-    "art-build-configurator": "^1.26.17",
-    "art-testbench": "^2.2.5"
+    "art-build-configurator": "^1.28.0",
+    "art-testbench": "^2.2.8"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {
@@ -28,7 +28,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "1.13.7",
+  "version": "1.13.8",
   "watch": {
     "build": {
       "extensions": "caf coffee",
