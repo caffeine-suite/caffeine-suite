@@ -37,6 +37,16 @@ Syntax Highlighting
 
 # To Sort
 ```
+# syntax error
+.gitignore: 123
+
+# but this is OK:
+foo: 123
+.gitignore: 123
+
+```
+
+```
 # The & operator should require space after to reduce confusion with:
 import &ArtStandardLib, &@fs
 ```

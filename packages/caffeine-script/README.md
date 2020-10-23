@@ -1,5 +1,12 @@
 ![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/CaffeineScriptLogo.png)
 [![Build Status](https://travis-ci.org/caffeine-suite/caffeine-script.svg?branch=master)](https://travis-ci.org/caffeine-suite/caffeine-script) [![NPM version](https://img.shields.io/npm/v/caffeine-script.svg)](https://www.npmjs.com/package/caffeine-script)
+
+> Code faster, refactor easier, understand better and reduce errors - all by focusing on CaffeineScript's key principle: *write less code*...
+
+# <center>CaffeineScript is 3x More Expressive Than JavaScript</center>
+
+This is an enormous advantage. You can write approximately 3x more functionality for the same amount of code in JavaScript. The majority of time spent on any programming project is proportional to the size of the code. Translating design into code, refactoring code, understanding existing code, and perhaps most of all, the number of errors, are all proportional to the size of the code base.
+
 ## Why CaffeineScript and not JSX, TypeScript, CoffeeScript or JavaScript?
 
 I believe less is more. It is the first principle of design and foundation of just about every good programming practice: [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [ZEN (YAGNI)](http://www.essenceandartifact.com/2016/02/yagni-and-building-in-house-frameworks.html), [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle), [interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle), etc... That's why I wrote CaffeineScript. This info-graphic shows the result:
