@@ -12,9 +12,9 @@
     "art-object-tree-factory": "^2.2.5",
     "art-standard-lib": "^1.70.0",
     "caffeine-eight": "^2.6.5",
-    "caffeine-mc": "^3.1.5",
+    "caffeine-mc": "^3.1.6",
     "caffeine-script-runtime": "^1.13.8",
-    "caffeine-source-map": "^2.0.6",
+    "caffeine-source-map": "^2.0.7",
     "neptune-namespaces-runtime": "^3.2.6",
     "source-map": "^0.7.2"
   },
@@ -49,7 +49,7 @@
     "test": "nn -s;mocha -u tdd",
     "watch": "npm-watch"
   },
-  "version": "0.72.11",
+  "version": "0.72.12",
   "watch": {
     "build": {
       "extensions": [
