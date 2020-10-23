@@ -259,3 +259,5 @@
   })(BaseClass);
 
 }).call(this);
+
+//# sourceMappingURL=Metacompiler.js.map

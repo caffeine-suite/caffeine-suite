@@ -24,3 +24,5 @@
   })(require('art-class-system').BaseClass);
 
 }).call(this);
+
+//# sourceMappingURL=JavaScript.js.map

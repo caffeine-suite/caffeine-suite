@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DirReader.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/CaffeineMc/DirReader.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,wFAAO,6BAAiB,sDAExB,eAAU,UAAU,iBAAU,CAAC,IAAM,mBAAY,qBACjD,MAAU,UAAU,QAAU,iBAC9B,SAAU,UAAU,WAAU"
+}

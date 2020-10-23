@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaffeineMcParser.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/CaffeineMc/CaffeineMcParser.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,8EAAO,8BAAoB,sFAE3B,sEAA+B,gFAE7B,UAAK,CACH,OACI,sCACF,SACE,2CAAiB,gGACjB,uCAAiB,4FACjB,4BAAiB,qDAAgB,WAEvC,UAAK,CACH,OACI,8CACA,+BACA,+CACA,0BACA,wBACA,QAEJ,sBAAsB,+BACtB,cAAc,YACd,OAAc,YACd,OAAc,YACd,KAAc,QACd,OAAc,+DAA8D,MAAM"
+}

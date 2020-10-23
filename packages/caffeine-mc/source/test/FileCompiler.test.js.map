@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "FileCompiler.test.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/test/FileCompiler.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,qKAAO,8BAAoB,uBAAO,wJAElC,gBAAQ,CACN,mBACE,WAAU,OACR,8CACA,iCAEF,UAAS,MACP,2DAEa,0CACb,KAAI,4BAAgB,cAAc,gBAChC,YAAY,WACN,CAAC,uBACL,WAAW,cAAc,cACzB,UAAU,+BACR,iCACA,sGACA,8FACmD,iDAE7D,uBACE,WAAU,OACR,8CACA,iCAEF,UAAS,MACP,2DAEa,0CACb,KAAI,4BAAgB,cAAc,yCAChC,qBAAqB,aACrB,YAAY,OAAM,OAAO,YAEnB,CAAC,SACL,qBAAqB,YACrB,UAAS,CAAE,uBAER,OACH,qCACA,YAAY,OAAM,OAAO,eAErB,CAAC,yBACL,UAAU,+BACR,iCACA,sGACA,gCAEF,UAAU,8CACV,UAAU,qCAAqC"
+}

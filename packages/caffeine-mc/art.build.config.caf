@@ -3,8 +3,8 @@ package: (abcPackage) ->
   buildScript = (target) ->
     """
       git checkout source/
-      coffee --output #{target} --compile source-source &
-      caf -p -c source-source -o #{target} &
+      coffee -m --output #{target} --compile source-source &
+      caf -m -c source-source -o #{target} &
       wait
       cd source-source
       find . -name '*.js' | cpio -vpdm ../#{target}

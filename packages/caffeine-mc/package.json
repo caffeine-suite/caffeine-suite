@@ -45,8 +45,8 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "git checkout source/\ncoffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source\ncd ..\nnn -s",
-    "build-clean": "rm -rf source-building\nmkdir source-building\ngit checkout source/\ncoffee --output source-building --compile source-source &\ncaf -p -c source-source -o source-building &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source-building\ncd ..\nnn -s\nrm -rf source\nmv source-building source\nnn -s",
+    "build": "git checkout source/\ncoffee -m --output source --compile source-source &\ncaf -m -c source-source -o source &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source\ncd ..\nnn -s",
+    "build-clean": "rm -rf source-building\nmkdir source-building\ngit checkout source/\ncoffee -m --output source-building --compile source-source &\ncaf -m -c source-source -o source-building &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source-building\ncd ..\nnn -s\nrm -rf source\nmv source-building source\nnn -s",
     "test": "jest",
     "watch": "npm-watch"
   },

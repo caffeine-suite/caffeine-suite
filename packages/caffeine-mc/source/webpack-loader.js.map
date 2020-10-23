@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "webpack-loader.js",
+  "sourceRoot": "..",
+  "sources": [
+    "source-source/webpack-loader.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2JAAO,6BAAiB,yBAAa,2BAAgB,oIAarD,uDAEA,CAAC,gDAAU,QACT,qCAUA,aAAa,oBAAoB,cAEjC,aACE,YAAU,CAAC,IAAI,cAAc,6BAA6B,aACxD,QACA,mBACA,YAAY,IACZ,OAAY,MACZ,aAAc,eACd,WAAa,yBAEf,cAAU,MAAM,IAAI,aAAS,0BAG7B,IAAG,aAAa,4BACd,MAAM,IAAI,MAAM,eACb,YAAS,IACZ,MAAM,YAGN,WAAU,mCAAmC,cAE/C,cAAM"
+}

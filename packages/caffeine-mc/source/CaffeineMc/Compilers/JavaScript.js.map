@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "JavaScript.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source-source/CaffeineMc/Compilers/JavaScript.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,UAAA;IAAA;;;EAAA,MAAM,CAAC,OAAP,GAAuB;;;;;;;IAErB,UAAC,CAAA,OAAD,GAAU,SAAC,UAAD,EAAa,OAAb;aACR;QAAA,QAAA,EAAU;UAAA,EAAA,EAAI,UAAJ;SAAV;;IADQ;;;;KAF8B,OAAA,CAAQ,kBAAR,CAA2B,CAAC;AAAtE"
+}

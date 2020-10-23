@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "WorkingCache.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source-source/CaffeineMc/WorkingCache.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,8EAAO,uJACP,mBAEA,iBAAiB,GACjB,0BAA0B,kBAAkB,iBAAiB,YAG3D,yCAA+B,OAC1B,CAAe,kBAAG,0BAA0B,kBAC7C,mCAEJ,uCAAiB,YAAM,4BAEvB,WAAY,YAAS,QAAK,CAAC,KAAK,cAAS,sCAAa,cAAM,MAC5D,YAAY,aAAU,QAAI,CAAC,KAAK,GAAG,cAAM,OAAuB,uEAAC,KAAK,KAEtE,mBAAW,CAAC,KAAK,IAAK,OACpB,CAAC,iBAAK,OACJ,mBAAU,KAAK,qBACb,WAAW,KAAK,GAAG,EAAE"
+}
