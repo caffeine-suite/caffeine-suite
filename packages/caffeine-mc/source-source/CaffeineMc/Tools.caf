@@ -30,6 +30,8 @@ class Tools
         /caffeine-(script-runtime|mc)/
       |
         internal/modules/cjs/\w+\.js
+      |
+        \bsource-map-support/
       )
 
   @displayError: (e, options = {}) ->

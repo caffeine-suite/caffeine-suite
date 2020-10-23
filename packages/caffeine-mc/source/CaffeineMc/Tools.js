@@ -46,7 +46,7 @@ Caf.defMod(module, () => {
             }
           })();
         };
-        this.stackTraceIgnoreLineRegExp = /(\/caffeine-(script-runtime|mc)\/|internal\/modules\/cjs\/\w+\.js)/;
+        this.stackTraceIgnoreLineRegExp = /(\/caffeine-(script-runtime|mc)\/|internal\/modules\/cjs\/\w+\.js|\bsource-map-support\/)/;
         this.displayError = function (e, options = {}) {
           if (!(e != null)) {
             return;

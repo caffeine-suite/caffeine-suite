@@ -13,6 +13,7 @@ Caf.defMod(module, () => {
         function (Register, classSuper, instanceSuper) {
           this.verbose = false;
           this.register = () => {
+            require("source-map-support").install({ hookRequire: true });
             Caf.each2(CaffeineMc.fileExtensions, (ext) => {
               let temp, base;
               return (temp = (base = realRequire.extensions)[

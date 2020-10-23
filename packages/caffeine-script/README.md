@@ -264,3 +264,22 @@ Is there interest in TypeScript support? If so, with some help, I could add it. 
 ## CaffeineScript and CoffeeScript
 
 I owe a debt of gratitude to Jeremy Ashkenas and the CoffeeScript community. It is my primary inspiration, and what the CaffeineScript compiler was originally written in. More on inspirations from CoffeeScript: [Coming from CoffeeScript](https://github.com/shanebdavis/caffeine-script/wiki/Coming-from-CoffeeScript).
+
+## NodeJS and Source-Maps
+
+CaffeineScript supports both inline and separate-file source maps. In many cases they will just work, however, if you compile your Caf files to javascript and later run the javascript directly, you may need to enable source-map decoding in node. Here's how:
+
+```javascript
+// separate-file source-maps, in code:
+require('source-map-support/register');
+
+// inline source-maps, in code:
+require('source-map-support').install({hookRequire: true});
+```
+
+```bash
+# separate-file source-maps, on the command-line:
+node -r source-map-support/register compiled.js
+```
+
+More info here: [npm/source-map-support](https://www.npmjs.com/package/source-map-support)
