@@ -19,3 +19,6 @@ test "importInvoke last has priority", ->
 
 test "importInvoke - global has last has priority", ->
   assert.eq Caf.importInvoke(["Math"], [{Math:123}], (Math) -> {Math}), Math: 123
+
+test "importInvoke from nested arrays", ->
+  assert.eq Caf.importInvoke(["foo"], [{bar: 456}, [[{foo:123}], bam: 666]], (foo) -> {foo}), foo: 123
