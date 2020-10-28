@@ -44,9 +44,35 @@ module.exports = suite:
       log {source, js, smc}
 
       assert.eq smc.decodedMappings, [
-        {generatedLine: 0, generatedColumn: 0, source: 0, sourceLine: 0, sourceColumn: 0}
-        {generatedLine: 2, generatedColumn: 77, source: 0, sourceLine: 0, sourceColumn: 6}
-        {generatedLine: 2, generatedColumn: 89, source: 0, sourceLine: 1, sourceColumn: 0}
+        {
+          generatedLine:   0
+          generatedColumn: 0
+          source:          0
+          sourceLine:      0
+          sourceColumn:    0
+        }
+
+        {
+          generatedLine:   2
+          generatedColumn: 0
+          source:          0
+          sourceLine:      0
+          sourceColumn:    0
+        }
+        {
+          generatedLine:   2
+          generatedColumn: 77
+          source:          0
+          sourceLine:      0
+          sourceColumn:    6
+        }
+        {
+          generatedLine:   2
+          generatedColumn: 89
+          source:          0
+          sourceLine:      1
+          sourceColumn:    0
+        }
       ]
 
     test "if", ->
