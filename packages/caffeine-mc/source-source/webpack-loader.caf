@@ -28,7 +28,7 @@ getEnv() extract cafSourceMaps
   outputFile = getCurrentRequest @
 
   try
-    result = FileCompiler.compileFileSync sourceFile, {}
+    {js} = result = FileCompiler.compileFileSync sourceFile, {}
       source
       @debug
       sourceRoot: ''                # make sourceMaps references relative to webpack's start directory
