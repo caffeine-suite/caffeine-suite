@@ -28,13 +28,15 @@ getEnv() extract cafSourceMaps
   outputFile = getCurrentRequest @
 
   try
-    {js} = result = FileCompiler.compileFileSync sourceFile, {}
+    result = FileCompiler.compileFileSync sourceFile, {}
       source
       @debug
       sourceRoot: ''                # make sourceMaps references relative to webpack's start directory
       cache:      true              # CaffeineMc's external-reference-smart caching
       sourceMap:  !!cafSourceMaps   # experimental - works in Safari, not Chrome
       prettier:   !cafSourceMaps    # prettier is incompatible with sourceMaps
+
+    {js} = result.compiled
 
     # this code attempts to mimic what coffee-loader does
     if sourceMap = result.compiled["js.map"]
@@ -45,7 +47,7 @@ getEnv() extract cafSourceMaps
       sourceMap.sources = [] sourceFile
 
       # strip the sourceMappingURL - webpack doesn't need it
-      js = js.replace(/\/\/# sourceMappingURL=.*(\n|\s)+$/, '');
+      js = js.replace /\/\/# sourceMappingURL=.*(\n|\s)+$/, ''
 
     @callback null, js, sourceMap
 

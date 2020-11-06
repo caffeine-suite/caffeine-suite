@@ -50,7 +50,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "3.1.9",
+  "version": "3.1.10",
   "watch": {
     "build": {
       "extensions": [
