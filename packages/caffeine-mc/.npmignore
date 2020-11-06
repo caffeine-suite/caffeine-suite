@@ -3,4 +3,3 @@ examples/
 *.tgz
 webpack.config.js
 TODO*
-*.caf
