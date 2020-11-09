@@ -1,21 +1,18 @@
 # TODO
 
-
-Need to fix my fix. I think I rewrite argv; I shouldn't!
+### fix colorized errors
 
 ```bash
-# a.caf: console.log process.argv
-> caf a.caf 123                                                                                    (258ms) 11:32:14 07/02
-[
-  '/Users/shanebdavis/dev/art-suite-foundations/packages/art-suite/cli/a.caf',
-  '123'
-]
+# a.caf has a syntax error:
+# a.caf: (
 
-# a.coffee: console.log process.argv
-> coffee a.coffee 123
-[
-  'coffee',
-  '/Users/shanebdavis/dev/art-suite-foundations/packages/art-suite/cli/a.coffee',
-  '123'
-]
+# nice color error:
+caf a.caf
+
+# no color error for some reason even though code-path is very similar
+caf -c a.caf
+
+# even uglier error in the REPL (shell)
+caf
+> &a
 ```
