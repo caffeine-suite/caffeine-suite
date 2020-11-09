@@ -112,10 +112,12 @@ if compile
 
     each files, (filename) ->
       serializer.then ->
-        if fs.statSync(filename).isDirectory()
-          compileDirectory filename
-        else
-          compileFile filename
+        if fs.existsSync(filename)
+          if fs.statSync(filename).isDirectory()
+            compileDirectory filename
+          else
+            compileFile filename
+        else throw new Error "sourceFile not found: #{filename}"
 
     serializer.then ->
       if commander.debug
@@ -124,7 +126,9 @@ if compile
           registeredLoaders: Object.keys realRequire.extensions
 
       log success: {fileCounts}
-    serializer.catch displayError
+    serializer.catch (error) ->
+      displayError error
+      process.exit 1
   else
     commander.outputHelp()
 

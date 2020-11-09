@@ -113,10 +113,14 @@
       serializer = new Promise.Serializer;
       each(files, function(filename) {
         return serializer.then(function() {
-          if (fs.statSync(filename).isDirectory()) {
-            return compileDirectory(filename);
+          if (fs.existsSync(filename)) {
+            if (fs.statSync(filename).isDirectory()) {
+              return compileDirectory(filename);
+            } else {
+              return compileFile(filename);
+            }
           } else {
-            return compileFile(filename);
+            throw new Error("sourceFile not found: " + filename);
           }
         });
       });
@@ -135,7 +139,10 @@
           }
         });
       });
-      serializer["catch"](displayError);
+      serializer["catch"](function(error) {
+        displayError(error);
+        return process.exit(1);
+      });
     } else {
       commander.outputHelp();
     }

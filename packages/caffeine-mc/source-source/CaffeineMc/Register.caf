@@ -14,25 +14,16 @@ class Register
 
     each ext in CaffeineMc.fileExtensions
       realRequire.extensions[".#{ext}"] ?= (module, filename) ->
+        @verbose && log caffeine-mc-compile-loading: filename
+
+        answer = CaffeineMc.compileFileSync filename, inlineMap: true, sourceRoot: '', cache: true
         try
-          @verbose && log caffeine-mc-compile-loading: filename
-
-          answer = CaffeineMc.compileFileSync filename, inlineMap: true, sourceRoot: '', cache: true
-
+          module._compile answer.compiled.js, filename
         catch error
-          CaffeineMc.displayError error
-          # process.exit 1
           if @verbose
-            module._compile "throw new Error('CaffeineMc: error compiling #{filename}');", filename
+            log caffeine-mc-compile: {} filename,  answer
+            module._compile "\nthrow new Error('CaffeineMc: error evaluating: #{filename}');\n", filename
 
-        if answer?
-          try
-            module._compile answer.compiled.js, filename
-          catch error
-            CaffeineMc.displayError error
-            # process.exit 1
-            if @verbose
-              log caffeine-mc-compile: {} filename,  answer
-              module._compile "\nthrow new Error('CaffeineMc: error evaluating: #{filename}');\n", filename
+          throw error
 
     CaffeineMc

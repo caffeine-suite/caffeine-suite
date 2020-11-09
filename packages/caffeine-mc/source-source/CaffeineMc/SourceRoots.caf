@@ -9,6 +9,7 @@ class SourceRoots extends BaseClass
 
   @classGetter
     :caffeineInits
+    :caffeineInitsSync
     sourceRootIndicatorFiles: -> caffeineProjectSourceRootFinder.indicatorFiles
     caffeineInitFileName: -> caffeineInitFileName
 
@@ -35,45 +36,39 @@ class SourceRoots extends BaseClass
   # OUT: promise.then (caffeineInit) ->
   #   caffeineInit is a js string or false
   @getCaffeineInit: (sourceRoot = process.cwd()) =>
-    if (res = @caffeineInits[sourceRoot])?
-      Promise.resolve res
-    else
+    @caffeineInits[sourceRoot] ?=
       fs.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
       .then (exists) ->
-        contentsPromise = if exists
+        if exists
           fs.readFile sourceFile
-          .then (contents) ->
-            contents = contents.toString()
+          .then (contents) -> contents.toString()
         else
           Promise.resolve false
 
-        contentsPromise.then (contents) ->
-          metacompiler = newMetacompiler()
+        .then (caffeineInitFileContents) ->
           @caffeineInits[sourceRoot] =
-            compiler: metacompiler
+            compiler: metacompiler = newMetacompiler()
             config:
-              if result = contents && metacompiler.compile contents, {sourceFile, sourceRoot}
+              if result = caffeineInitFileContents && metacompiler.compile caffeineInitFileContents, {} sourceFile, sourceRoot
                 evalCapturingModuleExports result.compiled.js
               else
                 {}
 
   @getCaffeineInitSync: (sourceRoot) =>
     throw new Error "no sourceRoot" unless sourceRoot
-    if (res = @caffeineInits[sourceRoot])?
-      res
-    else
+    @caffeineInitsSync[sourceRoot] ?=
       if fs.existsSync sourceFile = path.join sourceRoot, @caffeineInitFileName
-        contents = fs.readFileSync(sourceFile).toString()
+        caffeineInitFileContents = fs.readFileSync(sourceFile).toString()
 
         metacompiler = newMetacompiler()
-        result = metacompiler.compile contents, {sourceFile, sourceRoot}
+        result = metacompiler.compile caffeineInitFileContents, {sourceFile, sourceRoot}
 
-        @caffeineInits[sourceRoot] =
-          compiler: metacompiler.compiler
-          config: evalCapturingModuleExports result.compiled.js
+        compiler: metacompiler.compiler
+        config: evalCapturingModuleExports result.compiled.js
 
       else
-        false
+        compiler: newMetacompiler()
+        config: {}
 
   @findSourceRoot:      (directory) -> caffeineProjectSourceRootFinder.findSourceRoot directory
   @findSourceRootSync:  (directory) -> caffeineProjectSourceRootFinder.findSourceRootSync directory
@@ -84,7 +79,9 @@ class SourceRoots extends BaseClass
 
   # keyed by sourceRoot
   @_caffeineInits: {}
+  @_caffeineInitsSync: {}
 
   # for testing
   @_resetSourceRoots: =>
     @_caffeineInits = {}
+    @_caffeineInitsSync = {}

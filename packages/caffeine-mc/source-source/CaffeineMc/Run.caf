@@ -14,7 +14,7 @@ class Run extends BaseClass
       else if found = find v, k in require.extensions with fileExists "#{sourceFile}#{k}"
         found
       else
-        e = new Error "No matching file found: #{formattedInspect {sourceFile, extensions: Object.keys(require.extensions).join ' '}}"
+        e = new Error "No matching file found: #{formattedInspect {sourceFile, extensions: Object.keys(require.extensions).join ' '}, unquoted: true}"
         e.stack = if color then e.message.red else e.message
         throw e
 

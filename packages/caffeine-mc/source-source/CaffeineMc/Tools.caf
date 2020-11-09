@@ -32,6 +32,10 @@ class Tools
         internal/modules/cjs/\w+\.js
       |
         \bsource-map-support/
+      |
+        bluebird
+      |
+        processImmediate.*internal/timers
       )
 
   @displayError: (e, options = {}) ->

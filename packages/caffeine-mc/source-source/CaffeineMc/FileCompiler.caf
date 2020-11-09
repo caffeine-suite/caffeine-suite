@@ -12,51 +12,53 @@ class FileCompiler
       if sourceRoot then  path.resolve sourceRoot
       else                findSourceRootSync sourceFile
 
-    CaffeineMc.compile
-      source ?
-        fs.readFileSync sourceFile
-        .toString()
+    {compiler, config} = getCaffeineInitSync sourceRoot
+    source ?=
+      fs.readFileSync sourceFile
+      .toString()
 
-      merge options, {} sourceFile, sourceRoot
-      getCaffeineInitSync sourceRoot
+    compiler.compile source, merge config, options, {} sourceFile, sourceRoot
 
   @compileFile: (sourceFile, options = {})->
-    options extract outputDirectory, source
+    options extract outputDirectory, source, sourceRoot
 
-    findSourceRoot sourceFile
-    .then (sourceRoot) ->
-      result =
-        readCount:    0
-        writeCount:   0
-        outputFiles:  []
-        output:       null
+    result =
+      readCount:    0
+      writeCount:   0
+      outputFiles:  []
+      output:       null
+
+    # get sourceRoot; also, abort if sourceFile does not exist
+    Promise.all []
+      if sourceRoot then  path.resolve sourceRoot
+      else                findSourceRoot sourceFile
 
       fs.exists sourceFile
-      .then (exists) ->
-        throw new Error "sourceFile not found: #{sourceFile}" unless exists
+      .then (exists) -> throw new Error "sourceFile not found: #{sourceFile}" unless exists
+
+    .then ([sourceRoot]) ->
+      # load caffeineInitFile (if it exists) and load sourceFile
+      Promise.all []
         getCaffeineInit sourceRoot
+        source ?
+          Promise.then -> fs.readFile(sourceFile).then (source) -> source.toString()
+          .tap -> result.readCount++
 
-      .then ({compiler, config}) ->
-        Promise
-        .then -> source ? fs.readFile(sourceFile).then (source) -> source.toString()
-        .then (source) ->
+      # compile
+      .then ([{compiler, config}, source]) ->
+        compiler.compile source, merge config, options, {} sourceFile, sourceRoot
 
-          result.output = compiler.compile source, merge config, options, {} sourceFile, sourceRoot
-          result.readCount++
+    # write files if outputDirectory was provied
+    .then (compilerResult) ->
+      {compiled} = result.output = compilerResult
+      if outputDirectory
+        basename = path.basename sourceFile, path.extname sourceFile
+        Promise.all array text, extension from compiled when present text
+          result.outputFiles.push outputFilename = path.join outputDirectory, "#{basename}.#{extension}"
+          Promise.then -> fs.writeFile outputFilename, text
+          .tap -> result.writeCount++
 
-          Promise.all array text, extension from result.output.compiled when present text
-            basename = path.basename sourceFile, path.extname sourceFile
-            result.outputFiles.push outputFilename
-
-            if outputDirectory
-              result.writeCount++
-              outputFilename = path.join outputDirectory, "#{basename}.#{extension}"
-              fs.writeFile outputFilename, text
-
-            else
-              Promise.resolve text
-
-      .then -> result
-      .catch (e) ->
-        log.error "error compiling: #{sourceFile}"
-        throw e
+    .then -> result
+    .catch (e) ->
+      log.error "error compiling: #{sourceFile}"
+      throw e
