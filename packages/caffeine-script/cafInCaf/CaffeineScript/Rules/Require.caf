@@ -1,4 +1,6 @@
 require:
-  pattern:    "/&/ pathedRequire"
-  stnProps:   ~> require: @pathedRequire.text
+  pattern:    "/&@?/ pathedRequire"
+  stnProps:   ~>
+    @ extract text
+    require: text.slice 1, text.length
   stnFactory: :RequireStn

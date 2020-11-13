@@ -3,9 +3,11 @@ let Caf = require("caffeine-script-runtime");
 Caf.defMod(module, () => {
   return {
     require: {
-      pattern: "/&/ pathedRequire",
+      pattern: "/&@?/ pathedRequire",
       stnProps: function () {
-        return { require: this.pathedRequire.text };
+        let text;
+        text = this.text;
+        return { require: text.slice(1, text.length) };
       },
       stnFactory: "RequireStn",
     },

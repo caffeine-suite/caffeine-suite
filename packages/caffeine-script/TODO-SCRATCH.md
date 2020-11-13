@@ -37,6 +37,12 @@ Syntax Highlighting
 
 # To Sort
 ```
+# internal error
+reduce lastChainedTest, name, i in sequence inject @ by 2
+  lastChainedTest[applyMemberName] name, sequence[i + 1]
+
+```
+```
 # syntax error
 .gitignore: 123
 

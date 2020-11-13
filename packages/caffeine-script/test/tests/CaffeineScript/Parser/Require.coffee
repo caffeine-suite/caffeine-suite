@@ -16,6 +16,10 @@ module.exports = suite: parseTestSuite {
       "&caffeine_eight":  "require('caffeine-eight');"
       "&caffeine-eight":  "require('caffeine-eight');"
 
+    organizationPaths:
+      "&@art-suite/cli":  "require('@art-suite/cli');"
+      "&@ArtSuite/Cli":   "require('@art-suite/cli');"
+
     pathed:
       "&ArtStandardLib/Types":  "require('art-standard-lib/Types');"
 
