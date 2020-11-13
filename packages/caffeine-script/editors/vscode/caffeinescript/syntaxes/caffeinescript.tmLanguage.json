@@ -7,7 +7,7 @@
   "scopeName": "source.caffeine",
   "patterns": [
     {
-      "match": "&(?!\\d)((?:(?!\\s)[-/$\\w\\u007f-\\uffff])+)",
+      "match": "&@?(?!\\d)((?:(?!\\s)[-/$\\w\\u007f-\\uffff])+)",
       "name": "string.quoted.other.caffeine"
     },
     {
