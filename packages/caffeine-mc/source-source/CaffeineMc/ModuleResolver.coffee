@@ -79,7 +79,6 @@ defineModule module, class ModuleResolver
         denormalizedBase = "#{denormalizedBase}/#{denormalizedBase2}"
         [_, modulePathArray...] = modulePathArray
 
-      log {base, modulePathArray}
     else denormalizedBase = moduleName
 
     {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, modulePathArray, options

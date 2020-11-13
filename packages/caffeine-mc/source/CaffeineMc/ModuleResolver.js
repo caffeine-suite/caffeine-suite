@@ -117,10 +117,6 @@
           denormalizedBase = denormalizedBase + "/" + denormalizedBase2;
           ref3 = modulePathArray, _ = ref3[0], modulePathArray = 2 <= ref3.length ? slice.call(ref3, 1) : [];
         }
-        log({
-          base: base,
-          modulePathArray: modulePathArray
-        });
       } else {
         denormalizedBase = moduleName;
       }
