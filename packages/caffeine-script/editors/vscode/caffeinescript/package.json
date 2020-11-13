@@ -63,7 +63,7 @@
     "publish": "open https://marketplace.visualstudio.com/manage/publishers/caffeine-script-publisher",
     "watch": "npm-watch"
   },
-  "version": "0.2.1",
+  "version": "0.3.0",
   "watch": {
     "build": {
       "extensions": "caf",
