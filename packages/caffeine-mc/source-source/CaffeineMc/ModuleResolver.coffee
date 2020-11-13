@@ -48,9 +48,14 @@ defineModule module, class ModuleResolver
         require path looks like.
   ###
   @getNpmPackageName: (moduleBaseName, modulePathArray) ->
-    normalizedModuleName = upperCamelCase moduleBaseName
-    try absolutePath = Path.dirname realRequire.resolve  name = dashCase moduleBaseName
-    try absolutePath ?= Path.dirname realRequire.resolve name = snakeCase moduleBaseName
+    if /^@/.test moduleBaseName
+      [a, b] = moduleBaseName.split /\//
+      try absolutePath =  Path.dirname realRequire.resolve name = "@#{dashCase a}/#{dashCase b}"
+      try absolutePath ?= Path.dirname realRequire.resolve name = "@#{snakeCase a}/#{snakeCase b}"
+    else
+      try absolutePath =  Path.dirname realRequire.resolve name = dashCase moduleBaseName
+      try absolutePath ?= Path.dirname realRequire.resolve name = snakeCase moduleBaseName
+
     try absolutePath ?= Path.dirname realRequire.resolve name = moduleBaseName
     catch
       throw new ErrorWithInfo "ModuleResolver: Could not find requested npm package: #{moduleBaseName}",
@@ -66,9 +71,15 @@ defineModule module, class ModuleResolver
   @findModuleSync: (moduleName, options) =>
 
     if /\//.test moduleName
-      [base, modulePathArray...] = for mod in [denormalizedBase] = moduleName.split "/"
-        out = normalizeName mod
-        out
+      [base, modulePathArray...] = for mod in [denormalizedBase, denormalizedBase2] = moduleName.split "/"
+        normalizeName mod
+
+      if /^@/.test moduleName
+        base = "@#{base}/#{modulePathArray[0]}"
+        denormalizedBase = "#{denormalizedBase}/#{denormalizedBase2}"
+        [_, modulePathArray...] = modulePathArray
+
+      log {base, modulePathArray}
     else denormalizedBase = moduleName
 
     {requireString, absolutePath} = @_findModuleBaseSync denormalizedBase, modulePathArray, options

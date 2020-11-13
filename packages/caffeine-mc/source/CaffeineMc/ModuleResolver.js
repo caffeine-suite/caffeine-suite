@@ -57,16 +57,27 @@
      */
 
     ModuleResolver.getNpmPackageName = function(moduleBaseName, modulePathArray) {
-      var absolutePath, name, normalizedModuleName, requireString;
-      normalizedModuleName = upperCamelCase(moduleBaseName);
-      try {
-        absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleBaseName)));
-      } catch (error) {}
-      try {
-        if (absolutePath == null) {
-          absolutePath = Path.dirname(realRequire.resolve(name = snakeCase(moduleBaseName)));
-        }
-      } catch (error) {}
+      var a, absolutePath, b, name, ref2, requireString;
+      if (/^@/.test(moduleBaseName)) {
+        ref2 = moduleBaseName.split(/\//), a = ref2[0], b = ref2[1];
+        try {
+          absolutePath = Path.dirname(realRequire.resolve(name = "@" + (dashCase(a)) + "/" + (dashCase(b))));
+        } catch (error) {}
+        try {
+          if (absolutePath == null) {
+            absolutePath = Path.dirname(realRequire.resolve(name = "@" + (snakeCase(a)) + "/" + (snakeCase(b))));
+          }
+        } catch (error) {}
+      } else {
+        try {
+          absolutePath = Path.dirname(realRequire.resolve(name = dashCase(moduleBaseName)));
+        } catch (error) {}
+        try {
+          if (absolutePath == null) {
+            absolutePath = Path.dirname(realRequire.resolve(name = snakeCase(moduleBaseName)));
+          }
+        } catch (error) {}
+      }
       try {
         if (absolutePath == null) {
           absolutePath = Path.dirname(realRequire.resolve(name = moduleBaseName));
@@ -89,23 +100,31 @@
     };
 
     ModuleResolver.findModuleSync = function(moduleName, options) {
-      var absolutePath, base, denormalizedBase, j, len, matchingName, mod, modulePathArray, out, ref2, ref3, requireString, sub;
+      var _, absolutePath, base, denormalizedBase, denormalizedBase2, j, len, matchingName, mod, modulePathArray, ref2, ref3, ref4, requireString, sub;
       if (/\//.test(moduleName)) {
         ref2 = (function() {
           var j, len, ref2, ref3, results;
-          ref3 = (ref2 = moduleName.split("/"), denormalizedBase = ref2[0], ref2);
+          ref3 = (ref2 = moduleName.split("/"), denormalizedBase = ref2[0], denormalizedBase2 = ref2[1], ref2);
           results = [];
           for (j = 0, len = ref3.length; j < len; j++) {
             mod = ref3[j];
-            out = normalizeName(mod);
-            results.push(out);
+            results.push(normalizeName(mod));
           }
           return results;
         })(), base = ref2[0], modulePathArray = 2 <= ref2.length ? slice.call(ref2, 1) : [];
+        if (/^@/.test(moduleName)) {
+          base = "@" + base + "/" + modulePathArray[0];
+          denormalizedBase = denormalizedBase + "/" + denormalizedBase2;
+          ref3 = modulePathArray, _ = ref3[0], modulePathArray = 2 <= ref3.length ? slice.call(ref3, 1) : [];
+        }
+        log({
+          base: base,
+          modulePathArray: modulePathArray
+        });
       } else {
         denormalizedBase = moduleName;
       }
-      ref3 = ModuleResolver._findModuleBaseSync(denormalizedBase, modulePathArray, options), requireString = ref3.requireString, absolutePath = ref3.absolutePath;
+      ref4 = ModuleResolver._findModuleBaseSync(denormalizedBase, modulePathArray, options), requireString = ref4.requireString, absolutePath = ref4.absolutePath;
       if (modulePathArray) {
         for (j = 0, len = modulePathArray.length; j < len; j++) {
           sub = modulePathArray[j];

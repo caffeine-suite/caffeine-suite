@@ -65,6 +65,18 @@ describe
         assert.eq requireString, "art-standard-lib/Types"
         assert.match absolutePath, /art-standard-lib\/Types$/
 
+    test "npm organization: @art-suite/cli", ->
+      findModule "@art-suite/cli", sourceDir: "."
+      .then ({requireString, absolutePath}) ->
+        assert.eq requireString, "@art-suite/cli"
+        assert.match absolutePath, /art-suite\/cli$/
+
+    test "npm organization: @ArtSuite/cli", ->
+      findModule "@ArtSuite/cli", sourceDir: "."
+      .then ({requireString, absolutePath}) ->
+        assert.eq requireString, "@art-suite/cli"
+        assert.match absolutePath, /art-suite\/cli$/
+
   stubbedFindModule: ->
     # setup -> mockFs initialFs
     beforeEach ->
