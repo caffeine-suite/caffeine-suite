@@ -26,6 +26,12 @@ class Tools
 
   @stackTraceIgnoreLineRegExp:
     ///
+      ^
+
+      \s+
+
+      at.*
+
       (
         /caffeine-(script-runtime|mc)/
       |
@@ -38,7 +44,7 @@ class Tools
         processImmediate.*internal/timers
       )
 
-  @displayError: (e, options = {}) ->
+  @displayError: (e, options = {}) =>
     return unless e?
     if options.verbose
       log.error e
