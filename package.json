@@ -35,7 +35,7 @@
     "prettier": "^2.1.2",
     "source-map": "^0.7.2",
     "source-map-support": "^0.5.19",
-    "three": "^0.120.1"
+    "three": "^0.125.0"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "license": "ISC",
