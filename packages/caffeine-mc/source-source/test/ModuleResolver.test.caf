@@ -163,14 +163,15 @@ describe
         even though the actual file is: indexeddb-promised/js/indexeddb-promised.js
 
   regressions: ->
+    testModName = :three-caf-mr-test
     test 'getNpmPackageName', ->
       assert.eq
-        getNpmPackageName('three', ['build', 'three.min'])
-        requireString: "three"
-        absolutePath:  require.resolve("three/build/three.min").split(/\/build/)[0]
+        getNpmPackageName(testModName, ['build', 'three.min'])
+        requireString: testModName
+        absolutePath:  require.resolve("#{testModName}/build/three.min").split(/\/build/)[0]
 
-    test "findModuleSync 'three/build/threeMin' - should return same as require.resolve", ->
+    test "findModuleSync '#{testModName}/build/threeMin' - should return same as require.resolve", ->
       assert.eq
-        requireString: "three/build/three.min"
-        absolutePath: require.resolve("three/build/three.min").split(/\.js$/)[0]
-        findModuleSync "three/build/threeMin"
+        requireString: "#{testModName}/build/three.min"
+        absolutePath: require.resolve("#{testModName}/build/three.min").split(/\.js$/)[0]
+        findModuleSync "#{testModName}/build/threeMin"

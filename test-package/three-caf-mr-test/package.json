@@ -1,0 +1,15 @@
+{
+  "author": "Shane Brinkman-Davis Delamore",
+  "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
+  "description": "caf-mod-resolver-test-with-main",
+  "homepage": "https://github.com/caffeine-suite/caffeine-suite",
+  "license": "ISC",
+  "main": "build/three.js",
+  "module": "build/three.module.js",
+  "name": "three-caf-mr-test",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caffeine-suite/caffeine-suite.git"
+  },
+  "version": "0.0.1"
+}
