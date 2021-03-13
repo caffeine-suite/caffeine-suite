@@ -2,15 +2,15 @@
   "author": "Shane Brinkman-Davis Delamore",
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "art-standard-lib": "^1.70.0",
+    "art-standard-lib": "^1.70.3",
     "caffeine-eight": "^2.6.5",
-    "neptune-namespaces-runtime": "^3.2.6"
+    "neptune-namespaces-runtime": "^3.2.8"
   },
   "description": "Caffeine.SourceMap",
   "devDependencies": {
-    "art-build-configurator": "^1.28.0",
-    "art-testbench": "^2.2.8",
-    "jest": "^26.6.1"
+    "art-build-configurator": "^1.29.2",
+    "art-testbench": "^3.2.2",
+    "jest": "^26.6.3"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {

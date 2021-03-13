@@ -7,21 +7,21 @@
     }
   },
   "dependencies": {
-    "art-binary": "^1.1.11",
-    "art-class-system": "^1.11.10",
-    "art-object-tree-factory": "^2.2.5",
-    "art-standard-lib": "^1.70.0",
+    "art-binary": "^1.1.13",
+    "art-class-system": "^1.11.12",
+    "art-object-tree-factory": "^2.2.7",
+    "art-standard-lib": "^1.70.3",
     "caffeine-eight": "^2.6.5",
-    "caffeine-mc": "^3.3.0",
+    "caffeine-mc": "^3.3.1",
     "caffeine-script-runtime": "^1.14.0",
     "caffeine-source-map": "^2.0.7",
-    "neptune-namespaces-runtime": "^3.2.6",
+    "neptune-namespaces-runtime": "^3.2.8",
     "source-map": "^0.7.2"
   },
   "description": "CaffeineScript makes programming more wonderful, code more beautiful and programmers more productive. It is a lean, high-level language that empowers you to get the most out of any JavaScript runtime.",
   "devDependencies": {
-    "art-build-configurator": "^1.28.0",
-    "art-testbench": "^2.2.8",
+    "art-build-configurator": "^1.29.2",
+    "art-testbench": "^3.2.2",
     "chai": "^4.2.0",
     "mocha": "^7.2.0",
     "mock-fs": "^4.13.0"
