@@ -37,6 +37,25 @@ Syntax Highlighting
 
 # To Sort
 ```
+foo = null
+foo? 123
+# it should be the same as coffeescript: undefined
+# instead, we currently return false
+```
+
+```
+# javascript & coffeescript allow '[/]' as an alternative to '\/'; caffeine-script should too:
+/^dpass[/][0-9]{4,}[/][0-9]{5,}[/]/
+```
+
+```
+# bad JS generated
+d = find a in-array b
+  find c in-array a
+# Uncaught ReferenceError: temp1 is not defined
+```
+
+```
 # internal error
 reduce lastChainedTest, name, i in sequence inject @ by 2
   lastChainedTest[applyMemberName] name, sequence[i + 1]
