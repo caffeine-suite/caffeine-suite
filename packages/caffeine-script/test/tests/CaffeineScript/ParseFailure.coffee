@@ -4,10 +4,7 @@
 {CaffeineEightCompileError} = require 'caffeine-eight'
 
 compile = (source, parseOptions, toJsOptions) ->
-  parseTree               = CaffeineScriptParser.parse source, parseOptions
-  semanticTree            = parseTree.getStn()
-  transformedSemanticTree = semanticTree.validateAll().transform()
-  transformedSemanticTree.toJsUsingSourceNode toJsOptions
+  CaffeineScript.compile source, merge parseOptions, toJsOptions
   .compiled.js
 
 module.exports = suite:

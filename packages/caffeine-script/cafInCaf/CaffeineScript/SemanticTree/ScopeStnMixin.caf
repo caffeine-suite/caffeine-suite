@@ -65,7 +65,7 @@ UniqueIdentifierHandle = &UniqueIdentifierHandle
         @identifiersAssigned[identifier] = initializer || true
 
   @getter
-    # call during toJs
+    # call during code generation
     uniqueIdentifier: (preferredName) ->
       @getUniqueIdentifierHandle(preferredName).identifier
 

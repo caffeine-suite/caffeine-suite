@@ -40,28 +40,32 @@ version: require('../../package.json').version
       sourceMap:
         set if options.sourceMap
 
+      # if options.debug is true:
+      parseTree, semanticTree, transformedSemanticTree
+
     All sourceMaps are v3. See:
       https://www.npmjs.com/package/source-map
       https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit
 
 compile: (source, options = {}) ->
   try
-    {bare, inlineMap, sourceMap, sourceFile, sourceRoot} = options
+    options extract bare, module, inlineMap, sourceMap, sourceFile, sourceRoot, debug
 
-    transformedStn =
-      stn =
-        parseTree = &CaffeineScriptParser.parse source, options
-        .getStn()
-      .validateAll()
-      .transform()
+    parseTree = &CaffeineScriptParser.parse source, options
+    semanticTree = parseTree.getStn()
+    transformedSemanticTree = semanticTree.validateAll().transform()
 
-    transformedStn.toJsUsingSourceNode  {}
-      module:     !bare
+    output = transformedSemanticTree.toJsUsingSourceNode  {}
+      module:     module ? !bare
       bare
       inlineMap
       sourceMap
       sourceFile
       sourceRoot
+
+    mergeInto output, {} parseTree, semanticTree, transformedSemanticTree if debug
+
+    output
 
   catch e
     unless e.location? || e.sourceFile? || e.message.match /parse|expect/i
@@ -76,11 +80,9 @@ compile: (source, options = {}) ->
 
         options
         parseTree
-        stn
-        transformedStn
+        semanticTree
+        transformedSemanticTree
 
-    if options.debug
-      e.info ?= {}
-      mergeInto e.info, {options, parseTree, stn, transformedStn}
+    e.info = merge e.info, {} parseTree, semanticTree, transformedSemanticTree if debug
 
     throw e

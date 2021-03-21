@@ -154,7 +154,7 @@ class FunctionDefinitionStn extends &ScopeStnMixin &BaseStn
       super, but not recursing into function or class definitions.
 
     ON! And, super-insertion should be a transform; It shouldn't
-    even be in toJs / toSourceNode.
+    even be in toSourceNode.
 
     What about preBodyStatements?
 

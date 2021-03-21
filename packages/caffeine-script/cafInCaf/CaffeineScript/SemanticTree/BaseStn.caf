@@ -234,8 +234,7 @@ class BaseStn extends BaseClass
       isLeftOperand: t/f
 
   toSourceNode: (options) ->
-    throw new Error "toSourceNode not overridden in #{@class.name}. Falling back to old toJs()."
-    # @createSourceNode @toJs options
+    throw new Error "toSourceNode not overridden in #{@class.name}"
 
   ##
     options:

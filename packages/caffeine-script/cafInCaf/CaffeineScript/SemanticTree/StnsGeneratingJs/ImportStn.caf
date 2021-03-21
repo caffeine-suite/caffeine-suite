@@ -5,7 +5,7 @@ import &StandardImport
 
   don't overrid updateScope
 
-  instead, in toJs, we traverse the scope sub-tree:
+  instead, in code generation, we traverse the scope sub-tree:
     importMap = {}
     for each child-scope when child isnt ImportStn
       mergeInto importMap, @identifiersUsedButNotAssigned
