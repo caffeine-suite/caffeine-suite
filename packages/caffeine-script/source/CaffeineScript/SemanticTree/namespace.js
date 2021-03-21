@@ -6,5 +6,6 @@ module.exports = require('../namespace').addNamespace(
   class SemanticTree extends Neptune.PackageNamespace {}
 );
 require('./PlaceholderStns/namespace');
+require('./PreTransformOnlyStns/namespace');
 require('./StnsGeneratingJs/namespace');
 require('./TransformOnlyStns/namespace');

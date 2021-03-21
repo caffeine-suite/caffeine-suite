@@ -13,6 +13,7 @@
   Comprehensions:          require('./Comprehensions'),
   ControlStructures:       require('./ControlStructures'),
   DestructuringAssignment: require('./DestructuringAssignment'),
+  DotReference:            require('./DotReference'),
   Expressions:             require('./Expressions'),
   Extract:                 require('./Extract'),
   Functions:               require('./Functions'),

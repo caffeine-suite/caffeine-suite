@@ -1,6 +1,7 @@
-import &ArtStandardLib
+import &ArtStandardLib, &Transforms
 
 &SemanticTree
+
 
 version: require('../../package.json').version
 
@@ -52,8 +53,10 @@ compile: (source, options = {}) ->
     options extract bare, module, inlineMap, sourceMap, sourceFile, sourceRoot, debug
 
     parseTree = &CaffeineScriptParser.parse source, options
-    semanticTree = parseTree.getStn()
-    transformedSemanticTree = semanticTree.validateAll().transform()
+    semanticTree = parseTree.getStn().validateAll()
+    transformedSemanticTree =
+      applyTransforms semanticTree
+      .transform()
 
     output = transformedSemanticTree.toJsUsingSourceNode  {}
       module:     module ? !bare

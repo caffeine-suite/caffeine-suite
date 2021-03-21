@@ -1,0 +1,7 @@
+import &StandardImport
+transforms = [] &DotReferenceTransform
+
+applyTransforms: (stn) ->
+  each transform from-array transforms
+    stn = transform stn
+  stn

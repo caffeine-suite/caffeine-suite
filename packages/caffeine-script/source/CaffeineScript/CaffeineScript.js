@@ -2,9 +2,9 @@
 let Caf = require("caffeine-script-runtime");
 Caf.defMod(module, () => {
   return Caf.importInvoke(
-    ["mergeInto", "log", "merge"],
-    [global, require("art-standard-lib")],
-    (mergeInto, log, merge) => {
+    ["applyTransforms", "mergeInto", "log", "merge"],
+    [global, require("art-standard-lib"), require("./Transforms")],
+    (applyTransforms, mergeInto, log, merge) => {
       require("./SemanticTree");
       return {
         version: require("../../package.json").version,
@@ -35,8 +35,10 @@ Caf.defMod(module, () => {
                 source,
                 options
               );
-              semanticTree = parseTree.getStn();
-              transformedSemanticTree = semanticTree.validateAll().transform();
+              semanticTree = parseTree.getStn().validateAll();
+              transformedSemanticTree = applyTransforms(
+                semanticTree
+              ).transform();
               output = transformedSemanticTree.toJsUsingSourceNode({
                 module: (temp = module) != null ? temp : !bare,
                 bare,

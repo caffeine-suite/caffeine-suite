@@ -1,0 +1,10 @@
+import &StandardImport, &CaffeineEight
+
+->
+  @rule
+    dotReference:
+      "" dots:/\\.+(?!\\d)/ identifier?
+      stnFactory: :DotReferenceStn
+      stnProps: ~>
+        dotCount: @dots.toString().length
+        accessIdentifier: @identifier?.toString()
