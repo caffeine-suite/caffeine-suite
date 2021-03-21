@@ -2,46 +2,57 @@
 let Caf = require("caffeine-script-runtime");
 Caf.defMod(module, () => {
   return Caf.importInvoke(
-    ["log", "mergeInto"],
+    ["mergeInto", "log", "merge"],
     [global, require("art-standard-lib")],
-    (log, mergeInto) => {
+    (mergeInto, log, merge) => {
       require("./SemanticTree");
       return {
         version: require("../../package.json").version,
         compile: function (source, options = {}) {
           let bare,
+            module,
             inlineMap,
             sourceMap,
             sourceFile,
             sourceRoot,
-            transformedStn,
-            stn,
+            debug,
             parseTree,
+            semanticTree,
+            transformedSemanticTree,
+            output,
             e,
             temp;
           return (() => {
             try {
-              ({
-                bare,
-                inlineMap,
-                sourceMap,
-                sourceFile,
-                sourceRoot,
-              } = options);
-              transformedStn = (stn = (parseTree = require("./CaffeineScriptParser").parse(
+              bare = options.bare;
+              module = options.module;
+              inlineMap = options.inlineMap;
+              sourceMap = options.sourceMap;
+              sourceFile = options.sourceFile;
+              sourceRoot = options.sourceRoot;
+              debug = options.debug;
+              parseTree = require("./CaffeineScriptParser").parse(
                 source,
                 options
-              )).getStn())
-                .validateAll()
-                .transform();
-              return transformedStn.toJsUsingSourceNode({
-                module: !bare,
+              );
+              semanticTree = parseTree.getStn();
+              transformedSemanticTree = semanticTree.validateAll().transform();
+              output = transformedSemanticTree.toJsUsingSourceNode({
+                module: (temp = module) != null ? temp : !bare,
                 bare,
                 inlineMap,
                 sourceMap,
                 sourceFile,
                 sourceRoot,
               });
+              if (debug) {
+                mergeInto(output, {
+                  parseTree,
+                  semanticTree,
+                  transformedSemanticTree,
+                });
+              }
+              return output;
             } catch (error) {
               e = error;
               if (
@@ -57,14 +68,17 @@ Caf.defMod(module, () => {
                       "Uh-oh! There was an internal error compiling your file. We'd love to fix it. Could you submit an issue with a copy of the code that won't compile?\n\nSubmit issues here: https://github.com/caffeine-suite/caffeine-script/issues\n\nSorry for the inconvenience. Thank you so much for trying CaffeineScript!",
                     options,
                     parseTree,
-                    stn,
-                    transformedStn,
+                    semanticTree,
+                    transformedSemanticTree,
                   },
                 });
               }
-              if (options.debug) {
-                (temp = e.info) != null ? temp : (e.info = {});
-                mergeInto(e.info, { options, parseTree, stn, transformedStn });
+              if (debug) {
+                e.info = merge(e.info, {
+                  parseTree,
+                  semanticTree,
+                  transformedSemanticTree,
+                });
               }
               return (() => {
                 throw e;

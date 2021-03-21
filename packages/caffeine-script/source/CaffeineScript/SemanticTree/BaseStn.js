@@ -236,7 +236,7 @@ Caf.defMod(module, () => {
               throw new Error(
                 `toSourceNode not overridden in ${Caf.toString(
                   this.class.name
-                )}. Falling back to old toJs().`
+                )}`
               );
             })();
           };
