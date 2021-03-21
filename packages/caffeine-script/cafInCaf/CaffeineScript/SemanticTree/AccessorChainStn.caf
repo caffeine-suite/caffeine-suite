@@ -131,7 +131,7 @@ class AccessorChainStn extends &ValueBaseCaptureStn
     value
 
   _createPostTransformedAccessorStn: (value, key, oldStn) ->
-    oldStn.newTransformedInstance oldStn.props, compactFlatten([value, key]), oldStn
+    oldStn.withChildren compactFlatten [] value, key
     .postTransform()
 
   _createExistanceAccessorStn: (value, forFunctionInvocation, createRightStn) ->

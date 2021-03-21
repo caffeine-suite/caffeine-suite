@@ -12,6 +12,5 @@
   ValueBaseCaptureStn:    require('./ValueBaseCaptureStn')
 });
 require('./PlaceholderStns');
-require('./PreTransformOnlyStns');
 require('./StnsGeneratingJs');
 require('./TransformOnlyStns');

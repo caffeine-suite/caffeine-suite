@@ -332,13 +332,14 @@ Caf.defMod(module, () => {
           ) {
             return new this.class(newProps, newChildren, this);
           };
+          this.prototype.withChildren = function (newChildren) {
+            return newChildren !== this.children
+              ? new this.class(this.props, newChildren, this)
+              : this;
+          };
           this.prototype.transform = function () {
-            let newChildren;
             this.decorate();
-            return (this.children !== (newChildren = this.transformChildren())
-              ? this.newTransformedInstance(this.props, newChildren)
-              : this
-            )
+            return this.withChildren(this.transformChildren())
               .postTransform()
               .setDefaultParseTreeNode(this.parseTreeNode);
           };

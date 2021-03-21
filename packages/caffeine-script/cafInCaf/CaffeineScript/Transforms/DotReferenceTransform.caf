@@ -1,4 +1,34 @@
 import &StandardImport
 
-(stn) ->
+transformChildren = ({children}, transform) ->
+  ret = null
+  each child, i in-array children
+    if child != newChild = transform child
+      ret ?= children.slice()
+      newChild.props.label = child.label
+      ret[i] = newChild
+  ret || children
+
+transformChildren = (stn, transform) ->
+  stn.withChildren transformChildren stn, transform
+
+depthFirstTransform = (stn, transform) ->
+  try
+    transform transformChildren stn, transform
+  catch e
+    ce = @parseTreeNode.parser.generateCompileError {}
+      failureIndex: @sourceOffset
+      errorType:    :Validation
+      e.message
+      e.info
+
+    ce.stack = e.stack
+    throw ce
+
+dotTransform = (stn) ->
+  if stn.type == :DotReference
+    throw new Error "DotReference not supported yet"
   stn
+
+# depthFirstTransform stn, dotTransform
+(stn) -> stn

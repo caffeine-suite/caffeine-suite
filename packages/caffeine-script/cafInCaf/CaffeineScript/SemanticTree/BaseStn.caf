@@ -353,12 +353,14 @@ class BaseStn extends BaseClass
   newTransformedInstance: (newProps, newChildren) ->
     new @class newProps, newChildren, @
 
+  withChildren: (newChildren) ->
+    if newChildren != @children
+      new @class @props, newChildren, @
+    else @
+
   transform: ->
     @decorate()
-    if @children != newChildren = @transformChildren()
-      @newTransformedInstance @props, newChildren
-    else
-      @
+    @withChildren @transformChildren()
     .postTransform()
     .setDefaultParseTreeNode @parseTreeNode
 

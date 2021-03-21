@@ -1,0 +1,15 @@
+import &ArtStandardLib, &ArtTestbench, &CaffeineScript
+
+{}
+  evalCaf = (source, options) ->
+    eval
+      compile source, options
+      .compiled.js
+
+  evalCafSuite = (list...) ->
+    each k, i in-array list = compactFlatten list by 2
+      v = list[i + 1]
+      test "#{k} => #{v}" ->
+        assert.eq
+          evalCaf k
+          v

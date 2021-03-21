@@ -92,11 +92,7 @@ Caf.defMod(module, () => {
             oldStn
           ) {
             return oldStn
-              .newTransformedInstance(
-                oldStn.props,
-                compactFlatten([value, key]),
-                oldStn
-              )
+              .withChildren(compactFlatten([value, key]))
               .postTransform();
           };
           this.prototype._createExistanceAccessorStn = function (
