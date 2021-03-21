@@ -23,8 +23,9 @@ class FileCompiler
     options extract outputDirectory, source, sourceRoot
 
     result =
-      readCount:    0
-      writeCount:   0
+      readCount:      0
+      writeCount:     0
+      unchangedCount:  0
       outputFiles:  []
       output:       null
 
@@ -55,8 +56,16 @@ class FileCompiler
         basename = path.basename sourceFile, path.extname sourceFile
         Promise.all array text, extension from compiled when present text
           result.outputFiles.push outputFilename = path.join outputDirectory, "#{basename}.#{extension}"
-          Promise.then -> fs.writeFile outputFilename, text
-          .tap -> result.writeCount++
+          Promise
+          .then ->
+            fs.readFile outputFilename
+            .then (existing) -> existing.toString()
+            .catch -> null
+          .then (existingData) ->
+            if existingData != text
+              fs.writeFile outputFilename, text
+              .then -> result.writeCount++
+            else result.unchangedCount++
 
     .then -> result
     .catch (e) ->

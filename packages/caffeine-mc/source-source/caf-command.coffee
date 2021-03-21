@@ -47,9 +47,10 @@ CaffeineMc.cacheEnabled = cache = !nocache
 
 fileCounts =
   read: 0
-  written: 0
+  cached: 0
   compiled: 0
-  fromCache: 0
+  unchanged: 0
+  written: 0
 
 compileFile = (filename, outputDirectory) ->
   CaffeineMc.compileFile(filename, {
@@ -60,21 +61,22 @@ compileFile = (filename, outputDirectory) ->
     sourceMap: commander.map
     inlineMap: commander.inlineMap || commander["inline-map"]
   })
-  .then ({readCount, writeCount, output}) ->
+  .then ({readCount, writeCount, unchangedCount, output}) ->
 
-    if output.fromCache
-      fileCounts.fromCache += readCount
+    if output.cached
+      fileCounts.cached += readCount
     else
       fileCounts.compiled += readCount
 
     if verbose
-      if output.fromCache
+      if output.cached
         log "cached: #{filename.grey}"
       else
         log "compiled: #{filename.green}"
 
     fileCounts.read += readCount
     fileCounts.written += writeCount
+    fileCounts.unchanged += unchangedCount
 
 compileDirectory = (dirname) ->
   glob path.join dirname, "**", "*.caf"

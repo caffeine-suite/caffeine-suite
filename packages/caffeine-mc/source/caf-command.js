@@ -33,9 +33,10 @@
 
   fileCounts = {
     read: 0,
-    written: 0,
+    cached: 0,
     compiled: 0,
-    fromCache: 0
+    unchanged: 0,
+    written: 0
   };
 
   compileFile = function(filename, outputDirectory) {
@@ -47,22 +48,23 @@
       sourceMap: commander.map,
       inlineMap: commander.inlineMap || commander["inline-map"]
     }).then(function(arg) {
-      var output, readCount, writeCount;
-      readCount = arg.readCount, writeCount = arg.writeCount, output = arg.output;
-      if (output.fromCache) {
-        fileCounts.fromCache += readCount;
+      var output, readCount, unchangedCount, writeCount;
+      readCount = arg.readCount, writeCount = arg.writeCount, unchangedCount = arg.unchangedCount, output = arg.output;
+      if (output.cached) {
+        fileCounts.cached += readCount;
       } else {
         fileCounts.compiled += readCount;
       }
       if (verbose) {
-        if (output.fromCache) {
+        if (output.cached) {
           log("cached: " + filename.grey);
         } else {
           log("compiled: " + filename.green);
         }
       }
       fileCounts.read += readCount;
-      return fileCounts.written += writeCount;
+      fileCounts.written += writeCount;
+      return fileCounts.unchanged += unchangedCount;
     });
   };
 

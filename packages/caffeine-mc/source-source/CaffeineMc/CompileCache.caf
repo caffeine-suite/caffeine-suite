@@ -77,7 +77,7 @@ class CompileCache extends BaseClass
           cacheContents.source == cachedFileKey.source &&
           @dependenciesUnchanged cachedFileKey, cacheContents.props
 
-        cacheContents.fromCache = true
+        cacheContents.cached = true
         cacheContents
 
   @dependenciesUnchanged: (cachedFileKey, props) ->

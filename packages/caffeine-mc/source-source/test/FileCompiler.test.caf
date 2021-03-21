@@ -35,7 +35,7 @@ describe
 
         .then (out) ->
           firstCompileOutput = out
-          assert.ok !out.fromCache
+          assert.ok !out.cached
 
         .then ->
           CaffeineMcTestHelper.reset()
@@ -47,7 +47,7 @@ describe
             "caffeine-mc.config.caf custom compiler used on: caffeine-mc.config.caf, mySpecialConfig: undefined"
             "caffeine-mc.config.caf ran"
 
-          assert.ok secondCompileOutput.output.fromCache
+          assert.ok secondCompileOutput.output.cached
           assert.eq secondCompileOutput.output.compiled, firstCompileOutput.output.compiled
 
 
