@@ -1,0 +1,3 @@
+import &ArtTestbench
+
+test "stub" -> assert.true true

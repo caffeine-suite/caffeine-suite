@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaffeineModuleResolver.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source/CaffeineSuite.CaffeineModuleResolver/CaffeineModuleResolver.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;"
+}
