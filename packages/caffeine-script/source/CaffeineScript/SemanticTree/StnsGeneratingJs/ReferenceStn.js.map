@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ReferenceStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ReferenceStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;2DAEA,8DAA2B,kHAEZ,CAAC,sCACZ,IAAG,8BACD,qCAAiC,qCAC9B,wBAAO,+CACV,6BAAyB,+EAG7B,YAAO,CACL,yBAAgB,eAChB,wBAAc,OACZ,mCAA+B,cAAU,MAE3C,gCAAY,OACV,qEACG,4BAGL,0CAAsB,yBACpB,+CAEF,uCAA8B,+CAEhC,QAAc,CAAC,UAAW,OACxB,sBAAkB"
+}

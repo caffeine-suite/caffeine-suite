@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ArrayDestructuringStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ArrayDestructuringStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;oEAGA,gFAAoC,sFAElC,YAAO,CACL,sBAAa,8BAGb,4BAAkB,OAChB,gCACiB,0BACb,+DAER,QAAc,CAAC,mEAAW,IACyB,iEACb,sBAAsB,sDAE1D,OAAO,2BAAuB,MAAM,oBACjC,gBACD,OAGA,sBACE,KACA,MACA"
+}

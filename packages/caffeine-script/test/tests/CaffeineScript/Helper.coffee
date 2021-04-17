@@ -1,6 +1,7 @@
 {CaffeineScript} = Neptune
 {isNumber, eq, each, object, array, isArray, log, formattedInspect, isPlainObject, merge, object, stringCount, isString} = Neptune.Art.StandardLib
 {CaffeineScriptParser} = CaffeineScript
+{assert} = require "art-testbench"
 require "colors"
 
 module.exports =

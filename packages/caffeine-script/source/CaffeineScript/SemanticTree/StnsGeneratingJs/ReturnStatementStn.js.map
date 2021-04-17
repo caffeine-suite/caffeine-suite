@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ReturnStatementStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ReturnStatementStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,sEAEP,0EAAiC,6GAE/B,mBACE,IAAI,gBAAY,+CAChB,OAAO,KAAI,WAAU,mBAAkB,kCACrC,IAAI,aAAa,wDAEnB,GAAI,cAAQ,cAAM,IAAI,MAAM,gDACpB,YAAU,wBAChB,cAAM,IAAI,MAAM,iMAEpB,YAAgB,OACd,sBACK,cAAU,KAAE,CAEX,WACA,cAAU,qBACT"
+}

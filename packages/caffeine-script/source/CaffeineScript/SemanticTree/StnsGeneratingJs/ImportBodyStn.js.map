@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ImportBodyStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ImportBodyStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uEAEA,YAAY,wFAEgB,4BAAe,0GAE9B,oCAEX,QAAc,CAAC,UAAU,OACvB,cAAU,gBAAgB"
+}

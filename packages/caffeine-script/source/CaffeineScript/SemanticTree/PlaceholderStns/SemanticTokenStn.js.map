@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "SemanticTokenStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/PlaceholderStns/SemanticTokenStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;+DAEA,sEAA+B,uBAE7B,yBAAe,6BAEb,qBAAY,cAAK,2FAEnB,YAAO,CACL,mBAAU"
+}

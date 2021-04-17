@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Classes.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Classes.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,0BACE,SAAS,2FACT,YAAY,aAEd,iBACE,SAAS"
+}

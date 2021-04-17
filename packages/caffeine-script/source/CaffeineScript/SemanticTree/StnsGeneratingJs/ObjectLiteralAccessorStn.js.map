@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ObjectLiteralAccessorStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ObjectLiteralAccessorStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uEAEA,sFAAuC,uBAErC,WAAa,CAAC,OAAO,WAAY,qBAE/B,WAAO,SAAS,uEAElB,YAAO,CACL,2BAAkB,mCAClB,wBAAe,+CAEjB,sBAAgB,OACd,wCACE,kCAAqB,SAAS,QAC9B,KACA,uBAAkB,YAAY,QAC9B"
+}

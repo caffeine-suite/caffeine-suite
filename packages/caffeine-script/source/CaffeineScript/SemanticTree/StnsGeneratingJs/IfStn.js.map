@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "IfStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/IfStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,0CAAC,MAAM,MAAM,aAAc,OACzB,iCACE,SAAS,OACT,MACA,MACA"
+}

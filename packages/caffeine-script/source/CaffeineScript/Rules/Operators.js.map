@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Operators.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Operators.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,uLAAO,8BAAiB,8BAAiB,+IAEzC,0BACE,SAAS,uDAEX,kCACE,SAAS,gCACT,cAAc,MACd,gBAAQ,CAAC,OAAO,KAC0B,mDACxC,oCAEoB,iDAChB,sBAAsB,2BAExB,gBAAkB,gBAAwB,iDACxC,6BAEF,CAAC,UAAU,UAAU,aACnB,mBACE,eAAe,MACL,WACV,UACA,eAEV,8BACE,2CACA,gDACA,mDACA,4CAEF,wCAEI,SAAc,gEACd,sBAAiB,kBAAU,sBAAsB,yBACjD,YAAc,qBACd,cAAc,QAGd,SAAc,6CACd,sBAAiB,kBAAU,sBAAsB,yBACjD,YAAc,qBACd,cAAc,QAElB,oBACE,UACE,uEACA,+CAEF,6BACE,MAAM,iDACU,4CACd,MAAM,iBAAgB,CACpB,SAAS,2BACT,MAAM,OACN,iBACa,6DACf,MAAM,iBAAgB,CACpB,SAAS,4BACT,cACJ"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TestHelpers.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/test/TestHelpers.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,4GAAO,6BAAiB,0BAAe,sGAEvC,QACE,mBAAO,QAAG,CAAC,QAAQ,UAAW,OAC5B,KACE,QAAQ,QAAQ,yBAGpB,6BAAY,QAAG,CAAC,wCAAW,eACN,OAAO,eAAe,4HACvC,IAAI,KAAK,IAAI,IACb,qBAAQ,sBAAQ,YACd,UACE,QAAQ,IACR"
+}

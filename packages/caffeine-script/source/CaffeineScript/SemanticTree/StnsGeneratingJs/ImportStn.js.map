@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ImportStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ImportStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,6GAAO,gGAaP,wDAAwB,0EAEtB,YAAO,CACL,uCACE,EAAC,SAAS,cACY,eAAc,uCAEpC,SAEF,yCAA+B,OAC7B,qCAA6B,qCAAK,yCAAqC,qBAEzE,0BAAiB,uBAAY,+CAE/B,QAAc,CAAC,8JACb,8BAA8B,MAC9B,IAAG,IAAI,oBACL,EAAC,+BAA+B,IAChC,QAEF,EAAC,cAAc,uBACf,iBAAiB,iBAAiB,uBAE/B,aAAU,CACX,sBAAsB,YAAY,iCAGlC,gBAAgB,yBAAwB,cAAc,QAGtD,mBAEmB,QAAO,qDAEtB,gBAED,8BAA6B,KAAC,CAE/B,qBAAqB,gBACnB,+BAA+B,UAC/B,MACA,2BAAuB,gBAAgB,SAEzC,sBACI,uBACF,yBAAyB,SACzB,QACG,oCAAkC,CAChC,mCAA+B,oBAClC,KACF,oBACE,QACF,yBAAyB,OACvB,UACF,iBACE,SAGJ,sBACE,kBAAc,qBAElB"
+}

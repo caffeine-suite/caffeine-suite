@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ValueLists.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/ValueLists.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2EAAO,8BAAiB,6CAExB,mBACE,WACE,YAAW,mBAAkB,qBAE/B,UAAK,CACH,gBAAwB,iDAAgD,MAAM,4BAC9E,wBAAwB,6BAE1B,WACE,kBACE,4DACA,qDACA,+BAEF,uCACI,oEAIJ,8CACE,kFACA,qDACA,wCAEJ,WACE,qBAEI,SAAS,+DACT,YAAY,2BAEZ,SAAS,0EAEb,sBAEI,SAAS,uBACT,YAAY,2BAEZ,SAAS"
+}

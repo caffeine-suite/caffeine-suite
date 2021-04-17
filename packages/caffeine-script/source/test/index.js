@@ -5,7 +5,6 @@
 
 .addModules({
   BinaryOperatorsTest: require('./BinaryOperators.test'),
-  DotReference:        require('./DotReference'),
   DotReferenceTest:    require('./DotReference.test'),
   StandardImport:      require('./StandardImport'),
   TestHelpers:         require('./TestHelpers')

@@ -36,6 +36,16 @@ Syntax Highlighting
 
 
 # To Sort
+
+```
+# this should work
+# I don't think "in" accepts an array following...
+:from in :from :to # true
+:to in :from :to   # true
+:bam in :from :to  # false
+
+```
+
 ```
 foo = null
 foo? 123

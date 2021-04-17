@@ -2,9 +2,6 @@ import &ArtStandardLib, &Transforms
 
 &SemanticTree
 
-
-version: require('../../package.json').version
-
 ###
   IN:
     source: source-code string

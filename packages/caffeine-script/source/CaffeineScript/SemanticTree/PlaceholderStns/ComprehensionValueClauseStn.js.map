@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ComprehensionValueClauseStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/PlaceholderStns/ComprehensionValueClauseStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;0EAEA,4FAA0C,4FAExC,YAAO,CACL,kBAAS,0BACT,mBAAU"
+}

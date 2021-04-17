@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Accessors.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Accessors.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WAEI,aAAiB,uEACjB,iBAAiB,gGAEjB,YAAY,eACZ,cAAc,MACd,sBAAa,yBAAiB,uBAC9B,yBAAgB"
+}

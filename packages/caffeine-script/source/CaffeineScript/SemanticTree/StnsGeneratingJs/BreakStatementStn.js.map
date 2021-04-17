@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "BreakStatementStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/BreakStatementStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,qEAEP,wEAAgC,4GAE9B,mBACE,IAAI,gBAAY,mEAChB,wBAAM,SACA,aAAQ,qBAAM,IAAI,MAAM,8CAAsC,MAC/D,yBAAwB,WAAW,kCAAqC,aAAI,MAC5E,gBAAgB,SAAY,sBAC7B,OACF,cAAM,IAAI,MAAM,0KAEpB,+BACE,IAAI,gBAAY,qBAEhB,sBACE,wBAAM,MACD,oBAAkB,QAEnB,mCACA,OACA,yCAAU,6CACR,cACF,YAAS,MAER,uBAAsB,cAAU,KAAE,QAEnC,WACA,cAAU,6BAEV,OACF"
+}

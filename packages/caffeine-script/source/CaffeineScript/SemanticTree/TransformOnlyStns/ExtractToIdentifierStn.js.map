@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ExtractToIdentifierStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/TransformOnlyStns/ExtractToIdentifierStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,iLAAO,qKAEP,kFAAqC,uFAEnC,YAAO,CACL,oDAAyB,OACvB,qDACE,KAAK,+CACL,wBAEJ,uBAAmB,yCACnB,4BAAmB,8CACnB,4BAAmB,8CAEnB,oFACE,EAAC,uBAAuB,wBAAwB,8BAChD,wDAAwB,yBAAyB,8DAErD,QAAmB,CAAC,qCAClB,MAAM,YACJ,eACA,6BAEC,cAAa,8BAAsB,WAClB,2BAChB,MAAM,YACJ,KACA,aACJ,OAEA,qDAEJ,QAA8B,CAAC,uCAAgB,OAC1C,sBACD,mBACE,kBACE,iBACA,UAAU,QACV,cACE,oBAAoB,iBACpB,uBAAmB,kBACvB,mBACA,mCAEF,uBAAmB,uDAEV,CAAC,4BACZ,iCAA6B,cAAU"
+}

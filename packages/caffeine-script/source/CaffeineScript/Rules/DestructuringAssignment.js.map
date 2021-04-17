@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DestructuringAssignment.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/DestructuringAssignment.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBACE,WACE,yBAAyB,8EACtB,YAAY,gCAEjB,WACE,sBACE,uBACA,yBAEJ,WACE,qBAAqB,2CAClB,YAAY,4BAEjB,WACE,oBAAoB,0CACjB,YAAY,2BAEjB,WACE,0BACK,SAAS,qFACT,SAAS,uCAEd,4BACE,gCACA,0BAEJ,WACE,2BACK,SAAS,uFACT,SAAS,wCAEd,6BACE,8BACA,8BAEJ,WACE,4BAA4B,oDACzB,YAAY,mCAEjB,WACE,gCACK,SAAS,4BACT,SAAS,6DAEZ,YAAY,8BACZ,sBAAa,oBAAY,oBAE7B,WACE,yBAAyB,2DACtB,YAAY,uCAEjB,WACE,sBAAsB"
+}

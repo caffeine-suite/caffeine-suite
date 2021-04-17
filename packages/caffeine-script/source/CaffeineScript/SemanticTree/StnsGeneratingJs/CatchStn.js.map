@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CatchStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/CatchStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uDAEA,sDAAuB,8GAER,CAAC,uDACZ,EAAC,iBAAiB,QAAQ,uBAE1B,8BAA0B,qCAAiC,SAAS,QAEpE,IAAG,kBACD,iCAA6B,uBAC7B,6BAAyB,kHAI7B,QAAc,CAAC,6EACb,EAAC,cAAc,UACf,EAAC,iBAAiB,QAAQ,uBAE1B,kBAAO,4BAAmB,gBAAgB,cAE1C,wBAAwB,wCAExB,IAAG,kBACD,QAAI,gBACC,wCAA0B,2BACtB,wBACP,gBAEJ,sBACE,WACA,uBACA,OACA,MACA"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "LabeledDestructuringTargetStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/LabeledDestructuringTargetStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;4EAEA,gGAA4C,8FAE1C,YAAO,CAEL,4BAAkB,OAChB,gCACE,+BAAmB,cAAU,KAC7B,cAAU,qDAEhB,QAAc,CAAC,UAAU,OACvB,YAAG,qCACD,cAAU,gBAAgB,WAE1B,2BAAuB"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "RootStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/RootStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,0FAAO,4FAEP,gBAAgB,gFAEM,4BAAe,wBACnC,WAAa,CAAC,OAAO,WAAY,qBAE/B,4BAAwB,OACxB,kBAAc,SAAS,iFAEd,MAEX,YAAO,CACL,mCAAyB,OACvB,kEAEJ,QAAc,CAAC,qGACb,+BACG,eACD,sBACI,6DACF,4BACA,8BAEI,iBAAc,CACpB,gCAAoC,oDAA6B,4BAAc,OAG/E,uBAAuB,8BAAyB,cAAc,QAG9D,OAAO,gBAAkB,qBAAqB,+BAE9C,sBACK,6FAK0B,eAAc,2DAE3C,sBAEG,UAEH,CAGF,EAAC,yBAAyB,OAC1B,sBACK,QAAQ,WAAW,sBAAc,CAC/B,UAAU,mBACf,4DAEN,YAAmB,OACjB,CAAO,4BAAqB,CAC1B,4BAAwB,MACxB,iBAAa"
+}

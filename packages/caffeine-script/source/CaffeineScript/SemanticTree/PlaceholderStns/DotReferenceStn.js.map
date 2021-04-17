@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DotReferenceStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/PlaceholderStns/DotReferenceStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;8DAEA,oEAA8B"
+}

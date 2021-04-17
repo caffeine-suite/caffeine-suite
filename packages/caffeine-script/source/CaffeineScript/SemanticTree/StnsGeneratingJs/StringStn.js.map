@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "StringStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/StringStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,uHAAO,iCAAiB,+FAExB,wDAAwB,wGAEtB,QAAc,CAAC,UAAY,6BAAkB,kBAAc,aAE3D,YAAO,CACL,sBAAa,yBACb,mBAAW,CAAC,2DACV,OAAO,eAAe,aACtB,SAAY,SAAS,QACnB,MACM,SAAS,QAAI,CACnB,cAAc,WAAW,cAAa,GACtC,cAAc,WAAW,cAAa,GACnC,gBAAe,eAChB,MAEA,OAEF,KAEF,MACE,SACE,gBACE,aAAa,OAAO,QACpB,UACF,eAEJ,YAAG,+BAAgB,iBACb,UACD,0CAET,QAAiB,CAAC,aAAa,eAAgB,IACG,2EACA,wEAC1C,mBAAS,mBAAe,eAAe,aAC7C,kCAEF,YAAa,OAAM,mBAAS,oDAC5B,YAAc,OAAM,mBAAS,0BAE7B,YAAO,CACL,mBAAU,2EAEZ,YAAgC,OAC9B,eAAe,gBACb,kBAAkB,aAClB"
+}

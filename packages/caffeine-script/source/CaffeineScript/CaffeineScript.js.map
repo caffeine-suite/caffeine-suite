@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaffeineScript.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/CaffeineScript.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,6GAAO,6BAAiB,uEAExB,mCA6CA,iBAAS,CAAC,QAAQ,yJAAgB,OAChC,aAAG,OACD,8LAEA,YAAY,wCAA4B,QAAQ,UAChD,eAAe,kCACf,0BACE,gBAAgB,2BAGlB,SAAS,6CACP,QAAY,mCAAU,OACtB,MACA,WACA,WACA,YACA,kBAEuE,wFAEzE,SAAM,0BAGN,KAAkB,uBAAI,wBAAiB,gBAAgB,oBACrD,WAAU,qBACR,SACK,mTAOL,SACA,WACA,cACA,kCAE0E,6FAE9E,cAAM"
+}

@@ -1,34 +1,39 @@
-import &StandardImport
+import &StandardImport, &CaffeineEight
 
-transformChildren = ({children}, transform) ->
-  ret = null
-  each child, i in-array children
-    if child != newChild = transform child
-      ret ?= children.slice()
-      newChild.props.label = child.label
-      ret[i] = newChild
-  ret || children
+depthFirstTransformR = (stn, transform) ->
+  try
+    newChildren = null
+    each child, i in-array stn extract children
+      if child != newChild = depthFirstTransformR child, transform
+        newChildren ?= children.slice()
+        newChild.props.label = child.label
+        newChildren[i] = newChild
 
-transformChildren = (stn, transform) ->
-  stn.withChildren transformChildren stn, transform
+    transform stn.withChildren newChildren || children
+
+  catch e
+    e.stn ?= stn
+    throw e
 
 depthFirstTransform = (stn, transform) ->
   try
-    transform transformChildren stn, transform
+    depthFirstTransformR stn, transform
+
   catch e
-    ce = @parseTreeNode.parser.generateCompileError {}
-      failureIndex: @sourceOffset
-      errorType:    :Validation
-      e.message
-      e.info
+    if e.stn
+      ce = e.stn.parseTreeNode.parser.generateCompileError {}
+        failureIndex: e.stn.sourceOffset
+        errorType:    :Transform
+        e.message
+        e.info
 
-    ce.stack = e.stack
-    throw ce
+      ce.stack = e.stack
+      throw ce
 
-dotTransform = (stn) ->
-  if stn.type == :DotReference
-    throw new Error "DotReference not supported yet"
-  stn
+    else throw e
 
-# depthFirstTransform stn, dotTransform
-(stn) -> stn
+(stn) ->
+  depthFirstTransform stn, (stn) ->
+    if stn.type == :DotReference
+      throw new Error "DotReference is not supported yet."
+    stn

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DotReference.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/DotReference.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,UAAK,CACH,eACI,mCACF,YAAY,mBACZ,gCAAY,QACV,UAAU,6BACV,oCAAkB"
+}

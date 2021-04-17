@@ -12,7 +12,7 @@
     "art-object-tree-factory": "^2.2.7",
     "art-standard-lib": "^1.70.3",
     "caffeine-eight": "^2.6.5",
-    "caffeine-mc": "^3.3.1",
+    "caffeine-mc": "^3.3.2",
     "caffeine-script-runtime": "^1.14.0",
     "caffeine-source-map": "^2.0.7",
     "neptune-namespaces-runtime": "^3.2.8",
@@ -41,12 +41,12 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "caf -v -p -c cafInCaf -o source",
+    "build": "caf -m -c cafInCaf -o source; nn -s",
     "build-clean": "npm run clean; npm run build",
     "build-stable": "npm run build; cp -R source/* source-stable/",
     "clean": "rm -rf source/*",
-    "perf": "nn -s;mocha -u tdd perf",
-    "test": "nn -s;mocha -u tdd",
+    "perf": "mocha -u tdd perf",
+    "test": "mocha -u tdd",
     "watch": "npm-watch"
   },
   "version": "0.73.0",

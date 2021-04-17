@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ThrowStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ThrowStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uDAEA,sDAAuB,uGAErB,QAAc,CAAC,CAAC,wBACd,QACE,UACA,sCAEF,sBAAqB,aACnB,kBAAc,MAAM,OAEpB"
+}

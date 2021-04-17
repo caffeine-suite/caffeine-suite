@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "NumberLiterals.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/NumberLiterals.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WACE,eACE,6GA0BA,YAAY,oBACZ,sBAAY,QACV,OAAO,wBAAoB,eAAe"
+}

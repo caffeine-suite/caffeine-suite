@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "AccessorStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/AccessorStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,+DAEP,4DAA0B,gCAExB,WAAa,CAAC,OAAO,WAAY,0BAEe,qBAAmB,gDACjE,aAAS,SAAS,IAClB,WAAO,SAAS,SAC4C,0HAI9D,YAAO,CACL,2BAAkB,mCAClB,wBAAe,eACf,sBAAa,8DAEf,sBACE,OAAO,yBAAoB,YAAY,MAAK,SAAS,eAElD,wBACD,sBACE,MACA,KACA,2BAGF,sBACE,MACA,KACA,uBAAkB,YAAY,QAC9B"
+}

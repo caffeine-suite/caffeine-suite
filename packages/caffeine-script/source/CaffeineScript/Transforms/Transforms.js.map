@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Transforms.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Transforms/Transforms.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yDACA,cAAgB,6CAEhB,yBAAiB,CAAC,6BAAO,OACG,yHACxB,MAAM,UAAU,4BAClB"
+}

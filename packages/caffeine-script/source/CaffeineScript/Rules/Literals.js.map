@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Literals.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Literals.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,kBACE,kBACA,iBACA,iBACA,iBACA,mBACA"
+}

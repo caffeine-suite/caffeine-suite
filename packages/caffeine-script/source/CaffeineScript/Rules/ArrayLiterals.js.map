@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ArrayLiterals.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/ArrayLiterals.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WACE,QACI,qBACA,SAEJ,cACI,gEAEJ,gBACI,2DACA,6CACF,YAAkB,YAClB,WAAkB,eAAe,SAEnC,sCACI,wEACA,0DACF,YAAkB,YAClB,WAAkB,eAAe,WAGjC,YAAY"
+}

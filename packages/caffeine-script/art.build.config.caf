@@ -1,9 +1,9 @@
 import &ArtStandardLib
 package: (abcPackage) -> merge &package,
   scripts:
-    perf:         "nn -s;mocha -u tdd perf"
-    build:        "caf -v -p -c cafInCaf -o source"
-    test:         "nn -s;mocha -u tdd" # :jest
+    perf:         "" mocha -u tdd perf
+    build:        "" caf -m -c cafInCaf -o source; nn -s
+    test:         "" mocha -u tdd
     build-clean:  "" npm run clean; npm run build
     clean:        "" rm -rf source/*
     watch:        :npm-watch

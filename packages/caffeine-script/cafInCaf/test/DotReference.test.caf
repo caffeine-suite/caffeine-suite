@@ -1,7 +1,13 @@
-import &StandardImport
+import &ArtStandardLib, &ArtTestbench
 
-evalCafSuite
-  """
-    5
-    3 + .
-  8
+&CaffeineScript
+
+describe
+  basics: ->
+    test "big error" ->
+      assert.eq 1, 2
+    # evalCafSuite
+    #   """
+    #     5
+    #     3 + .
+    #   8

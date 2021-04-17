@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "FinallyStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/FinallyStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yDAEA,0DAAyB,yGAEvB,QAAc,CAAC,yBAAgB,OAC7B,sBACE,+BACA,mDACA"
+}

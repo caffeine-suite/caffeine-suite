@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "BinaryOperators.test.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/test/BinaryOperators.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,6EAAO,iDAEP,qBACE,SAAQ,KACR,SAAQ,MACR,SAAQ,IAAE,KACV,SAAQ"
+}

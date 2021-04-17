@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DotReferenceTransform.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Transforms/DotReferenceTransform.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,8BAAiB,uFAExB,uBAAoB,QAAG,CAAC,KAAK,oEAAa,OACxC,aACE,cAAc,aACS,sJACrB,IAAG,UAAS,YAAW,qBAAqB,OAAO,cACjD,oCAAW,cAAI,kBACD,uBAAS,aACZ,YAAC,KAAK,mCAErB,UAAU,iBAAiB,eAAe,aAAQ,0BAE7C,SACJ,wBAAI,QAAI,aACT,cAAM,iBAEV,sBAAmB,QAAG,CAAC,KAAK,uBAAa,OACvC,aAAG,OACD,qBAAqB,KAAK,aAAS,0BAE9B,OACF,QAAK,CACN,KAAK,gDAA+C,CAClD,cAAc,oBACd,WAAc,aACd,oBACA,gBAEA,WAAS,SACX,cAAM,WAEH,cAAM,gCAEf,CAAC,MAAO,OACN,oBAAoB,KAAK,CAAC,SACxB,IAAG,aAAY,iBACb,MAAM,IAAI,MAAM,gDAClB"
+}

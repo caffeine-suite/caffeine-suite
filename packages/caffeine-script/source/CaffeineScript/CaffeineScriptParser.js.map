@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaffeineScriptParser.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/CaffeineScriptParser.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,qFAAO,6BAAiB,2BAAgB,wFAExC,8EAAmC,2FACjB,8CAEJ,qCACP,WAAW,OACZ,SAAS,QAET,UAAM,8BAEV,QAAO,CAAC,QAAQ,UAAW,sCAEvB,sCAA0B,SAC1B"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "FunctionDefinitionArgsStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/FunctionDefinitionArgsStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;wEAEA,wFAAwC,0FAEtC,YAAO,CACL,8BAAoB,iBACP,sBACT,0EAEN,QAAc,CAAC,UAAW,OACxB,sBACE,eAEc,kCACZ,KAAK,yBACF,KAAI,KAAC,CAEJ,MACA,MACC,OAEP"
+}

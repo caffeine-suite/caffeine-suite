@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "PureJsStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/PureJsStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,uEAAO,8DAEP,wDAAwB,uBAEtB,WAAa,CAAC,OAAO,mBACnB,IAAI,YAAK,SAAS,IAAO,UACvB,SAAW,KACX,uBAEI,OAAO,6FAEf,YAAiB,6BAAkB"
+}

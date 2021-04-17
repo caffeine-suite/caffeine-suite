@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DestructuringAssignmentStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/DestructuringAssignmentStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yEAGA,0FAAyC,2FAEvC,YAAO,CACL,4BAAmB,6FAErB,QAAc,CAAC,4EAAW,IACkC,sEAC1D,EAAC,WAAW,SAAS,2BACA,4CAErB,gCAAS,YAAI,cAAU,IACvB,wBAAK,QAAQ,cAAU,WAEvB,uBACa,4BACX,0BACA,OACA,oBAAmB,YAAY,QAC/B,cAAc,MACd,cAAc,wBAAuB,oBAAoB,SAC9C"
+}

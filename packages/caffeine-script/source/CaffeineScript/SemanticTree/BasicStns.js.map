@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "BasicStns.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/BasicStns.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,2CAEP,aACE,8BACA"
+}

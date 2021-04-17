@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Root.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Root.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,yCACE,SAAS,mDACT,YAAY,kBAEd,eACE,SAAS,mDACT,YAAY"
+}

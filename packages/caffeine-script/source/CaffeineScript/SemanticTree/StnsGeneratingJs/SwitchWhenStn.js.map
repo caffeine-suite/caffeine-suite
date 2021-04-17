@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "SwitchWhenStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/SwitchWhenStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;4DAEA,gEAA4B,4GAE1B,QAAc,CAAC,6DACb,EAAC,cAAc,gBAAgB,UAC/B,EAAC,WAAW,UAAU,8BAEtB,sBACK,eAAkB,WAAc,SAChC,0BACD,2BACE,oBACG,eACD,aAEA,YACF,SAAS,iBAET,CAEA,wBAAuB,SAAS,iBAEpC,MAEG,SACD,qBAAqB,iBAErB"
+}

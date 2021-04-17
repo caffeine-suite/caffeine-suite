@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "IdentifierStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/IdentifierStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,8HAAO,kCAAoB,iJAE3B,gEAA4B,uBAE1B,WAAa,CAAC,OAAO,uCACnB,IAAI,oBAAa,SAAS,IAAO,UAC/B,QAAQ,MAAM,QAAU,cACxB,uBACI,OAAO,WACb,KAAO,wBAAiB,iBACtB,+CAAuB,wBAAI,IAAI,uBAAuB,gCAA4B,kFAEtF,YAAO,CACL,kBAAS,gCACT,0BAAiB,6BAAsB,oBACvC,8BAAqB,sCACrB,gCAAuB,qCAAqB,2BAC5C,sBAAa,0BAEb,wBAAe,OAAC,0BAAqB,0BAGrC,gCAAuB,gCACvB,uCAA8B,eAE9B,sBAAa,iCAAc,gDAEhB,CAAC,4BACZ,IAAG,wBACD,qCAAiC,mHAGrC,YAAgB,OACd,sBAAmB,0BAAqB"
+}

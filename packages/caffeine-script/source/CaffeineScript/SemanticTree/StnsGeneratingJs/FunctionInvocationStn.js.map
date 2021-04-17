@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "FunctionInvocationStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/FunctionInvocationStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,uFAEP,eAAe,QAAQ,gGAEa,gCAElC,WAAa,CAAC,OAAO,2DAAY,qBAE/B,EAAC,eAAe,cAAc,WAC9B,WAAO,eAAW,SAClB,aAAS,qBAAiB,eAG1B,IAAkB,wBAAI,KAAK,aAAS,yBAClC,eAAW,aAAS,mBAEW,gFAA+B,mLAElE,YAAO,CACL,2BAAkB,mCAClB,kCAAyB,eACzB,gCAAa,iGAEf,QAAc,CAAC,sEAAU,IAC8B,qEAEY,uFACjE,kBAAkB,mCAElB,IAAG,8BACD,QAAO,0BAAmB,KACrB,kBAAY,yBAAmB,QAClC,sBACG,KAAO,WACV,mBACE,KACA,iBACA,mBAEN,sBACE,iBACA,KACA,2BAAuB,cAAU,OAAM,YAAY,QACnD"
+}

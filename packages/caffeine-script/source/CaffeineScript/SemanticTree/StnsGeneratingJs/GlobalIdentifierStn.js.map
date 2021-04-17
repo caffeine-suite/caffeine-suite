@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "GlobalIdentifierStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/GlobalIdentifierStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;kEAEA,4EAAkC,kHAEhC,YAAiB,6BAAkB"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "LetStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/LetStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;qDAEA,kDAAqB,4GAEN,CAAC,6CACE,0BAAa,kBAAkB,aAAQ,WAAW,yCAElE,YAAgB,OACd,sBACE,kBACkB,qCAChB,IAAI,6BACD,KAAI,KAAC,CACH,MAAK,KACL"
+}

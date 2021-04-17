@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Assignment.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Assignment.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WACE,qBACE,sDAGA,YAAc,iBACd,cAAc,MACd,wCACE,QAAQ,4CACR,UAAW,SAAQ,YAAY,cAAa,MAAM"
+}
