@@ -1,4 +1,4 @@
-import &StandardImport, require :@art-suite/source-root-finder
+import &StandardImport, &@art-suite/SourceRootFinder
 
 caffeineInitFileName = :caffeine-mc.config.caf
 

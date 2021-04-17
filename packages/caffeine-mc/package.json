@@ -1,7 +1,7 @@
 {
   "author": "Shane Brinkman-Davis Delamore",
   "bin": {
-    "caf": "./caf"
+    "caf": "caf"
   },
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
@@ -49,7 +49,7 @@
     "test": "jest",
     "watch": "npm-watch"
   },
-  "version": "3.3.1",
+  "version": "3.3.2",
   "watch": {
     "build": {
       "extensions": [
