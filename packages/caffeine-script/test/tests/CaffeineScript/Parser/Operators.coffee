@@ -177,64 +177,90 @@ module.exports = suite: parseTestSuite
         """
         foo
           || bar
+        """: null
+
+        """
+        foo ||
+          bar
         """: "foo || bar;"
 
         """
-        foo && bar
-          || baz
+        foo &&
+          bar || baz
         """: "foo && (bar || baz);"
 
       mixed:
         """
-        foo
-          || bar
-            .baz
+        foo ||
+          bar.baz
         """: "foo || bar.baz;"
 
         """
-        foo
-          .bar
-            || baz
+        foo.bar
+        || baz
         """: "foo.bar || baz;"
 
       precedence:
-        """
-        foo
-          || bar + 2 * 3
-        """: "foo || bar + 2 * 3;"
+        forceLow:
+          baseline:
+            """
+            a || b && c || d
+            """: "a || b && c || d;"
 
-        """
-        foo
-          || bar * 2 + 3
-        """: "foo || bar * 2 + 3;"
+            """
+            (a || b) && (c || d)
+            """: "(a || b) && (c || d);"
+
+          withMultilineInsteadOfParens:
+            """
+            a || b
+            && c || d
+            """: "(a || b) && (c || d);"
+
+        forceHigh:
+          baseline:
+            """
+            a && b || c && d
+            """: "a && b || c && d;"
+
+            """
+            a && (b || c) && d
+            """: "a && (b || c) && d;"
+
+          withBlocksInsteadOfParens:
+            """
+            a &&
+              b || c
+            && d
+            """: "a && (b || c) && d;"
 
       comments:
         """
-        foo # 1
-          || bar
+        foo || # 1
+          bar
         """: "foo || bar;"
 
         """
-        foo
+        foo ||
           # 1
-          || bar
+          bar
         """: "foo || bar;"
 
         """
-        foo
-          || bar # 1
+        foo ||
+          bar # 1
         """: "foo || bar;"
 
         """
-        foo
-          || bar
+        foo ||
+          bar
           # 1
         """: "foo || bar;"
 
         """
-        foo # 1
+        foo || # 1
           # 2
-          || bar # 3
+          bar # 3
           # 4
         """: "foo || bar;"
 
@@ -245,7 +271,8 @@ module.exports = suite: parseTestSuite
       """: "a && b || c && d;"
 
       """
-      a && b
+      a &&
+        b
         || c && d
       """: "a && (b || c && d);"
 
@@ -255,7 +282,8 @@ module.exports = suite: parseTestSuite
       """: "(a || b) && (c || d);"
 
       """
-      a || b
+      a ||
+        b
         && c || d
       """: "a || b && (c || d);"
 
@@ -270,13 +298,11 @@ module.exports = suite: parseTestSuite
         simple:
           """
           foo
-          || bar
-            || baz
+          || bar || baz
           """: "foo || (bar || baz);"
 
           """
-          foo
-            || bar
+          foo || bar
           || baz
           """: "foo || bar || baz;"
 
@@ -284,6 +310,11 @@ module.exports = suite: parseTestSuite
           foo
             || bar
             || baz
+          """: null
+
+          """
+          foo || bar
+          || baz
           """: "foo || bar || baz;"
 
           """
@@ -293,9 +324,9 @@ module.exports = suite: parseTestSuite
           """: "foo || bar || baz;"
 
           """
-          foo
-            || bar
-              || baz
+          foo ||
+            bar ||
+              baz
           """: "foo || (bar || baz);"
 
         precedence:
@@ -307,19 +338,21 @@ module.exports = suite: parseTestSuite
 
           """
           a + b
-          || c + d
-            || e + f
+          || c +
+            d || e + f
           """: "a + b || c + (d || e + f);"
 
           """
-          a || b
-            && c || d
+          a ||
+            b &&
+              c || d
           && e || f
           """: "(a || b && (c || d)) && (e || f);"
 
           """
-          a || b
-            && c || d
+          a ||
+            b &&
+              c || d
             && e || f
           """: "a || b && (c || d) && (e || f);"
 
@@ -344,37 +377,40 @@ module.exports = suite: parseTestSuite
         mixedMultiline:
           """
           a || b
-          && c || d
-            .e || f
+          && c ||
+            d.e || f
           """: "(a || b) && (c || (d.e || f));"
 
           """
           a || b
-          .c || d
-            && e || f
+          .c ||
+            d &&
+              e || f
           """: "(a || b).c || d && (e || f);"
 
           """
-          a || b
-            && c || d
+          a ||
+            b &&
+              c || d
           .e || f
           """: "(a || b && (c || d)).e || f;"
 
           """
-          a || b
-            .c || d
+          a ||
+            b.c || d
           && e || f
           """: "(a || (b.c || d)) && (e || f);"
 
           """
-          a || b
-            && c || d
+          a ||
+            b &&
+              c || d
             .e || f
           """: "a || ((b && (c || d)).e || f);"
 
           """
-          a || b
-            .c || d
+          a ||
+            b.c || d
             && e || f
           """: "a || (b.c || d) && (e || f);"
 
@@ -394,7 +430,7 @@ module.exports = suite: parseTestSuite
       """
       (++a)
         + b
-      """: "++a + b;"
+      """: null
 
       """
       ++a

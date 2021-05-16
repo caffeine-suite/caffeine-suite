@@ -46,7 +46,7 @@ module.exports = suite: parseTestSuite
       """
       a
         ?.b
-      """: "Caf.exists(a) && a.b;"
+      """: null
 
     withBase:
       "a.foo.bar?.b":  "let base; Caf.exists(base = a.foo.bar) && base.b;"
@@ -115,16 +115,40 @@ module.exports = suite: parseTestSuite
         # """: "let base, base1; Caf.exists(a) && (Caf.exists(base = a[b]) && (Caf.exists(base1 = base[c]) && base1[d]));"
 
   multiline:
-    basic:
-      """
-      foo
-      .bar
-      """: "foo.bar;"
+    readValue:
+      # simpleDotReference:
+      #   """
+      #   foo
+      #   .
+      #   """: "let dotRef; dotRef = foo; dotRef;"
 
-      """
-      foo
-      ?.bar
-      """: "Caf.exists(foo) && foo.bar;"
+      #   """
+      #   5
+      #   7 + .
+      #   """: "let dotRef; dotRef = 5; 7 + dotRef;"
+
+      #   """
+      #   5
+      #   . + .
+      #   """: "let dotRef; dotRef = 5; dotRef + dotRef;"
+
+      #   """
+      #   5 * 6
+      #   foo .
+      #   """: "let dotRef; dotRef = 5 * 6; foo(dotRef);"
+
+      accessor:
+        """
+        foo
+        .bar
+        """: "foo.bar;"
+
+
+      conditionalReference:
+        """
+        foo
+        ?.bar
+        """: "Caf.exists(foo) && foo.bar;"
 
     binaryOperatorExtensions:
       """
@@ -152,28 +176,28 @@ module.exports = suite: parseTestSuite
       """: "let a; a = [1, (2).bar];"
 
     block:
-      basic:
+      basicDepricated:
         """
         foo
           .bar
-        """: "foo.bar;"
+        """: null
 
       binaryOperatorExtensions:
         """
         foo
           .bar + 1
-        """: "foo.bar + 1;"
+        """: null
 
       precedence:
         """
         foo
           .bar * 2 + 3
-        """: "foo.bar * 2 + 3;"
+        """: null
 
         """
         foo
           .bar + 2 * 3
-        """: "foo.bar + 2 * 3;"
+        """: null
 
     compound:
       """

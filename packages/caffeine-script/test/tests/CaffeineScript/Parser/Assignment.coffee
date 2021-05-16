@@ -52,8 +52,10 @@ module.exports = suite: parseTestSuite
       "f\n.foo().bar = 1":  "f.foo().bar = 1;"
 
     block:
-      "f\n  .foo = 1":      "f.foo = 1;"
-      "f\n  || foo = 1":    "let foo; f || (foo = 1);"
+      """
+      f ||
+        foo = 1
+      """:    "let foo; f || (foo = 1);"
 
   binopAssignment:
     javascriptSupported:
