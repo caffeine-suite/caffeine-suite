@@ -38,6 +38,27 @@ Syntax Highlighting
 # To Sort
 
 ```
+# This should probably be a parse error:
+up
+  1, 2,
+  + 10
+# parses to: up([1, 2] + 10)
+
+# should this be a parse error? (gut, no)
+up
+  1, 2
+  + 10
+```
+
+Feature: allow all numeric constants in object structuring:
+```
+# new feature; currently a compile error
+{} 0 1
+# should equal:
+{0: 0, 1: 1}
+```
+
+```
 # this should work
 # I don't think "in" accepts an array following...
 :from in :from :to # true

@@ -7,9 +7,11 @@
 
 This is an enormous advantage. You can write approximately 3x more functionality for the same amount of code in JavaScript. The majority of time spent on any programming project is proportional to the size of the code. Translating design into code, refactoring code, understanding existing code, and perhaps most of all, the number of errors, are all proportional to the size of the code base.
 
-## Why CaffeineScript and not JSX, TypeScript, CoffeeScript or JavaScript?
+## Less is More
 
-I believe less is more. It is the first principle of design and foundation of just about every good programming practice: [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [ZEN (YAGNI)](http://www.essenceandartifact.com/2016/02/yagni-and-building-in-house-frameworks.html), [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle), [interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle), etc... That's why I wrote CaffeineScript. This info-graphic shows the result:
+Humanity makes progress by doing more with less. I believe reducing code size is the fundamental goal of any programming language. If you didn't care about code size, you'd just write your code in assembly.
+
+Doing more with less is the first principle of design and foundation of just about every good programming practice: [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [ZEN (YAGNI)](http://www.essenceandartifact.com/2016/02/yagni-and-building-in-house-frameworks.html), [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle), [interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle), etc... That's why I wrote CaffeineScript. This info-graphic shows the result:
 
 [![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic.png)](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic-Large.png)
 
