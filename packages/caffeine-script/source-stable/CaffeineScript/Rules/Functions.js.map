@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Functions.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Functions.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oFAAO,8BAAiB,oDAExB,6BACE,qEACA,YAAY,yBACZ,sBAAY,QACV,OAAO,gBAAO,uBAAmB,cAAc,KAC7C,KAAK,MAAS,aAAI,KACb,MAAS,cAAK,KACd,MAAS,wBACT,qBAAM,IAAI,wBAErB,8BACE,2DACA,iDAAgD,mBAAmB,SAErE,iBACE,uCACA,YAAY,+BAEd,aACE,4CACA,uBACA,WAEF,SACE,qDACA,uDACA,YAAY,4BACZ,gCAAe,mCAAQ,gDAAmC,sBAAsB,cAElF,yBACE,gBACA,aAEF,eACE,SAAS,wBAEX,0BACE,2CACA,iBAEF,8BACE,8EACA,6DACA,YAAc,yBACd,cAAc,MACd,sBAAiB,yBAAiB,uBAClC,mCAAiB"
+}

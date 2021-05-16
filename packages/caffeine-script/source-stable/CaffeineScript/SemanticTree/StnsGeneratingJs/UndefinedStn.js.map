@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "UndefinedStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/UndefinedStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;2DAEA,8DAA2B,2GAEzB,YAAiB,6BAAkB"
+}

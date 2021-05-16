@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Extract.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Extract.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2EAAO,8BAAiB,6CAExB,4BACI,0FACF,YAAY,cACZ,sBAAa,uBAAe,8BAE9B,iBACI,sBACA,wBAEJ,kBAAmB,iDAAgD,MAAM,iBAEzE,aAAa,yBACb,iBAAiB,wBAEjB,oBACE,MAEF,kBACE,wBAEF,uBACI,2EACA,gCAEJ,gBACE,gBACA,wBAEF,eACI,wGACF,YAAY,cACZ,sBAAa,uBAAe,8BAE9B,gBAAgB,wBAEhB,WAAW,uBAEX,sBACI,uCAOJ,sBACI,wGACF,YAAY"
+}

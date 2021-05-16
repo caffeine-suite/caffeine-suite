@@ -5,5 +5,7 @@
 
 .addModules({
   ComprehensionValueClauseStn: require('./ComprehensionValueClauseStn'),
+  DeprecatedStn:               require('./DeprecatedStn'),
+  DotReferenceStn:             require('./DotReferenceStn'),
   SemanticTokenStn:            require('./SemanticTokenStn')
 });

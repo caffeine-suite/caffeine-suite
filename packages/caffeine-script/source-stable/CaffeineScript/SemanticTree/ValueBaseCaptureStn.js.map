@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ValueBaseCaptureStn.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/ValueBaseCaptureStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uGAEA,yBAAyB,qCACzB,cAAc,uGAEoB,mFAChC,+DAEA,QAAyB,CAAC,gGAAc,OACnC,2BAAsB,CAAK,qBAAqB,kBAAc,CAC/D,EAAC,eAAe,cAAc,iBAAiB,cAE/C,EAAC,OAAO,OAAO,eACf,QAAQ,IAAI,oBAAkB,oBAC1B,cACE,cAAa,CAAC,kBAAkB,uBAAuB,IAAI,uBAAuB,WAClF,QACF,OAGJ,QAAQ,IAAI,oBAAkB,oBAC1B,cAAa,kBAAkB,wBAC/B,UAEE,2BAA0B,qBAAoB,UAAM,CAC1D,QAAQ,aAAa,QAAQ,eAE7B,yBAAqB,qDAEzB,QAAqB,CAAC,oFAAc,OAC/B,CAAgB,qBAAI,gBAAgB,qBAAoB,eAAW,CACpE,QAAQ,aAAa,QAAQ,eAE3B,CACF,EAAC,eAAe,cAAc,iBAAiB,eAE/C,QACE,cACE,cAAa,CAAC,kBAAkB,uBAAuB,IAAI,uBAAuB,WAClF,cAEJ,QAAQ,cAAa,kBAAkB"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ForStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ForStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,6FACE,MAAM,mBACN,CAAC,OAAO,OAAQ,OACd,uBACE,SAAS,QACT,OACA"
+}

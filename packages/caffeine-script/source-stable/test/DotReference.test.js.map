@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DotReference.test.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/test/DotReference.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2FAAO,6BAAiB,wDAExB,qCAEA,SAAQ,CACN,oBAAU,OACR,KAAK,mBACH,UAAU,GAAG"
+}

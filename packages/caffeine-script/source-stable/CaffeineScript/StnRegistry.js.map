@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "StnRegistry.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/StnRegistry.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,iIAAO,6BAAiB,8GAExB,4DAA0B,gFAExB,QAAW,CAAC,MAAO,OAChB,KAAC,uBAAuB,kBAE3B,QAAM,CAAC,0BAAkB,OACpB,WAAW,kBACZ,iBACM,SAAS,kBAAc,CAC7B,CAAO,OAAM,KAAE,mBACb,cAAM,IAAI,MAAK,0CAA8B,iBAAiB,sCAChE"
+}

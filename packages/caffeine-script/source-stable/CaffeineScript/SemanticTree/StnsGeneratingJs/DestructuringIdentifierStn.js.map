@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DestructuringIdentifierStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/DestructuringIdentifierStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,iGAAO,kCAAoB,0IAE3B,0FAAyC,wHAEvC,QAAa,CAAC,OAAO,UACnB,aAAS,OACT,iCAA6B,4CAAwC,sBAAW,qHAGlF,YAAY,OACP,wBAAwB,mBACzB,cAAM,IAAI,uBAAU,yGAExB,YAAO,CACL,wBAAe,qDACf,4BAAkB,OAChB,mEAIJ,QAAc,CAAC,+DAAU,IACM,yCAE7B,EAAC,YAAY,wBAAwB,8BAClC,gBACD,4BAGA,sBACW,yCACT,2BACG,uBAA0B,mBAAM,mCAAkC,YAAY"
+}

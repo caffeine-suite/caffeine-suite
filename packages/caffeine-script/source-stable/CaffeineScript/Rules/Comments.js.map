@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Comments.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Comments.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WACE,GAAgB,iBAChB,KAAc,kBAEd,SACE,KACA,QAEF,WACK,SAAS,+BACT,SAAS,gCAed,MACE,iCAKF,mBAAkB,gBAAe,SACjC,gBAAkB,wCAGf,wBAAe,kBAElB,oBAAoB"
+}

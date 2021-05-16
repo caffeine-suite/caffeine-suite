@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TryStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/TryStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,4EAAO,gEAEP,kDAAqB,uBAEnB,+BAAe,qBAEb,KAAO,uCAAkC,wCAEvC,kJAAU,uFAEd,QAAc,CAAC,2EACb,EAAC,cAAc,UACf,EAAC,MAAM,eAAe,mBAAmB,uBAEzC,QACE,SACA,mBAAkB,gBAAgB,cAClC,iBACA,6CAA4B,qBAC5B,iDAA8B,kBAE7B,aACD,kBAAc,OAAS,MAAM,QAE7B"
+}

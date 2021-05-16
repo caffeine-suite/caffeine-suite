@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ForInControlStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ForInControlStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;8DAEA,oEAA8B,gFAE5B,YAAO,CACL,oBAAa,qBAAU,MACvB,qBAAa,qBAAU,sCAEzB,YAAgB,OACd,sBACY,qCACV,4BACA,QACA,2BAAsB,YAAY"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Blocks.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Blocks.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2EAAO,8BAAiB,6CAExB,mBACE,WACE,QAAQ,YAEV,WACE,gBAAgB,SAChB,OAAgB,wBAChB,cAAgB,+BAChB,eAAgB,yCAElB,UAAK,CACH,aAAsB,iDAAgD,MAAM,kBAC5E,oBAAsB,iDAAgD,MAAM,UAC5E,qBAAsB,yDAAwD,MAAM,kBACpF,eAAsB,iDAAgD,MAAM,cAE5E,WACE,SAAS"
+}

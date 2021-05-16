@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "RequireStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/RequireStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;iCAIA,sDAAO,6FAEP,EAAC,kBAAkB,QAAQ,2EAEF,2EAEvB,YAAO,CAEL,8BAAqB,6BAErB,sBAAY,OACV,eACK,UAAU,yBACX,KAAK,4BAAwB,QAE7B,0BAEN,2BAAiB,OACf,eAAe,uBAAmB,8EAGzB,2DAEb,+BACE,EAAC,iBAAiB,cAClB,+CACgB,+BAEd,qBAAoB,iBAAG,2BAAqB"
+}

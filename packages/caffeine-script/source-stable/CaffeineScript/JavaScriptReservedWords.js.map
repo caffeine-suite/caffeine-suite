@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "JavaScriptReservedWords.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/JavaScriptReservedWords.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,4CAAO,+CAAiC"
+}

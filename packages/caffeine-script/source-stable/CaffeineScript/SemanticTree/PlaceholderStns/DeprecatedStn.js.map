@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DeprecatedStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/PlaceholderStns/DeprecatedStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,iEAEP,gEAA4B,wGAE1B,sBAAY,OACV,cAAM,IAAI,MAAK,4BAAoB,8CAAiB,oDAEtD,QAAc,CAAC,UAAY,qBAAU,gBAAgB"
+}

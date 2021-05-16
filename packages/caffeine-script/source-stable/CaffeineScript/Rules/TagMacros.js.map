@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TagMacros.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/TagMacros.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,sEAAO,4DACP,cAAc,mCAEd,WACE,SAAS,0CACT,2BAAiB,OACf,cAAM,IAAI,MAAM"
+}

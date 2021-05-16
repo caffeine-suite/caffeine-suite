@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "DoStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/DoStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,uEAAO,0DAEP,gDAAoB,oGAElB,oCACE,EAAC,sBAAsB,8BAEvB,sBACE,KACA,mCACA,MACC,YAAY,uCAAuC,OACpD"
+}

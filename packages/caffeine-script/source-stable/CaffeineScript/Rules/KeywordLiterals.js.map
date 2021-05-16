@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "KeywordLiterals.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/KeywordLiterals.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBAAE,OACA,WACE,gBAAkB,qDAEhB,YAAY,oBACZ,sBAAa,eAAO"
+}

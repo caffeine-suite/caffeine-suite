@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "RegExp.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/RegExp.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2EAAO,8BAAiB,2BAAgB,6CAaxC,wBACI,uDACA,2CACA,mBACF,YAAY,aACZ,8CAAc,OACT,oBAAa,CACd,OAAO,8BAA0B,6BAAW,4CAC1C,CACF,8BAAW,oGAEjB,uBACE,mBACA,cAEF,aAAa,yDAAwD,MAAM,wBAC3E,oBAAoB,0BAQpB,aAAkB,iBAClB,cAAkB,6BAClB,WAAkB,MAClB,iBAAkB,cAElB,wBACE,uBACA,yBACA,iCACA,gCACA,2BAGF,sBACE,SAAY,kCACZ,YAAY,aACZ,sBAAe,eAAO,kBAAc,YAAY,SAElD,wBACE,SAAY,SACZ,YAAY,aACZ,sBAAe,eAAU,eAAS,SAAW,MAAS,eAExD,yBACE,SAAY,4CAId,+BACE,SAAS,gEAEX,gCACE,SAAY,eACZ,YAAY,aACZ,sBAAe,eAAO,kBAAc,OAAO"
+}

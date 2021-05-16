@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "NumberLiteralStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/NumberLiteralStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,2EAAO,yEAEP,sEAA+B,+GAE7B,QAAc,CAAC,qBACb,EAAC,SAAS,oBAEV,sBACE,YAAG,+BAAgB,CAEf,qBACG,UACH,OACA,gBACC,aAET,YAAO,CACL,sBAAa,2BACb,uCAA8B,eAC9B,8BAAqB,kBAAW"
+}

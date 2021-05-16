@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ExtractStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/TransformOnlyStns/ExtractStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uEACA,eAAe,wFAeU,2EAEvB,YAAO,CACL,2BAAmB,6CACnB,4BAAmB,2EAErB,QAAW,CAAC,+OACV,EAAC,eAAe,eAAe,aAAa,eAAe,uBAAuB,sBAAsB,sBACxG,gFACA,gBAAgB,uEAA0B,6CAC1C,EAAC,eAAe,oBAEhB,cACM,iBAAe,wBAAwB,MACvC,CAAkB,uBAAI,eAAc,uBAAsB,iBAAW,CACvE,gBAAgB,eAChB,cAAc,cACZ,gBAAgB,iBAChB,gBAEC,cAAW,CACZ,oBAAoB,aACpB,QAEA,0BAED,OAAI,CACL,sBAA8B,uFAC5B,sBAAyB,eAAS,eAAiB,gBAAe,uBAA0B,OAE5F,kBACE,cACE,2CACA,iDAAiD,wBAElD,eAAY,CAEX,iBACA,uBAAuB,8CAGzB,oBAED,cACD,mBACE,sBACE,eAAc,YAAY,gBAC1B,gDAAoB,gBAEtB,cAAc,cAEhB"
+}

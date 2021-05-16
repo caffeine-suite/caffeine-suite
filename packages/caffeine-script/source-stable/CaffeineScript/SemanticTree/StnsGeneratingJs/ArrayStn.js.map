@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ArrayStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ArrayStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uDAEA,sDAAuB,uBAKrB,WAAa,CAAC,OAAO,WAEnB,IAAkB,oBAAI,KAAK,SAAS,yBAClC,WAAW,SAAS,qBAChB,OAAO,yKAEf,QAAc,CAAC,uBACb,qBAAU,oCACV,sBACK,UAAa,OAAU,eACZ,kCACZ,KAAK,gBAAe,YAAY,eAC7B,KAAI,KAAC,CAEJ,MACA,MAEF,OACD,UAAa,OAAU"
+}

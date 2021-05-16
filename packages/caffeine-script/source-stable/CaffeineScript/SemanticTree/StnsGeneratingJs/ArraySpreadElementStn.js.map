@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ArraySpreadElementStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ArraySpreadElementStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;oEAGA,gFAAoC,oHAElC,YAAgB,OACd,sBACE,OACA"
+}

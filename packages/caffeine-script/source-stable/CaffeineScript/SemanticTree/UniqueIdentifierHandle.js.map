@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "UniqueIdentifierHandle.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/UniqueIdentifierHandle.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,+GAAO,4GAEP,kFAAqC,sBACtB,CAAC,eAAgB,YAAa,4FAEzC,cAAU,uEAEZ,cAAU,UAEV,YAAO,CACL,8BAAqB,8BAAsB,wDAA4C,gDAA8B,EAAE,0CAAwB,QAAQ,0BACvJ,wBAAe,2BAAY,oBAAK,gCAA4B,oBAAgB,MAAG,4DAEpE"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Require.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Require.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,4CACE,SAAY,uBACZ,gCAAc,OACZ,mBACA,SAAS,WAAW,GAAG,iBACzB,YAAY"
+}

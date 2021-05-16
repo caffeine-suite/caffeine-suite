@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Tokens.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Tokens.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,8FAKE,UAAK,CACH,UAAgB,UAChB,SAAgB,sBAEhB,SAAgB,UAChB,wBAA+B,aAC/B,eAAgB,iBAChB,QAAgB,aAEhB,YAAgB,QAChB,aAAgB,SAEhB,cAAgB,oBAChB,eAAgB,YAEhB,YAAgB,QAChB,aAAgB,SAChB,OAAgB,oBAChB,UAAgB,SAEhB,cACE,oWAyFM,8CAAiC,gFAkBzC,aACE,sCAIA,YAAY,iBACZ,sBAAa,oBAAY,sBAG3B,eACE,kCAyBF,yBAAyB,0BACvB,mDAgBF,gBACE,0BAGI,sCAIN,oCACE,iCAKI,iDAIE,sCAIR,uBACE,yCAKI,yDAUE,uCAKR,mBAAoB,MACpB,gBACE,qCAOF,gBACE,+GAwBF,oBAAoB,qBAClB,kFA0BF,KAAK,SACL,OAAO,oBAET,WAEE,KAAK,MACL,cAAc,QACX,YAAY"
+}

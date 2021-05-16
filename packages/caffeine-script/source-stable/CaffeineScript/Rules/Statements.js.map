@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Statements.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Statements.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,mFAAO,8BAAiB,2BAAgB,qDAMxC,6BACE,+DACA,oBAEF,qBAAqB,kCACrB,sCAAsC,iDAEtC,+BACE,uBACA,wBAEF,kBACI,2CACA,gBACF,YAAY,wBAEd,iBACI,0CACA,eACF,YAAY,uBAGd,sBACI,8DAEA,oEACF,6BACE,MAAM,mDACM,qDACV,MAAM,mBAAkB,CACtB,SAAS,4CACT,wCACA,cACJ,SAEJ,eACE,SAAS,WACT,wBAAe,iBAEjB,kBACE,SAAS,uDACT,YAAY,cAEd,aACE,SACA,YAAY,mBAEd,4BACE,4CACA,2EAEF,mBACE,UACE,sCACA,wBACF,YAAY,kBAEd,0BACE,oBACA,mBAEF,eAAe"
+}

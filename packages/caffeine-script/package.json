@@ -49,7 +49,7 @@
     "test": "mocha -u tdd",
     "watch": "npm-watch"
   },
-  "version": "0.73.0",
+  "version": "0.74.0",
   "watch": {
     "build": {
       "extensions": [

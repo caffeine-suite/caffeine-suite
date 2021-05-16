@@ -8,3 +8,4 @@ module.exports = require('neptune-namespaces-runtime').addNamespace(
 );
 require('./Rules/namespace');
 require('./SemanticTree/namespace');
+require('./Transforms/namespace');

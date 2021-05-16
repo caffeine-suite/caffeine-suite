@@ -16,3 +16,4 @@
 });
 require('./Rules');
 require('./SemanticTree');
+require('./Transforms');

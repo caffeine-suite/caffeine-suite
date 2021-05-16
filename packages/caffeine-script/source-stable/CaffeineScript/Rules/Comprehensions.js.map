@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Comprehensions.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Rules/Comprehensions.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;yCAEA,mBACE,WACE,UAAU,eACV,8BAA8B,mFAEhC,WACE,yBAA8B,qCAC9B,4BAA8B,kCAC3B,YAAY,sBAEjB,UAAK,CACH,2BACI,sFAKF,YAAY,+BACZ,gCAAY,QAEV,MACE,gBAAO,OAAO,+CAAwC,KACjD,MAAgB,eAAK,KACrB,YAAgB,qBAAW,KAC3B,aAAgB,+BAChB,yBAEX,2BAA2B,+BAE7B,WACE,2BAA2B,mFACxB,YAAY,+BAEjB,WACE,aAAa,2CAEb,mCAAmC,iCACnC,qBAAqB,4CAErB,mBAAmB,kBAErB,WACE,eAAe,oLASZ,YAAY"
+}

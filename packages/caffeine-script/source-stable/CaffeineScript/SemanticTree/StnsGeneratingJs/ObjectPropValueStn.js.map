@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ObjectPropValueStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ObjectPropValueStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oJAAO,0IAEP,0EAAiC,mFAE/B,YAAO,CACL,UAAU,MACV,2BAAkB,qBAAU,MAC5B,wBAAe,YAAK,kBAEpB,kCAAe,mEAEf,mEACE,EAAC,iBAAiB,+BAClB,uCAAe,gBACb,gBAAO,uBAAgB,KAClB,GAAC,OACJ,oDAAyB,gBAAa,KAEnC,GAAC,OACJ,oDACE,cAAM,IAAI,MAAK,gBAAI,0IAE3B,qDAA6B,OAC3B,YAAW,gCACX,CAAI,wBAAwB,aACzB,sBAAsB,aACtB,6CACA,6BAAwB,wCAE/B,YAAY,QAC4B,QAAQ,2GAEhD,kDAAgB,OACd,8DACA,OAAO,yBAAwB,YAAY,aACD,SAAS,yDAEhD,iCACD,OAEA,sBACE,UACA,MACA"
+}

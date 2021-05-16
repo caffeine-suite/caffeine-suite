@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ObjectDestructuringStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ObjectDestructuringStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;qEAEA,kFAAqC,uFAEnC,YAAO,CACL,sBAAa,8BAGb,4BAAkB,OAChB,iCACiB,0BACb,+DAER,QAAc,CAAC,mEAAW,IACyB,iEACb,sBAAsB,sDAC1D,OAAO,2BAAuB,MAAM,oBACjC,gBACD,OAEA,sBACE,KACA,MACA"
+}

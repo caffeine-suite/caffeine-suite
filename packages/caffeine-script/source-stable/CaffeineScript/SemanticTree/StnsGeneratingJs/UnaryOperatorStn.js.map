@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "UnaryOperatorStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/UnaryOperatorStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;+DAEA,sEAA+B,iFAE7B,YAAO,CACL,uCAAqB,OACnB,gBAAO,KAAK,qBACV,KAAK,UAAc,kBAAS,KAKvB,OAAW,YAAG,KACd,KAAS,4BACT,oBAET,oCAA2B,4BAAqB,yBAElD,YAAO,CACL,kBAAS,0BAAe,uBAAkB,uCAE5C,QAAc,CAAC,0DAAW,IACiB,qDAEzC,YAAY,cAAU,iBACpB,SAAS,MACT,kBAAkB,MAClB,YAAY,QAEd,OAAU,YAAK,CACb,WAAW,0BACT,CACF,wBAAoB,mBAEnB,cACE,qBAAqB,gCACxB,sBAAkB,KAAK,MAAM,OAG7B,sBAAkB"
+}

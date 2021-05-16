@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ThisStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/ThisStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,mHAAO,oGAEP,oDAAsB,wEAEpB,YAAO,CACL,sCAAc,OACT,MAAK,yBACH,sBAAsB,MACvB,KAEA,uBAAuB,MACvB,kBACF,KAAK,sCAET,gCAAa,kDAAc,2CAE7B,oBAAgB,OACX,MAAK,mBACH,sBAAsB,MACvB,sBAAkB,SAAO,MAEzB,sBAAkB,SAAQ,IAAI,OAEhC,sBACE"
+}

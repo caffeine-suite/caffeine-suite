@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "RegExpStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/RegExpStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,yEAAO,iCAAiB,qDAExB,wDAAwB,wGAEtB,yEACE,EAAC,OAAO,aAAa,aAErB,gBAAmB,qDAAoB,KAAC,CACtC,4BAAiC,0BAAe,CAAC,SAAS,+BAC3C,kCAAS,OACnB,SAAS,IAAI,qBACX,mBACD,UAAU,aAAa,UAEvB,IAEF,2CAGJ,cAEe,mBAAI,yBAAwB,KAC3C,sBAAkB,YACZ,mBACN,sBACE,YACA,eACA,KACyB,iDACzB,OAEF,sBACE,KACA,eACA,KACA"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaptureStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/TransformOnlyStns/CaptureStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;uEACA,eAAe,wFAeU,0GAEvB,YAAiB,OACf,uBACE,YACA,gCACE,gCAA+B,OAAO,YACtC,uBAAsB,CAAC,OAAO,cAAU,0BAE1C,gCACE,gCAA+B,OAAO,WACtC,cAAU"
+}

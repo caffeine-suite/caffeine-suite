@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "NewInstanceStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/NewInstanceStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;6DAEA,kEAA6B,6GAE3B,QAAc,CAAC,2CAAW,IACA,oCACxB,EAAC,SAAS,gBAEV,aAAa,gBAAO,aAClB,KAAK,2BAAqB,kBAAY,yBAAmB,QAAK,OAC5D,oBAAmB,6BAA6B,iBAC9C,QAEA,KACA,sBACA,oBAEN,YAAG,+BACD,uBACa,4BACX,QACA,aACW,8BAGb,sBACE,QACA"
+}

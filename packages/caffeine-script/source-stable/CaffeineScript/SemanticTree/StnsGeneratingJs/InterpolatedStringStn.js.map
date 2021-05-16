@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "InterpolatedStringStn.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/StnsGeneratingJs/InterpolatedStringStn.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,qEAAO,wEAEP,gFAAoC,uHAElC,QAAiB,CAAC,aAAa,eAAe,iBAC3B,6BACf,sBACE,eAAe,MAAK,GACpB,gBAAgB,MAAK,uBAAmB,wEAE9C,sBAAY,yBACV,cAAU,iFAEZ,sBAAa,yBACX,KAAK,kGAEP,YAAgB,OACd,sBACE,eACW,sBAAe,mCAC1B"
+}

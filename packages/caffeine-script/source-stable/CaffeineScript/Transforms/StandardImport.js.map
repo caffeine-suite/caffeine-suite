@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "StandardImport.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/Transforms/StandardImport.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oDAAG,+BAAoB,6BAAe"
+}

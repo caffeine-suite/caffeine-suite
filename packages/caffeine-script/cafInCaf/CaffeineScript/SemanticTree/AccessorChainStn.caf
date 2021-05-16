@@ -73,8 +73,7 @@ class AccessorChainStn extends &ValueBaseCaptureStn
   getLeftAccessorChain: ->
     current = @
     accessorChain = []
-    while current
-        && current instanceof AccessorChainStn
+    while current && current instanceof AccessorChainStn
       accessor = current
       current = current.value
       accessorChain.push accessor

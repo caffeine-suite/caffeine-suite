@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "StandardImport.js",
+  "sourceRoot": "../../../..",
+  "sources": [
+    "cafInCaf/CaffeineScript/SemanticTree/TransformOnlyStns/StandardImport.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,+EAA8B"
+}
