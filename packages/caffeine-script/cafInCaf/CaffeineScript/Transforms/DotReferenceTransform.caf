@@ -1,10 +1,24 @@
-import &StandardImport, &CaffeineEight
+import &StandardImport, &CaffeineEight, &SemanticTree
 
-depthFirstTransformR = (stn, transform) ->
+depthFirstTraversal = (stn, applicator) ->
+  each child in-array stn.children
+    depthFirstTraversal child, applicator
+
+  applicator stn
+
+findAllStnsByType = (rootStn, type) ->
+  dotRefs = []
+  depthFirstTraversal rootStn, (stn) ->
+    dotRefs.push stn if stn.type == type
+
+  dotRefs
+
+depthFirstTransformR = (stn, transform, recursionTest) ->
   try
     newChildren = null
     each child, i in-array stn extract children
-      if child != newChild = depthFirstTransformR child, transform
+      shouldRecurse = if recursionTest then recursionTest(child) else true
+      if shouldRecurse && child != newChild = depthFirstTransformR child, transform
         newChildren ?= children.slice()
         newChild.props.label = child.label
         newChildren[i] = newChild
@@ -15,9 +29,9 @@ depthFirstTransformR = (stn, transform) ->
     e.stn ?= stn
     throw e
 
-depthFirstTransform = (stn, transform) ->
+depthFirstTransform = (stn, transform, recursionTest) ->
   try
-    depthFirstTransformR stn, transform
+    depthFirstTransformR stn, transform, recursionTest
 
   catch e
     if e.stn
@@ -32,8 +46,58 @@ depthFirstTransform = (stn, transform) ->
 
     else throw e
 
-(stn) ->
-  depthFirstTransform stn, (stn) ->
-    if stn.type == :DotReference
-      throw new Error "DotReference is not supported yet."
-    stn
+##
+  OKAY, what needs to be done:
+
+  We find the direct parent StatementsStn.
+  We find what index of it's children our DotReference(s) are in
+  We capture the value of the statment at the previous index.
+  We replace the related DotReference(s) with the captured value.
+
+(rootStn) ->
+  {AssignmentStn, IdentifierStn, ReferenceStn, AccessorStn} = SemanticTree
+  dotRefs = findAllStnsByType rootStn, :DotReference
+  if dotRefs.length > 0
+    parentStatementsAndChild = array dotRef from dotRefs
+      dotRef.findParent :Statements true
+    parentStatementsNodes = array {parent} from parentStatementsAndChild with parent
+    # log {} parentStatementsAndChild
+    depthFirstTransform rootStn, (stn) ->
+      if parentStatementsAndChild[parentStatementsNodes.indexOf statements = stn] extract? child
+        switch referencingChildIndex = statements.children.indexOf child
+        when -1
+          throw new Error "DotReference internal error."
+        when 0
+          throw new Error "DotReference is not supported yet in first statements."
+        else
+          # throw new Error "DotReference on second statements coming soon!"
+          log "" rewriting children for "tail statements" DotReferenceTransform...
+          dotRefIdentifierHandle = null
+          statements.withChildren array child, i in statements.children
+            switch referencingChildIndex
+            when i + 1
+              log ""    adding AssignmentStn
+              AssignmentStn
+                IdentifierStn identifierHandle: dotRefIdentifierHandle = new UniqueIdentifierHandle :dotRef
+                child
+
+            when i
+              log ""    adding ReferenceStn
+              depthFirstTransform child,
+                (lookingForDotRefStn) ->
+                  if (dotRef = lookingForDotRefStn).type == :DotReference
+                    reference = ReferenceStn identifierHandle: dotRefIdentifierHandle
+                    if accessorIdentifier = dotRef.children?[0]
+                      AccessorStn
+                        reference
+                        accessorIdentifier
+                    else
+                      reference
+
+                  else lookingForDotRefStn
+                (dontRecurseOnStatementsStn) -> dontRecurseOnStatementsStn != :Statements
+      else stn
+
+    # throw new Error "DotReference is not supported yet."
+  else
+    rootStn

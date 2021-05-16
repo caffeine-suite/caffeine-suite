@@ -3,8 +3,8 @@ import &StandardImport, &CaffeineEight
 ->
   @rule
     dotReference:
-      "" dots:/\\.+(?!\\d)/ identifier?
+      "" dots:/\\??\\.+(?!\\d)/ identifier?
       stnFactory: :DotReferenceStn
       stnProps: ~>
         dotCount: @dots.toString().length
-        accessIdentifier: @identifier?.toString()
+        # accessIdentifier: @identifier?.toString()
