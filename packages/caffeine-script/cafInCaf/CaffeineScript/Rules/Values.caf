@@ -196,11 +196,19 @@ import &StandardImport, &CaffeineEight
   @rule
     blockValueExtension: "" _? blockValueExtensionBlock
     blockValueExtensionBlock: Extensions.IndentBlocks.getPropsToSubparseBlock rule: :blockValueExtensionSubparse
-    blockValueExtensionSubparse:
-      "" lineStartComment* &dotOrQuestionDot valueExtension+ binaryOperatorSequenceExtension? newLineStatementExtension* end
-      "" lineStartComment* lineStartBinaryOperatorAndExpression newLineStatementExtension* end
-
     dotOrQuestionDot: /\??\./
+
+  @rule
+    blockValueExtensionSubparse:
+      pattern: "" lineStartComment* &dotOrQuestionDot valueExtension+ binaryOperatorSequenceExtension? newLineStatementExtension* end
+      stnFactory: :DeprecatedStn
+      stnProps: message: "" Blocks starting with dot ('.')
+
+  @rule
+    blockValueExtensionSubparse:
+      pattern: "" lineStartComment* lineStartBinaryOperatorAndExpression newLineStatementExtension* end
+      stnFactory: :DeprecatedStn
+      stnProps: message: "" Blocks starting with binary operators (e.g. '+', '&&', 'or', etc...)
 
   @rule
     singleValueOrImplicitArray:

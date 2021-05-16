@@ -1,0 +1,8 @@
+import &StandardImport
+
+class DeprecatedStn extends &BaseStn
+
+  validate: ->
+    throw new Error "" Deprecated: #{} @props.message ? "syntax"
+
+  toSourceNode: (options) -> @children[0].toSourceNode options
