@@ -94,4 +94,26 @@
     });
   });
 
+  test("importInvoke from nested arrays", function() {
+    return assert.eq(Caf.importInvoke(["foo"], [
+      {
+        bar: 456
+      }, [
+        [
+          {
+            foo: 123
+          }
+        ], {
+          bam: 666
+        }
+      ]
+    ], function(foo) {
+      return {
+        foo: foo
+      };
+    }), {
+      foo: 123
+    });
+  });
+
 }).call(this);

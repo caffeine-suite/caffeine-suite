@@ -158,11 +158,22 @@
       IN:
         _module: module form currently defined module
         defineFunction
+    
+      EFFECT
+        global.__definingModule is set to the currently loading module
+          (recursive module loading is handled properly)
+    
+          This is used by ArtObjectModel to automatically configure
+          hot-reloading if available.
+    
+        module.exports.__definingModule is set to the module
+          This helps us detect and debug circular dependencies.
      */
     defMod: function(_module, a) {
       var lastModule, result;
       lastModule = global.__definingModule;
       global.__definingModule = _module;
+      _module.exports.__definingModule = _module;
       result = _module.exports = a();
       global.__definingModule = lastModule;
       return result;
