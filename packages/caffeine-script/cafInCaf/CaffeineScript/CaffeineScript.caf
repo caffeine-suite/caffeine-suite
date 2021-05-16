@@ -69,7 +69,7 @@ compile: (source, options = {}) ->
 
   catch e
     unless e.location? || e.sourceFile? || e.message.match /parse|expect/i
-      log.error CaffeineScriptBETA: {}
+      !debug && log.error CaffeineScript: {}
         message:
           """
             Uh-oh! There was an internal error compiling your file. We'd love to fix it. Could you submit an issue with a copy of the code that won't compile?

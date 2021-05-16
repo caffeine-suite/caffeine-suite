@@ -1,7 +1,7 @@
 {CaffeineScript} = Neptune
 {isNumber, eq, each, object, array, isArray, log, formattedInspect, isPlainObject, merge, object, stringCount, isString} = Neptune.Art.StandardLib
 {CaffeineScriptParser} = CaffeineScript
-{assert} = require "art-testbench"
+{assert, skipKnownFailingTest} = require "art-testbench"
 require "colors"
 
 module.exports =
@@ -24,6 +24,7 @@ module.exports =
           CaffeineScript.compile source, merge parseOptions,
             sourceFile: "mySourceFile.caf"
             inlineMap:  true
+            debug:      true
             bare:       !compileModule
 
       catch error
@@ -62,7 +63,7 @@ module.exports =
 
     try
       {parseTree, semanticTree, transformedSemanticTree, compiled:{js}} =
-        CaffeineScript.compile source, merge parseOptions, module: !!compileModule
+        CaffeineScript.compile source, merge parseOptions, debug: true, module: !!compileModule
 
     catch error
       if expectFailure && isNumber error.failureIndex
