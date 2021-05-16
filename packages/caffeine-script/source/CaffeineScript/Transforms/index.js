@@ -4,5 +4,6 @@
 (module.exports = require('./namespace'))
 .includeInNamespace(require('./Transforms'))
 .addModules({
-  DotReferenceTransform: require('./DotReferenceTransform')
+  DotReferenceTransform: require('./DotReferenceTransform'),
+  StandardImport:        require('./StandardImport')
 });
