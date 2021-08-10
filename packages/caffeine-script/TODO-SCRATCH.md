@@ -36,6 +36,22 @@ Syntax Highlighting
 
 
 # To Sort
+```coffeescript
+# should be legal:
+{} foo,
+  bar: 132
+# {foo: foo, bar: 123}
+```
+# this used to work:
+this "foo"->
+# now it must be this:
+this "foo" ->
+```
+
+```
+long = 123
+# long is a reserved word; the compile error should make that abundantly clear
+```
 
 ```
 # This should probably be a parse error:
