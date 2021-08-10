@@ -2,7 +2,7 @@
   "author": "Shane Brinkman-Davis Delamore",
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "@art-suite/monorepo": "^1.6.0",
+    "@art-suite/monorepo": "^1.6.1",
     "@art-suite/source-root-finder": "^1.0.7",
     "@caffeine-suite/caffeine-module-resolver": "file:packages/@caffeine-suite/caffeine-module-resolver",
     "art-binary": "^1.1.13",

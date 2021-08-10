@@ -27,6 +27,7 @@ commander = require "commander"
 .option '-d, --debug', 'show debug info'
 .option '-v, --verbose', 'show more output'
 .option '-r, --reset', 'reset cache'
+.option '--require <packages...>', 'require one or more packages on load (e.g. --require coffee-script/register)'
 .option '-m, --map',        'generate source map and save as .js.map files'
 .option '-M, --inline-map',  'generate source map and include it directly in output'
 .option '--versions [compiler-npm-name]', "show caffeine-mc's version OR the specified caffeine-mc-compatible compiler's version"
@@ -41,8 +42,9 @@ commander = require "commander"
 displayError = (e) ->
   CaffeineMc.displayError e, commander
 
-{reset, output, compile, prettier, transpile, verbose, versions, cache, nocache} = commander
+{reset, output, compile, prettier, transpile, verbose, versions, cache, nocache, require: toRequire} = commander
 
+log {toRequire}
 CaffeineMc.cacheEnabled = cache = !nocache
 
 fileCounts =
