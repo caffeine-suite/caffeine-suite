@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "npm-watch": "^0.9.0"
+    "npm-watch": "^0.11.0"
   },
   "description": "Syntax highlighting support for CaffeineScript.",
   "displayName": "CaffeineScript Language Support (official)",
