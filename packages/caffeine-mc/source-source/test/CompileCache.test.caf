@@ -1,4 +1,4 @@
-import &ArtStandardLib, &CaffeineMc, &ArtTestbench, &CaffeineScript, {}
+import &StandardImport, &CaffeineScript, {}
   &mockFs
   &path
   fs: &fsExtra
@@ -18,6 +18,9 @@ initialFs =
       "StandardImport.caf": ":foo"
 
 describe
+  pre: ->
+    test "JEST-needs-this-for-mock-fs-to-workfoo" ->
+
   basic: ->
     beforeAll -> mockFs initialFs
     afterAll -> mockFs.restore()
