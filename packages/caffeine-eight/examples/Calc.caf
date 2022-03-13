@@ -108,4 +108,4 @@ class CalcParser extends &CaffeineEight.Parser
 
     _: /\s+/
 
-.repl verbose: true
+.repl()
