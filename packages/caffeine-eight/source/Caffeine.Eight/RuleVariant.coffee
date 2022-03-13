@@ -52,8 +52,8 @@ module.exports = class RuleVariant extends BaseClass
 
 
   # depth = 0
-  ###
-  see: Caffeine.Eight.Rule#parse
+  ### parse
+    see: Caffeine.Eight.Rule#parse
   ###
   parse: (parentNode) ->
     {name} = @
@@ -91,14 +91,14 @@ module.exports = class RuleVariant extends BaseClass
         "CustomParser"
       @_variantNodeClassName = baseName
 
-  ###
-  OPTIONS:
+  ### _initVariantNodeClass
+    OPTIONS:
 
-    node / nodeClass
-      TODO: pick one, I like 'node' today
+      node / nodeClass
+        TODO: pick one, I like 'node' today
 
-    extends / baseClass / nodeBaseClass
-      TODO: pick one, I like 'extends' today
+      extends / baseClass / nodeBaseClass
+        TODO: pick one, I like 'extends' today
   ###
   _initVariantNodeClass: (options) ->
     {rule} = options

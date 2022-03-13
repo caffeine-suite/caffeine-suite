@@ -1,7 +1,6 @@
-{log, defineModule, toInspectedObjects, merge} = require 'art-standard-lib'
-{BaseClass} = require "art-class-system"
+import &ArtStandardLib, &ArtClassSystem
 
-defineModule module, class ScratchNode extends BaseClass
+class ScratchNode extends BaseClass
 
   @resetAll: ->
     @_scatchNodes = []
@@ -16,7 +15,7 @@ defineModule module, class ScratchNode extends BaseClass
       @_scatchNodes[@_scatchNodesInUse++].reset parentNode, ruleVariant
 
   @checkin: (scratchNode) ->
-    throw new Error "WTF" unless scratchNode == @_scatchNodes[--@_scatchNodesInUse]
+    throw new Error "unknown error" unless scratchNode == @_scatchNodes[--@_scatchNodesInUse]
 
   constructor: (parent, ruleVariant) ->
     @matches = []
@@ -24,14 +23,15 @@ defineModule module, class ScratchNode extends BaseClass
     @reset parent, ruleVariant
 
   reset: (@parent, @ruleVariant) ->
-    {@_parser} = @parent
+    @_parser = @parent._parser
     @offset = @parent.getNextOffset() | 0
     @matchesLength = @matchPatternsLength =
     @matchLength = 0
     @variantNode = null
     @
 
-  @getter "parser",
+  @getter
+    :parser
     source:     -> @_parser.source
     nextOffset: -> @offset + @matchLength
     inspectedObjects: ->
@@ -47,7 +47,8 @@ defineModule module, class ScratchNode extends BaseClass
   @getter
     firstPartialMatchParent: -> @realNode.firstPartialMatchParent
     realNode: ->
-      @variantNode ||= new @ruleVariant.VariantNodeClass @parent.realNode || @_parser,
+      @variantNode ?= new @ruleVariant.VariantNodeClass
+        @parent.realNode || @_parser
         ruleVariant:    @ruleVariant
         matchLength:    @matchLength
         matches:        @matchesLength       > 0 && @matches.slice       0, @matchesLength

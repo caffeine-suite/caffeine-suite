@@ -110,8 +110,8 @@
     });
 
 
-    /*
-    see: Caffeine.Eight.Rule#parse
+    /* parse
+      see: Caffeine.Eight.Rule#parse
      */
 
     RuleVariant.prototype.parse = function(parentNode) {
@@ -154,14 +154,14 @@
     });
 
 
-    /*
-    OPTIONS:
+    /* _initVariantNodeClass
+      OPTIONS:
     
-      node / nodeClass
-        TODO: pick one, I like 'node' today
+        node / nodeClass
+          TODO: pick one, I like 'node' today
     
-      extends / baseClass / nodeBaseClass
-        TODO: pick one, I like 'extends' today
+        extends / baseClass / nodeBaseClass
+          TODO: pick one, I like 'extends' today
      */
 
     RuleVariant.prototype._initVariantNodeClass = function(options) {

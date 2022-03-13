@@ -1,10 +1,11 @@
-{log, defineModule} = require 'art-standard-lib'
-{BaseClass} = require 'art-class-system'
+import &ArtStandardLib, &ArtClassSystem
 
-defineModule module, class NonMatch extends BaseClass
+class NonMatch extends BaseClass
   constructor: (@_node, @_patternElement) ->
 
-  @getter "node patternElement",
+  @getter
+    :node
+    :patternElement
     inspectedObjects: ->
       NonMatch:
         patternElement: @toString()

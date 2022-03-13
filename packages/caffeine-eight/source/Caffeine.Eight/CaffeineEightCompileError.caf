@@ -1,0 +1,5 @@
+import &ArtStandardLib
+
+class CaffeineEightCompileError extends ErrorWithInfo
+  constructor: (message, info) ->
+    super message, info, :CaffeineEightCompileError

@@ -1,0 +1,32 @@
+import &ArtStandardLib
+
+# In order to use CaffeineEight in the browser, we have to 'hide' any nodejs-specific requires.
+# Why? At build-time, webpack attempts to resolve all 'require' statements even if they will never be executed.
+# We just need to 'hide' these requires from webpack.
+realRequire = eval :require
+
+class Repl
+  @caffeineEightRepl: (parser, options) ->
+    parser = new parser if isClass parser
+
+    try realRequire :colors
+
+    if options?.load
+      log "" TODO: load, parse and evaluate these files: #{options.load.join ', '}
+
+    realRequire :repl
+    .start
+      prompt: "#{parser.getClassName()}> ".grey
+      eval: (command, context, filename, callback) ->
+        try
+          result = parsed = parser.parse command.trim()
+          try
+            log if undefined == result = parsed.evaluate?() then parsed else result
+            callback()
+
+          catch e
+            callback e
+
+        catch e
+          log parser.getParseFailureInfo(color: true, verbose: options.verbose).replace :<HERE>, "<HERE>".red
+          callback()

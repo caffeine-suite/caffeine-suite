@@ -1,24 +1,22 @@
-{BaseClass} = require 'art-class-system'
-{defineModule} = require 'art-standard-lib'
+import &ArtStandardLib, &ArtClassSystem
 
-defineModule module, class SourceLineColumnMap extends BaseClass
+class SourceLineColumnMap extends BaseClass
 
   constructor: (@_source)->
-
     count = 0
     @_lineOffsets = []
-    for line in @_source.split "\n"
+    each line in @_source.split "\n"
       @_lineOffsets.push count
       count += line.length + 1
-    null
 
-  @getter "source"
+  @getter :source
 
-  # IN: number of characters from the start of @_source (0-based)
-  #   into: {} - optionally provide an existing object to set 'line' and 'column' on to avoid creating objects
-  # OUT:  line: 0, column: 0
-  #   line and column are 0-based
-  getLineColumn: (offset, into) ->
+  ## getLineColumn
+    IN: number of characters from the start of @_source (0-based)
+      into: {} - optionally provide an existing object to set 'line' and 'column' on to avoid creating objects
+    OUT:  line: 0, column: 0
+      line and column are 0-based
+  getLineColumn: (offset, _into) ->
     lineOffsets = @_lineOffsets
     i = 0
     j = lineOffsets.length - 1
@@ -39,10 +37,11 @@ defineModule module, class SourceLineColumnMap extends BaseClass
           i = m
 
     column = offset - lineOffsets[line = i]
-    if into
-      into.column = column
-      into.line = line
-      into
+    if _into
+      _into.column = column
+      _into.line = line
+      _into
+
     else
       {column, line}
 

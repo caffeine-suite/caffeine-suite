@@ -3,8 +3,8 @@
   "file": "Eight.js",
   "sourceRoot": "../..",
   "sources": [
-    "source/Caffeine.Eight/Eight.coffee"
+    "source/Caffeine.Eight/Eight.caf"
   ],
   "names": [],
-  "mappings": ";AAAA;AAAA,MAAA;;EAAA,MAAiB,OAAA,CAAQ,kBAAR,CAAjB,EAAC,qBAAD,EAAU;;EACV,MAAM,CAAC,OAAP,GAAiB;IACf,OAAA,CAAQ,QAAR,CADe,EAEf,OAAA,CAAQ,OAAR,CAFe,EAGf;MAAA,OAAA,EAAS,CAAC,OAAA,CAAQ,oBAAR,CAAD,CAA8B,CAAC,OAAxC;KAHe;;AADjB"
+  "mappings": "AAAA;;AAAA,kCACE,mBACA"
 }

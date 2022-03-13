@@ -1,22 +1,25 @@
-{defineModule, max} = require 'art-standard-lib'
+import &ArtStandardLib
 
-defineModule module, class Lib
+class Lib
+
   @lastLines: lastLines = (string, count = 5) ->
     a = string.split "\n"
-    a.slice max(0, a.length - count), a.length
+    .slice
+      max 0, a.length - count
+      a.length
+
     .join "\n"
 
   @firstLines: firstLines = (string, count = 5) ->
     a = string.split "\n"
-    a.slice 0, count
+    a.slice 0 count
     .join "\n"
 
-  @presentSourceLocation: (source, index, options = {}) ->
-
-    {maxLines = 10, color, insertString = "<HERE>"} = options
+  @presentSourceLocation: (source, index, options) ->
+    options extract? maxLines = 10, color, insertString = :<HERE>
 
     if color
-      color = "red" if color == true
+      color = :red if color == true
       insertString = "#{insertString}"[color]
 
     sourceBefore  = source.slice 0, index
@@ -27,4 +30,4 @@ defineModule module, class Lib
       sourceBefore  = lastLines   sourceBefore, halfMaxLines
       sourceAfter   = firstLines  sourceAfter,  halfMaxLines
 
-    "#{sourceBefore}#{insertString}#{sourceAfter.replace /[\s\n]+$/, ''}"
+    "" #{sourceBefore}#{insertString}#{sourceAfter.replace /[\s\n]+$/, ''}

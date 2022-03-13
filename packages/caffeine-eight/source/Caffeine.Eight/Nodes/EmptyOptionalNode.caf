@@ -1,0 +1,2 @@
+class EmptyOptionalNode extends &EmptyNode
+  @getter present: -> false

@@ -3,8 +3,8 @@
   "file": "EmptyOptionalNode.js",
   "sourceRoot": "../../..",
   "sources": [
-    "source/Caffeine.Eight/Nodes/EmptyOptionalNode.coffee"
+    "source/Caffeine.Eight/Nodes/EmptyOptionalNode.caf"
   ],
   "names": [],
-  "mappings": ";AAAA;AAAA,MAAA,iBAAA;IAAA;;;EAAA,MAAM,CAAC,OAAP,GAAuB;;;;;;;IACrB,iBAAC,CAAA,MAAD,CAAQ;MAAA,OAAA,EAAS,SAAA;eAAG;MAAH,CAAT;KAAR;;;;KAD+C,OAAA,CAAQ,aAAR;AAAjD"
+  "mappings": "AAAA;;AAAA,yHAAgC,mFAC9B,aAAQ,qBAAY"
 }
