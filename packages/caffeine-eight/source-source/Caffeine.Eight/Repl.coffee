@@ -20,5 +20,5 @@ defineModule module, class Repl
           catch e
             callback e
         catch e
-          log parser.getParseFailureInfo(color: true).replace "<HERE>", "<HERE>".red
+          log parser.getParseFailureInfo(color: true, verbose: options.verbose).replace "<HERE>", "<HERE>".red
           callback()

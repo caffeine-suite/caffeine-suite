@@ -33,7 +33,8 @@
           } catch (error) {
             e = error;
             log(parser.getParseFailureInfo({
-              color: true
+              color: true,
+              verbose: options.verbose
             }).replace("<HERE>", "<HERE>".red));
             return callback();
           }
