@@ -36,6 +36,15 @@ Syntax Highlighting
 
 
 # To Sort
+
+
+# bad compile error
+```coffeescript
+(10).toFixed().length
+
+# (10).toFixed().length<HERE>
+```
+
 ```coffeescript
 # should be legal:
 {} foo,

@@ -4,6 +4,7 @@
   "dependencies": {
     "@art-suite/monorepo": "^1.6.1",
     "@art-suite/source-root-finder": "^1.0.7",
+    "@art-suite/standard-package-builder": "*",
     "@caffeine-suite/caffeine-module-resolver": "file:packages/@caffeine-suite/caffeine-module-resolver",
     "art-binary": "^1.1.13",
     "art-build-configurator": "^1.29.2",

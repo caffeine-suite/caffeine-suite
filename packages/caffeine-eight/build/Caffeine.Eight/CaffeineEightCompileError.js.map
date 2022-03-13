@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "CaffeineEightCompileError.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source/Caffeine.Eight/CaffeineEightCompileError.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,yGAAA;IAAA;;;EAAA,MAA8E,OAAA,CAAQ,kBAAR,CAA9E,EAAC,+BAAD,EAAe,aAAf,EAAoB,yBAApB,EAA+B,2BAA/B,EAA2C,uCAA3C,EAA6D;;EAE7D,YAAA,CAAa,MAAb,EAA2B;;;IACZ,mCAAC,OAAD,EAAU,IAAV;MACX,2DAAM,OAAN,EAAe,IAAf,EAAqB,2BAArB;IADW;;;;KAD8C,cAA7D;AAFA"
+}

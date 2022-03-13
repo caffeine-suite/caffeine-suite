@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "EmptyNode.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source/Caffeine.Eight/Nodes/EmptyNode.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,SAAA;IAAA;;;EAAA,MAAM,CAAC,OAAP,GAAuB;;;;;;;IACrB,SAAC,CAAA,MAAD,CAAQ;MAAA,OAAA,EAAS,SAAA;eAAG;MAAH,CAAT;KAAR;;;;KADuC,OAAA,CAAQ,QAAR;AAAzC"
+}

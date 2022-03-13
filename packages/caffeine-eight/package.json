@@ -8,6 +8,7 @@
   },
   "description": "a 'runtime' parsing expression grammar parser",
   "devDependencies": {
+    "@art-suite/standard-package-builder": "*",
     "art-build-configurator": "^1.29.2",
     "art-testbench": "^3.2.2",
     "chai": "^4.2.0",
@@ -17,11 +18,15 @@
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {
     "collectCoverageFrom": [
-      "source/**/*.js",
-      "!source/Jest/**/*.js",
-      "!source/test/**/*.js"
+      "build/**/*.js",
+      "!build/test/**/*.js"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/test"
+    ],
+    "verbose": true
   },
   "license": "ISC",
   "name": "caffeine-eight",
@@ -30,18 +35,22 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "coffee --output source --compile source-source &\ncaf -p -c source-source -o source &\nwait\nnn -s",
-    "build-clean": "npm run clean; npm run build",
-    "clean": "rm -rf source/*",
-    "test": "jest",
+    "build": "cd source\nfind . -name '*.js' -o -name '*.css' | cpio -vpdm ../build\ncd ..\ncoffee -m --output build --compile source &\nCOFFEE_PID=$!\ncaf -m -c source -o build --require coffee-script/register&\nCAF_PID=$!\nwait $COFFEE_PID || exit 1\nwait $CAF_PID || exit 1\nnpm run nn",
+    "build-clean": "# BUILD CLEAN START\n#   - building into: build-temp\n#\nrm -rf ./__build-old__\ncd source\nfind . -name '*.js' -o -name '*.css' | cpio -vpdm ../build-temp\ncd ..\ncoffee -m --output build-temp --compile source &\nCOFFEE_PID=$!\ncaf -m -c source -o build-temp --require coffee-script/register&\nCAF_PID=$!\nwait $COFFEE_PID || exit 1\nwait $CAF_PID || exit 1\nnpm run nn\n\nnn build-temp/*\n\n# BUILD CLEAN FINIALIZING\n#  - replace old build in:   build\n#  - with new build from:    build-temp\n#\nmv build __build-old__\nmv build-temp build\nrm -rf ./__build-old__",
+    "clean": "rm -rf build/*",
+    "nn": "nn build/* ",
+    "test": "npm run nn\njest",
     "watch": "npm-watch"
   },
   "version": "2.6.5",
   "watch": {
     "build": {
-      "extensions": "caf coffee",
+      "extensions": [
+        "caf",
+        "coffee"
+      ],
       "patterns": [
-        "source-source"
+        "source"
       ],
       "quiet": false
     }
