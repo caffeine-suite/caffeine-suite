@@ -1,0 +1,111 @@
+import &ArtStandardLib
+
+isNumber = eval "" a => typeof a === 'number'
+
+ops =
+  "-": (a, b) -> if isNumber(a) && isNumber(b) then a - b
+  "+": (a, b) -> if isNumber(a) && isNumber(b) then a + b
+  "*": (a, b) -> if isNumber(a) && isNumber(b) then a * b
+  "/": (a, b) -> if isNumber(a) && isNumber(b) then a / b
+
+exampleContext =
+  resolveValue: (valueName) -> if valueName == :PI then Math.PI else throw new Error "unknown value name '#{valueName}'"
+  resolveFunction: (functionName) -> (args...) ->
+    if functionName == :sum
+      reduce a, b from args inject 0 with a + b
+    else
+      throw new Error "unknown function name '#{functionName}'"
+
+resolveInfixBinaryOpsSequence = (values, operands) ->
+  valueStackSize = 1
+  operandStackSize = 0
+
+  # evaluate '*' and '/' first, left to right
+  each operand, readIndex from operands
+    if operand == "-" || operand == "+"
+      operands[operandStackSize++] = operands[readIndex]
+      values[valueStackSize++] = values[readIndex + 1]
+
+    else
+      values[valueStackSize - 1] = ops[operands[readIndex]]
+        values[valueStackSize - 1]
+        values[readIndex + 1]
+
+  # evaluate '+' and '-' second, left to right
+  result = values[0]
+  each opIndex til operandStackSize
+    result = ops[operands[opIndex]] result, values[opIndex + 1]
+
+  result
+
+class CalcParser extends &CaffeineEight.Parser
+
+  @rule
+    root:
+      :expression
+
+      # provide a custom context with resolveValue and resolveFunction
+      evaluate: (context = exampleContext) -> @expression.evaluate context
+
+    expression:
+      :binaryOp :nonBinOpExpr
+      evaluate: (context) -> @matches[0].evaluate context
+
+    binaryOp:
+      "" nonBinOpExpr binOpExtension+
+      evaluate: (context) ->
+        resolveInfixBinaryOpsSequence
+          array {nonBinOpExpr} from @binOpExtensions with nonBinOpExpr.evaluate context into [] @nonBinOpExpr.evaluate context
+          array {op} from @binOpExtensions with op.text
+
+    binOpExtension:
+      "" _? op:/[-+*\\/]/ _? nonBinOpExpr
+
+    nonBinOpExpr:
+      :parenthetical :function :number :variable
+      evaluate: (context) -> @matches[0].evaluate context
+
+    function:
+      "" identifier '(' _? arguments? _? ')'
+      evaluateArguments: (context) ->
+        array match in @arguments.getArguments()
+          match.evaluate context
+
+      evaluate: (context) ->
+        context.resolveFunction(@identifier.text) @evaluateArguments(context)...
+
+    arguments:
+      "" expression argumentExtension*
+      getArguments: -> array match in @matches when match.evaluate
+
+    argumentExtension:
+      "" _? ',' _? expression
+      evaluate: (context) -> @expression.evaluate context
+
+    parenthetical:
+      "" '(' _? expression _? ')'
+      evaluate: (context) -> @expression.evaluate context
+
+    variable:
+      :identifier
+      evaluate: (context) -> context.resolveValue @text
+
+    identifier:
+      ///
+        (?!\d)
+        ( (?!\s) [$\w\u007f-\uffff] )+
+
+    number:
+      ///i
+        # decimal number
+        [-+]?
+        [0-9]*
+        \.?
+        [0-9]+
+        ([eE][-+]?[0-9]+)?
+
+      evaluate: (context) -> eval @text
+
+    _: /\s+/
+
+.repl verbose: true
