@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "art-binary": "^1.1.13",
-    "art-class-system": "^1.11.12",
+    "art-class-system": "^1.11.16",
     "art-object-tree-factory": "^2.2.7",
-    "art-standard-lib": "^1.70.3",
+    "art-standard-lib": "^1.71.3",
     "caffeine-eight": "^2.6.5",
     "caffeine-mc": "^3.4.0",
     "caffeine-script-runtime": "^1.14.0",

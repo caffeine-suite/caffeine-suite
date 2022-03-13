@@ -2,8 +2,8 @@
   "author": "Shane Brinkman-Davis Delamore",
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "art-class-system": "^1.11.12",
-    "art-standard-lib": "^1.70.3",
+    "art-class-system": "^1.11.16",
+    "art-standard-lib": "^1.71.3",
     "neptune-namespaces-runtime": "^3.2.8"
   },
   "description": "a 'runtime' parsing expression grammar parser",
