@@ -40,7 +40,8 @@
       }
     ]
   },
-  "dependencies": {
+  "devDependencies": {
+    "vsce": "^2.9.1",
     "npm-watch": "^0.11.0"
   },
   "description": "Syntax highlighting support for CaffeineScript.",
