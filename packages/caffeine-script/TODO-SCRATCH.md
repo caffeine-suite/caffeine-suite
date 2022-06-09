@@ -2,43 +2,59 @@
 
 I'm reaching the point of limited gains with reducing syntax. There are still a few big things left:
 
-* Dot (.) back-refs will be huge
-* Inline Types will be huge for Art.Nano.*
-* `await`
+- Dot (.) back-refs will be huge
+- Inline Types will be huge for Art.Nano.\*
+- `await`
 
 Streamlining development is going to be my next focus:
 
-* Make webpack compile errors clearer
-* Try write-back mode for CaffeineMc for compile errors
-* Start a campaign to really make good compile-errors (and fix the totally broken ones)
-* Get help with source-maps. Why are mine ignore almost everywhere? But sometimes not?
+- Make webpack compile errors clearer
+- Try write-back mode for CaffeineMc for compile errors
+- Start a campaign to really make good compile-errors (and fix the totally broken ones)
+- Get help with source-maps. Why are mine ignore almost everywhere? But sometimes not?
 
 Help with CoffeeScript conversion:
 
-* Allow `for`, but log a DEPRECATION
-* Can we make my old-style "array fromArray, (v, k) ->" lib a compile error? Right now they compile into something really broken.
-* Allow `{\n\tblah\n}` both for structuring and destructuring.
+- Allow `for`, but log a DEPRECATION
+- Can we make my old-style "array fromArray, (v, k) ->" lib a compile error? Right now they compile into something really broken.
+- Allow `{\n\tblah\n}` both for structuring and destructuring.
 
 Syntax Highlighting
 
-* support the other syntax-highlighting file-type that everyone else uses
-* support starting blocks with """ at the end of a line instead of only at the start
-* support #{} block syntax highlighting
-
-
-
-
-
-
-
-
-
-
+- support the other syntax-highlighting file-type that everyone else uses
+- support starting blocks with """ at the end of a line instead of only at the start
+- support #{} block syntax highlighting
 
 # To Sort
 
+# should find return null or undefined?
+
+```coffeescript
+find i til 9 with false
+# currently returns null
+# I think it should return undefined - same as:
+if false
+  blah blah
+```
+
+# invalid scoping
+
+```coffeescript
+while neq data, newData = fastPass data
+  data = newData
+
+###
+# incorrectly generates:
+Caf = global.Caf || require("caffeine-script-runtime");
+while (neq(data, (newData = fastPass(data)))) {
+  let newData, data;
+  data = newData;
+}
+###
+```
 
 # bad compile error
+
 ```coffeescript
 (10).toFixed().length
 
@@ -51,203 +67,301 @@ Syntax Highlighting
   bar: 132
 # {foo: foo, bar: 123}
 ```
+
 # this used to work:
+
 this "foo"->
+
 # now it must be this:
+
 this "foo" ->
+
 ```
 
 ```
+
 long = 123
+
 # long is a reserved word; the compile error should make that abundantly clear
+
 ```
 
 ```
+
 # This should probably be a parse error:
+
 up
-  1, 2,
-  + 10
+1, 2,
+
+- 10
+
 # parses to: up([1, 2] + 10)
 
 # should this be a parse error? (gut, no)
+
 up
-  1, 2
-  + 10
+1, 2
+
+- 10
+
 ```
 
 Feature: allow all numeric constants in object structuring:
 ```
+
 # new feature; currently a compile error
+
 {} 0 1
+
 # should equal:
+
 {0: 0, 1: 1}
+
 ```
 
 ```
+
 # this should work
+
 # I don't think "in" accepts an array following...
+
 :from in :from :to # true
-:to in :from :to   # true
-:bam in :from :to  # false
+:to in :from :to # true
+:bam in :from :to # false
 
 ```
 
 ```
+
 foo = null
 foo? 123
+
 # it should be the same as coffeescript: undefined
+
 # instead, we currently return false
+
 ```
 
 ```
+
 # javascript & coffeescript allow '[/]' as an alternative to '\/'; caffeine-script should too:
+
 /^dpass[/][0-9]{4,}[/][0-9]{5,}[/]/
+
 ```
 
 ```
+
 # bad JS generated
+
 d = find a in-array b
-  find c in-array a
+find c in-array a
+
 # Uncaught ReferenceError: temp1 is not defined
+
 ```
 
 ```
+
 # internal error
+
 reduce lastChainedTest, name, i in sequence inject @ by 2
-  lastChainedTest[applyMemberName] name, sequence[i + 1]
+lastChainedTest[applyMemberName] name, sequence[i + 1]
 
 ```
+
 ```
+
 # syntax error
+
 .gitignore: 123
 
 # but this is OK:
+
 foo: 123
 .gitignore: 123
 
 ```
 
 ```
+
 # The & operator should require space after to reduce confusion with:
+
 import &ArtStandardLib, &@fs
+
 ```
 
 ```
+
 # INTERNAL ERROR COMPILING
-fac = (a) -> reduce t, v from 1 to a by 1 inject 1 with t * v
+
+fac = (a) -> reduce t, v from 1 to a by 1 inject 1 with t \* v
+
 ```
 
 WRONG SEMANTICS
 ```
+
 foo = []
-  :bar :baz
+:bar :baz
+
 # should be
+
 foo = [["bar", "baz"]]
+
 # Why? Because adding a second item, when using [] explicitly,
+
 # shouldn't change the object structure:
+
 foo = []
-  :bar :baz
-  :boo :bob
+:bar :baz
+:boo :bob
+
 # correctly outputs:
+
 foo = [["bar", "baz"], ["boo", "bob"]]
+
 ```
 
 WRONG CODEGEN!!!
 ```
+
 (->).foo
 
 # Generates:
+
 function() {}.foo;
 
 # Should Generate:
+
 (function() {}).foo;
+
 ```
 
 WRONG PRECEDENCE!!!:
 ```
+
 length <= wordWrapLength ? 120
+
 # should be the same as
+
 length <= (wordWrapLength ? 120)
+
 ```
 
 ```
+
 double = 123 # wrongly gets matched as "do"
+
 ```
 
 If a file is not in a package, it should still be loadable with the require('caffeine-script/register')
 ```
+
 > require("/Users/shanebdavis/.git-genui.prefs")
-Error: no sourceRoot
+> Error: no sourceRoot
+
     at module.exports.SourceRoots.getCaffeineInitSync (./node_modules/caffeine-mc/build/index.js:932:13)
     at Function.module.exports.FileCompiler.compileFileSync (./node_modules/caffeine-mc/build/index.js:1518:20)
     at Object.<computed>.base.<computed> [as .caf] (./node_modules/caffeine-mc/build/index.js:1817:31)
     at Module.load (./node_modules/coffee-script/lib/coffee-script/register.js:45:36)
     at Function.Module._load (internal/modules/cjs/loader.js:723:14)
     at Module.require (internal/modules/cjs/loader.js:848:19)
+
 ```
 
 ```
+
 # parse-with-one-less-subblock doesn't work here:
+
 # Caf:
+
 find node in nextNodes when node.type == nextNodeType &&
-  @_sequenceExistsInDag node
+@\_sequenceExistsInDag node
 
 # parsed:
+
 Caf.find(nextNodes, null, node => node.type === nextNodeType) &&
-  this._sequenceExistsInDag(node);
+this.\_sequenceExistsInDag(node);
 
 # should be:
+
 Caf.find(
-  nextNodes,
-  null,
-  node => node.type === nextNodeType && this._sequenceExistsInDag(node)
+nextNodes,
+null,
+node => node.type === nextNodeType && this.\_sequenceExistsInDag(node)
 )
 
 # clearly "&&" is expecting a block to follow, but
+
 # that possibility has been precluded.
+
 # The tricky part is if you remove "&&", then
+
 # we need the one-less-block requirement otherwise
+
 # nextNodeType will be invoked as a function.
+
 # Really what we want is to supress implicit function invocations
+
 # (if we don't already have a with-block) unless there are 2 or more
+
 # sub-blocks.
+
 # BUT, we want to allow other explicit-expects-sub-blocks
+
 ```
+
 ```
+
 #` should be a comment
 :&nbsp;•&nbsp; should be a word-string
+
 ```
 
 ```
+
 # badjs: doesn't properly declare "temp" var
+
 array a in-array b with array c in-array a
+
 ```
 
 ```
+
 # this should not not need the trailing 'null'
+
 # to return directly from the explicit return-statement
+
 # It doesn't right now because the outer-most each gets
+
 # wrapped in a "do" block.
+
 ->
-  @ extract nodesByMergePriority
-  each candidateList in-array nodesByMergePriority
-    each i til candidateList.length - 1 by 1
-      each j from i + 1 til candidateList.length by 1
-        n1 = candidateList[i]
-        n2 = candidateList[j]
-        if @nodesAreMergable n1, n2
-          return @withMergedNodes n1, n2
-  null # should not be needed
+@ extract nodesByMergePriority
+each candidateList in-array nodesByMergePriority
+each i til candidateList.length - 1 by 1
+each j from i + 1 til candidateList.length by 1
+n1 = candidateList[i]
+n2 = candidateList[j]
+if @nodesAreMergable n1, n2
+return @withMergedNodes n1, n2
+null # should not be needed
+
 ```
 
 ```
+
 # empty while should be OK
+
 i = 10
 while i--
+
 ```
 # this should probably work, but since it's not an actual NPM; it's built in, it doesn't
 &child_process
 ```
+
 ```
 # BREAKING CHANGE IDEA: simplify reduce - always
 # use the following format regardless of container-size
@@ -293,7 +407,6 @@ reduce sum = 0, value from container with sum + value
 
 Honestly, I'm ok with that inconsistency! Reduce's first parameter is special anyway. So what if it only initializes once while value and key would initialize every time? Actually, only value makes sense to have defaults. Key is always a string.
 
-
 ```
 # compile error
 object i til turingStore.length by 10
@@ -309,7 +422,9 @@ Neptune.PackageNamespace subclassof Neptune.Namespace
 # equals:
 Neptune.PackageNamespace.prototype instanceof Neptune.Namespace
 ```
+
 ---
+
 Change how we handle `__filename` - I just figured out how NODE.js does it! When you require code, it is evaluated within this function. Therefor, those 5 values should all be considered 'global' and should all be handled the same way. I think the first 3 are, but we need to add `__filename` and `__dirname`.
 
 ```javascript
@@ -317,12 +432,14 @@ Change how we handle `__filename` - I just figured out how NODE.js does it! When
   // ...
 }
 ```
+
 ---
 
 ```coffeescript
 # bad JS
 haveColor = find color in-object @colors when color
 ```
+
 ```coffeescript
 # defaultState isn't defined? What?!?!
 import Foo
@@ -437,6 +554,7 @@ array foo in bar when-not foo in baz
 a not in b
 
 ```
+
 ```coffeescript
 # can we fix this easy? I think so:
 
@@ -571,6 +689,7 @@ We could also be lazier and just add 'out = into' to the end, and otherwise trea
 
 ###
 ```
+
 ```
 # naming the key in from-object doesn't work
 each v, k4 from-object source
@@ -651,6 +770,7 @@ a = (1;2;3)
 "" invited you to join #{} getTopicTitle @topic.
 # however, it becomes: "invited you to join getTopicTitle @topic."
 ```
+
 ```
 # doesn't properly let the temp var
 
@@ -660,12 +780,14 @@ while inverseBlocks.pop() extract? text
 while a extract? b
 
 ```
+
 ```
 find {}
 # should probably return undefined...
 # Why? well, we'd like to distinguish between finding and not finding:
 find a in b when a == null
 ```
+
 ```
 # IDEA: this:
 if find v, k in record when allowedFields[k]
@@ -708,128 +830,183 @@ object-if-found records with allowedFields[..] # .. == second param which is the
 
 # I kinda like it since it's more declarative-feeling vs imparative.
 ```
+
 # SHOULD COMPILE
+
 if !response.isRootRequest ||
-    response.requestProps.prefetch == false ||
-    response.requestProps.include == false || # DEPRICATED
-    response.type == :delete
+response.requestProps.prefetch == false ||
+response.requestProps.include == false || # DEPRICATED
+response.type == :delete
 
-  response
+response
+
 ```
 
 ```
+
 # IDEA:
+
 b = {} = a
+
 # could be:
+
 b = object a
+
 # OK, so not a big savings there, but what I want is this:
 
 {}
-  {} = a
-  foo: bar
-  # ...
+{} = a
+foo: bar
+
+# ...
 
 # The ability to merge "a" into the new object we are also
+
 # merging other things into.
+
 # Example 2:
 
 {}
-  {} = a
-  {} = b
+{} = a
+{} = b
+
 # i.e.: merge a, b
+
 # OR equiv:
+
 {}
-  object a
-  object b
+object a
+object b
 
 # None look terribly "obvious" to me, but they are useful,
+
 # and currently illegal...
+
 # REALWORLD EXAMPLE: Art.Ery/Ery.caf
 
 []
-  &Filters
-  {}
-    config
-    pipelines
-    &Session.session
-    # ...
+&Filters
+{}
+config
+pipelines
+&Session.session # ...
 
 # could be:
+
 {}
-  {} = &Filters
-  config
-  pipelines
-  &Session.session
+{} = &Filters
+config
+pipelines
+&Session.session
 
 # I like "{} = foo" best, it's consistent with what I know-i-want:
+
 {}
-  {a, b} = foo
-  c: 123
+{a, b} = foo
+c: 123
+
 # IE:
+
 a: foo.a
 b: foo.b
 c: 123
+
 ```
 
 ```
+
 # ANOTHER COOL IDEA:
+
 c = {-a} = b
+
 # equals
+
 c = object v, k in b when k != :a
 
 AND, how about this one:
-c = {/^a.*/} = b
+c = {/^a.\*/} = b
+
 # equals
-c = object v, k in b when /^a.*/.test k
+
+c = object v, k in b when /^a.\*/.test k
 
 # mix-and-match: (?)
+
 c = {/^a/, -a} = b
+
 # since that could just be this, maybe we only allow one regexp:
+
 c = {/^a.+/} = b
+
 # in fact, I almost think {/ /} is a special thing, since you
+
 # can express any possible selector that way, adding special logic
+
 # w.r.t. how separate selectors combine (is it AND or is it OR?)
+
 # is just messy.
 
 # NOTE, I have no idea what this means:
+
 {/^a/i} = b # This has no side-effects and if the return is ignored...
+
 # Probably: cpu burner
+
 # Could be ILLEGAL, but I like to minimize what's ILLEGAL.
 
 ############################
+
 # Another, realworld example:
+
 # THIS
+
 # 7 tokens
+
 merge
-  objectWithout responseProps, :dataUpdates
-  {} data
+objectWithout responseProps, :dataUpdates
+{} data
+
 # OR, only creates 1 obj, 12 tokens
+
 out = objectWithout responseProps, :dataUpdates
 out.data = data
 out
 
 # COULD BE THIS:
+
 # NOTE: this would only create 1 object instead of 3!
+
 # 8 tokens
+
 {}
-  {-dataUpdates} = responseProps
-  data
+{-dataUpdates} = responseProps
+data
 
 # Here is another, current option, that only creates 1 object:
+
 # 18 tokens
+
 object v, k in responseProps into {} data when k != :dataUpdates && k != :data
+
 ```
 
 
 ```
+
 # Should this be legal?
+
 1 /2
+
 # right now you have two spacing options:
+
 1 / 2
 1/2
+
 # I just made it illegal when I fixed this:
+
 # "1 -2" == "[1, -2]" and "a 1 -2" == "a(1, -2)"
-```
+
+````
 
 
 
@@ -860,7 +1037,7 @@ object v, k in responseProps into {} data when k != :dataUpdates && k != :data
   bar extract foo, fun
 # should be: {baz: baz, fun: bar.fun}
 # also sets: foo and fun as expected
-```
+````
 
 ```coffeescript
 # TODO: - word-string-interpolation:
@@ -897,13 +1074,14 @@ o = a extract?
 # o, b, and d should == (if c? then c.d else :noD) when !a?
 ```
 
------
+---
 
 ```coffeescript
 # let's do this soon:
 {@foo} = bar
 bar extract @foo
 ```
+
 ---
 
 ```coffeescript
@@ -925,7 +1103,9 @@ bar extract @foo
 # in-array should work
 array a in-array b
 ```
+
 ---
+
 ```coffeescript
   {
     a
@@ -951,28 +1131,6 @@ array a in-array b
 
 `break` & `return` for comprehensions
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Comment Todo
 
 The real solution looks like this: Every block sub-parsed, other than literals
@@ -987,46 +1145,12 @@ the base of the sub-block. I -think- that'll solve it.
   foo
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Generates invalid javascript:
-
 
 ```coffeescript
 # compiler ERROR
 chapterPost?.postsInChapter++
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # SHOULD COMPILE
 
@@ -1044,31 +1168,10 @@ chapterPost?.postsInChapter++
 
 ---
 
-
 ```coffeescript
 # compile ERROR
 each from a til 3
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # SHOULD NOT COMPILE
 
@@ -1091,38 +1194,12 @@ I think we need "match-block-or-no-block" to solve this.
 NOTE: It isn't just dot-line-starts. This also fails fore operator-line-starts.
 
 ---
+
 ```coffeescript
 App extends FluxComponent
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # WRONG COMPILE
-
 
 ```coffeescript
 ###
@@ -1135,12 +1212,10 @@ App extends FluxComponent
 # Should generate: require('./.DotSubdir')
 ```
 
-
 ```coffeescript
 # bad regexp detect
 rect a.left, a.top, a.w/2, a.h/2
 ```
-
 
 ```coffeescript
 array a in things when a &&
@@ -1152,6 +1227,7 @@ array a in things when a &&
 # > array a in things when a && true
 
 ```
+
 ---
 
 I think the following code is solvable if we make the "comma-then-block-extends-list" an optional comma. I -think- it'll work.
@@ -1174,7 +1250,6 @@ a :string, b
 # should be:
 (a || b)(c);
 ```
-
 
 ```coffeescript
 # Shouldn't this:
@@ -1200,6 +1275,7 @@ object v, k with-key lowerCamelCase k.replace /^posterText/, '' in a: 1 b: 2
 object v, k in a: 1 b: 2 with-key lowerCamelCase k.replace /^posterText/, ''
 
 ```
+
 ---
 
 ```coffeescript
@@ -1220,7 +1296,6 @@ foo = foo1.foo
 bar = foo1.bar
 ```
 
-
 ---
 
 ```coffeescript
@@ -1234,9 +1309,8 @@ if i == cats.length - 1 then Promise.then -> action event, props else {}
 if a then -> c else d
 ```
 
-
-
 ---
+
 ```coffeescript
 array item in list.sort (a, b) -> b - a when item
 
@@ -1254,24 +1328,7 @@ Probably same problem as above:
 array item in -> a when item
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Improved Parse Errors
-
 
 ```
 # TODO: "UnaryOperator not allowed when structuring an object" should reveal a line-number:
@@ -1289,20 +1346,6 @@ Error: UnaryOperator not allowed when structuring an object. Legal examples: foo
 "before#{&&&}after"
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Should Be Legal
 
 ```coffeescript
@@ -1311,17 +1354,6 @@ A
 +
   B
 ```
-
-
-
-
-
-
-
-
-
-
-
 
 # Ideas
 
@@ -1344,23 +1376,6 @@ if
 # hanging prepositions feel bad :)
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Major Plans
 
@@ -1398,7 +1413,6 @@ each .b from c
 ```
 
 ### Improve While Scoping
-
 
 ```coffeescript
 # This SHOULD 'let p' in the while-test, not in the body, assuming
@@ -1465,10 +1479,7 @@ if foo
 else foo
 ```
 
-
-
 # Quandaries
-
 
 ```coffeescript
 # If Foo has its own Function object, global.Function will NOT
@@ -1490,7 +1501,6 @@ PostDate {}
 
 ```
 
-
 ```coffeescript
 # We should support this:
 a extract
@@ -1507,7 +1517,6 @@ c = b?.foo
 c extract? d
 ```
 
-
 ```coffeescript
 # hmm, ES6 is so dumb
 assert.eq
@@ -1518,7 +1527,6 @@ assert.eq
 # as it should be. Adding defaults should not change the external API! WTF?!?
 # This is a problem for my fastBind function which needs to know the number of args a function has
 ```
-
 
 ```
 class Foo
