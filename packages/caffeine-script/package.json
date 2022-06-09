@@ -29,8 +29,12 @@
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {
     "collectCoverageFrom": [
-      "source/**/*.js",
+      "./source/**/*.js",
       "!source/_?[Jjt]est/**/*.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/source-stable/"
     ],
     "testEnvironment": "node"
   },

@@ -13,3 +13,11 @@ import &ArtStandardLib, &ArtTestbench, &CaffeineScript
         assert.eq
           evalCaf k
           v
+
+  knownFailingEvalCafSuite = (list...) ->
+    each k, i in-array list = compactFlatten list by 2
+      v = list[i + 1]
+      skipKnownFailingTest "#{k} => #{v}" ->
+        assert.eq
+          evalCaf k
+          v

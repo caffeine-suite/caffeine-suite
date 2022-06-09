@@ -1,13 +1,11 @@
-import &ArtStandardLib, &ArtTestbench
+import &ArtStandardLib, &ArtTestbench, &TestHelpers
 
 &CaffeineScript
 
 describe
   basics: ->
-    test "big error" ->
-      assert.eq 1, 2
-    # evalCafSuite
-    #   """
-    #     5
-    #     3 + .
-    #   8
+    knownFailingEvalCafSuite
+      """
+        5
+        3 + .
+      8
