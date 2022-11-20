@@ -172,6 +172,18 @@ lastChainedTest[applyMemberName] name, sequence[i + 1]
 
 ```
 
+# smart-require error
+
+`npm install jszip`
+
+```caffeinescript
+&JSZip
+
+# compiles to:
+require("JSZip")
+# on mac; I think it's the case-insensitive FS)
+```
+
 # syntax error
 
 .gitignore: 123
@@ -471,21 +483,6 @@ temp = a: a, b: 2
 object v, k in foo with v * 2 into temp
 temp
 
-```
-
-```coffeescript
-# new feature: stop comprehension when
-# motivation: another way to avoid using "break"
-
-array v from 1 10 100 until v == 10
-# v = [] 1
-
-array v from 1 10 100 unto v == 10
-# v = [] 1, 10
-
-# Note this uses the same semantics as "til" and "to":
-#  "til v"  - stop BEFORE v
-#  "to v"   - stop AFTER v
 ```
 
 ```coffeescript
@@ -1532,4 +1529,23 @@ assert.eq
 class Foo
   b = []
   constructor: (a = b) ->
+```
+
+# Comprehensions
+
+- new feature: new feature "anti-with" block that runs when the `when` block is false; return-value ignored? Example use: if 'when' is false, it may be an exception you'd like to log
+
+```coffeescript
+# new feature: stop comprehension when
+# motivation: another way to avoid using "break"
+
+array v from 1 10 100 until v == 10
+# v = [] 1
+
+array v from 1 10 100 unto v == 10
+# v = [] 1, 10
+
+# Note this uses the same semantics as "til" and "to":
+#  "til v"  - stop BEFORE v
+#  "to v"   - stop AFTER v
 ```
