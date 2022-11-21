@@ -4,6 +4,7 @@
   "dependencies": {
     "art-class-system": "^1.11.16",
     "art-standard-lib": "^1.71.3",
+    "colors": "^1.1.2",
     "neptune-namespaces-runtime": "^3.2.8"
   },
   "description": "a 'runtime' parsing expression grammar parser",
@@ -42,7 +43,7 @@
     "test": "npm run nn\njest",
     "watch": "npm-watch"
   },
-  "version": "2.6.7",
+  "version": "2.6.9",
   "watch": {
     "build": {
       "extensions": [
