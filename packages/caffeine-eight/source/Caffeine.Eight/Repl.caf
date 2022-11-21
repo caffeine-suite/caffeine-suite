@@ -22,7 +22,12 @@ class Repl
         try
           result = parsed = parser.parse command.trim()
           try
-            log if undefined == result = parsed.evaluate?() then parsed else result
+            log
+              if parsed.evaluate is Function
+                log parsed.evaluate()
+
+              else parsed
+
             callback()
 
           catch e
