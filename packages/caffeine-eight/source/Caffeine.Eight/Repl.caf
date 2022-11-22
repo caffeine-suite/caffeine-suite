@@ -22,12 +22,7 @@ class Repl
         try
           result = parsed = parser.parse command.trim()
           try
-            log
-              if parsed.evaluate is Function
-                log parsed.evaluate()
-
-              else parsed
-
+            log if parsed.evaluate is Function then parsed.evaluate() else parsed
             callback()
 
           catch e
