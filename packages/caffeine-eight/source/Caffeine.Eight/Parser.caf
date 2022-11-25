@@ -1,0 +1,117 @@
+import &ArtStandardLib, {} &Rule
+
+normalizeVariantDefinitions = (variantDefinitions, nodeBaseClass) ->
+  variantDefinitions = [variantDefinitions] unless isPlainArray variantDefinitions
+
+  if variantDefinitions.length > 1 &&
+      isPlainObject(last = peek variantDefinitions) &&
+        !(last.pattern ? last.parse)
+
+    commonNodeProps = peek variantDefinitions
+    variantDefinitions = arrayWithoutLast variantDefinitions
+
+  else
+    commonNodeProps = {}
+
+  commonNodeProps.nodeBaseClass ||= nodeBaseClass
+
+  out = []
+  each definition in compactFlatten variantDefinitions
+    unless isPlainObject definition
+      definition = pattern: definition
+
+    if isPlainArray patterns = definition.pattern
+      each pattern in patterns
+        out.push merge commonNodeProps, definition, {pattern}
+    else
+      out.push merge commonNodeProps, definition
+  out
+
+
+class Parser extends &ParserCoffee
+
+  @classGetter
+    rootRuleName: -> @_rootRuleName || "root"
+    rootRule: -> @getRules()[@_rootRuleName]
+
+  @extendableProperty
+    rules: {}
+    {}
+      # TODO: elliminate the need for 'noSetter'
+      noSetter: true
+      extend: (extendableRules, newRules) ->
+        object newRule from newRules into extendableRules
+          newRule.clone()
+
+  ### @rule
+    IN:
+      rules: plain object mapping rule-names to variantDefinitions
+      nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
+  @rule: rulesFunction = (args...)->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_addRule ruleName, definition
+
+  @rules: rulesFunction
+
+  @replaceRule: (args...)->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_replaceRule @_newRule(ruleName), ruleName, definition, true
+
+  @priorityRule: (args...) ->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_addRule ruleName, definition, true
+
+  rule: instanceRulesFunction = ~> throw new Error "DEPRICATED: instance.rule(s) is not suppoerted; use class.rule(s) instead"
+
+  ## Fetch or add ruleName to @rules, but be sure to clone
+  ## the existing rule if we are a parser sub-class
+  @_extendRule: (ruleName) ->
+    if rule = @extendRules()[ruleName]
+      if rule.definedInClass != @
+        rule.clone()
+      else rule
+    else
+      @_newRule ruleName
+
+  @_newRule: (ruleName) -> new Rule ruleName, @
+
+  @_addRule: (ruleName, variantDefinitions, addPriorityVariants) ->
+
+    if variantDefinitions.root
+      throw new Error "root rule already defined! was: #{@_rootRuleName}, wanted: #{ruleName}" if @_rootRuleName
+      unless ruleName == "root"
+        log.warn "DEPRICATED: root rule should always be called 'root' now"
+
+      @_rootRuleName = ruleName
+
+    @_replaceRule @_extendRule(ruleName), ruleName, variantDefinitions, addPriorityVariants
+
+  ### _replaceRule
+    IN:
+      rule: <Rule>
+      ruleName: <String>
+      variantDefinitions: <Array<Object:definition>>
+
+    definition:
+      pattern: <String|RegExp>
+      ... additional props are added to the Rule's Node class
+  @_replaceRule: (rule, ruleName, variantDefinitions, addPriorityVariants) ->
+    @extendRules()[ruleName] = rule
+
+    each definition in variantDefinitions
+      rule.addVariant definition, addPriorityVariants
+
+  @_normalizeRuleDefinition: (a, b) ->
+    if isClass a
+      nodeBaseClass = a
+      _rules = b
+    else
+      _rules = a
+      nodeBaseClass = b
+
+    if isPlainObject nodeBaseClass
+      nodeBaseClass = @getNodeBaseClass().createSubclass nodeBaseClass
+    else nodeBaseClass ?= @getNodeBaseClass()
+
+    object definition, ruleName in _rules
+      normalizeVariantDefinitions definition, nodeBaseClass

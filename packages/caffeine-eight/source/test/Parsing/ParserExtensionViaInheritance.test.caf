@@ -25,18 +25,6 @@ describe
       assert.throws -> myParser1.parse "bar"
       assert.true   !!myParser2.parse "bar"
 
-    test "can add rules from instance", ->
-      class MyParser extends Parser
-        @rule root: "'foo'"
-
-      myParser = new MyParser
-      myParser.rule root: "'bar'"
-
-      result = myParser.parse "bar"
-      assert.eq result.offset, 0
-      assert.eq result.matchLength, 3
-      assert.eq result.text, "bar"
-
   priorityRule: ->
 
     test "parsers are extensible", ->

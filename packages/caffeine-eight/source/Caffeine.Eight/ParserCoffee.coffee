@@ -27,7 +27,7 @@ SourceLineColumnMap = require './SourceLineColumnMap'
 
 CaffeineEightCompileError = require './CaffeineEightCompileError'
 
-module.exports = class Parser extends require("art-class-system").BaseClass
+module.exports = class ParserCoffee extends require("art-class-system").BaseClass
   @repl: (options) ->
     (require './Repl').caffeineEightRepl @, options
 
@@ -48,31 +48,6 @@ module.exports = class Parser extends require("art-class-system").BaseClass
           extendableRules[ruleName] = newRule.clone()
         extendableRules
     }
-
-  ###
-  IN:
-    rules: plain object mapping rule-names to variantDefinitions
-    nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
-  ###
-  @rule: rulesFunction = (args...)->
-    # log rule:
-    #   inputs: [a, b]
-    #   noramlized: @_normalizeRuleDefinition a, b
-    for ruleName, definition of @_normalizeRuleDefinition args...
-      @_addRule ruleName, definition
-
-  @rules: rulesFunction
-
-  @replaceRule: (args...)->
-    for ruleName, definition of @_normalizeRuleDefinition args...
-      @_replaceRule @_newRule(ruleName), ruleName, definition, true
-
-  @priorityRule: (args...) ->
-    for ruleName, definition of @_normalizeRuleDefinition args...
-      @_addRule ruleName, definition, true
-
-  rule: instanceRulesFunction = (args...) -> @class.rule args...
-  rules: instanceRulesFunction
 
   @getNodeBaseClass: ->
     @_nodeBaseClass ||= if isPlainObject @nodeBaseClass
@@ -514,42 +489,3 @@ module.exports = class Parser extends require("art-class-system").BaseClass
 
     for definition in variantDefinitions
       rule.addVariant definition, addPriorityVariants
-
-  normalizeVariantDefinitions = (variantDefinitions, nodeBaseClass) ->
-    variantDefinitions = [variantDefinitions] unless isPlainArray array = variantDefinitions
-    if variantDefinitions.length > 1 && isPlainObject(last = peek variantDefinitions) &&
-        !(last.pattern ? last.parse)
-      [variantDefinitions..., commonNodeProps] = variantDefinitions
-    else
-      commonNodeProps = {}
-
-    commonNodeProps.nodeBaseClass ||= nodeBaseClass
-
-    out = []
-    for definition in compactFlatten variantDefinitions
-      unless isPlainObject definition
-        definition = pattern: definition
-
-      if isPlainArray patterns = definition.pattern
-        for pattern in patterns
-          out.push merge commonNodeProps, definition, {pattern}
-      else
-        out.push merge commonNodeProps, definition
-    out
-
-  @_normalizeRuleDefinition: (a, b) ->
-    if isClass a
-      nodeBaseClass = a
-      _rules = b
-    else
-      _rules = a
-      nodeBaseClass = b
-
-    if isPlainObject nodeBaseClass
-      nodeBaseClass = @getNodeBaseClass().createSubclass nodeBaseClass
-    else nodeBaseClass ?= @getNodeBaseClass()
-
-    rules = {}
-    for ruleName, definition of _rules
-      rules[ruleName] = normalizeVariantDefinitions definition, nodeBaseClass
-    rules
