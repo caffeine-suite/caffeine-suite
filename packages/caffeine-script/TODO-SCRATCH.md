@@ -1535,7 +1535,7 @@ class Foo
 
 - new feature: new feature "anti-with" block that runs when the `when` block is false; return-value ignored? Example use: if 'when' is false, it may be an exception you'd like to log
 
-```coffeescript
+```coffee
 # new feature: stop comprehension when
 # motivation: another way to avoid using "break"
 
@@ -1548,4 +1548,12 @@ array v from 1 10 100 unto v == 10
 # Note this uses the same semantics as "til" and "to":
 #  "til v"  - stop BEFORE v
 #  "to v"   - stop AFTER v
+```
+
+# new operator and parens
+
+```coffee
+# should compile to the same thing in javaScript
+# the parens are ESSENTIAL
+new (createMyBlockParser())
 ```
