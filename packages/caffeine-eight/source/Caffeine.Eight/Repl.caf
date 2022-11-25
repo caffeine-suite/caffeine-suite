@@ -15,6 +15,7 @@ class Repl
     if options?.load
       log "" TODO: load, parse and evaluate these files: #{options.load.join ', '}
 
+    log "START"
     realRequire :repl
     .start
       prompt: "#{parser.getClassName()}> ".grey
@@ -25,9 +26,9 @@ class Repl
             log if parsed.evaluate is Function then parsed.evaluate() else parsed
             callback()
 
-          catch e
-            callback e
+          catch error
+            callback error
 
-        catch e
-          log parser.getParseFailureInfo(color: true, verbose: options?.verbose).replace :<HERE>, "<HERE>".red
+        catch error
+          log parser.getParseFailureInfo(error: error, color: true, verbose: options?.verbose).replace :<HERE>, "<HERE>".red
           callback()

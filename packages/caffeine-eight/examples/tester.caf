@@ -1,0 +1,9 @@
+class BadParser extends &CaffeineEight.Parser
+
+  @rule
+    root: :array
+    array:
+      :array
+      /hi/
+
+.repl()

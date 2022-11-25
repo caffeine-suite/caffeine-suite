@@ -393,14 +393,14 @@
         }
       },
       parseFailureInfo: function(options) {
-        var errorType, failureIndex, failureOffset, ref3, ref4, verbose;
+        var error, errorType, failureIndex, failureOffset, ref3, ref4, verbose;
         if (options == null) {
           options = {};
         }
         if (!this._source) {
           return;
         }
-        failureOffset = options.failureOffset, failureIndex = (ref3 = options.failureIndex) != null ? ref3 : this._failureIndex, verbose = options.verbose, errorType = (ref4 = options.errorType) != null ? ref4 : "Parsing";
+        error = options.error, failureOffset = options.failureOffset, failureIndex = (ref3 = options.failureIndex) != null ? ref3 : this._failureIndex, verbose = options.verbose, errorType = (ref4 = options.errorType) != null ? ref4 : "Parsing";
         if (failureOffset != null) {
           throw new Error("DEPRICATED: failureOffset");
         }
@@ -412,7 +412,7 @@
           });
         } else {
           return compactFlatten([
-            this.colorString("gray", errorType + " error at " + (this.colorString("red", this.getFailureUrl(failureIndex)))), "", this.colorString("gray", "Source:"), this.colorString("gray", "..."), presentSourceLocation(this._source, failureIndex, this.options), this.colorString("gray", "..."), "", formattedInspect(this.expectingInfo, options), verbose ? formattedInspect({
+            this.colorString("gray", errorType + " error at " + (this.colorString("red", this.getFailureUrl(failureIndex)))), "", this.colorString("gray", "Source:"), this.colorString("gray", "..."), presentSourceLocation(this._source, failureIndex, this.options), this.colorString("gray", "..."), "", this.expectingInfo ? formattedInspect(this.expectingInfo, options) : error, verbose ? formattedInspect({
               "partial-parse-tree": this.partialParseTree
             }, options) : void 0, ""
           ]).join("\n");

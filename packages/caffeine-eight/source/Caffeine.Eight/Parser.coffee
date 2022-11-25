@@ -245,22 +245,6 @@ module.exports = class Parser extends require("art-class-system").BaseClass
   generateCompileError: (options) ->
       {message, info, rootParseTreeNode} = options
 
-      # log generateCompileError: {
-      #   options
-      #   getParseFailureInfo: @getParseFailureInfo options
-      #   out:
-      #     message:
-      #       compactFlatten([
-      #         if rootParseTreeNode?.matchLength < @_source.length
-      #           @colorString "gray", "#{@class.name} only parsed: " +
-      #             @colorString "black", "#{rootParseTreeNode.matchLength} of #{@_source.length} " +
-      #             @colorString "gray", "characters"
-      #         @getParseFailureInfo options
-      #         message
-      #       ]).join "\n"
-      #     info: merge @getParseFailureInfoObject(options), info
-      # }
-
       new CaffeineEightCompileError(
         compactFlatten([
           if rootParseTreeNode?.matchLength < @_source.length
@@ -321,7 +305,7 @@ module.exports = class Parser extends require("art-class-system").BaseClass
     parseFailureInfo: (options = {})->
       return unless @_source
 
-      {failureOffset, failureIndex = @_failureIndex, verbose, errorType = "Parsing"} = options
+      {error, failureOffset, failureIndex = @_failureIndex, verbose, errorType = "Parsing"} = options
       throw new Error "DEPRICATED: failureOffset" if failureOffset?
 
       if @parentParser
@@ -344,7 +328,10 @@ module.exports = class Parser extends require("art-class-system").BaseClass
 
           @colorString "gray", "..."
           ""
-          formattedInspect @expectingInfo, options
+          if @expectingInfo
+            formattedInspect @expectingInfo, options
+          else
+            error
           if verbose
             formattedInspect ("partial-parse-tree": @partialParseTree), options
           ""
