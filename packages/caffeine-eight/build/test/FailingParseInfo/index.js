@@ -4,5 +4,5 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  CouldHaveContinued: require('./CouldHaveContinued')
+  CouldHaveContinuedTest: require('./CouldHaveContinued.test')
 });

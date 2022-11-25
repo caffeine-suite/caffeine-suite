@@ -4,8 +4,9 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  Lib:                 require('./Lib'),
-  SourceLineColumnMap: require('./SourceLineColumnMap')
+  LibTest:                 require('./Lib.test'),
+  SourceLineColumnMapTest: require('./SourceLineColumnMap.test'),
+  StandardImport:          require('./StandardImport')
 });
 require('./Compiling');
 require('./Extensions');

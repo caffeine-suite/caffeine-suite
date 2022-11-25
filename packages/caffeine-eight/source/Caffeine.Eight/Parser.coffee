@@ -54,24 +54,24 @@ module.exports = class Parser extends require("art-class-system").BaseClass
     rules: plain object mapping rule-names to variantDefinitions
     nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
   ###
-  @rule: rulesFunction = (a, b)->
+  @rule: rulesFunction = (args...)->
     # log rule:
     #   inputs: [a, b]
     #   noramlized: @_normalizeRuleDefinition a, b
-    for ruleName, definition of @_normalizeRuleDefinition a, b
+    for ruleName, definition of @_normalizeRuleDefinition args...
       @_addRule ruleName, definition
 
   @rules: rulesFunction
 
-  @replaceRule: (a, b) ->
-    for ruleName, definition of @_normalizeRuleDefinition a, b
+  @replaceRule: (args...)->
+    for ruleName, definition of @_normalizeRuleDefinition args...
       @_replaceRule @_newRule(ruleName), ruleName, definition, true
 
-  @priorityRule: (a, b) ->
-    for ruleName, definition of @_normalizeRuleDefinition a, b
+  @priorityRule: (args...) ->
+    for ruleName, definition of @_normalizeRuleDefinition args...
       @_addRule ruleName, definition, true
 
-  rule: instanceRulesFunction = (a, b) -> @class.rule a, b
+  rule: instanceRulesFunction = (args...) -> @class.rule args...
   rules: instanceRulesFunction
 
   @getNodeBaseClass: ->

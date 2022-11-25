@@ -1,17 +1,15 @@
-{defineModule, log, wordsArray} = Neptune.Art.StandardLib
-{Parser, Nodes} = Neptune.Caffeine.Eight
+import &StandardImport
 
-defineModule module, suite:
+describe
   simplest: ->
     test "depth 1", ->
       class MyLeftRecursiveParser extends Parser
         @rule
           root: "leftRecursiveRule"
 
-          leftRecursiveRule: [
+          leftRecursiveRule:
             "leftRecursiveRule '.'"
             "'&'"
-          ]
 
       p = new MyLeftRecursiveParser
 
@@ -22,10 +20,9 @@ defineModule module, suite:
         @rule
           root: "leftRecursiveRule"
 
-          leftRecursiveRule: [
+          leftRecursiveRule:
             "leftRecursiveRule '.'"
             "'&'"
-          ]
 
       p = new MyLeftRecursiveParser
 

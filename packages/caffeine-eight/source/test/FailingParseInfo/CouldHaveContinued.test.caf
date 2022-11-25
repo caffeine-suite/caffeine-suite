@@ -1,5 +1,4 @@
-{Parser, CaffeineEightCompileError, Extensions} = Neptune.Caffeine.Eight
-{log, defineModule, l, w, compactFlatten} = Neptune.Art.StandardLib
+import &StandardImport
 
 validateCompileError = (error, testProps) ->
   assert.instanceof CaffeineEightCompileError, error
@@ -15,21 +14,22 @@ validateCompileError2 = (parser, text, testedProps) ->
     assert.match error.message, /<HERE>/
 
 
-defineModule module, suite:
+describe
   info: ->
-    MyParser = null
-    setup ->
+    getClass = ->
       class MyParser extends Parser
         @rule
           root: "myRule+"
           myRule: /foo\n?/
 
     test "baseline ok", ->
+      MyParser = getClass()
       myParser = new MyParser
       # assert.rejects -> 123
       myParser.parse "foo"
 
     test "0", ->
+      MyParser = getClass()
       myParser = new MyParser
       assert.rejects -> myParser.parse "bad"
       .then (error)->
@@ -40,6 +40,7 @@ defineModule module, suite:
 
 
     test "line 1, col 3", ->
+      MyParser = getClass()
       myParser = new MyParser
       assert.rejects -> myParser.parse "foobad"
       .then (error)->
@@ -50,6 +51,7 @@ defineModule module, suite:
           location: ":1:4"
 
     test "line 2, col 1", ->
+      MyParser = getClass()
       myParser = new MyParser
       assert.rejects -> myParser.parse "foo\nbad"
       .then (error)->
@@ -59,6 +61,7 @@ defineModule module, suite:
           column: 0
 
     test "line 2, col 4", ->
+      MyParser = getClass()
       myParser = new MyParser
       # assert.rejects -> 123
       # myParser.parse "foo"
@@ -71,8 +74,7 @@ defineModule module, suite:
           column: 3
 
   infoOnNonFirstPattern: ->
-    MyParser = null
-    setup ->
+    getClass = ->
       class MyParser extends Parser
 
         @rule
@@ -81,9 +83,11 @@ defineModule module, suite:
           _: /\s+/
 
     test "baseline", ->
+      MyParser = getClass()
       MyParser.parse "1 hi"
 
     test "fail on first pattern", ->
+      MyParser = getClass()
       validateCompileError2 MyParser, "- hi",
         failureIndex: 0
         line: 0
@@ -91,6 +95,7 @@ defineModule module, suite:
         expectingInfo: expecting: "/[0-9]+/": "to-continue": "root", "started-at": "1:1"
 
     test "fail on second pattern", ->
+      MyParser = getClass()
       validateCompileError2 MyParser, "1 HI",
         failureIndex: 2
         line: 0

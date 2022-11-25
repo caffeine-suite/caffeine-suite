@@ -4,5 +4,6 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  IndentBlocksParsingTest: require('./IndentBlocksParsing.test')
+  IndentBlocksParsingTest: require('./IndentBlocksParsing.test'),
+  TodoTestNodeClass:       require('./TODO_TestNodeClass')
 });

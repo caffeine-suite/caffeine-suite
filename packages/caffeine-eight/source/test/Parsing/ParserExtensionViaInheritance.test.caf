@@ -1,23 +1,25 @@
-{log, wordsArray} = Neptune.Art.StandardLib
-{Parser, Nodes} = Neptune.Caffeine.Eight
-{Node} = Nodes
+import &StandardImport
 
-module.exports = suite:
+describe
   basic: ->
     MyParser = MySubParser = null
-    setup ->
+    getParserClasses = ->
       class MyParser extends Parser
         @rule root: "'foo'"
 
       class MySubParser extends MyParser
         @rule root: "'bar'"
 
+      {} MyParser, MySubParser
+
     test "parsers are extensible", ->
+      getParserClasses() extract MyParser, MySubParser
       myParser = new MySubParser
       myParser.parse "bar"
       myParser.parse "foo"
 
     test "parsers extentension doesn't alter parent class", ->
+      getParserClasses() extract MyParser, MySubParser
       myParser1 = new MyParser
       myParser2 = new MySubParser
       assert.throws -> myParser1.parse "bar"

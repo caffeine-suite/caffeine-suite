@@ -7,5 +7,6 @@
   CustomNodesTest:            require('./CustomNodes.test'),
   NodeBaseClassTest:          require('./NodeBaseClass.test'),
   NodesTest:                  require('./Nodes.test'),
-  RuleGroupNodeBaseClassTest: require('./RuleGroupNodeBaseClass.test')
+  RuleGroupNodeBaseClassTest: require('./RuleGroupNodeBaseClass.test'),
+  TodoTestNodeClass:          require('./TODO_TestNodeClass')
 });

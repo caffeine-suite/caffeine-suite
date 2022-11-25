@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "Labels.test.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source/test/Parsing/Labels.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,yFAAO,0DAEP,KAAK,8DAA4B,+CACR,0DACrB,UAAK,CACH,OACE,SAAY,+BAKZ,YACE,4CAAU,QACR,qBAAG,sBACH,sBAAG,uBACH,sBAAG,iCAEb,WAAW,eAAe,iBAC1B,UAAU,oBAAmB,GAAG,MAAM,GAAG,WAAW,GAAG,mBAEzD,KAAK,yDAAuB,+CACH,0DACrB,UAAK,CACH,OACE,SAAY,+BAKZ,YACE,oBAAU,QACR,GAAG,aACH,uBAA4B,oBAAS,uBAE/C,WAAW,eAAe,iBAC1B,UAAU,oBAAmB,GAAG,OAAO,cAAc,MAAM"
+}

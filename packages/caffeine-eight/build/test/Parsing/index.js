@@ -4,8 +4,8 @@
 (module.exports = require('./namespace'))
 
 .addModules({
-  Labels:                        require('./Labels'),
-  LeftRecursive:                 require('./LeftRecursive'),
-  Parser:                        require('./Parser'),
-  ParserExtensionViaInheritance: require('./ParserExtensionViaInheritance')
+  LabelsTest:                        require('./Labels.test'),
+  LeftRecursiveTest:                 require('./LeftRecursive.test'),
+  ParserTest:                        require('./Parser.test'),
+  ParserExtensionViaInheritanceTest: require('./ParserExtensionViaInheritance.test')
 });

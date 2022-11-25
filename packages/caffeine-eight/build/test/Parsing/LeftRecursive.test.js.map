@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "LeftRecursive.test.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source/test/Parsing/LeftRecursive.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,qGAAO,oEAEP,gBAAQ,CACN,sBACE,KAAK,gDAAa,yEACoB,uEAClC,WACE,MAAM,qBAEN,oBACE,yBACA,aAEN,IAAI,IAAI,8BAER,eAAc,MAAI,QAAQ,kBAE5B,KAAK,gDAAa,yEACoB,uEAClC,WACE,MAAM,qBAEN,oBACE,yBACA,aAEN,IAAI,IAAI,8BAER,eAAc,MAAI,QAAQ"
+}

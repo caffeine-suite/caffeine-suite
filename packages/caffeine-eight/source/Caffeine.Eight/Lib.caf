@@ -16,7 +16,9 @@ class Lib
     .join "\n"
 
   @presentSourceLocation: (source, index, options) ->
-    options extract? maxLines = 10, color, insertString = :<HERE>
+    options extract? maxLines, color, insertString
+    maxLines ?= 10
+    insertString ?= :<HERE>
 
     if color
       color = :red if color == true
@@ -25,9 +27,8 @@ class Lib
     sourceBefore  = source.slice 0, index
     sourceAfter   = source.slice index
 
-    if maxLines
-      halfMaxLines  = Math.ceil maxLines / 2
-      sourceBefore  = lastLines   sourceBefore, halfMaxLines
-      sourceAfter   = firstLines  sourceAfter,  halfMaxLines
+    halfMaxLines  = Math.ceil maxLines / 2
+    sourceBefore  = lastLines   sourceBefore, halfMaxLines
+    sourceAfter   = firstLines  sourceAfter,  halfMaxLines
 
     "" #{sourceBefore}#{insertString}#{sourceAfter.replace /[\s\n]+$/, ''}

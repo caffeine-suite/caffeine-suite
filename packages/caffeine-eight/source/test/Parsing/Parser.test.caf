@@ -1,35 +1,35 @@
-{log, wordsArray} = Neptune.Art.StandardLib
-{Parser, Nodes} = Neptune.Caffeine.Eight
-{Node} = Nodes
+# converting parser tests to CAF
+import &StandardImport
 
-module.exports = suite:
+describe
   basic: ->
+    test
+      """ a "'foo'"
+      ->
+        class MyParser extends Parser
+          @rule root: "" 'foo'
 
-    test "\"'foo'\"", ->
-      class MyParser extends Parser
-        @rule root: "'foo'"
+        myParser = new MyParser
+        result = myParser.parse "foo"
+        assert.eq result.offset, 0
+        assert.eq result.matchLength, 3
+        assert.eq result.text, "foo"
 
-      myParser = new MyParser
-      result = myParser.parse "foo"
-      assert.eq result.offset, 0
-      assert.eq result.matchLength, 3
-      assert.eq result.text, "foo"
-
-    test "/foo/", ->
+    test "/foo/" ->
       class MyParser extends Parser
         @rule root: /foo/
 
       myParser = new MyParser
-      result = myParser.parse "foo"
+      result = myParser.parse :foo
       assert.eq result.offset, 0
       assert.eq result.matchLength, 3
-      assert.eq result.text, "foo"
+      assert.eq result.text, :foo
 
-    test "/[0-9]+/", ->
+    test "/[0-9]+/" ->
       class MyParser extends Parser
         @rule root: /[0-9]+/
 
-      for source in sources = wordsArray "0 1 10 123 1001"
+      each source in sources = wordsArray "0 1 10 123 1001"
         result = MyParser.parse source
         assert.eq result.offset, 0
         assert.eq result.matchLength, source.length
@@ -77,7 +77,6 @@ module.exports = suite:
       assert.eq result.text, "foobar"
 
   "conditional parsing": ->
-
     test "conditional rule 'foo? bar'", ->
       class MyParser extends Parser
         @rule
@@ -106,9 +105,9 @@ module.exports = suite:
           boo: /boo/
           anything: /.*/
 
-       assert.throws -> MyParser.parse "boo"
-       assert.throws -> MyParser.parse "boobat"
-       MyParser.parse "bobat"
+      assert.throws -> MyParser.parse "boo"
+      assert.throws -> MyParser.parse "boobat"
+      MyParser.parse "bobat"
 
   "couldMatch parsing": ->
 
@@ -120,8 +119,8 @@ module.exports = suite:
           foo: /foo/
           rest: /fo[a-z]+/
 
-       MyParser.parse "boofoo"
-       assert.throws -> MyParser.parse "boofoa"
+      MyParser.parse "boofoo"
+      assert.throws -> MyParser.parse "boofoa"
 
   "rule variants": ->
     test "two variants", ->
@@ -162,7 +161,8 @@ module.exports = suite:
             parse: (parentNode) ->
               {nextOffset, source} = parentNode
               if source[nextOffset] == "a"
-                new Node parentNode,
+                new Node
+                  parentNode
                   offset: nextOffset
                   matchLength: 1
                   ruleVariant: @
@@ -173,26 +173,26 @@ module.exports = suite:
     test "alternate custom parsers", ->
       class MyParser extends Parser
         @rule
-          root: [
-            {
+          root: []
+            {}
               parse: (parentNode) ->
                 {nextOffset, source} = parentNode
                 if source[nextOffset] == "a"
-                  new Node parentNode,
+                  new Node
+                    parentNode
                     offset: nextOffset
                     matchLength: 1
                     ruleVariant: @
-            }
-            {
+
+            {}
               parse: (parentNode) ->
                 {nextOffset, source} = parentNode
                 if source[nextOffset] == "b"
-                  new Node parentNode,
+                  new Node
+                    parentNode
                     offset: nextOffset
                     matchLength: 1
                     ruleVariant: @
-            }
-          ]
 
       MyParser.parse "a"
       MyParser.parse "b"
@@ -246,3 +246,9 @@ module.exports = suite:
 
       assert.eq "FOO", MyParser.parse("foo").custom()
       assert.eq "BOO", MyParser.parse("boo").custom()
+
+  # "javascript friendly rule definition": ->
+  #   class MyParser extends Parser
+  #       @rule :root :foo custom: -> @text.toUpperCase()
+
+  #   assert.eq "FOO", MyParser.parse("foo").custom()

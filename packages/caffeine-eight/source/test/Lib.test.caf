@@ -1,15 +1,13 @@
-{log} = require 'art-standard-lib'
-{presentSourceLocation} = Neptune.Caffeine.Eight
+import &StandardImport
 
-module.exports = suite:
+describe
   presentSourceLocation: ->
     source =
       """
-      firstLines = (string, count = 5) ->
-        a = string.split "\\n"
-        a.slice 0, count
-        .join "\\n"
-      """
+        firstLines = (string, count = 5) ->
+          a = string.split "\\n"
+          a.slice 0, count
+          .join "\\n"
 
     testString = "slice"
     insertString = "<HERE>"

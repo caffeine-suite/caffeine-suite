@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TODO_TestNodeClass.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source/test/Compiling/TODO_TestNodeClass.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAIA;AAAA,MAAA,8BAAA;IAAA;;;EAAC,OAAQ,OAAA,CAAQ,sBAAR,CAA+B,CAAC;;EACzC,MAAM,CAAC,OAAP,GACE;IAAA,qBAAA,EAA6B;;;;;;;iCAC3B,IAAA,GAAM,SAAA;eAAG,IAAC,CAAA,QAAD,CAAA,CAAA,GAAc;MAAjB;;;;OAD8C,KAAtD;IAEA,0BAAA,EAAkC;;;;;;;uBAC9B,OAAA,GAAS,SAAA;AAAG,YAAA;eAAA;;AAAC;AAAA;eAAA,qCAAA;;gBAAmC,CAAC,CAAC;2BAArC,CAAC,CAAC,OAAF,CAAA;;AAAA;;qBAAD,CAA8C,CAAC,IAA/C,CAAoD,EAApD;MAAH;;;;OADoC,KAFjD;;AAFF"
+}

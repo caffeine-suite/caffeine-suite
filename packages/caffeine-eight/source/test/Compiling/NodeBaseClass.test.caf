@@ -1,11 +1,8 @@
-{log, wordsArray} = require "art-standard-lib"
-{Parser, Nodes:{Node}} = require "../../"
-{assert} = require "art-testbench"
+import &StandardImport
 
 test "with class", ->
   class MyParser extends Parser
-    @nodeBaseClass: class IndentBlocksNode extends Node
-      toJs: -> @toString() + "!"
+    @nodeBaseClass: require('./TODO_TestNodeClass').NodeBaseClassTestNode
 
     @rule
       root: /boo/

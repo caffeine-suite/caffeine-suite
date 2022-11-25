@@ -68,9 +68,10 @@
       nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
      */
 
-    Parser.rule = rulesFunction = function(a, b) {
-      var definition, ref3, results, ruleName;
-      ref3 = this._normalizeRuleDefinition(a, b);
+    Parser.rule = rulesFunction = function() {
+      var args, definition, ref3, results, ruleName;
+      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+      ref3 = this._normalizeRuleDefinition.apply(this, args);
       results = [];
       for (ruleName in ref3) {
         definition = ref3[ruleName];
@@ -81,9 +82,10 @@
 
     Parser.rules = rulesFunction;
 
-    Parser.replaceRule = function(a, b) {
-      var definition, ref3, results, ruleName;
-      ref3 = this._normalizeRuleDefinition(a, b);
+    Parser.replaceRule = function() {
+      var args, definition, ref3, results, ruleName;
+      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+      ref3 = this._normalizeRuleDefinition.apply(this, args);
       results = [];
       for (ruleName in ref3) {
         definition = ref3[ruleName];
@@ -92,9 +94,10 @@
       return results;
     };
 
-    Parser.priorityRule = function(a, b) {
-      var definition, ref3, results, ruleName;
-      ref3 = this._normalizeRuleDefinition(a, b);
+    Parser.priorityRule = function() {
+      var args, definition, ref3, results, ruleName;
+      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+      ref3 = this._normalizeRuleDefinition.apply(this, args);
       results = [];
       for (ruleName in ref3) {
         definition = ref3[ruleName];
@@ -103,8 +106,10 @@
       return results;
     };
 
-    Parser.prototype.rule = instanceRulesFunction = function(a, b) {
-      return this["class"].rule(a, b);
+    Parser.prototype.rule = instanceRulesFunction = function() {
+      var args, ref3;
+      args = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+      return (ref3 = this["class"]).rule.apply(ref3, args);
     };
 
     Parser.prototype.rules = instanceRulesFunction;
