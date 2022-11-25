@@ -1,4 +1,4 @@
-import &ArtStandardLib, {} &Rule
+import &ArtStandardLib, &ArtClassSystem, &Nodes, &lib, {} &Rule, &NonMatch, &Stats, &SourceLineColumnMap, &CaffeineEightCompileError
 
 normalizeVariantDefinitions = (variantDefinitions, nodeBaseClass) ->
   variantDefinitions = [variantDefinitions] unless isPlainArray variantDefinitions
@@ -27,9 +27,383 @@ normalizeVariantDefinitions = (variantDefinitions, nodeBaseClass) ->
       out.push merge commonNodeProps, definition
   out
 
+addToExpectingInfo = (node, _into, value) ->
+  if node.parent
+    _into = addToExpectingInfo node.parent, _into
+
+  _into[node.parseInfo] ||= if value
+    value
+  else
+    p = {}
+    if (pm = node.presentMatches)?.length > 0
+      p.matches = array m in pm with m.parseInfo
+    p
 
 class Parser extends &ParserCoffee
+  ##################################################################
+    PUBLIC: Class Methods
+  ##################################################################
+  @repl: (options) -> &Repl.caffeineEightRepl @, options
 
+  @parse: (@_source, options = {})->
+    new @
+    .parse @_source, options
+
+  ##################################################################
+    Contructor
+  ##################################################################
+  constructor: ->
+    @_options = null
+    @_parser = @
+    @_source = null
+    @_resetParserTracking()
+
+  ##################################################################
+    PUBLIC: Getters
+  ##################################################################
+  @property :subparseInfo :options
+  @getter
+    :source
+    :parser
+    rootRuleName: -> @class.getRootRuleName()
+    rootRule:     -> @class.getRootRule()
+    nextOffset:   -> 0
+    rootParser:   -> @parentParser?.rootParser || @
+    rootSource:   -> @rootParser.source
+    ancestors:    (_into) -> _into.push @; _into
+    parseInfo:    -> :Parser
+    failureIndexInParentParser: -> @offsetInParentParserSource @_failureIndex
+
+  ##################################################################
+    PUBLIC: Parsing
+  ##################################################################
+
+  ### parse
+    IN:
+      source: string - the text to parse
+      options: object - parsing options:
+        allowPartialMatch: true/false
+        color:    (default: false)  show errors in color (console colors)
+        maxLines: (default: 10)     max total source lines to show when showing errors
+
+        (internal use: parentParser, rule, isSubparse, logParsingFailures)
+    OUT: on success, root Node of the parse tree, else null
+  parse: (@_source, @options = {})->
+    {allowPartialMatch, rule, isSubparse, logParsingFailures} = @options
+    @parentParser = options.parentParser
+
+    startRule = @getRule rule
+
+    @_resetParserTracking()
+    @_logParsingFailures = logParsingFailures
+
+    try
+      if (rootParseTreeNode = startRule.parse @) &&
+          rootParseTreeNode.matchLength == @_source.length
+          || allowPartialMatch && rootParseTreeNode.matchLength > 0
+
+        rootParseTreeNode.applyLabels() unless isSubparse
+        rootParseTreeNode
+
+      else
+        unless isSubparse
+          if logParsingFailures
+            throw @generateCompileError merge @options, {rootParseTreeNode}
+
+          else
+            # rerun parse with parsing-failure-logging
+            # NOTE: we could speed this up by not completely trashing the cache
+            @parse @_source, merge @options, logParsingFailures: true
+
+    finally
+      ScratchNode.resetAll() unless isSubparse
+
+
+  ### subparse
+    (only to be used internally)
+    IN:
+      subsource:
+        any string what-so-ever
+      options:
+        [all of @parse's options plus:]
+        parentNode: (required)
+          the resulting Node's parent
+
+        originalMatchLength: (required)
+          matchLength from @source that subsource was generated from.
+
+        originalOffset: starting offset in parentParser.source
+
+        sourceMap: (subsourceOffset) -> parentSourceOffset
+
+      The original source we are sub-parsing from must be:
+
+        parentNode.getNextText originalMatchLength
+
+    OUT: a Node with offset and matchLength
+  subparse: (subsource, options = {}) ->
+    Stats.add :subparse
+    subparser = new @class
+    options extract originalMatchLength, parentNode, sourceMap, originalOffset
+
+    options.parentParser = @
+    options.sourceFile = @options.sourceFile
+    if match = subparser.parse subsource, merge options, isSubparse: true, logParsingFailures: @_logParsingFailures
+      match extract offset, matchLength, source, parser
+      match.subparseInfo = {} offset, matchLength, source, parser
+
+      if match.matchLength < subsource.length
+        # options.allowPartialMatch was requested and the match was partial...
+
+        originalMatchLength =
+          if sourceMap
+            sourceMap(match.matchLength) - parentNode.nextOffset
+
+          else if match.text == parentNode.getNextText match.matchLength
+            match.matchLength
+
+          else
+            throw new Error "" Subparse requires a sourceMap to determine the match-length in the parent text for partial-matches.
+
+      match.offset      = parentNode.nextOffset
+      match.matchLength = originalMatchLength
+      match._parser     = parentNode._parser
+      match._parent     = parentNode
+      match
+
+    else
+      failureIndex = subparser.failureIndexInParentParser
+
+      each nonMatch, k from-object subparser._nonMatches
+        rootNode = nonMatch.node
+
+        while rootNode != parentNode && rootNode.parent instanceof Node
+          rootNode = rootNode.parent
+
+        rootNode._parent = parentNode if rootNode != parentNode
+        if @_logParsingFailures
+          @_addNonMatch failureIndex, nonMatch
+
+        else
+          @_failureIndex = max @_failureIndex, failureIndex
+
+      null
+
+  ##################################################################
+    PUBLIC: Error Handling
+  ##################################################################
+  @getter
+    :nonMatches
+
+    sourceFile: -> @options.sourceFile
+
+    failureUrl: (failureIndex = @_failureIndex) -> "" #{@options.sourceFile || ''}:#{@getLineColumnString failureIndex}
+
+    parseFailureInfoObject: (options) ->
+      failureIndex = options?.failureIndex ? @_failureIndex
+
+      if @parentParser
+        @rootParser.getParseFailureInfoObject
+          failureIndex: @offsetInRootParserSource failureIndex
+
+      else
+        merge
+          {}
+            sourceFile: @options.sourceFile
+            failureIndex
+            location: @getFailureUrl failureIndex
+            expectingInfo: if failureIndex == @_failureIndex then @expectingInfo
+
+          @getLineColumn failureIndex
+
+    # partialParseTree: ->
+    #   return @_partialParseTree if @_partialParseTree
+    #   expectingInfoTree = {}
+    #   rootNode = null
+    #   @_partialParseTreeNodes = array {patternElement, node}, k from @_nonMatches # when (node.getPresent() || node.getPresent == Node.prototype.getPresent)
+    #     addToExpectingInfo node, expectingInfoTree, patternElement.pattern.toString()
+    #     n = new Node node
+    #     n.pattern = patternElement
+    #     rootNode = n._addToParentAsNonMatch()
+    #     n
+
+    #   @_partialParseTree = rootNode
+
+    expectingInfo: ->
+      return null unless objectLength(@_nonMatches) > 0
+      return @_expectingInfo if @_expectingInfo
+
+      ###
+        I know how to do this right!
+
+        1) I want to add all the non-match nodes to the parse-tree
+        2) I want to further improve the parse-tree inspect
+          - it may be time to do a custom inspect
+
+      partialMatchingParents = []
+      each node in @partialParseTreeLeafNodes
+        {firstPartialMatchParent} = node
+        pushIfNotPresent partialMatchingParents, firstPartialMatchParent
+
+      couldMatchRuleNames = []
+
+      expecting = {}
+      each pmp in partialMatchingParents
+        each child in pmp.matches when child.isNonMatch && child.nonMatchingLeaf
+          couldMatchRuleNames.push ruleName if ruleName = child.nonMatchingLeaf.ruleNameOrNull
+          expecting[child.nonMatchingLeaf.ruleNameOrPattern] =
+            "to-continue": pmp.ruleName
+            "started-at": @getLineColumnString pmp.absoluteOffset
+
+      @_expectingInfo = if objectHasKeys expecting
+        out = {expecting}
+        if couldMatchRuleNames.length > 1
+          out.rules = {}
+          each ruleName in couldMatchRuleNames
+            each v in @rules[ruleName]._variants
+              out.rules[ruleName] = v.patternString
+
+        out
+
+      else
+        expecting: "end of input"
+
+    parseFailureInfo: (options = {})->
+      return unless @_source
+
+      {error, failureOffset, failureIndex = @_failureIndex, verbose, errorType = "Parsing"} = options
+      throw new Error "DEPRICATED: failureOffset" if failureOffset?
+
+      if @parentParser
+        @rootParser.getParseFailureInfo {}
+          failureIndex: @offsetInRootParserSource failureIndex
+          verbose
+          errorType
+
+      else
+        compactFlatten []
+          @colorString :gray "" #{errorType} error at #{} @colorString :red @getFailureUrl failureIndex
+          ''
+          @colorString :gray "" Source:
+          @colorString :gray "" ...
+
+          presentSourceLocation @_source,
+            failureIndex
+            @options
+
+          @colorString :gray "" ...
+          ''
+          if @expectingInfo then formattedInspect @expectingInfo, options
+          else error
+          if verbose then formattedInspect ("partial-parse-tree": @partialParseTree), options
+          ''
+
+        .join "\n"
+
+    partialParseTreeLeafNodes: ->
+      return @_partialParseTreeNodes if @_partialParseTreeNodes
+      @getPartialParseTree()
+      @_partialParseTreeNodes
+
+
+  generateCompileError: (options) ->
+      {message, info, rootParseTreeNode} = options
+
+      new CaffeineEightCompileError
+        compactFlatten []
+          if rootParseTreeNode?.matchLength < @_source.length
+            @colorString "gray", "#{@class.name} only parsed: "
+            + @colorString "black", "#{rootParseTreeNode.matchLength} of #{@_source.length} "
+            + @colorString "gray", "characters"
+
+          @getParseFailureInfo options
+          message
+
+        .join "\n"
+
+        merge @getParseFailureInfoObject(options), info
+
+
+  ##################################################################
+    PUBLIC: HELPERs
+  ##################################################################
+
+  @getNodeBaseClass: ->
+    @_nodeBaseClass ?=
+      if isPlainObject @nodeBaseClass
+        Node.createSubclass merge
+          name: @getName() + "NodeBaseClass"
+          @nodeBaseClass
+
+      else @nodeBaseClass ? Node
+
+  getRule: (ruleName) ->
+    ruleName ?= @rootRuleName
+    throw new Error "No root rule defined." unless ruleName
+    @rules[ruleName] ? throw new Error "Could not find rule: #{ruleName}"
+
+  colorString: (clr, str)->
+    if @options.color
+      "#{str}"[clr]
+    else
+      str
+
+  offsetInParentParserSource: (suboffset) ->
+    {sourceMap, originalOffset = 0} = @options
+    if sourceMap
+      throw new Error "suboffset (#{suboffset}) > source.length (#{@source.length})" unless suboffset <= @source.length
+      sourceMap suboffset
+
+    else if @parentParser
+      @options.originalOffset + suboffset
+
+    else
+      suboffset
+
+  offsetInRootParserSource: (suboffset) ->
+    if @parentParser
+      @parentParser.offsetInRootParserSource @offsetInParentParserSource suboffset
+    else
+      suboffset
+
+  # FAST!
+  # SEE: SourceLineColumnMap#getLineColumn
+  getLineColumn: (offset, _into) ->
+    @_sourceLineColumnMap ?= new SourceLineColumnMap @_source
+    .getLineColumn offset, _into
+
+  getLineColumnString: (offset, _into)->
+    {line, column} = a = @getLineColumn offset, _into
+    "" #{line + 1}:#{column + 1}
+
+  tryPatternElement: (patternElement, parseIntoNode, ruleVariant) ->
+    Stats.add :tryPatternElement
+    if patternElement.parseInto parseIntoNode
+      true
+
+    else
+      @_logParsingFailure parseIntoNode, patternElement
+      false
+
+
+  ##################################################################
+    PUBLIC: PLURALIZE
+  ##################################################################
+  @_pluralNames = {}
+  @pluralize: (name) ->
+    unless pluralName = @_pluralNames[name]
+      pluralName = pluralize name
+      if pluralName == name
+        pluralName += "s"
+      @_pluralNames[name] = pluralName
+
+    pluralName
+
+  pluralize: (name) -> @class.pluralize name
+
+  # ##################################################################
+  #   PUBLIC: RULE DEFINITION
+  # ##################################################################
   @classGetter
     rootRuleName: -> @_rootRuleName || "root"
     rootRule: -> @getRules()[@_rootRuleName]
@@ -63,6 +437,9 @@ class Parser extends &ParserCoffee
 
   rule: instanceRulesFunction = ~> throw new Error "DEPRICATED: instance.rule(s) is not suppoerted; use class.rule(s) instead"
 
+  ##################################################################
+    PRIVATE: RULE DEFINITION
+  ##################################################################
   ## Fetch or add ruleName to @rules, but be sure to clone
   ## the existing rule if we are a parser sub-class
   @_extendRule: (ruleName) ->
@@ -115,3 +492,62 @@ class Parser extends &ParserCoffee
 
     object definition, ruleName in _rules
       normalizeVariantDefinitions definition, nodeBaseClass
+
+  ##################
+  # PRIVATE
+  ##################
+
+  _getRuleParseCache: (ruleName)          -> @_parseCache[ruleName] ?= {}
+  _cached:            (ruleName, offset)  -> @_getRuleParseCache(ruleName)[offset]
+
+  _cacheMatch: (ruleName, matchingNode) ->
+    Stats.add :cacheMatch
+    @_getRuleParseCache(ruleName)[matchingNode.offset] = matchingNode
+    matchingNode
+
+  _cacheNoMatch: (ruleName, offset) ->
+    Stats.add :cacheNoMatch
+    @_getRuleParseCache(ruleName)[offset] = :no_match
+    null
+
+  _resetParserTracking: ->
+    @_activeRuleVariantParserOffsets = {}
+    @_subparseInfo = null
+    @_logParsingFailures = false
+    @_partialParseTreeNodes = null
+    @_partialParseTree = null
+    @_matchingNegativeDepth = 0
+    @_parsingDidNotMatchEntireInput = false
+    @_failureIndex = 0
+    @_expectingInfo = null
+    @_nonMatches = {}
+    @_parseCache = {}
+    @_parentParserRootOffset = null
+
+  @getter
+    :activeRuleVariantParserOffsets
+    :activeRuleVariantParserAreLeftRecursive
+    :failureIndex
+    isMatchingNegative: -> @_matchingNegativeDepth > 0
+
+  _matchNegative: (f) ->
+    @_matchingNegativeDepth++
+    result = f()
+    @_matchingNegativeDepth--
+    result
+
+  _logParsingFailure: (parseIntoNode, patternElement) ->
+    {nextOffset} = parseIntoNode
+    if @_matchingNegativeDepth == 0 && nextOffset >= @_failureIndex && patternElement.isTokenPattern
+      if @_logParsingFailures
+        parseIntoNode = parseIntoNode.getRealNode()
+        @_addNonMatch nextOffset, new NonMatch parseIntoNode, patternElement
+      else
+        @_failureIndex = nextOffset
+
+  _addNonMatch: (offset, nonMatch) ->
+    if offset > @_failureIndex
+      @_failureIndex = offset
+      @_nonMatches = {}
+
+    @_nonMatches[nonMatch] = nonMatch
