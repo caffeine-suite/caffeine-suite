@@ -139,7 +139,7 @@
       "name": "keyword.macro.compileTime.caffeine"
     },
     {
-      "match": "(?x) \\b ( super | delete | as | extract | import | instanceof | is | return | break | throw | try | catch | if | unless | then | else | switch | and | or | isnt | not | while | until | new | class | extends | (( in | from ) - )? ( array | object ) | reduce | inject | find | each | into | returning | to | til | by | in | from | with | do | with-key | short | skip | when | await | yield | case ) \\b",
+      "match": "(?x) \\b ( super | delete | as | extract | import | instanceof | is | return | break | throw | try | catch | finally | if | unless | then | else | switch | and | or | isnt | not | while | until | new | class | extends | (( in | from ) - )? ( array | object ) | reduce | inject | find | each | into | returning | to | til | by | in | from | with | do | with-key | short | skip | when | await | yield | case ) \\b",
       "name": "keyword.caffeine"
     },
     {

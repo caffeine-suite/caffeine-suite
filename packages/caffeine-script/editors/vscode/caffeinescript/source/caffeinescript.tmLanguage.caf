@@ -147,7 +147,7 @@ patterns:
 
             | return | break
 
-            | throw | try | catch
+            | throw | try | catch | finally
             | if | unless | then | else
             | switch
             | and | or | isnt | not
