@@ -62,6 +62,42 @@ class Parser extends BaseClass
     parseInfo:    -> :Parser
     failureIndexInParentParser: -> @offsetInParentParserSource @_failureIndex
 
+  # ##################################################################
+  #   PUBLIC: RULE DEFINITION
+  # ##################################################################
+  @classGetter
+    rootRuleName: -> @_rootRuleName || "root"
+    rootRule: -> @getRules()[@_rootRuleName]
+
+  @extendableProperty
+    rules: {}
+    {}
+      # TODO: elliminate the need for 'noSetter'
+      noSetter: true
+      extend: (extendableRules, newRules) ->
+        object newRule from newRules into extendableRules
+          newRule.clone()
+
+  ### @rule
+    IN:
+      rules: plain object mapping rule-names to variantDefinitions
+      nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
+  @rule: rulesFunction = (args...)->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_addRule ruleName, definition
+
+  @rules: rulesFunction
+
+  @replaceRule: (args...)->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_replaceRule @_newRule(ruleName), ruleName, definition, true
+
+  @priorityRule: (args...) ->
+    each definition, ruleName in @_normalizeRuleDefinition args...
+      @_addRule ruleName, definition, true
+
+  rule: instanceRulesFunction = ~> throw new Error "DEPRICATED: instance.rule(s) is not suppoerted; use class.rule(s) instead"
+
   ##################################################################
     PUBLIC: Parsing
   ##################################################################
@@ -388,41 +424,6 @@ class Parser extends BaseClass
 
   pluralize: (name) -> @class.pluralize name
 
-  # ##################################################################
-  #   PUBLIC: RULE DEFINITION
-  # ##################################################################
-  @classGetter
-    rootRuleName: -> @_rootRuleName || "root"
-    rootRule: -> @getRules()[@_rootRuleName]
-
-  @extendableProperty
-    rules: {}
-    {}
-      # TODO: elliminate the need for 'noSetter'
-      noSetter: true
-      extend: (extendableRules, newRules) ->
-        object newRule from newRules into extendableRules
-          newRule.clone()
-
-  ### @rule
-    IN:
-      rules: plain object mapping rule-names to variantDefinitions
-      nodeClass: optional, must extend Caffeine.Eight.Node or be a plain object
-  @rule: rulesFunction = (args...)->
-    each definition, ruleName in @_normalizeRuleDefinition args...
-      @_addRule ruleName, definition
-
-  @rules: rulesFunction
-
-  @replaceRule: (args...)->
-    each definition, ruleName in @_normalizeRuleDefinition args...
-      @_replaceRule @_newRule(ruleName), ruleName, definition, true
-
-  @priorityRule: (args...) ->
-    each definition, ruleName in @_normalizeRuleDefinition args...
-      @_addRule ruleName, definition, true
-
-  rule: instanceRulesFunction = ~> throw new Error "DEPRICATED: instance.rule(s) is not suppoerted; use class.rule(s) instead"
 
   ##################################################################
     PRIVATE: RULE DEFINITION
@@ -465,20 +466,26 @@ class Parser extends BaseClass
     each definition in variantDefinitions
       rule.addVariant definition, addPriorityVariants
 
-  @_normalizeRuleDefinition: (a, b) ->
-    if isClass a
-      nodeBaseClass = a
-      _rules = b
+  @_normalizeRuleDefinition: (args...) ->
+    if isString args[0]
+      [ruleName, definition...] = args
+      [ruleName]: normalizeVariantDefinitions definition, @getNodeBaseClass()
+
     else
-      _rules = a
-      nodeBaseClass = b
+      [a, b] = args
+      if isClass a
+        nodeBaseClass = a
+        _rules = b
+      else
+        _rules = a
+        nodeBaseClass = b
 
-    if isPlainObject nodeBaseClass
-      nodeBaseClass = @getNodeBaseClass().createSubclass nodeBaseClass
-    else nodeBaseClass ?= @getNodeBaseClass()
+      if isPlainObject nodeBaseClass
+        nodeBaseClass = @getNodeBaseClass().createSubclass nodeBaseClass
+      else nodeBaseClass ?= @getNodeBaseClass()
 
-    object definition, ruleName in _rules
-      normalizeVariantDefinitions definition, nodeBaseClass
+      object definition, ruleName in _rules
+        normalizeVariantDefinitions definition, nodeBaseClass
 
   ##################
   # PRIVATE

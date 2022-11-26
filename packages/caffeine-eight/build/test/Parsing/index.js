@@ -7,5 +7,6 @@
   LabelsTest:                        require('./Labels.test'),
   LeftRecursiveTest:                 require('./LeftRecursive.test'),
   ParserTest:                        require('./Parser.test'),
+  ParserDefinitionTest:              require('./ParserDefinition.test'),
   ParserExtensionViaInheritanceTest: require('./ParserExtensionViaInheritance.test')
 });

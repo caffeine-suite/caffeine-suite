@@ -1,0 +1,27 @@
+# converting parser tests to CAF
+import &StandardImport
+
+describe
+  "javascript friendly definitions": ->
+    test :basic ->
+      class MyParser extends Parser
+        @rule :root /foo/ custom: -> @text.toUpperCase()
+
+      assert.eq "FOO", MyParser.parse("foo").custom()
+
+    test :rule-ref ->
+      class MyParser extends Parser
+        @rule :root :thing custom: -> @thing.custom()
+        @rule :thing /foo/ custom: -> @text.toUpperCase()
+
+      assert.eq "FOO", MyParser.parse("foo").custom()
+
+    test :two-patterns ->
+      class MyParser extends Parser
+        @rule :root :thing1 :thing2 custom: -> (@thing1 ? @thing2).custom()
+        @rule :thing1 /foo/ custom: -> @text.toUpperCase()
+        @rule :thing2 /bar/ custom: -> @text.toUpperCase()
+
+      assert.eq "FOO", MyParser.parse("foo").custom()
+      assert.eq "BAR", MyParser.parse("bar").custom()
+      assert.rejects -> MyParser.parse("barf").custom()

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "ParserDefinition.test.js",
+  "sourceRoot": "../../..",
+  "sources": [
+    "source/test/Parsing/ParserDefinition.test.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;iCACA,oEAAO,oEAEP,gBAAQ,CACN,+CACE,KAAK,8BAAS,+CACW,0DACrB,UAAM,QAAM,QAAM,oBAAW,8CAE/B,UAAU,OAAO,eAAe,qBAElC,KAAK,iCAAY,+CACQ,0DACrB,UAAM,QAAM,UAAO,oBAAW,gCAC9B,UAAM,SAAO,QAAM,oBAAW,8CAEhC,UAAU,OAAO,eAAe,4BAElC,KAAK,qCAAgB,+CACI,0DACrB,UAAM,QAAM,UAAQ,WAAQ,8BAAW,OAAC,wCAAU,4BAClD,UAAM,UAAQ,QAAM,oBAAW,oCAC/B,UAAM,UAAQ,QAAM,oBAAW,uCAEjC,UAAU,OAAO,eAAe,kBAChC,UAAU,OAAO,eAAe,yBAChC,eAAc,MAAI,eAAe"
+}

@@ -43,103 +43,77 @@ const resolveInfixBinaryOpsSequence = function (values, operands) {
 
 class CalcParser extends require("caffeine-eight").Parser {}
 
-CalcParser.rule({
-  root: [
-    "expression",
-    {
-      evaluate(context = exampleContext) {
-        return this.expression.evaluate(context);
-      },
-    },
-  ],
-  expression: [
-    ["binaryOp", "nonBinOpExpr"],
-    {
-      evaluate(context) {
-        return this.matches[0].evaluate(context);
-      },
-    },
-  ],
-  binaryOp: [
-    "nonBinOpExpr binOpExtension+",
-    {
-      evaluate(context) {
-        return resolveInfixBinaryOpsSequence(
-          [this.nonBinOpExpr]
-            .concat(this.binOpExtensions.map(({ nonBinOpExpr }) => nonBinOpExpr))
-            .map(node => node.evaluate(context)),
-          this.binOpExtensions.map(({ op }) => op.text)
-        );
-      },
-    },
-  ],
-  binOpExtension: "_? op:/[-+*\\/]/ _? nonBinOpExpr",
-  nonBinOpExpr: [
-    ["parenthetical", "function", "number", "variable"],
-    {
-      evaluate(context) {
-        return this.matches[0].evaluate(context);
-      },
-    },
-  ],
-  function: [
-    "identifier '(' _? arguments? _? ')'",
-    {
-      evaluateArguments(context) {
-        return this.arguments.getArguments().map(match => match.evaluate(context));
-      },
-      evaluate(context) {
-        const f = context.resolveFunction(this.identifier.text);
-        if (!f) throw new Error(`Could not resolve function named: '${this.identifier.text}'`);
-        return f(...this.evaluateArguments(context));
-      },
-    },
-  ],
-  arguments: [
-    "expression argumentExtension*",
-    {
-      getArguments() {
-        return this.matches.filter(match => match.evaluate);
-      },
-    },
-  ],
-  argumentExtension: [
-    "_? ',' _? expression",
-    {
-      evaluate(context) {
-        return this.expression.evaluate(context);
-      },
-    },
-  ],
-  parenthetical: [
-    "'(' _? expression _? ')'",
-    {
-      evaluate(context) {
-        return this.expression.evaluate(context);
-      },
-    },
-  ],
-  propAccessorExtension: "'.' identifier",
-  variable: [
-    "identifier propAccessorExtension*",
-    {
-      evaluate(context) {
-        return context.resolveValue(this.text);
-      },
-    },
-  ],
-  identifier: /(?!\d)((?!\s)[$\w\u007f-\uffff])+/,
-  number: [
-    /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/i,
-    {
-      evaluate(context) {
-        return eval(this.text);
-      },
-    },
-  ],
-  _: /\s+/,
+CalcParser.rule("root", "expression", {
+  evaluate(context = exampleContext) {
+    return this.expression.evaluate(context);
+  },
 });
 
-CalcParser.repl({ verbose: true });
+CalcParser.rule("expression", "binaryOp", "nonBinOpExpr", {
+  evaluate(context) {
+    return this.matches[0].evaluate(context);
+  },
+});
 
-module.exports = CalcParser;
+CalcParser.rule("binaryOp", "nonBinOpExpr binOpExtension+", {
+  evaluate(context) {
+    return resolveInfixBinaryOpsSequence(
+      [this.nonBinOpExpr]
+        .concat(this.binOpExtensions.map(({ nonBinOpExpr }) => nonBinOpExpr))
+        .map(node => node.evaluate(context)),
+      this.binOpExtensions.map(({ op }) => op.text)
+    );
+  },
+});
+
+CalcParser.rule("binOpExtension", "_? op:/[-+*\\/]/ _? nonBinOpExpr");
+
+CalcParser.rule("nonBinOpExpr", "parenthetical", "function", "number", "variable", {
+  evaluate(context) {
+    return this.matches[0].evaluate(context);
+  },
+});
+CalcParser.rule("function", "identifier '(' _? arguments? _? ')'", {
+  evaluateArguments(context) {
+    return this.arguments.getArguments().map(match => match.evaluate(context));
+  },
+  evaluate(context) {
+    const f = context.resolveFunction(this.identifier.text);
+    if (!f) throw new Error(`Could not resolve function named: '${this.identifier.text}'`);
+    return f(...this.evaluateArguments(context));
+  },
+});
+
+CalcParser.rule("arguments", "expression argumentExtension*", {
+  getArguments() {
+    return this.matches.filter(match => match.evaluate);
+  },
+});
+CalcParser.rule("argumentExtension", "_? ',' _? expression", {
+  evaluate(context) {
+    return this.expression.evaluate(context);
+  },
+});
+CalcParser.rule("parenthetical", "'(' _? expression _? ')'", {
+  evaluate(context) {
+    return this.expression.evaluate(context);
+  },
+});
+
+CalcParser.rule("variable", "identifier propAccessorExtension*", {
+  evaluate(context) {
+    return context.resolveValue(this.text);
+  },
+});
+CalcParser.rule("propAccessorExtension", "'.' identifier");
+
+CalcParser.rule("identifier", /(?!\d)((?!\s)[$\w\u007f-\uffff])+/);
+CalcParser.rule("number", /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?/i, {
+  evaluate(context) {
+    return eval(this.text);
+  },
+});
+
+CalcParser.rule("_", /\s+/);
+
+CalcParser.repl({ verbose: true });
