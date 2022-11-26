@@ -27,19 +27,7 @@ normalizeVariantDefinitions = (variantDefinitions, nodeBaseClass) ->
       out.push merge commonNodeProps, definition
   out
 
-addToExpectingInfo = (node, _into, value) ->
-  if node.parent
-    _into = addToExpectingInfo node.parent, _into
-
-  _into[node.parseInfo] ||= if value
-    value
-  else
-    p = {}
-    if (pm = node.presentMatches)?.length > 0
-      p.matches = array m in pm with m.parseInfo
-    p
-
-class Parser extends &ParserCoffee
+class Parser extends BaseClass
   ##################################################################
     PUBLIC: Class Methods
   ##################################################################
@@ -216,18 +204,17 @@ class Parser extends &ParserCoffee
 
           @getLineColumn failureIndex
 
-    # partialParseTree: ->
-    #   return @_partialParseTree if @_partialParseTree
-    #   expectingInfoTree = {}
-    #   rootNode = null
-    #   @_partialParseTreeNodes = array {patternElement, node}, k from @_nonMatches # when (node.getPresent() || node.getPresent == Node.prototype.getPresent)
-    #     addToExpectingInfo node, expectingInfoTree, patternElement.pattern.toString()
-    #     n = new Node node
-    #     n.pattern = patternElement
-    #     rootNode = n._addToParentAsNonMatch()
-    #     n
+    partialParseTree: ->
+      return @_partialParseTree if @_partialParseTree
+      # expectingInfoTree = {}
+      rootNode = undefined
+      @_partialParseTreeNodes = array {patternElement, node} from @_nonMatches
+        n = new Node node
+        n.pattern = patternElement
+        rootNode = n._addToParentAsNonMatch()
+        n
 
-    #   @_partialParseTree = rootNode
+      @_partialParseTree = rootNode
 
     expectingInfo: ->
       return null unless objectLength(@_nonMatches) > 0

@@ -8,7 +8,6 @@
   Lib:                       require('./Lib'),
   NonMatch:                  require('./NonMatch'),
   Parser:                    require('./Parser'),
-  ParserCoffee:              require('./ParserCoffee'),
   PatternElement:            require('./PatternElement'),
   Repl:                      require('./Repl'),
   Rule:                      require('./Rule'),
