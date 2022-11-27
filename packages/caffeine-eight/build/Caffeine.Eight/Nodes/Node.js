@@ -59,8 +59,8 @@
       if (options.name) {
         klass._name = klass.prototype._name = options.name;
       }
-      if (options.ruleVarient) {
-        klass.ruleVarient = options.ruleVarient;
+      if (options.ruleVariant) {
+        klass.ruleVariant = options.ruleVariant;
         klass.rule = klass.ruleVariant.rule;
       }
       mergeInto(klass.prototype, objectWithout(options, "getter"));

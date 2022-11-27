@@ -42,8 +42,8 @@ module.exports = class Node extends BaseClass
     klass = @_createSubclassBase()
     # class NodeSubclass extends @
     klass._name = klass.prototype._name = options.name if options.name
-    if options.ruleVarient
-      klass.ruleVarient = options.ruleVarient
+    if options.ruleVariant
+      klass.ruleVariant = options.ruleVariant
       klass.rule = klass.ruleVariant.rule
     mergeInto klass.prototype, objectWithout options, "getter"
     klass.getter options.getter if options.getter

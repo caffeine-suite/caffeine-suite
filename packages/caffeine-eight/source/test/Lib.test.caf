@@ -19,6 +19,13 @@ describe
       assert.eq sourceIndex, out.indexOf insertString
       assert.eq sourceIndex + insertString.length, out.indexOf testString
 
+    test "presentSourceLocation source, sourceIndex with customInsertString", ->
+      customInsertString = "<CUSTOM>"
+      out = presentSourceLocation source, sourceIndex, insertString: customInsertString
+
+      assert.eq sourceIndex, out.indexOf customInsertString
+      assert.eq sourceIndex + customInsertString.length, out.indexOf testString
+
     test "presentSourceLocation source, sourceIndex, color: true", ->
       out = presentSourceLocation source, sourceIndex, color: true
 

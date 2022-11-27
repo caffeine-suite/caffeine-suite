@@ -1,39 +1,39 @@
-{Node, EmptyNode, EmptyOptionalNode} = require './Nodes'
-{isPlainObject, isString, isRegExp, inspect, log} = require 'art-standard-lib'
+import &ArtStandardLib, &ArtClassSystem, &Nodes
 
-module.exports = class PatternElement extends require("art-class-system").BaseClass
+class PatternElement extends BaseClass
   @escapeRegExp: escapeRegExp = (str) ->
     str.replace /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&"
-  @regExpRegExp: /\/((?:[^\\\/]|\\.)+)\//
-  @ruleRegExp: /([a-zA-Z0-9_]+)/
-  @singleQuotedStringRegExp: /'((?:[^\\']|\\.)+)'/
-  @doubleQuotedStringRegExp: /"((?:[^\\"]|\\.)+)"/
-  @labelRegExp: /([a-zA-Z0-9_]+)\:/
-  @patternElementRegExp: ///
-    (?:#{@labelRegExp.source})?
-    ([!&])?
-    (?:
-      #{@ruleRegExp.source} |
-      #{@regExpRegExp.source} |
-      #{@singleQuotedStringRegExp.source} |
-      #{@doubleQuotedStringRegExp.source}
-    )
-    ([?*+])?
+  @regExpRegExp:              /\/((?:[^\\\/]|\\.)+)\//
+  @ruleRegExp:                /([a-zA-Z0-9_]+)/
+  @singleQuotedStringRegExp:  /'((?:[^\\']|\\.)+)'/
+  @doubleQuotedStringRegExp:  /"((?:[^\\"]|\\.)+)"/
+  @labelRegExp:               /([a-zA-Z0-9_]+)\:/
+  @patternElementRegExp:
     ///
-  @allPatternElementsRegExp: ///#{@patternElementRegExp.source}///g
+      (?:#{@labelRegExp.source})?
+      ([!&])?
+      (?:
+        #{@ruleRegExp.source} |
+        #{@regExpRegExp.source} |
+        #{@singleQuotedStringRegExp.source} |
+        #{@doubleQuotedStringRegExp.source}
+      )
+      ([?*+])?
+
+  @allPatternElementsRegExp: ///g #{@patternElementRegExp.source}
 
   #####################
   # members
   #####################
-  constructor: (@pattern, {@ruleVariant} = {}) ->
-    super
+  constructor: (@pattern, options) ->
+    options ?= {}
+    @ruleVariant = options.ruleVariant
     @parse = null
     @_init()
 
-  toString: ->
-    "PatternElement(#{@pattern})"
+  toString: -> "" PatternElement(#{@pattern})
 
-  @getter "isTokenPattern"
+  @getter :isTokenPattern
 
   @property
     label: null
@@ -55,6 +55,7 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
       !@couldMatch
     inspectedObjects: ->
       PatternElement: @props
+
     props: ->
       props = pattern: @pattern
 
@@ -77,8 +78,10 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
   parseInto: (parentNode) ->
     !!parentNode.addMatch @, @parse parentNode
 
+
   _applyParseFlags: ->
     singleParser = @parse
+    m = undefined
     if @_optional
       @parse = (parentNode) ->
         if match = singleParser parentNode
@@ -106,7 +109,6 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
           matchCount++
           break if m.matchLength == 0 # avoid infinite match
 
-        # parentNode.addMatch @, new EmptyNode parentNode if matchCount == 0
         true
 
     if @_oneOrMore
@@ -127,7 +129,9 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
     if isPlainObject pattern
       @_initPlainObject pattern
     else if isString pattern
-      [__, @label, prefix, @ruleName, regExp, singleQuotedString, doubleQuotedString, suffix] = res = pattern.match PatternElement.patternElementRegExp
+      [__, label, prefix, ruleName, regExp, singleQuotedString, doubleQuotedString, suffix] = res = pattern.match PatternElement.patternElementRegExp
+      @label = label
+      @ruleName = ruleName
       throw new Error "pattern can only have one prefix: !/& or one suffix: ?/+/*" if prefix && suffix
 
       switch prefix
@@ -152,15 +156,14 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
 
     @_applyParseFlags()
 
-  _initPlainObject: (object)->
-    {
-      @negative
-      @oneOrMore
-      @zeroOrMore
-      @optional
-      @parse
-      parseInto
-    } = object
+  _initPlainObject: (plainObject)->
+    @negative = plainObject.negative
+    @oneOrMore = plainObject.oneOrMore
+    @zeroOrMore = plainObject.zeroOrMore
+    @optional = plainObject.optional
+    @parse = plainObject.parse
+    parseInto = plainObject.parseInto
+
     @parseInto = parseInto if parseInto
     throw new Error "plain-object pattern definition requires 'parse' or 'parseInto'" unless @parse || parseInto
 
@@ -171,18 +174,17 @@ module.exports = class PatternElement extends require("art-class-system").BaseCl
       matchRule.parse parentNode
 
   ###
-  NOTE: regExp.test is 3x faster than .exec in Safari, but about the
-    same in node/chrome. Safari is 2.5x faster than Chrome/Node in this.
+    NOTE: regExp.test is 3x faster than .exec in Safari, but about the
+      same in node/chrome. Safari is 2.5x faster than Chrome/Node in this.
 
-    Regexp must have the global flag set, even if we are using the y-flag,
-    to make .test() set .lastIndex correctly.
+      Regexp must have the global flag set, even if we are using the y-flag,
+      to make .test() set .lastIndex correctly.
 
-  SEE: https://jsperf.com/regex-match-length
-  ###
+    SEE: https://jsperf.com/regex-match-length
   _initRegExp: (regExp) ->
     @_isTokenPattern = true
-    flags = "yg"
-    flags += "i" if regExp.ignoreCase
+    flags = :yg
+    flags += :i if regExp.ignoreCase
     regExp = RegExp regExp.source, flags
 
     @parse = (parentNode) ->

@@ -88,7 +88,7 @@ class RuleVariant extends BaseClass
       @_variantNodeClassName = baseName
 
 
-  ### _initVariantNodeClass
+  ## _initVariantNodeClass
     OPTIONS:
 
       node / nodeClass
@@ -103,6 +103,8 @@ class RuleVariant extends BaseClass
 
     @VariantNodeClass =
       nodeBaseClass.createSubclass merge
-        name:        @variantNodeClassName
-        ruleVarient: @ruleVarient
+        {}
+          name:        @variantNodeClassName
+          @ruleVariant
+
         nodeSubclassOptions
