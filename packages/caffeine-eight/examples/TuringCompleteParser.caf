@@ -1,0 +1,32 @@
+class TuringCompleteParser extends &CaffeineEight.Parser
+  getStore:   -> @store ?= []
+  getContext: -> @context ?= {}
+  operators   = {}
+  getOperator = (op) -> operators[op] ?= eval "" (a, b) => a #{op} b
+
+  # SEQUENCING
+  @rule root:       [] "expression nextExpr* _? ';'?"                               evaluate: -> reduce last, e in @nextExprs inject @expression.evaluate() do e.expression.evaluate()
+  @rule nextExpr:   "_? ';' _? expression"
+
+  # ARITHMETIC
+  @rule expression: [] "operand _? op:/==|!=|<=|>=|[-+*\\/<>]/ _? operand"          evaluate: -> getOperator(@op.text) (array op in @operands with op.evaluate())...
+  @rule expression: [] :operand                                                     evaluate: -> @operand.evaluate()
+  @rule operand:    [] "'(' _? root _? ')'"                                         evaluate: -> @root.evaluate()
+  @rule operand:    [] /-?[0-9]+/                                                   evaluate: -> eval @text
+  @rule _:          /\s+/
+
+  # MEMORY
+  @rule expression: [] "'[' _? expression _? ']' _? '=' _? value:expression"        evaluate: -> @parser.getStore()[@expression.evaluate()] = @value.evaluate()
+  @rule expression: [] "'[' _? expression _? ']'"                                   evaluate: -> @parser.getStore()[@expression.evaluate()]
+
+  # LOOPING AND CONDITIONALS
+  @rule operand:    [] "'while' _ test:expression _ 'do' _ body:expression"         evaluate: -> while @test.evaluate() do @body.evaluate()
+  @rule operand:    [] "'if' _ test:expression _ 'then' _ then:expression _ else?"  evaluate: -> if @test.evaluate() then @then.evaluate() else @else?.expression.evaluate()
+  @rule else:       "'else' _ expression"
+
+  # VARIABLES
+  @rule operand:    [] "identifier _? '=' _? expression"                            evaluate: -> @parser.getContext()[@identifier.text] = @expression.evaluate()
+  @rule operand:    [] :identifier                                                  evaluate: -> @parser.getContext()[@identifier.text]
+  @rule identifier: /\w+/
+
+.repl()

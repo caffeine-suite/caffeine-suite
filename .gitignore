@@ -1,2 +1,3 @@
 .mailmap
 node_modules/
+coverage/
