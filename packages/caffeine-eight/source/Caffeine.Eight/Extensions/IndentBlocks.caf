@@ -1,66 +1,76 @@
-{array, defineModule, log, merge, escapeJavascriptString, find} = require 'art-standard-lib'
-{Node} = require '../Nodes'
-
-defineModule module, -> class IndentBlocks
+import &ArtStandardLib, &ArtClassSystem, &Nodes
+class IndentBlocks extends BaseClass
   blockStartRegExp = /\n(?: *\n)*( +)(?=$|[^ \n])/y
   toEolContent = /(\ *)((?:\ *[^ \n]+)+)\ */y
-  blockLinesRegExp = (indent) -> ///
-    (
-      (?:\s*\n)
-      (?:#{indent}\ *[^\n\ ][^\n]*)
-    )+
+  blockLinesRegExp = (indent) ->
     ///y
+      (
+        (?:\s*\n)
+        (?:#{indent}\ *[^\n\ ][^\n]*)
+      )+
 
   ###
-  TODO:
-    for matchBlock and matchToEolAndBlock
+    TODO:
+      for matchBlock and matchToEolAndBlock
 
-    We also need a source-offset mapper from the new source back to the old-source.
+      We also need a source-offset mapper from the new source back to the old-source.
 
-    I think the map should just be part of the returned object
-  ###
-
-  @matchBlock: matchBlock = (source, sourceOffset, returnRawMatch = false) ->
+      I think the map should just be part of the returned object
+  @matchBlock: (source, sourceOffset, returnRawMatch = false) =>
     blockStartRegExp.lastIndex = sourceOffset
 
     if match = blockStartRegExp.exec source
-      [__, indent] = match
+      indent = match[1]
       length = indent.length
       linesRegExp = blockLinesRegExp indent
       linesRegExp.lastIndex = sourceOffset
       [rawSubsource] = linesRegExp.exec source
 
-      replaceRegExp = ///(?:^\n#{indent})|(\n)(?:#{indent})///g
-      replaceWith = "$1"
+      replaceRegExp = ///g (?:^\n#{indent})|(\n)(?:#{indent})
 
       # generated on demand, but then cached for future sourceMap calls.
       subsourceToParentSourceMap = null
 
-      subsource = if returnRawMatch then rawSubsource
-      else rawSubsource.replace replaceRegExp, "$1"
+      {}
+        subsource:
+          if returnRawMatch then rawSubsource
+          else rawSubsource.replace replaceRegExp, "$1"
 
-      matchLength:  rawSubsource.length
-      subsource:    subsource
-      sourceMap:
-        if returnRawMatch
-          (suboffset) -> suboffset + sourceOffset
-        else (suboffset) ->
-          subsourceToParentSourceMap ||= computeSubsourceToParentSourceMap sourceOffset, replaceRegExp, indent, rawSubsource
-          bestMapEntry = find subsourceToParentSourceMap, (entry) ->
-            entry if suboffset < entry.subsourceEndOffset
+        matchLength:  rawSubsource.length
+        sourceMap:
+          if returnRawMatch
+            (suboffset) -> suboffset + sourceOffset
+          else (suboffset) ->
+            subsourceToParentSourceMap ||= @_computeSubsourceToParentSourceMap
+              sourceOffset
+              replaceRegExp
+              indent
+              rawSubsource
 
-          unless bestMapEntry
-            log bestMapEntryNotFound: {source, rawSubsource, subsourceToParentSourceMap, suboffset, sourceLength: source.length, rawSubsourceLength: rawSubsource.length, sourceOffset, indent}
-            throw new Error "error getting source location from subparse sourceMap"
+            bestMapEntry = find entry in subsourceToParentSourceMap when suboffset < entry.subsourceEndOffset
 
-          suboffset + bestMapEntry.toSourceDelta
+            unless bestMapEntry
+              log bestMapEntryNotFound: {}
+                source
+                rawSubsource
+                subsourceToParentSourceMap
+                suboffset
+                sourceLength: source.length
+                rawSubsourceLength: rawSubsource.length
+                sourceOffset
+                indent
 
-  computeSubsourceToParentSourceMap = (sourceBaseOffset, replaceRegExp, indent, rawSubsource)->
+              throw new Error "error getting source location from subparse sourceMap"
+
+            suboffset + bestMapEntry.toSourceDelta
+
+  @_computeSubsourceToParentSourceMap: (sourceBaseOffset, replaceRegExp, indent, rawSubsource) =>
       indentLength = indent.length
       indentWithNewLineLength = indentLength + 1
       indexes = []
       sourceOffset = toSourceDelta = sourceBaseOffset
       subsourceOffset = subsourceEndOffset = 0
+      match = null
       while match = replaceRegExp.exec rawSubsource
 
         matchLength = match[0].length
@@ -69,7 +79,7 @@ defineModule module, -> class IndentBlocks
         sourceEndOffset     = match.index + sourceBaseOffset + matchLength
         subsourceEndOffset  += sourceEndOffset - sourceOffset - removedLength
 
-        indexes.push {
+        indexes.push {}
           keptLength
           removedLength
           sourceOffset
@@ -77,7 +87,6 @@ defineModule module, -> class IndentBlocks
           toSourceDelta
           sourceEndOffset
           subsourceEndOffset
-        }
 
         toSourceDelta += removedLength
 
@@ -87,25 +96,24 @@ defineModule module, -> class IndentBlocks
       sourceEndOffset     = sourceBaseOffset + rawSubsource.length
       subsourceEndOffset  = sourceEndOffset - sourceOffset + sourceOffset
 
-      indexes.push {
+      indexes.push {}
         sourceOffset
         subsourceOffset
         toSourceDelta
         sourceEndOffset
         subsourceEndOffset
-      }
 
       indexes
 
   # I think this is actually matchToEolOrBlock - one or the other
-  @matchToEolAndBlock: matchToEolAndBlock = (source, offset) ->
+  @matchToEolAndBlock: matchToEolAndBlock = (source, offset) =>
     toEolContent.lastIndex = offset
     if eolMatch = toEolContent.exec source
 
       [sourceMatched, spaces] = eolMatch
       matchLength = sourceMatched.length
 
-      if blockMatch = matchBlock source, offset + matchLength, true
+      if blockMatch = @matchBlock source, offset + matchLength, true
         matchLength += blockMatch.matchLength
 
       subsource:    source.slice offset + spaces.length, offset + matchLength
@@ -113,23 +121,23 @@ defineModule module, -> class IndentBlocks
       matchLength:  matchLength
 
     else
-      matchBlock source, offset
+      @matchBlock source, offset
 
-  @matchToEol: matchToEol = (source, offset) ->
+  @matchToEol: (source, offset) =>
     toEolContent.lastIndex = offset
     if eolMatch = toEolContent.exec source
 
       [sourceMatched, spaces] = eolMatch
       matchLength = sourceMatched.length
 
-      if blockMatch = matchBlock source, offset + matchLength, true
+      if blockMatch = @matchBlock source, offset + matchLength, true
         matchLength += blockMatch.matchLength
 
       subsource:    source.slice offset + spaces.length, offset + matchLength
       sourceMap:    (suboffset) -> offset + spaces.length + suboffset
       matchLength:  matchLength
 
-  @getParseFunction: (matcher, subparseOptions) ->
+  @getParseFunction: (matcher, subparseOptions) =>
     parse:
       # for debugging
       if subparseOptions.verbose
@@ -149,6 +157,7 @@ defineModule module, -> class IndentBlocks
 
             log IndentBlocks_parse_verbose_matcher_subparse: {subparseOptions, parsed}
             parsed
+
       else
         (parentNode) ->
           {nextOffset:offset, source} = parentNode
@@ -162,6 +171,5 @@ defineModule module, -> class IndentBlocks
               sourceMap:            sourceMap
 
   @getPropsToSubparseToEol: (subparseOptions = {}) => @getParseFunction @matchToEol, subparseOptions
-
   @getPropsToSubparseBlock: (subparseOptions = {}) => @getParseFunction @matchBlock, subparseOptions
   @getPropsToSubparseToEolAndBlock: (subparseOptions = {}) => @getParseFunction @matchToEolAndBlock, subparseOptions
