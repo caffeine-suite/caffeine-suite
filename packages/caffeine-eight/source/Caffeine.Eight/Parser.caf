@@ -317,7 +317,7 @@ class Parser extends BaseClass
           @colorString :gray "" ...
           ''
           if @expectingInfo then formattedInspect @expectingInfo, options
-          else error?.message
+          else error?.message?.split("\n")?[0]
           if verbose then formattedInspect ("partial-parse-tree": @partialParseTree), options
           ''
 
@@ -335,11 +335,12 @@ class Parser extends BaseClass
       new CaffeineEightCompileError
         compactFlatten []
           if rootParseTreeNode?.matchLength < @_source.length
-            @_failureIndex = rootParseTreeNode.matchLength
+            @_failureIndex = max @_failureIndex || 0, rootParseTreeNode.matchLength
             @colorString "gray", "#{@class.name} only parsed: "
             + @colorString "black", "#{rootParseTreeNode.matchLength} of #{@_source.length} "
             + @colorString "gray", "characters"
 
+          @getParseFailureInfo options
           message
 
         .join "\n"
