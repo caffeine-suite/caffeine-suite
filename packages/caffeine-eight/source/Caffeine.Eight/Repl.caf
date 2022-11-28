@@ -30,5 +30,7 @@ class Repl
             callback error
 
         catch error
-          log parser.getParseFailureInfo(error: error, color: true, verbose: options?.verbose).replace :<HERE>, "<HERE>".red
+          log
+            parser.getParseFailureInfo {} error, color: true, options?.verbose
+            .replace :<HERE> "<HERE>".red
           callback()
