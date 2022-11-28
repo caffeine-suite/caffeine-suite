@@ -2,7 +2,8 @@ import &StandardImport
 
 test "with class", ->
   class MyParser extends Parser
-    @nodeBaseClass: require('./TODO_TestNodeClass').NodeBaseClassTestNode
+    @nodeBaseClass: class MyNode extends Node
+      toJs: -> @toString() + "!"
 
     @rule
       root: /boo/

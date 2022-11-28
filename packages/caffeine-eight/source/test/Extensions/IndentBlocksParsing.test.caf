@@ -34,7 +34,13 @@ createMyEolOrBlockParser = ->
 
 createObjectNotationParser = ->
   class ObjectNotationParser extends Parser
-    @nodeBaseClass: require './TODO_TestNodeClass'
+    @nodeBaseClass:
+      # class IndentBlocksNode extends Node
+      toJs: ->
+        if m = (find match in-array @matches when match.toJs)
+          return m.toJs()
+        log "no matches have toJs": self: @, class: @class, matches: @matches, parseTreePath: @parseTreePath
+        throw new Error "no matches have toJs"
 
     @rules
       root: 'statement+'

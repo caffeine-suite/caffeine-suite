@@ -2,7 +2,9 @@ import &StandardImport
 
 getClass = ->
   class MyParser extends Parser
-    @nodeBaseClass: require('./TODO_TestNodeClass').RuleGroupNodeBaseClassNode
+    @nodeBaseClass:
+      # class MyNode extends Node
+      compile: -> (array a in @matches when a.compile with a.compile()).join ''
 
     @rule
       root: "noun _ verb _ noun"

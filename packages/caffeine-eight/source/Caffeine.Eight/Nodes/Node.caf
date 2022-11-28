@@ -1,18 +1,11 @@
-{
-  arrayWith, array, peek, log, push, compactFlatten, objectWithout, isPlainArray, isPlainObject, inspectedObjectLiteral, merge, mergeInto
-} = require 'art-standard-lib'
-Nodes = require './namespace'
+import &ArtStandardLib, &ArtClassSystem, {} &Nodes, &Stats
 
-{BaseClass} = require 'art-class-system'
+class Node extends BaseClass
 
-Stats = require '../Stats'
-
-module.exports = class Node extends BaseClass
   constructor: (parent, options) ->
-    super
     Stats.add "newNode"
     @_parent = parent
-    {@_parser} = parent
+    @_parser = parent._parser
 
     @_absoluteOffset = -1
 
@@ -53,15 +46,16 @@ module.exports = class Node extends BaseClass
   toString: -> @text
 
   # SEE: SourceLineColumnMap#getLineColumn
-  getSourceLineColumn: (into) -> @parser.getLineColumn @offset, into
+  getSourceLineColumn: (_into) -> @parser.getLineColumn @offset, _into
 
   emptyArray = []
   @setter "matches offset matchLength ruleVariant pattern matchPatterns"
-  @getter "
+  @getter
+    "
     parent parser offset matchLength
     matchPatterns
     label pluralLabel ruleName pluralRuleName pattern nonMatch
-    ",
+    "
     realNode: -> @
     name: -> @_name || @ruleName || @class.getName()
     present: -> @_matchLength > 0 || @_nonMatch
@@ -76,10 +70,10 @@ module.exports = class Node extends BaseClass
         # log "=== get absoluteOffset --- #{@inspectedName} --- #{@_offset}/#{@parser.source.length} --- subparsed: #{!!@parser.parentParser}"
         @_absoluteOffset = @_parser.offsetInRootParserSource @_offset
 
-    ancestors: (into = [])->
-      @parent.getAncestors into
-      into.push @
-      into
+    ancestors: (_into = [])->
+      @parent.getAncestors _into
+      _into.push @
+      _into
 
     sourceFile: -> @_parser.sourceFile
 
@@ -90,7 +84,7 @@ module.exports = class Node extends BaseClass
         "#{@ruleName}:#{@offset}"
 
     rulePath: ->
-      ancestorRuleNames = for ancestor in @ancestors
+      ancestorRuleNames = array ancestor in @ancestors
         ancestor.parseInfo
 
       ancestorRuleNames.join " > "
@@ -98,8 +92,7 @@ module.exports = class Node extends BaseClass
     nextOffset: -> @offset + @matchLength
     text: ->
       {matchLength, offset, source} = @subparseInfo || @
-      if matchLength == 0 then "" else source.slice offset, offset + matchLength
-
+      if matchLength == 0 then '' else source.slice offset, offset + matchLength
 
     ruleVariant: -> @_ruleVariant || @_parent?.ruleVariant
     ruleName: ->
@@ -129,14 +122,12 @@ module.exports = class Node extends BaseClass
     parseTreePath: -> compactFlatten [@parent?.parseTreePath, @class.getName()]
 
     presentMatches: ->
-      m for m in @matches when m.getPresent?()
+      array m in @matches when m.getPresent?()
 
     isNonMatch: -> !!@nonMatch
     isPartialMatch: ->
       return false unless @nonMatch
-      return true for match in @presentMatches when !match.nonMatch
-
-      false
+      !!find match in @presentMatches when !match.nonMatch
 
     isMatch: -> !@nonMatch
 
@@ -150,11 +141,10 @@ module.exports = class Node extends BaseClass
       else
         @parent.firstPartialMatchParent
 
-    inspectedName: -> "#{if l = @label then "#{l}:" else ""}#{@ruleName}"
+    inspectedName: -> "" #{if l = @label then "#{l}:" else ''}#{@ruleName}
 
     children: ->
-      for match in @presentMatches when match.getPresent?() && !match.nonMatch
-        match
+      array match in @presentMatches when match.getPresent?() && !match.nonMatch
 
     inspectedObjects: (verbose) ->
       match = @
@@ -162,50 +152,51 @@ module.exports = class Node extends BaseClass
       if matches.length > 0
 
         path = []
-        while matches.length == 1 && matches[0].matches?.length > 0
+        while matches.length == 1 && matches[0].matches && matches[0].matches.length > 0
           path.push match.inspectedName
           [match] = matches
           matches = match.presentMatches
 
-        {label, ruleName, nonMatch} = match
+        match extract label, ruleName, nonMatch
 
         path.push ruleName
 
         path = path.join '.'
 
         hasOneOrMoreMatchingChildren = false
-        children = for match in matches
+        children = array match in matches
           hasOneOrMoreMatchingChildren = true unless match.nonMatch
           match.getInspectedObjects verbose
 
-        parts = compactFlatten [
+        parts = compactFlatten []
           # if path.length > 0   then path: path
-          if label             then label: label
-          {@offset, @absoluteOffset}
+          if label then {} label
+
+          if @absoluteOffset != @offset
+            {} @offset, @absoluteOffset
+          else
+            {} @offset
+
           if children.length > 0
             children
           else
             match.toString()
-        ]
+
         parts = parts[0] if parts.length == 1
-        "#{
+
+        p =
           if nonMatch
             if hasOneOrMoreMatchingChildren
               'partialMatch-'
             else 'nonMatch-'
           else
             ''
-          }#{path}": parts
+        ["#{p}#{path}"]: parts
 
-        # ret = nonMatch: ret if nonMatch
-
-
-        # ret
       else if @nonMatch
         nonMatch: merge {offset: @offset, @ruleName, pattern: "#{@pattern?.pattern ? @ruleVariant?.pattern}"}
-        # nonMatch: offset: @offset, pattern: "#{@pattern?.pattern}"
-      else
 
+      else
         if verbose
           token: offset: @offset, length: @matchLength, text: @text, pattern: "#{@pattern?.pattern}", class: @class.getName(), ruleName: @ruleName
         else
@@ -215,7 +206,7 @@ module.exports = class Node extends BaseClass
       {matches} = @
       if matches.length > 0
 
-        children = for match in matches
+        children = array match in matches
           match.detailedInspectedObjects
 
         ret = {}
@@ -226,18 +217,16 @@ module.exports = class Node extends BaseClass
 
         ret
       else
-        @text #, offset: @offset, length: @matchLength
+        @text # , offset: @offset, length: @matchLength
 
     plainObjects: ->
-      ret = [{inspect:=>@class.getName()}]
       if @_matches?.length > 0
-        ret = ret.concat (match.getPlainObjects() for match in @matches)
+        [{inspect:=>@class.getName()}].concat array match in @matches with match.getPlainObjects()
       else
-        ret = @text #, offset: @offset, length: @matchLength
-      ret
+        @text
 
   find: (searchName, out = []) ->
-    for m in @matches
+    each m in @matches
       if m.getName() == searchName
         out.push m
       else
@@ -247,16 +236,14 @@ module.exports = class Node extends BaseClass
   subparse: (subSource, options) ->
     @_parser.subparse subSource, merge options, parentNode: @
 
-  ###
-  IN: pattern, match - instanceof Node
-  OUT: true if match was added
-  ###
+  ## addMatch
+    IN: pattern, match - instanceof Node
+    OUT: true if match was added
   addMatch: (pattern, match) ->
     return false unless match
 
     @_matches       = push @_matches, match
     @_matchPatterns = push @_matchPatterns, pattern
-
     @_matchLength   = match.nextOffset - @offset
 
     true
@@ -264,7 +251,7 @@ module.exports = class Node extends BaseClass
   applyLabels: ->
     return if !@_matches || @_labelsApplied
     @_labelsApplied = true
-    array @_matches, (match, i) =>
+    array match, i in @_matches
       pattern = @_matchPatterns[i]
 
       match._parent = @

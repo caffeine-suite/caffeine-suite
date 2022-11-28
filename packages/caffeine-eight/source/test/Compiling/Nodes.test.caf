@@ -5,10 +5,10 @@ test "cache and node mutations - or lack thereof soon", ->
     @rule
       root: w "doesntMatch1 doesntMatch2 doesMatch"
 
-      doesntMatch1: "label ':('"
+      doesntMatch1: "myLabel ':('"
       doesntMatch2: "bad:identifier ':('"
-      doesMatch: "label ')'"
-      label: "good:identifier ':'"
+      doesMatch: "myLabel ')'"
+      myLabel: "good:identifier ':'"
       identifier: /[_a-z0-9]+/i
 
   mainNode = MyParser.parse "boo:)"
