@@ -1557,3 +1557,9 @@ array v from 1 10 100 unto v == 10
 # the parens are ESSENTIAL
 new (createMyBlockParser())
 ```
+
+```coffee
+# this has the error "base not defined"
+# I think there is a general bug with variables first used in a while test
+while matches.length == 1 && matches[0].matches?.length > 0
+```
