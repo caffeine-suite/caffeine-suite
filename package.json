@@ -28,7 +28,7 @@
     "glob": "^7.1.6",
     "glob-promise": "^4.1.0",
     "jest": "^27.0.6",
-    "loader-utils": "^2.0.0",
+    "loader-utils": "^2.0.4",
     "mocha": "^7.2.0",
     "mock-fs": "^5.0.0",
     "neptune-namespaces-runtime": "^3.2.8",
