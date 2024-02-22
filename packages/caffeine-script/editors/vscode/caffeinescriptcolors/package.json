@@ -13,6 +13,7 @@
       }
     ]
   },
+  "icon": "assets/caffeine-logo.png",
   "description": "Official CaffeineScript color scheme",
   "displayName": "Caffeine Script Colors",
   "engines": {
@@ -27,7 +28,8 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "vsce package"
+    "build": "vsce package",
+    "publish": "open https://marketplace.visualstudio.com/manage/publishers/caffeine-script-publisher"
   },
   "version": "0.0.1"
 }
