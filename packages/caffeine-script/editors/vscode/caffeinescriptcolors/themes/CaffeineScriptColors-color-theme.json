@@ -504,7 +504,8 @@
 		"editor.foreground": "#ccc",
 		"editorWhitespace.foreground": "#3b3a32",
 		"editor.lineHighlightBackground": "#282828",
-		"editor.selectionBackground": "#F85931"
+		"editor.selectionBackground": "#F85931",
+		"editor.foldBackground": "#333333"
 	},
 	"name": "CaffeineScriptColors"
 }
