@@ -2,7 +2,7 @@
   "author": "Shane Brinkman-Davis Delamore",
   "bugs": "https:/github.com/caffeine-suite/caffeine-suite/issues",
   "dependencies": {
-    "art-standard-lib": "^1.71.3",
+    "art-standard-lib": "^1.73.1",
     "caffeine-eight": "^3.0.3",
     "neptune-namespaces-runtime": "^3.2.8"
   },

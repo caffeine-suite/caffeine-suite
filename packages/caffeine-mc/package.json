@@ -7,7 +7,7 @@
   "dependencies": {
     "@art-suite/source-root-finder": "^1.0.7",
     "art-class-system": "^1.11.16",
-    "art-standard-lib": "^1.71.3",
+    "art-standard-lib": "^1.73.1",
     "caffeine-eight": "^3.0.3",
     "cardinal": "^2.0.0",
     "colors": "^1.1.2",
@@ -60,7 +60,7 @@
     "test": "jest",
     "test-watch": "jest --watch"
   },
-  "version": "3.5.0",
+  "version": "3.5.1",
   "watch": {
     "build": {
       "extensions": [
