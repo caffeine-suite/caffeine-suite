@@ -1,14 +1,12 @@
 highlight: (js) ->
 
-  chalk = &chalk
+  terminalColors = &ArtStandardLib.TerminalColors
   cardinal = &cardinal
 
-  normalizeChalkColor = (clk) -> (str) -> clk str
-
-  keywordColor = normalizeChalkColor chalk.yellow
-  operatorColor = normalizeChalkColor chalk.magenta
-  functionDeclarationColor = normalizeChalkColor chalk.blue
-  itentifierColor = (str) -> str
+  keywordColor = terminalColors.yellow
+  operatorColor = terminalColors.magenta
+  functionDeclarationColor = terminalColors.blue
+  identifierColor = (str) -> str
 
   options =
     linenos: true
@@ -28,14 +26,14 @@ highlight: (js) ->
           else if nextToken?.value == ":"
             functionDeclarationColor s
           else
-            itentifierColor s
+            identifierColor s
 
-      Line:       _default: normalizeChalkColor chalk.grey
-      Block:      _default: normalizeChalkColor chalk.grey
+      Line:       _default: terminalColors.grey
+      Block:      _default: terminalColors.grey
       Boolean:    _default: keywordColor
       Null:       _default: keywordColor
-      Numeric:    _default: normalizeChalkColor chalk.red
-      String:     _default: normalizeChalkColor chalk.green
+      Numeric:    _default: terminalColors.red
+      String:     _default: terminalColors.green
       Keyword:    _default: keywordColor
       Punctuator: _default: operatorColor
 

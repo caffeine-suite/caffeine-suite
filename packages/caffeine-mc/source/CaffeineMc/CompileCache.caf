@@ -1,7 +1,5 @@
 import &StandardImport, &SourceRoots, &moduleResolver, &MockableTempDir, {} &crypto
 
-&chalk
-
 ## NOTES
   cachedFileKey: (object)
     compiler:   (required, object) compiler

@@ -10,7 +10,6 @@
     "art-standard-lib": "^1.71.3",
     "caffeine-eight": "^3.0.3",
     "cardinal": "^2.0.0",
-    "chalk": "^4.0.0",
     "colors": "^1.1.2",
     "commander": "^6.2.1",
     "fs-extra": "^10.0.0",

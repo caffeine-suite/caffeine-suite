@@ -1,7 +1,5 @@
 import &StandardImport, {} &path, &vm
 
-&chalk
-
 class Tools
   @fileExtensions: :caf :caffeine
   @fileIsCaffeine: (filename) -> /\.(caf|caffeine)$/.test filename
