@@ -1,4 +1,5 @@
 import &StandardImport
+import Extensions.IndentBlocks
 
 createMyBlockParserClass = ->
   class MyBlockParser extends Parser
@@ -559,3 +560,12 @@ describe
           .toJs()
 
           "" {myNumber1: .10, myNumber2: 1, myNumber3: 1.1, myArray1: [123, 456], myArray2: [\"hello\", \"world\"], myObject1: {foo: 1, bar: 2}, myObject2: {foo: 1, bar: 2}}
+
+  regressions:
+    matchBlock: ->
+      test "match block", ->
+        source = "class B\nclass A extends B\n  "
+        offset = 25
+        assert.eq
+          matchBlock source, offset
+          undefined

@@ -1,6 +1,6 @@
 import &ArtStandardLib, &ArtClassSystem, &Nodes
 class IndentBlocks extends BaseClass
-  blockStartRegExp = /\n(?: *\n)*( +)(?=$|[^ \n])/y
+  blockStartRegExp = /\n(?: *\n)*( +)(?=[^ \n])/y
   toEolContent = /(\ *)((?:\ *[^ \n]+)+)\ */y
   blockLinesRegExp = (indent) ->
     ///y
