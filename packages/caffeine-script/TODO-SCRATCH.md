@@ -25,6 +25,168 @@ Syntax Highlighting
 - support starting blocks with """ at the end of a line instead of only at the start
 - support #{} block syntax highlighting
 
+# Sorted
+
+## Breaking Changes
+
+```coffee
+# It really is annoying me that this doesn't work as expected.
+# BUT, I very intentionally did supported this; I'm just not loving it now.
+# Maybe it's OK
+
+# this
+v = new Validator
+  stateToCapital:
+    object:
+      keys: :string
+      values: :string minLength: 3
+
+# should be this
+v = new Validator
+  stateToCapital:
+    object: {}
+      keys:   :string
+      values: [] :string minLength: 3
+
+# but currently it is
+v = new Validator
+  stateToCapital:
+    object: []
+      {} keys:   :string
+      {} values: :string minLength: 3
+```
+
+## New Feature
+
+Bracket-style destructuring's should support pathing
+```
+a = b: c: 123
+out = {b.c} = a
+# c now == 123
+# returned: {c: 123}
+```
+---
+
+```coffeescript
+# pathed destructuring
+{global.pipelineRegistry} = foo
+
+global.pipelineRegistry = foo.pipelineRegistry
+```
+
+---
+
+## Syntax Highlighting
+
+Here's how to get Markdown support into VSCode: https://stackoverflow.com/questions/75903579/how-to-add-custom-language-syntax-highlighter-to-markdown-code-block-in-vscode
+
+## Invalid Codegen
+
+> "SyntaxError: Duplicate parameter name not allowed in this context"
+
+This NodeJs error when you try to use the same variable name twice in a function definition, object creation, structuring or destructuring.
+
+---
+
+Bracket-style destructuring's return object should use the renamed name:
+```
+a = b: c: 123
+out = {b: dude} = a
+# out should b {dude: {c: 123}}, but currently it's {b: {c: 123}}
+```
+
+---
+Shouldn't variables declared in a comprehension always be scoped?
+
+```
+v = 0
+each v in-array :hi :there :you # the "in-array" is key
+v
+# v == :you ???
+
+```
+
+---
+
+In this example, fields should be an object, not an array. If you make the status field an explicit array instead of
+an implicit one, it works. Otherwise it becomes an array of 3 objects.
+
+```coffeescript
+userOwned: true
+fields:
+  name:                   :present :string
+  status:                 :required enum: :created :invited :reciprocated :declined
+  responseSummary:        :string
+  invitedAtPhoneNumber:   phoneNumberFieldType
+  invitedAtEmail:         :email
+  friend:                 link: :user
+
+```
+
+---
+
+Should define `v` outside the while-loop if assigned in the while-test.
+
+```coffeescript
+while v = foo
+  v
+
+Source:
+1: Caf = global.Caf || require("caffeine-script-runtime");
+# let v;    # should be here
+2: while ((v = foo)) {
+3:   let v; # and not here
+4:   v;
+5: }
+```
+
+---
+
+## Spurious Compile Errors (Should compile, but it doesn't)
+
+
+```coffee
+log stopReplayOrLogTrace:
+  tag: tag
+  _caller: (new Error).stack.split("\n")[0]
+  traceForReplay: @traceForReplay
+
+# splitting it out works:
+# new Error
+# .stack.split("\n")[0]
+```
+
+---
+
+```
+object package from packages
+  getLatestPublishedPackageJson package.name
+# getLatestPublishedPackageJson <HERE>package.name
+# if you change "package" to anything else, it works.
+```
+
+```
+/foo/myPipeline-getTime: 123
+
+# remove one '/' and it's fine. Clearly Regexp is matching the first part.
+```
+
+## Generates Broken JavaScript
+
+---
+
+```coffeescript
+[] (array from 1 til 10)...
+```
+
+out:
+
+```javascript
+[...into = []; i = 1; while (i < 10) {let v; v = i; into.push(v); i++;}; into;];
+```
+
+---
+
 # To Sort
 
 # should find return null or undefined?
@@ -35,22 +197,6 @@ find i til 9 with false
 # I think it should return undefined - same as:
 if false
   blah blah
-```
-
-# invalid scoping
-
-```coffeescript
-while neq data, newData = fastPass data
-  data = newData
-
-###
-# incorrectly generates:
-Caf = global.Caf || require("caffeine-script-runtime");
-while (neq(data, (newData = fastPass(data)))) {
-  let newData, data;
-  data = newData;
-}
-###
 ```
 
 # bad compile error
