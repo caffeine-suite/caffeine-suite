@@ -14,7 +14,7 @@ each file from CaffeineMcTestHelper.testFiles
   test "findSourceRoot #{path.basename file}", ->
     findSourceRoot file
     .then (out) ->
-      assert.eq path.relative(process.cwd(), out), "test/files/SourceRoots/DotCaffeineRoot"
+      assert.eq path.relative(getCwd(), out), "test/files/SourceRoots/DotCaffeineRoot"
 
 each file from CaffeineMcTestHelper.testFiles
   test "getCaffeineInit #{path.basename file}", ->

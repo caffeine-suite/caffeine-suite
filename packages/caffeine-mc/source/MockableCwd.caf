@@ -1,0 +1,10 @@
+import &ArtStandardLib
+
+mockedCwdFunction = null
+mockCwdFunction: (newCwd) -> mockedCwdFunction = newCwd
+unmockCwdFunction: -> mockedCwdFunction = null
+getCwd: ->
+  if mockedCwdFunction
+    mockedCwdFunction?()
+  else
+    process.cwd()

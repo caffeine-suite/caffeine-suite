@@ -1,5 +1,4 @@
 import &StandardImport, &CaffeineScript, {}
-  &mockFs
   &path
   fs: &fsExtra
 
@@ -11,7 +10,8 @@ sourceFileExtension = "caf"
 sourceFile = "#{sourcePath}/#{sourceFileName}.#{sourceFileExtension}"
 
 initialFs =
-  "#{sourceRoot}":
+  tmp: {}
+  home: alice: AliceInLove:
     "package.json": "{}"
     source: AliceInLove:
       Lib: "#{sourceFileName}.caf": "&standard_import"
@@ -22,8 +22,8 @@ describe
     test "JEST-needs-this-for-mock-fs-to-workfoo" ->
 
   basic: ->
-    beforeAll -> mockFs initialFs
-    afterAll -> mockFs.restore()
+    beforeAll ->
+      fs.setMockFileStructure initialFs
 
     fakeInfo =
       compiler:
@@ -34,22 +34,21 @@ describe
       compiled: js: "console.log('My source code'.);"
 
     test "getFileName", ->
-      fn = CompileCache.getFileName fakeInfo
-      assert.match fn, CompileCache.compileCacheFileNameRoot
-      assert.match fn, "TestCompiler"
-      assert.match fn, sourceRootName
-      assert.match fn, sourceFileName
-      assert.match fn, sourceFileExtension
+      cacheFileName = CompileCache.getFileName fakeInfo
+      assert.match cacheFileName, CompileCache.compileCacheFileNameRoot
+      assert.match cacheFileName, "TestCompiler"
+      assert.match cacheFileName, sourceRootName
+      assert.match cacheFileName, sourceFileName
+      assert.match cacheFileName, sourceFileExtension
 
     test "cache", ->
-      CompileCache.cache fakeInfo
-
+      cacheKey = CompileCache.cache fakeInfo
       assert.eq fakeInfo.compiled, CompileCache.fetch(objectWithout fakeInfo, "compiled").compiled
 
     test "different compilerOptions generates different cache filenames", ->
       assert.neq
         CompileCache.getFileName merge fakeInfo, compilerOptions: {}
-        CompileCache.getFileName merge fakeInfo, compilerOptions: transpile: true
+        CompileCache.getFileName merge fakeInfo, compilerOptions: prettier: true
 
     test "compilerOptions with different order still generates same cache filenames", ->
       assert.eq
@@ -58,20 +57,16 @@ describe
 
   FileCompiler: ->
     beforeAll ->
-      # have to preload caffeineScript because of mockFs
-      Metacompiler.CaffeineScript
-      mockFs initialFs
-
-    afterAll -> mockFs.restore()
+      fs.setMockFileStructure initialFs
 
     chainedTest "init" -> WorkingCache.resetWorkingCache()
     .thenTest
-      "initial", ->
+      "initial compileFile", ->
         FileCompiler.compileFile sourceFile, cache: true
         .then ({output}) ->
           assert.jsFalse output.cached
 
-      "cached", ->
+      "cached compileFile", ->
         FileCompiler.compileFile sourceFile, cache: true
         .then ({output}) ->
           assert.true output.cached

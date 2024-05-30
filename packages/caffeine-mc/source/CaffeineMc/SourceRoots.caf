@@ -35,7 +35,7 @@ class SourceRoots extends BaseClass
 
   # OUT: promise.then (caffeineInit) ->
   #   caffeineInit is a js string or false
-  @getCaffeineInit: (sourceRoot = process.cwd()) =>
+  @getCaffeineInit: (sourceRoot = getCwd()) =>
     @caffeineInits[sourceRoot] ?=
       fs.exists sourceFile = path.join sourceRoot, @caffeineInitFileName
       .then (exists) ->

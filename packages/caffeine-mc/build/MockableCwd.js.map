@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "MockableCwd.js",
+  "sourceRoot": "..",
+  "sources": [
+    "source/MockableCwd.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,wEAAO,mEAEP,oBAAoB,cACpB,yBAAiB,CAAC,SAAW,2BAAoB,UACjD,+BAAsB,2BAAoB,QAC1C,oBAAU,OACL,oBAAiB,QAClB,4CAEA"
+}

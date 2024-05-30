@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TempDir.js",
+  "sourceRoot": "../..",
+  "sources": [
+    "source/CaffeineMc/TempDir.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oEAAU,2CAGV,UAAU,cAEV,qBAAa,CAAC,aAAe,iBAAU,cACvC,wBAAe,mCAAU"
+}

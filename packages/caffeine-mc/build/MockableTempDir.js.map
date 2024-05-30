@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "MockableTempDir.js",
+  "sourceRoot": "..",
+  "sources": [
+    "source/MockableTempDir.caf"
+  ],
+  "names": [],
+  "mappings": "AAAA;;AAAA,oEAAU,2CAGV,UAAU,cAEV,qBAAa,CAAC,aAAe,iBAAU,cACvC,2BAAkB,iBAAU,QAC5B,wBAAe,mCAAU"
+}

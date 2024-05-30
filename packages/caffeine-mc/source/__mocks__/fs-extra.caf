@@ -1,0 +1,89 @@
+import &ArtStandardLib, &MockableCwd, &MockableTempDir, {} &path
+actualFs = require 'fs-extra'
+
+mockFileStructure = {}
+cwd = "/"
+
+resolvePath = (filePath) ->
+  currentFolder = cwd
+  unless isString filePath
+    throw new Error "filePath must be a string got: #{formattedInspect filePath}"
+
+  folders = filePath.split '/'
+
+  if folders[0] == ''
+    folders.shift()
+    currentFolder = mockFileStructure
+  else
+    throw new Error "cwd not supported"
+
+  while folders.length > 0
+    return unless currentFolder = currentFolder[folders[0]]
+    folders.shift()
+
+  currentFolder
+
+mockMethods =
+  setMockFileStructure: (newMockFileStructure) ->
+    cwd = "/"
+    mockTempDir "/tmp"
+    mockCwdFunction -> cwd
+    mockFileStructure = merge
+      tmp: {}
+      newMockFileStructure
+
+  isMocked: -> mockFileStructure?
+  getMockFileStructure: -> mockFileStructure
+  unmockFs: ->
+    unmockCwdFunction()
+    unmockTempDir()
+    mockFileStructure = null
+
+mockedMethods =
+  existsSync: existsSync = (filePath) => !!resolvePath filePath
+  exists: exists = (filePath) => Promise.then -> existsSync filePath
+  statSync: statSync = (filePath) =>
+    file = resolvePath filePath
+    unless file?
+      throw new Error "Could not find file: #{filePath}"
+    isDirectory: -> isPlainObject file
+    isFile: -> isString file
+
+  readFileSync: readFileSync = (filePath) ->
+    resolvePath filePath
+    ? throw new Error "Could not find file: #{filePath}"
+
+  readFile: (filePath) -> Promise.then -> readFileSync filePath
+
+  stat: (filePath) -> Promise.then -> statSync filePath
+
+  writeFileSync: writeFileSync = (filePath, contents) ->
+    folderName = path.dirname filePath
+    fileName = path.basename filePath
+    folder = resolvePath folderName
+    if !folder
+      throw new Error "Could not find folder: #{folderName}"
+    if isPlainObject folder[fileName]
+      throw new Error "File already exists as a folder: #{folderName}/#{fileName}"
+
+    folder[fileName] = contents
+
+  writeFile: (filePath, contents) -> Promise.then -> writeFileSync filePath, contents
+
+  readdirSync: (path, options) ->
+    folder = resolvePath path
+    unless isPlainObject folder
+      log readdirSync: {} path, options, mockFileStructure
+      throw new Error "Not a folder: #{path}"
+
+    return Object.keys folder
+
+merge mockMethods, object v, k from actualFs
+  (args...) ->
+    if mockFileStructure
+      if mock = mockedMethods[k]
+        mock.apply null, args
+      else
+        log.warn "fs-extra mocked method not found: #{k}"
+        throw new Error "fs-extra mocked method not found: #{k}"
+    else v.apply null, args

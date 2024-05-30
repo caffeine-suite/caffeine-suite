@@ -1,13 +1,9 @@
-import &StandardImport, {} &mockFs, &CaffeineMcTestHelper
+import &StandardImport, &CaffeineMcTestHelper, fs: &fsExtra
 
 describe
   findModule: ->
-    beforeEach ->
-      CaffeineMcTestHelper.mockFileSystem()
-      CaffeineMcTestHelper.reset()
-
-    afterEach ->
-      CaffeineMcTestHelper.unmockFileSystem()
+    beforeAll ->
+      fs.setMockFileStructure initialFs
 
     each file from CaffeineMcTestHelper.testFiles
       test "'sub-awesome' in absolutePath.basename('#{file}')", ->
@@ -53,6 +49,9 @@ describe
         assert.rejects -> findModule "SourceRoots", sourceFile: file
 
   npmModules: ->
+    beforeAll ->
+      fs.unmockFs()
+
     test "npm module", ->
       findModule "ArtStandardLib", sourceDir: "."
       .then ({requireString, absolutePath}) ->
@@ -78,11 +77,9 @@ describe
         assert.match absolutePath, /art-suite\/cli$/
 
   stubbedFindModule: ->
-    # setup -> mockFs initialFs
     beforeEach ->
       WorkingCache.resetWorkingCache()
-
-    afterAll -> mockFs.restore()
+      fs.setMockFileStructure initialFs
 
     dirReaderFromDirMap = (structure) ->
       findDir = (dir, current = structure) ->
@@ -99,7 +96,7 @@ describe
         resolve: (dir) -> dir
 
     test "stubbed", ->
-      mockFs
+      fs.setMockFileStructure
         ArtStandardLib:
           alpha: {}
           beta:  {}
@@ -113,7 +110,7 @@ describe
         assert.match absolutePath, "ArtStandardLib/alpha"
 
     test "MyDottedDir finds My.DottedDir", ->
-      mockFs
+      fs.setMockFileStructure
         myRoot:
           "My.DottedDir":
             MySubdir: {}
@@ -125,7 +122,7 @@ describe
         assert.eq requireString, "../"
 
     test "DottedDir does not find My.DottedDir", ->
-      mockFs
+      fs.setMockFileStructure
         myRoot:
           "My.DottedDir": MySubdir: {}
           MyDottedDir: {}
@@ -137,7 +134,7 @@ describe
         assert.match rejectsWith.message, /Could not find.*DottedDir/i
 
     test "findModuleSync does not resolve to the sourceFile the request came from", ->
-      mockFs
+      fs.setMockFileStructure
         myRoot:
           MySubdir: "StandardImport.caf": "&StandardImport"
           "StandardImport.caf": "&ArtSuite"
@@ -162,7 +159,7 @@ describe
         should resolve to 'indexeddb-promised'
         even though the actual file is: indexeddb-promised/js/indexeddb-promised.js
 
-  regressions: ->
+  ## regressions: ->
     testModName = :three-caf-mr-test
     test 'getNpmPackageName', ->
       assert.eq

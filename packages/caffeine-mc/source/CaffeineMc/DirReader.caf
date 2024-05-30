@@ -1,5 +1,9 @@
-import &StandardImport, &WorkingCache
+import &StandardImport, &WorkingCache, &MockableCwd
 
 isDir:    cacheable :isDir    (p) -> fs.statSync(p).isDirectory()
 read:     cacheable :read     fs.readdirSync
-resolve:  cacheable :resolve  path.resolve
+resolve:  cacheable :resolve  (args...) ->
+  if args[0] && path.isAbsolute args[0]
+    path.resolve args...
+  else
+    path.resolve getCwd(), args...

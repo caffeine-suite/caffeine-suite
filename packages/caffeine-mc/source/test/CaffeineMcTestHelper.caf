@@ -1,4 +1,4 @@
-import &StandardImport, {} &path, &mockFs
+import &StandardImport, {} &path, fs: &fsExtra
 
 global.CaffeineMcTestHelper = class CaffeineMcTestHelper extends BaseObject
   @classProperty testLog: []
@@ -10,15 +10,11 @@ global.CaffeineMcTestHelper = class CaffeineMcTestHelper extends BaseObject
     @testLog = []
 
   @testFiles:
-    alpha:  path.join process.cwd(), :test :files :SourceRoots :DotCaffeineRoot :HurlockAlpha.caf
-    beta:   path.join process.cwd(), :test :files :SourceRoots :DotCaffeineRoot :SubAwesome :BetaRelease.caf
+    alpha:  "/" + path.join :test :files :SourceRoots :DotCaffeineRoot :HurlockAlpha.caf
+    beta:   "/" + path.join :test :files :SourceRoots :DotCaffeineRoot :SubAwesome :BetaRelease.caf
 
-  @mockFileSystem:     =>
-    Tools.__preloadCoffeeScriptForTests() # preload because of mockFs
-    Metacompiler.getCaffeineScript()      # preload because of mockFs
-    mockFs @initialFs
-
-  @unmockFileSystem:   => mockFs.restore()
+  @mockFileSystem:     => fs.setMockFileStructure @initialFs
+  @unmockFileSystem:   => fs.unmockFs()
 
   @initialFs:
     test: files:

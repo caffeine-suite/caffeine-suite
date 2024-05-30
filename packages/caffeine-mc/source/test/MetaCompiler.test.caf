@@ -1,4 +1,4 @@
-import &StandardImport
+import &StandardImport, &CaffeineMcTestHelper
 describe
   default: ->
     test "default to compiling with CoffeeScript", ->
@@ -34,11 +34,12 @@ describe
         CaffeineMc.compile ":wordString"
 
   testCompiler: ->
-    test "|CaffeineMc/SourceSource/Test/TestCompiler", ->
+    beforeEach -> unmockFileSystem()
+    test "|CaffeineMc/Build/Test/TestCompiler", ->
       assert.eq
         CaffeineMc.compile
           """
-            |CaffeineMc/SourceSource/Test/TestCompiler
+            |CaffeineMc/Build/Test/TestCompiler
             alpha+beta
 
         compiled: js: "AlphaBeta"

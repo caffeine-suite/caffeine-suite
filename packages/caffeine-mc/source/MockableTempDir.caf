@@ -1,0 +1,8 @@
+import {} &os
+## We need this file so we can mock the tmpdir function easily
+
+tempDir = null
+
+mockTempDir: (newTempDir) -> tempDir = newTempDir
+unmockTempDir: -> tempDir = null
+getTempDir: -> tempDir ? os.tmpdir()

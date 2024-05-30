@@ -3,11 +3,10 @@
   ErrorWithInfo, log, merge, present, find, each, w
   mergeInto
   currentSecond
-  snakeCase
+  snakeCase,
+  isString
 } = require 'art-standard-lib'
 Path = require 'path'
-
-{statSync, readdirSync} = require 'fs-extra'
 
 dirReader = require './DirReader'
 {cacheable} = require './WorkingCache'
@@ -205,6 +204,8 @@ defineModule module, class ModuleResolver
   # PRIVATE
   @_matchingNameInDirectorySync: (normalizedModuleName, directory, options) ->
     matchingName = null
+    unless isString directory
+      throw new ErrorWithInfo "Directory must be a string"
     for name in dirReader.read directory
       if newMatchingName = getMatchingName normalizedModuleName, name, dirReader.isDir Path.join directory, name
         if matchingName && matchingName != newMatchingName

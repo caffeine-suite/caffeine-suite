@@ -20,7 +20,6 @@ commander = new (require "commander").Command()
 .option '-c, --compile',                  "" compile files
 .option '--nocache',                      "" disable compile cache
 .option '-p, --prettier',                 "" apply "prettier" to any js output
-.option '-t, --transpile [presets...]',   "" transpile with babel
 .option '-d, --debug',                    "" show debug info
 .option '-v, --verbose',                  "" show more output
 .option '-r, --reset',                    "" reset cache
@@ -41,7 +40,7 @@ displayError = (e) ->
   CaffeineMc.displayError e, commander
 
 commander extract
-  reset, output, compile, prettier, transpile, verbose, versions, cache, nocache
+  reset, output, compile, prettier, verbose, versions, cache, nocache
   require as toRequire
 
 CaffeineMc.cacheEnabled = cache = !nocache
@@ -57,7 +56,6 @@ compileFile = (filename, outputDirectory) ->
   CaffeineMc.compileFile filename, {}
     outputDirectory: outputDirectory || output || path.dirname filename
     prettier
-    transpile
     cache
     sourceMap: commander.map
     inlineMap: commander.inlineMap || commander["inline-map"]
@@ -114,7 +112,7 @@ when compile
       inputs: if files.length == 1 then files[0] else files
       output: output
     log "caffeine-mc loaded" if verbose
-    log {prettier, transpile} if verbose && (transpile || prettier)
+    log {prettier} if verbose && prettier
     serializer = new Promise.Serializer
 
 

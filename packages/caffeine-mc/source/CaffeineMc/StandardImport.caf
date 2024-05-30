@@ -1,6 +1,8 @@
 []
   &ArtStandardLib
   &ArtClassSystem
+  &MockableCwd
+  &MockableTempDir
   {}
     &path
     fs:   &fs-extra

@@ -158,15 +158,7 @@
     };
 
     Metacompiler.prototype._postprocess = function(options, out) {
-      return this._postprocesPrettier(options, this._postprocessWithTranspiler(options, out));
-    };
-
-    Metacompiler.prototype._postprocessWithTranspiler = function(options, out) {
-      var transpileOptions;
-      if (transpileOptions = options.transpile) {
-        throw new Error("DEPRICATED: transpile option");
-      }
-      return out;
+      return this._postprocesPrettier(options, out);
     };
 
     Metacompiler.prototype._postprocesPrettier = function(options, out) {
@@ -189,7 +181,7 @@
     };
 
     Metacompiler.prototype._compileWithCaching = function(code, options) {
-      var cacheInfo, cachedCompile, inlineMap, prettier, transpile;
+      var cacheInfo, cachedCompile, inlineMap, prettier;
       options = objectWithout(options, "cache");
       cacheInfo = {
         compiler: this.compiler,
@@ -197,12 +189,11 @@
         verbose: options.verbose,
         sourceFile: options.sourceFile
       };
-      prettier = options.prettier, inlineMap = options.inlineMap, transpile = options.transpile;
-      if (prettier || inlineMap || transpile) {
+      prettier = options.prettier, inlineMap = options.inlineMap;
+      if (prettier || inlineMap) {
         cacheInfo.compilerOptions = merge({
           prettier: prettier,
-          inlineMap: inlineMap,
-          transpile: transpile
+          inlineMap: inlineMap
         });
       }
       if (cachedCompile = CompileCache.fetch(cacheInfo)) {

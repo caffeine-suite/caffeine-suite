@@ -107,14 +107,7 @@ module.exports = class Metacompiler extends BaseClass
       @_postprocess options, @_compileWithMetacompiler code, options
 
   _postprocess: (options, out) ->
-    @_postprocesPrettier options, @_postprocessWithTranspiler options, out
-
-  _postprocessWithTranspiler: (options, out) ->
-
-    if transpileOptions = options.transpile
-      throw new Error "DEPRICATED: transpile option"
-
-    out
+    @_postprocesPrettier options, out
 
   _postprocesPrettier: (options, out) ->
     if options.prettier
@@ -136,10 +129,10 @@ module.exports = class Metacompiler extends BaseClass
       verbose:    options.verbose
       sourceFile: options.sourceFile
 
-    {prettier, inlineMap, transpile} = options
+    {prettier, inlineMap} = options
 
-    if prettier || inlineMap || transpile
-      cacheInfo.compilerOptions = merge {prettier, inlineMap, transpile}
+    if prettier || inlineMap
+      cacheInfo.compilerOptions = merge {prettier, inlineMap}
 
     if cachedCompile = CompileCache.fetch cacheInfo
       cachedCompile

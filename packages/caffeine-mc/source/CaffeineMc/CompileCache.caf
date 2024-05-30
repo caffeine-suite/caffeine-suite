@@ -1,4 +1,4 @@
-import &StandardImport, &SourceRoots, &moduleResolver, {} &crypto, &os
+import &StandardImport, &SourceRoots, &moduleResolver, &MockableTempDir, {} &crypto
 
 &chalk
 
@@ -13,10 +13,10 @@ import &StandardImport, &SourceRoots, &moduleResolver, {} &crypto, &os
     all the cachedFileKey fields
     compiled: (required, object) the compiler's results
 class CompileCache extends BaseClass
-  @compileCacheFileNameRoot: :CaffineMcCompileCache
+  @compileCacheFileNameRoot: :CaffeineMcCompileCache
 
   @classGetter
-    compileCachePathRoot: -> os.tmpdir()
+    compileCachePathRoot: -> getTempDir()
     compileCacheFilePathRoot: -> @_compileCacheFilePathRoot ?= path.join @compileCachePathRoot, @compileCacheFileNameRoot
 
   @compilerSupportsCaching:     (compiler)      -> isString(compiler.version) && @getCompilerName compiler
@@ -41,6 +41,7 @@ class CompileCache extends BaseClass
     return null unless @compilerSupportsCaching compiler
 
     sourceRoot = findSourceRootSync sourceFile
+    throw new Error "Could not findSourceRootSync for #{sourceFile}" unless sourceRoot
     relativeSourceFile = path.relative sourceRoot, sourceFile
 
     source =
@@ -71,14 +72,14 @@ class CompileCache extends BaseClass
     IN: cachedFileKey (see above)
   @fetch: (cachedFileKey) ->
     start = currentSecond()
-    if (fileName = @getFileName cachedFileKey) &&
-        fs.existsSync(fileName)
-      if (cacheContents = try JSON.parse fs.readFileSync fileName) &&
-          cacheContents.source == cachedFileKey.source &&
-          @dependenciesUnchanged cachedFileKey, cacheContents.props
+    if fileName = @getFileName cachedFileKey
+      if fs.existsSync fileName
+        if (cacheContents = try JSON.parse fs.readFileSync fileName) &&
+            cacheContents.source == cachedFileKey.source &&
+            @dependenciesUnchanged cachedFileKey, cacheContents.props
 
-        cacheContents.cached = true
-        cacheContents
+          cacheContents.cached = true
+          cacheContents
 
   @dependenciesUnchanged: (cachedFileKey, props) ->
     !find cachedRequireString, sourceString from props?.moduleDependencies

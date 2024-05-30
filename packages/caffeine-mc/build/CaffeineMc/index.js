@@ -16,6 +16,7 @@
   Run:              require('./Run'),
   SourceRoots:      require('./SourceRoots'),
   StandardImport:   require('./StandardImport'),
+  TempDir:          require('./TempDir'),
   Tools:            require('./Tools'),
   WorkingCache:     require('./WorkingCache')
 });

@@ -4,3 +4,5 @@
   &ArtTestbench
   &CaffeineMc
   {} &CaffeineMc
+  &MockableTempDir
+  &MockableCwd
