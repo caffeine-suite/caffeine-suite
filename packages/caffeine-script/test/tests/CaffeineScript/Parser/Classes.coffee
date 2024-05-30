@@ -176,6 +176,9 @@ module.exports = suite: parseTestSuite
     .bar
     """: "let FooWithDot; (FooWithDot = Caf.defClass(class FooWithDot extends Object {})).bar;"
 
+    # trailing whitespace caused issues with caffeine8
+    "class B\nclass A extends B\n  ": "let B, A; B = Caf.defClass(class B extends Object {}); A = Caf.defClass(class A extends B {});"
+
   super:
     basics:
       "class MyClassA\n foo: -> super":     "let MyClassA; MyClassA = Caf.defClass(class MyClassA extends Object {}, function(MyClassA, classSuper, instanceSuper) {this.prototype.foo = function() {return instanceSuper.foo.apply(this, arguments);};});"
@@ -187,10 +190,10 @@ module.exports = suite: parseTestSuite
 
     complex:
       """
-      class CaffeineScriptParser
+        class CaffeineScriptParser
 
-        parse: ->
-          super foo 1
+          parse: ->
+            super foo 1
 
       """: "let CaffeineScriptParser;
         CaffeineScriptParser =
