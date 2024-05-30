@@ -3,7 +3,7 @@
   "file": "CaffeineMc.js",
   "sourceRoot": "../..",
   "sources": [
-    "source-source/CaffeineMc/CaffeineMc.caf"
+    "source/CaffeineMc/CaffeineMc.caf"
   ],
   "names": [],
   "mappings": "AAAA;;AAAA,0EAGE,2BACA,2BACA,6BACA,oBACA,kBACA"

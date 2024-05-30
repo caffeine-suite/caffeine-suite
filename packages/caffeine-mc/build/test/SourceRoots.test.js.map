@@ -3,7 +3,7 @@
   "file": "SourceRoots.test.js",
   "sourceRoot": "../..",
   "sources": [
-    "source-source/test/SourceRoots.test.caf"
+    "source/test/SourceRoots.test.caf"
   ],
   "names": [],
   "mappings": "AAAA;;AAAA,oKAAO,8BAAoB,uBAAO,yDAAuB,yKAEzD,+IAGA,WAAU,YACR,8CACA,iCAEF,UAAS,YAAG,OACV,sDAEa,0CACb,KAAI,+BAAmB,cAAc,sBAAU,OAC7C,eAAe,WACT,CAAC,QACL,UAAU,cAAc,eAAe,MAAM,iEAEpC,0CACb,KAAI,gCAAoB,cAAc,sBAAU,OAC9C,eAAe,WACT,CAAC,eAAe,gBAAgB,kBAChC,CAAC,kBACL,UAAU,+BACR,iCACA,sGACA,gCAEF,UAAU,sBAAqB,iBAAiB,oBAChD,kBAAkB"

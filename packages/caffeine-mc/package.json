@@ -8,7 +8,7 @@
     "@art-suite/source-root-finder": "^1.0.7",
     "art-class-system": "^1.11.16",
     "art-standard-lib": "^1.71.3",
-    "caffeine-eight": "^2.6.8",
+    "caffeine-eight": "^3.0.3",
     "cardinal": "^2.0.0",
     "chalk": "^4.0.0",
     "colors": "^1.1.2",
@@ -23,7 +23,7 @@
   },
   "description": "Select, configure and extend your to-JavaScript compiler, with arbitrary code, on a per file bases from within the file.",
   "devDependencies": {
-    "art-build-configurator": "^1.29.2",
+    "art-build-configurator": "^1.30.3",
     "art-testbench": "^3.2.2",
     "chai": "^4.2.0",
     "mocha": "^7.2.0",
@@ -32,10 +32,19 @@
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "jest": {
     "collectCoverageFrom": [
-      "source/**/*.js",
-      "!source/_?[Jjt]est/**/*.js"
+      "build/**/*.js",
+      "!build/test/**/*.js"
     ],
-    "testEnvironment": "node"
+    "coveragePathIgnorePatterns": [
+      "/index.js$",
+      "/namespace.js$"
+    ],
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/test"
+    ],
+    "verbose": true
   },
   "license": "ISC",
   "name": "caffeine-mc",
@@ -44,10 +53,13 @@
     "url": "https://github.com/caffeine-suite/caffeine-suite.git"
   },
   "scripts": {
-    "build": "git checkout source/\ncoffee -m --output source --compile source-source &\ncaf -m -c source-source -o source &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source\ncd ..\nnn -s",
-    "build-clean": "rm -rf source-building\nmkdir source-building\ngit checkout source/\ncoffee -m --output source-building --compile source-source &\ncaf -m -c source-source -o source-building &\nwait\ncd source-source\nfind . -name '*.js' | cpio -vpdm ../source-building\ncd ..\nnn -s\nrm -rf source\nmv source-building source\nnn -s",
+    "build": "rsync -av --include='*.js' --include='*.css' --exclude='*' ./source/ ./build/\ncoffee -m --output build --compile source &\nCOFFEE_PID=$!\ncaf -m -c source -o build --require coffee-script/register&\nCAF_PID=$!\nwait $COFFEE_PID || exit 1\nwait $CAF_PID || exit 1\nnpm run nn",
+    "build-clean": "# BUILD CLEAN START\n#   - building into: build-temp\n#\nrm -rf ./__build-old__\nrsync -av --include='*.js' --include='*.css' --exclude='*' ./source/ ./build/\ncoffee -m --output build-temp --compile source &\nCOFFEE_PID=$!\ncaf -m -c source -o build-temp --require coffee-script/register&\nCAF_PID=$!\nwait $COFFEE_PID || exit 1\nwait $CAF_PID || exit 1\nnpm run nn\n\nnn build-temp/*\n\n# BUILD CLEAN FINIALIZING\n#  - replace old build in:   build\n#  - with new build from:    build-temp\n#\nmv build __build-old__\nmv build-temp build\nrm -rf ./__build-old__",
+    "build-watch": "nodemon -e js,ts,jsx,tsx,caf,coffee,json -i \"build/**\" -x npm run build",
+    "clean": "rm -rf build/*",
+    "nn": "nn build/* ",
     "test": "jest",
-    "watch": "npm-watch"
+    "test-watch": "jest --watch"
   },
   "version": "3.4.0",
   "watch": {

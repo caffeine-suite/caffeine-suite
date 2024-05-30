@@ -1,1 +1,1 @@
-module.exports = require("./source/webpack-loader");
+module.exports = require("./build/webpack-loader");
