@@ -1,8 +1,7 @@
-import &ArtStandardLib, &CaffeineMc, {}
+import &ArtStandardLib, &CaffeineMc, &glob, {}
   &CaffeineMc
   &path
   fs: &fsExtra
-  glob: &globPromise
   &colors
 
 # enable multi-context type-support (slower, but other wise the same)

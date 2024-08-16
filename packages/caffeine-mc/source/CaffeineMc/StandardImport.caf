@@ -6,4 +6,4 @@
   {}
     &path
     fs:   &fs-extra
-    glob: &glob-promise
+    &glob.glob
