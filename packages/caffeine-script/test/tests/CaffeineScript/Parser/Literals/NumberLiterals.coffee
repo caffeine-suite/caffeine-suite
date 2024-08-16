@@ -53,3 +53,15 @@ module.exports = suite: parseTestSuite
   regressions:
     "01": "1;"
     "-01": "-1;"
+
+  bigInt:
+    "123n":   "123n;"
+    "0x123n": "0x123n;"
+    "0b101n": "0b101n;"
+    "0o123n": "0o123n;"
+    "0n":     "0n;"
+    "1234567890123456789012345678901234567890n": "1234567890123456789012345678901234567890n;"
+
+    # Illegal JavaScript; we should detect these as syntax errors
+    "123.456n": "123.456n;"
+    "01n":      "1n;"

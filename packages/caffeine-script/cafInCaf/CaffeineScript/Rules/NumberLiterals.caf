@@ -22,8 +22,9 @@ import &StandardImport
           | # octal
           0x[0-9a-f]+
         )
+        n? # bigint
 
-        # not immediatly followed by a legal identifier character
+        # not immediately followed by a legal identifier character
         (?![$\w\u007f-\uffff])
 
         (?!\.[0-9])

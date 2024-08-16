@@ -58,6 +58,37 @@ v = new Validator
 
 ## New Feature
 
+BitInt numbers: "10n" should be trivial to support
+
+---
+
+await support; It's time. CaffeineScript's syntax is so much better than JavaScript it is almost not needed, but "for await" is really cool, and sometimes await is cleaner.
+
+---
+
+Comprehensions
+
+- Map type support: input and output
+- Set type: input and output
+- Iterators: input (what about output- return an interator???)
+- "for await" - i.e. serialized promises; await the incoming "value" AND the outgoing value
+
+```coffee
+# output map
+comp-map
+
+# output set
+comp-set
+
+# obviously:
+from-map
+from-set
+from-iter
+```
+
+
+---
+
 Bracket-style destructuring's should support pathing
 ```
 a = b: c: 123
