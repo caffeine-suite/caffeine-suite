@@ -29,7 +29,7 @@ I've been using CaffeineScript in production since 2016. Though I do a lot of Ty
 
 I'd love to hear from anyone who's interested in using CaffeineScript. I'm really the only one right now, but I LOVE it, and I think you will too.
 
-You can find me most places:
+You can find me::
 
 - [LinkedIn](https://www.linkedin.com/in/shane-brinkman-davis-delamore-b340676/)
 - [X](https://x.com/shanebdavis)
@@ -40,4 +40,4 @@ My blog, podcast, and youtube channel:
 - [Medium.com](https://medium.com/@shanebdavis)
 - [YouTube.com/@code-and-optimism](https://youtube.com/@code-and-optimism)
 - [Code and Optimism Podcast](https://shows.acast.com/code-and-optimism)
-- Old blog: [EssenceAndArtifact.com](https://essenceandartifact.com)
+- Old blog: [www.EssenceAndArtifact.com](https://www.essenceandartifact.com)
