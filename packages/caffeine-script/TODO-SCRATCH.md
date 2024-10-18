@@ -70,7 +70,7 @@ Comprehensions
 
 - Map type support: input and output
 - Set type: input and output
-- Iterators: input (what about output- return an interator???)
+- Iterators: input (what about output- return an iterator???)
 - "for await" - i.e. serialized promises; await the incoming "value" AND the outgoing value
 
 ```coffee
