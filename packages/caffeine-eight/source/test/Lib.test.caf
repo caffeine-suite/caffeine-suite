@@ -30,6 +30,7 @@ describe
       out = presentSourceLocation source, sourceIndex, color: true
 
       assert.lt sourceIndex, outIndexOfInsertString = out.indexOf insertString
+      log {} sourceIndex, outIndexOfInsertString, out
       assert.lt outIndexOfInsertString + insertString.length, out.indexOf testString
 
     test "presentSourceLocation source, sourceIndex, maxLines: 1", ->

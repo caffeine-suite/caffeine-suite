@@ -272,7 +272,6 @@ describe
               -abc
 
           .then (rejectsWith) ->
-            log {} rejectsWith, parser, parser.parse
             assert.eq parser._failureIndex, 0
 
         test "first line", ->
