@@ -12,9 +12,9 @@
     "art-object-tree-factory": "^2.2.7",
     "art-standard-lib": "^1.73.1",
     "caffeine-eight": "^3.0.4",
-    "caffeine-mc": "^3.5.2",
+    "caffeine-mc": "^3.5.3",
     "caffeine-script-runtime": "^1.14.0",
-    "caffeine-source-map": "^2.0.8",
+    "caffeine-source-map": "^2.0.9",
     "neptune-namespaces-runtime": "^3.2.8",
     "source-map": "^0.7.2"
   },
