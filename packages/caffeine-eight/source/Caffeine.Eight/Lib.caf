@@ -22,7 +22,8 @@ class Lib
 
     if color
       color = :red if color == true
-      insertString = "#{insertString}"[color]
+      if terminalColors[color]
+        insertString = terminalColors[color] "#{insertString}"
 
     sourceBefore  = source.slice 0, index
     sourceAfter   = source.slice index
