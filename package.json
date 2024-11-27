@@ -15,6 +15,7 @@
     "caffeine-eight": "file:packages/caffeine-eight",
     "caffeine-mc": "file:packages/caffeine-mc",
     "caffeine-script": "file:packages/caffeine-script",
+    "caffeine-script-language-server": "file:packages/caffeine-script-language-server",
     "caffeine-script-runtime": "file:packages/caffeine-script-runtime",
     "caffeine-source-map": "file:packages/caffeine-source-map",
     "caffeinescript-vscode": "file:packages/caffeine-script/editors/vscode/caffeinescript",
@@ -35,7 +36,9 @@
     "source-map": "^0.7.2",
     "source-map-support": "^0.5.19",
     "three-caf-mr-test": "file:test-package/three-caf-mr-test",
-    "vsce": "^2.9.1"
+    "vsce": "^2.9.1",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.12"
   },
   "homepage": "https://github.com/caffeine-suite/caffeine-suite",
   "license": "ISC",
