@@ -58,6 +58,24 @@ v = new Validator
 
 ## New Feature
 
+Object destructuring assignment syntax improvement makes it look and feel like a "merge":
+
+```coffee
+# currently, this is the allowed syntax:
+a = b: 1
+{b, c = 2} = a
+# but we could allow this, currently illegal, syntax:
+{b, c: 2} = a
+# which both does the destructuring, but it also allows works identically to:
+merge {b, c: 2}, a
+# with less syntax
+# but why add this on top of the existing syntax?
+# because it makes refactoring easier = you don't have to rewrite all the ":" to "="
+# shrug, probably a NO based on KISS and keeping the current syntax as close to JavaScript as reasonable without sacrificing CaffeineScript principles.
+```
+
+---
+
 BitInt numbers: "10n" should be trivial to support
 
 ---
@@ -112,6 +130,22 @@ global.pipelineRegistry = foo.pipelineRegistry
 Here's how to get Markdown support into VSCode: https://stackoverflow.com/questions/75903579/how-to-add-custom-language-syntax-highlighter-to-markdown-code-block-in-vscode
 
 ## Invalid Codegen
+
+I think this only a problem in the console:
+```coffee
+# this
+a = b: 1
+{b, c = 2} = a
+# should return
+b: 1, c: 2
+# currently it returns b: 1
+# HOWEVER
+d = {b, c = 2} = a
+# correctly returns: d = b: 1, c: 2; d != a
+# so that's I think it's only the console mode not applying the return-value-expected transformation to the destructuring.
+```
+
+---
 
 > "SyntaxError: Duplicate parameter name not allowed in this context"
 
