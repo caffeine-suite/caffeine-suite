@@ -11,10 +11,10 @@
     "art-class-system": "^1.11.16",
     "art-object-tree-factory": "^2.2.7",
     "art-standard-lib": "^1.73.1",
-    "caffeine-eight": "^3.0.4",
-    "caffeine-mc": "^3.5.3",
-    "caffeine-script-runtime": "^1.14.0",
-    "caffeine-source-map": "^2.0.9",
+    "caffeine-eight": "^3.0.5",
+    "caffeine-mc": "^3.5.4",
+    "caffeine-script-runtime": "^1.14.1",
+    "caffeine-source-map": "^2.0.10",
     "neptune-namespaces-runtime": "^3.2.8",
     "source-map": "^0.7.2"
   },
@@ -53,7 +53,7 @@
     "test": "mocha -u tdd",
     "watch": "npm-watch"
   },
-  "version": "0.75.1",
+  "version": "0.75.2",
   "watch": {
     "build": {
       "extensions": [
