@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/CaffeineScriptLogo.png)
+![logo](wiki/CaffeineScriptLogo.png)
 [![Actions Status](https://github.com/caffeine-suite/caffeine-suite/workflows/test/badge.svg)](https://github.com/caffeine-suite/caffeine-suite/actions)
 
 # Caffeine-Suite Monorepo
@@ -11,9 +11,17 @@ Caffeine-Suite is a collection of packages and tools that power the Caffeine eco
 
 And various supporting tools.
 
-Important links:
+## Documentation
 
-- [CaffeineScript Manual and Wiki](https://github.com/shanebdavis/caffeine-script/wiki)
+- [Get Started](wiki/Get-Started.md)
+- [Benefits](wiki/Benefits.md)
+- [Highlights](wiki/Highlights.md)
+- [Productivity by Design](wiki/Productivity-by-Design.md)
+- [CaffeineScript Design](wiki/CaffeineScript-Design.md)
+- [What is CaffeineScript Good For?](wiki/What-is-CaffeineScript-Good-For%3F.md)
+- [Why CaffeineScript over CoffeeScript?](wiki/Why-CaffeineScript-over-CoffeeScript%3F.md)
+- [Why CaffeineScript over JavaScript?](wiki/Why-CaffeineScript-over-JavaScript%3F.md)
+- [Full Wiki](wiki/Home.md)
 
 ## Less is More
 
@@ -21,7 +29,7 @@ Humanity makes progress by doing more with less. I believe reducing code size is
 
 Doing more with less is the first principle of design and foundation of just about every good programming practice: [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [ZEN (YAGNI)](http://www.essenceandartifact.com/2016/02/yagni-and-building-in-house-frameworks.html), [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle), [interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle), etc... That's why I wrote CaffeineScript. This info-graphic shows the result:
 
-[![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic.png)](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic-Large.png)
+[![logo](wiki/Why-CaffeineScript-InfoGraphic.png)](wiki/Why-CaffeineScript-InfoGraphic-Large.png)
 
 ## Project Status (updated October, 2024)
 

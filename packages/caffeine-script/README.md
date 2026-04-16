@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/CaffeineScriptLogo.png)
+![logo](../../wiki/CaffeineScriptLogo.png)
 [![Build Status](https://travis-ci.org/caffeine-suite/caffeine-script.svg?branch=master)](https://travis-ci.org/caffeine-suite/caffeine-script) [![NPM version](https://img.shields.io/npm/v/caffeine-script.svg)](https://www.npmjs.com/package/caffeine-script)
 
 > Code faster, refactor easier, understand better and reduce errors - all by focusing on CaffeineScript's key principle: *write less code*...
@@ -13,7 +13,7 @@ Humanity makes progress by doing more with less. I believe reducing code size is
 
 Doing more with less is the first principle of design and foundation of just about every good programming practice: [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), [KISS](https://en.wikipedia.org/wiki/KISS_principle), [ZEN (YAGNI)](http://www.essenceandartifact.com/2016/02/yagni-and-building-in-house-frameworks.html), [single responsibility principle](https://en.wikipedia.org/wiki/Single_responsibility_principle), [interface segregation](https://en.wikipedia.org/wiki/Interface_segregation_principle), etc... That's why I wrote CaffeineScript. This info-graphic shows the result:
 
-[![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic.png)](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/Why-CaffeineScript-InfoGraphic-Large.png)
+[![logo](../../wiki/Why-CaffeineScript-InfoGraphic.png)](../../wiki/Why-CaffeineScript-InfoGraphic-Large.png)
 
 > 2019 UPDATE: I'm using and developing CaffieneScript every day. Progress continues, the above example has been reduced to just 220 tokens. You can see more here: [CaffeineScript TicTacToe](https://github.com/imikimi/art-suite-demos/tree/master/source/Art.SuiteDemos/Demos/TicTacToe)
 
@@ -41,9 +41,9 @@ JavaScript has a golden heart. At its core, it is a powerful hybrid of object-or
 
 However, JavaScript has an ailing body. Even now, in 2019, JavaScript has major syntax and semantic problems which make it error prone and dangerous. JavaScript's syntax is excessively verbose. Code readability matters, especially for large projects, and JavaScript's syntax is the least readable of any major language. This is easy to fix, and the rewards can be huge.
 
-Further, JavaScript has many dangerous holes in its semantics which can introduce subtle, hard to find bugs. They include [accidental globals](https://github.com/caffeine-suite/caffeine-script/wiki/Globals), [weakly-typed truth](https://github.com/caffeine-suite/caffeine-script/wiki/Caffeine-Truth), [weakly-typed equality](https://github.com/caffeine-suite/caffeine-script/wiki/Equality) and other [weakly-typed operators](https://github.com/caffeine-suite/caffeine-script/wiki/Operator-Overloading). Thankfully, the core JavaScript semantics are good, and these auxiliary semantics can be partially or fully fixed without changing JavaScript.
+Further, JavaScript has many dangerous holes in its semantics which can introduce subtle, hard to find bugs. They include [accidental globals](../../wiki/Globals.md), [weakly-typed truth](../../wiki/Caffeine-Truth.md), [weakly-typed equality](../../wiki/Equality.md) and other [weakly-typed operators](../../wiki/Operator-Overloading.md). Thankfully, the core JavaScript semantics are good, and these auxiliary semantics can be partially or fully fixed without changing JavaScript.
 
-CaffeineScript's goal is to maximize productivity for JavaScript-based projects. It does this primarily by minimizing syntax and patching the holes in JavaScript's [semantics](https://github.com/caffeine-suite/caffeine-script/wiki/Semantics).
+CaffeineScript's goal is to maximize productivity for JavaScript-based projects. It does this primarily by minimizing syntax and patching the holes in JavaScript's [semantics](../../wiki/Semantics.md).
 
 ### Inspired by CoffeeScript
 
@@ -53,14 +53,14 @@ If you love CoffeeScript, or even if you liked some parts but others drove you c
 
 ## Introducing CaffeineScript
 
-CaffeineScript is an open-source programming language that compiles to JavaScript. The goal is to minimize total effort, over a product's lifetime, for the entire team. Design thinking is essential for achieving that goal. That means [user-experience](https://github.com/shanebdavis/caffeine-script/wiki/UX-Design-for-Langauges) and [graphic design](https://github.com/shanebdavis/caffeine-script/wiki/Graphic-Design-for-Languages) are as important as computer-science and software engineering. A well-designed language makes code more beautiful, programming more fun, and, ultimately, lets us get more done with less effort.
+CaffeineScript is an open-source programming language that compiles to JavaScript. The goal is to minimize total effort, over a product's lifetime, for the entire team. Design thinking is essential for achieving that goal. That means [user-experience](../../wiki/UX-Design-for-Langauges.md) and [graphic design](../../wiki/Graphic-Design-for-Languages.md) are as important as computer-science and software engineering. A well-designed language makes code more beautiful, programming more fun, and, ultimately, lets us get more done with less effort.
 
-CaffeineScript starts where CoffeeScript left off, fixing its shortcomings and taking a big step forward for high-productivity JavaScript. Two concrete examples: [improved React-style programming](https://github.com/shanebdavis/caffeine-script/wiki/React-with-CaffeineScript) and [90% reduced module-specific code](https://github.com/shanebdavis/caffeine-script/wiki/Streamlined-Modules). The result is a lean, high-level language that empowers you to get the most out of JavaScript.
+CaffeineScript starts where CoffeeScript left off, fixing its shortcomings and taking a big step forward for high-productivity JavaScript. Two concrete examples: [improved React-style programming](../../wiki/React-with-CaffeineScript.md) and [90% reduced module-specific code](../../wiki/Streamlined-Modules.md). The result is a lean, high-level language that empowers you to get the most out of JavaScript.
 
 ### Example
 
 CaffeineScript:
-![logo](https://raw.githubusercontent.com/wiki/shanebdavis/caffeine-script/CaffeineScriptDemo.png)
+![logo](../../wiki/CaffeineScriptDemo.png)
 > 41 tokens in CaffeineScript - GitHub doesn't support custom syntax highlighting, so I've included the image above. You can access the [example source here](example.caf).
 
 
@@ -112,15 +112,15 @@ npm install caffeine-script
 
 ### Learn More
 
-* [CaffeineScript Documentation Wiki](https://github.com/shanebdavis/caffeine-script/wiki/Home)
-* [Get Started](https://github.com/shanebdavis/caffeine-script/wiki/Get-Started)
-* [Benefits](https://github.com/shanebdavis/caffeine-script/wiki/Benefits)
-* [Highlights](https://github.com/shanebdavis/caffeine-script/wiki/Highlights)
-* [Productivity by Design](https://github.com/shanebdavis/caffeine-script/wiki/Productivity-by-Design)
-* [CaffeineScript Design](https://github.com/shanebdavis/caffeine-script/wiki/CaffeineScript-Design)
-* [What is CaffeineScript Good For?](https://github.com/shanebdavis/caffeine-script/wiki/What-is-CaffeineScript-Good-For%3F)
-* [Why CaffeineScript over CoffeeScript?](https://github.com/shanebdavis/caffeine-script/wiki/Why-CaffeineScript-over-CoffeeScript%3F)
-* [Why CaffeineScript over JavaScript?](https://github.com/shanebdavis/caffeine-script/wiki/Why-CaffeineScript-over-JavaScript%3F)
+* [CaffeineScript Documentation Wiki](../../wiki/Home.md)
+* [Get Started](../../wiki/Get-Started.md)
+* [Benefits](../../wiki/Benefits.md)
+* [Highlights](../../wiki/Highlights.md)
+* [Productivity by Design](../../wiki/Productivity-by-Design.md)
+* [CaffeineScript Design](../../wiki/CaffeineScript-Design.md)
+* [What is CaffeineScript Good For?](../../wiki/What-is-CaffeineScript-Good-For%3F.md)
+* [Why CaffeineScript over CoffeeScript?](../../wiki/Why-CaffeineScript-over-CoffeeScript%3F.md)
+* [Why CaffeineScript over JavaScript?](../../wiki/Why-CaffeineScript-over-JavaScript%3F.md)
 
 ### Contribute
 
@@ -130,9 +130,9 @@ npm install caffeine-script
 
 ### More Examples
 
-##### [React](https://github.com/shanebdavis/caffeine-script/wiki/React) and [Declarative Programming](https://github.com/shanebdavis/caffeine-script/wiki/Declarative-Programming)
-* [streamlined modules](https://github.com/shanebdavis/caffeine-script/wiki/Streamlined-Modules)
-* block [function invocation](https://github.com/shanebdavis/caffeine-script/wiki/function-invocation)
+##### [React](../../wiki/React.md) and [Declarative Programming](../../wiki/Declarative-Programming.md)
+* [streamlined modules](../../wiki/Streamlined-Modules.md)
+* block [function invocation](../../wiki/Function-Invocation.md)
 
 ```coffeescript
 # CaffeineScript - 27 tokens and 0 must-match-tokens
@@ -178,7 +178,7 @@ module.exports = class Login extends Component {
 ```
 
 
-##### Implicit [Array](https://github.com/shanebdavis/caffeine-script/wiki/Array-Literals) and [Object](https://github.com/shanebdavis/caffeine-script/wiki/Object-Literals) literals
+##### Implicit [Array](../../wiki/Array-Literals.md) and [Object](../../wiki/Object-Literals.md) literals
 ```coffeescript
 # CaffeineScript - 20 tokens
 1d: 1 2 3 4 5 6 7 8 9
@@ -212,7 +212,7 @@ let users = [
   {id: 456, username: "alanturing",  born: 1912, "Alan Turing"}
 ];
 ```
-##### [#hashStrings, :wordStrings, and 10unitStrings](https://github.com/shanebdavis/caffeine-script/wiki/String-Literals)
+##### [#hashStrings, :wordStrings, and 10unitStrings](../../wiki/String-Literals.md)
 
 ```coffeescript
 # CaffeineScript - 15 tokens - 0 must-match-tokens
@@ -238,7 +238,7 @@ style:
 };
 ```
 
-##### [Comprehensions and Iteration](https://github.com/shanebdavis/caffeine-script/wiki/Comprehensions-and-Iteration)
+##### [Comprehensions and Iteration](../../wiki/Comprehensions-and-Iteration.md)
 
 ```coffeescript
 # CaffeineScript 15 tokens - 2 must-match tokens
@@ -261,11 +261,11 @@ for (key in allProps) {
 
 Is there interest in TypeScript support? If so, with some help, I could add it. CaffeineScript could easily support a modified TypeScript syntax for type annotation and integration into the TypeScript universe.
 
-[More on CaffeineScript and Static Typing](https://github.com/caffeine-suite/caffeine-script/wiki/Static-Typing)
+[More on CaffeineScript and Static Typing](../../wiki/Static-Typing.md)
 
 ## CaffeineScript and CoffeeScript
 
-I owe a debt of gratitude to Jeremy Ashkenas and the CoffeeScript community. It is my primary inspiration, and what the CaffeineScript compiler was originally written in. More on inspirations from CoffeeScript: [Coming from CoffeeScript](https://github.com/shanebdavis/caffeine-script/wiki/Coming-from-CoffeeScript).
+I owe a debt of gratitude to Jeremy Ashkenas and the CoffeeScript community. It is my primary inspiration, and what the CaffeineScript compiler was originally written in. More on inspirations from CoffeeScript: [Coming from CoffeeScript](../../wiki/Coming-from-CoffeeScript.md).
 
 ## NodeJS and Source-Maps
 
