@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ### Undefined is Unfortunate
 
 In my opinion, there is no need for two non-values. It just creates confusion without really resolving anything. For example, there are still important semantic differences between: `{a: undefined}` and `{}`. 

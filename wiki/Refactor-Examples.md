@@ -1,4 +1,7 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 CaffeineScript is designed to make refactoring easier. Here are some random examples where it does just that.
+
 
 
 ### Destructuring with `extract` Streamlines Refactoring (vs using `{}=`)

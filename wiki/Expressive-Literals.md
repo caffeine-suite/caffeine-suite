@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 CaffeineScript's powerful, expressive literals allow you to construct complex data-structures in a way that mirrors your data, rather than disfiguring your data because of the constraints of the language. The goal is to be able to create data-structures which are easy to read. To do this, we need to apply graphical design:
 
 * *proximity*: authors can communicate the relatedness of things by putting them near each other
@@ -8,8 +10,8 @@ CaffeineScript's powerful, expressive literals allow you to construct complex da
 
 Alignment is key to presenting data in an easy-to-read way. As such, the CaffeineScript-literals are designed to work well in columns and rows, with indentation to establish hierarchical relationships. Visual clutter, symbols, keywords and formatting have been virtually eliminated, to allow you to express your data in the cleanest way possible.
 
-* [[Array Literals]]
-* [[Object Literals]]
-* [[String Literals]]
-* Object [[Structuring]]
-* Object and Array [[Destructuring]]
+* [Array Literals](./Array-Literals.md)
+* [Object Literals](./Object-Literals.md)
+* [String Literals](./String-Literals.md)
+* Object [Structuring](./Structuring.md)
+* Object and Array [Destructuring](./Destructuring.md)

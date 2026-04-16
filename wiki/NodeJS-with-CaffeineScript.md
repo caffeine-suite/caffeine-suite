@@ -1,6 +1,9 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 As part of my combined ArtSuite and Caffeine ecosystems, I'm maintaining an ever-growing list of NPMs. As-of May 2017, there are 43! The only way one person can stay on top of this much code is by doing more with less. CaffeineScript is key to my ongoing strategy of extending my reach as a programmer.
 
 If you are interested in streamlining your npm-code, see also: [neptune-namespaces](https://www.npmjs.com/package/neptune-namespaces)
+
 
 ### Example: 'random-key' NPM
 

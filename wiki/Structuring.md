@@ -1,6 +1,8 @@
-See also: [[Destructuring]] and [[Restructuring]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
 
-The opposite of [[destructuring]], object-structuring allows you to create objects with further-reduced syntax. Inside an *explicit* object-literal, you can omit keys for your values and have them automatically generated for you:
+See also: [Destructuring](./Destructuring.md) and [Restructuring](./Restructuring.md)
+
+The opposite of [destructuring](./Destructuring.md), object-structuring allows you to create objects with further-reduced syntax. Inside an *explicit* object-literal, you can omit keys for your values and have them automatically generated for you:
 
 ```coffeescript
 a = {} # < explicit object literal block
@@ -20,12 +22,13 @@ a = {
 };
 ```
 
+
 ### Implicit Key Rules
 
 If it is a pathed reference, the final identifier is used as the key.
 
 * Effectively, "@" and everything before the last '.' in a dot-chain are removed when generating the key.
-* This is the inverse of pathing with [[Destructuring]].
+* This is the inverse of pathing with [Destructuring](./Destructuring.md).
 
 Examples:
 ```coffeescript

@@ -1,8 +1,11 @@
-Related: [[String Interpolation]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [String Interpolation](./String-Interpolation.md)
 
 CaffeineScript has lots of nice, streamlined ways to express strings:
 
 ```coffeescript
+
 # CaffeineScript
 a = "" To end of line string.
 b = :word-string

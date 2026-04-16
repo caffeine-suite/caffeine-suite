@@ -1,4 +1,7 @@
-Related: [[Functional Oriented Programming]], [[React]]-style programming
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Functional Oriented Programming](./Functional-Oriented-Programming.md), [React](./React.md)-style programming
+
 
 ### What is Declarative Programming?
 
@@ -39,6 +42,6 @@ class JsonParser extends &CaffeineEight.Parser
 ```
 
 ### CaffeineScript Enhancements for Declarative Programming
-* [[Class Definition]] which allows method invocation as well as declaration
-* [[Blocks Instead of Brackets]]
-* [[Expressive Literals]]
+* [Class Definition](./Class-Definition.md) which allows method invocation as well as declaration
+* [Blocks Instead of Brackets](./Blocks-Instead-of-Brackets.md)
+* [Expressive Literals](./Expressive-Literals.md)

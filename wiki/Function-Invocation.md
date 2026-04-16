@@ -1,4 +1,7 @@
-Related: [[Function Definition]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Function Definition](./Function-Definition.md)
+
 
 ### Explicit Function Invocation
 
@@ -21,7 +24,7 @@ Any value, A, can also be followed by a Value-List, to pass more than one parame
 Math.round 123.456, 0.1
 ```
 
-Lastly, commas are optional after [[atomic literals]] (strings, numbers, ...):
+Lastly, commas are optional after [atomic literals](./Atomic-Literals.md) (strings, numbers, ...):
 
 ```coffeescript
 # implicit value list

@@ -1,9 +1,12 @@
-Related: [[Language Comparison]], [[Benefits]] and [[Highlights]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Language Comparison](./Language-Comparison.md), [Benefits](./Benefits.md) and [Highlights](./Highlights.md)
 
 While CaffeineScript is an excellent choice for any JavaScript project, there are certain areas where it particularly excels:
 
-* [[React with CaffeineScript]] and [[Declarative Programming]]
-* [[NodeJS with CaffeineScript]] with [90% reduction in module-specific-code](Streamlined-Modules)
+* [React with CaffeineScript](./React-with-CaffeineScript.md) and [Declarative Programming](./Declarative-Programming.md)
+* [NodeJS with CaffeineScript](./NodeJS-with-CaffeineScript.md) with [90% reduction in module-specific-code](Streamlined-Modules)
+
 
 ### React-Style Example
 

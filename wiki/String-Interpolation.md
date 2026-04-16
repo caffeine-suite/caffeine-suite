@@ -1,4 +1,7 @@
-Related: [[Semantics]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Semantics](./Semantics.md)
+
 
 ### JavaScript to-String Conversion Problems with null and undefined
 

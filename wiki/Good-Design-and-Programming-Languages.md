@@ -1,6 +1,9 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 Related: 
-* [[Graphic Design for Languages]]
-* [[CaffeineScript Design]]
+* [Graphic Design for Languages](./Graphic-Design-for-Languages.md)
+* [CaffeineScript Design](./CaffeineScript-Design.md)
+
 
 ### Design Matters
 

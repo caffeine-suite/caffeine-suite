@@ -1,4 +1,7 @@
-See also: [[Destructuring]], [[Structuring]], [[Extract-Destructuring]] and [[Assignment-Destructuring]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+See also: [Destructuring](./Destructuring.md), [Structuring](./Structuring.md), [Extract-Destructuring](./Extract-Destructuring.md) and [Assignment-Destructuring](./Assignment-Destructuring.md)
+
 
 ### Example
 
@@ -25,7 +28,7 @@ A **restructuring** statement looks like this:
 a = {...} = b
 ```
 
-It is logically the same as a [[destructuring]] statement followed by a [[structuring]] statement:
+It is logically the same as a [destructuring](./Destructuring.md) statement followed by a [structuring](./Structuring.md) statement:
 
 ```CoffeeScript
 {...} = b
@@ -62,7 +65,7 @@ I chose to change the semantics for the following reasons:
 
 * Though JavaScript's interpretation is logically consistent along one dimension (assignments return the right-value), it breaks other, logically reasonable expectations: Decomposing `a = b = c`, into `b = c` and then `a = b` doesn't change the semantics. JavaScript's interpretation of the return value of destructuring-assignment, however, *is not consistent under decomposition*. 
 * JavaScript's interpretation isn't *useful*. There is no leverage in `a = {...} = b` if it only means `a = b`. My experience is destructuring is therefore only used as a pure statement of the form: `let {...} = b;`
-* JavaScript's interpretation does not support [[functional programming]], since it is only useful as a pure statement.
+* JavaScript's interpretation does not support [functional programming](./Functional-Programming.md), since it is only useful as a pure statement.
 * JavaScript's interpretation isn't as syntactically stable:
 
 ```javascript

@@ -1,4 +1,7 @@
-Related: [[Static Typing]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Static Typing](./Static-Typing.md)
+
 
 ### Strongly, Dynamically Typed
 
@@ -12,8 +15,8 @@ Related: [[Static Typing]]
 
 ### No more Weak Typing
 
-CaffeineScript strives to eliminate JavaScript's weak typing with minor changes to JavaScript's [[Semantics]]:
+CaffeineScript strives to eliminate JavaScript's weak typing with minor changes to JavaScript's [Semantics](./Semantics.md):
 
-* [[Caffeine Truth]] (coming soon)
-* [[Operator Overloading]] (coming soon - if it's performant, i.e. fast at runtime)
-* [[String Interpolation]]
+* [Caffeine Truth](./Caffeine-Truth.md) (coming soon)
+* [Operator Overloading](./Operator-Overloading.md) (coming soon - if it's performant, i.e. fast at runtime)
+* [String Interpolation](./String-Interpolation.md)

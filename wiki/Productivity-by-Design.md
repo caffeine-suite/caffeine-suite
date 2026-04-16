@@ -1,4 +1,7 @@
-Related: [[CaffeineScript Design]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [CaffeineScript Design](./CaffeineScript-Design.md)
+
 
 # Civilization Progresses by Doing More with Less
 
@@ -20,7 +23,7 @@ Productivity even supersedes requirements. If a language cannot meet your perfor
 
 Writing hundreds of CoffeeScript files, I've noticed many little things that grind down my daily productivity. So, I wrote CaffeineScript. Here are some of the ways CaffeineScript makes me more productive:
 
-* [[blocks instead of brackets]]
+* [blocks instead of brackets](./Blocks-Instead-of-Brackets.md)
   * indent-blocks reduce the need for escape chars
     * you can comment a comment-block without escapes
     * you can quote a quote-block without escapes
@@ -35,17 +38,17 @@ Writing hundreds of CoffeeScript files, I've noticed many little things that gri
   * JavaScript truth (COMING SOON)
   * JavaScript toString
 * prevent common CoffeeScript bugs
-  * block [[Scopes and Variables]] for comprehensions and loops
-  * [[smart this-binding]]
+  * block [Scopes and Variables](./Scopes-and-Variables.md) for comprehensions and loops
+  * [smart this-binding](./Smart-This-Binding.md)
 * reduced friction
-  * [[Auto Variable Declaration]]
-  * [[eliminating bracket-matching]]
-  * [[smart import]]
+  * [Auto Variable Declaration](./Auto-Variable-Declaration.md)
+  * [eliminating bracket-matching](./Eliminating-Bracket-Matching.md)
+  * [smart import](./Smart-Import.md)
 * consistency
   * simple logic for blocks
-  * simple logic for [[binary line starts]]
+  * simple logic for [binary line starts](./Binary-Line-Starts.md)
 * improved refactorability
-  * [[smart require]]
-  * [[smart import]]
-  * [[blocks instead of brackets]]
-  * [[binary line starts]]
+  * [smart require](./Smart-Require.md)
+  * [smart import](./Smart-Import.md)
+  * [blocks instead of brackets](./Blocks-Instead-of-Brackets.md)
+  * [binary line starts](./Binary-Line-Starts.md)

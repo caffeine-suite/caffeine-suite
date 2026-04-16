@@ -1,6 +1,9 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 CaffeineScript makes structured literals lightweight and fun! Examples:
 
 ```coffeescript
+
 
 # Array of 3-element Arrays
 a = 

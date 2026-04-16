@@ -1,3 +1,4 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
 
 ### CaffeineScript's Smart-Binding Function Declarations: `->`
 

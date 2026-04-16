@@ -1,6 +1,9 @@
-Related: [[Declarative Programming]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Declarative Programming](./Declarative-Programming.md)
 
 CaffeineScript is ideal for React-style programming.
+
 
 ## Facebook React
 

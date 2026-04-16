@@ -1,6 +1,9 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 Object literals can be implicit, explicit-to-end-of-line(EOL), explicit-blocks, or traditional JavaScript-style:
 
 ```coffeescript
+
 # implicit comma after simple literals
 a = foo: 1  bar: 2
 

@@ -1,4 +1,7 @@
-related: [[instanceof operator]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+related: [instanceof operator](./instanceof-Operator.md)
+
 
 ### is/isnt - for testing if an object is an exact type
 

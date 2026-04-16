@@ -1,6 +1,9 @@
-Related: [[Semantics]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Semantics](./Semantics.md)
 
 ![GLOBALS ARE BAD, M'KAY?](https://cdn.meme.am/cache/instances/folder984/500x/76823984/mr-mackey-globals-are-bad-mkay.jpg)
+
 
 ### JavaScript's Accidental Globals
 

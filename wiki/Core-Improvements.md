@@ -1,18 +1,21 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 The most significant improvements over CoffeeScript.
 
-I count tokens in many examples below, to show how CaffeineScript improves over CoffeeScript and JavaScript ES6. Learn more about [[Counting Tokens]].
+I count tokens in many examples below, to show how CaffeineScript improves over CoffeeScript and JavaScript ES6. Learn more about [Counting Tokens](./Counting-Tokens.md).
+
 
 ## Core Improvements
 
 (I'm factoring this page out into multiple, focused pages.)
 
-* [[Blocks Instead of Brackets]]
-* [[Extract]]
-* [[Strings]]
-* [[Array and Object Literals]]
-* [[CommonJs]]
-* [[Include]]
-* [[Binary Operator Line Starts]]
+* [Blocks Instead of Brackets](./Blocks-Instead-of-Brackets.md)
+* [Extract](./Extract.md)
+* [Strings](./Strings.md)
+* [Array and Object Literals](./Array-and-Object-Literals.md)
+* [CommonJs](./CommonJs.md)
+* [Include](./Include.md)
+* [Binary Operator Line Starts](./Binary-Operator-Line-Starts.md)
 
 ### Block method invocation
 

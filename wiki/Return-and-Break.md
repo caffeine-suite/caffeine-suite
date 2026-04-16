@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 # Return and Break
 
 As-of v0.69.0 we have basic `return` and `break` support. These work pretty-much everywhere you'd expect *except* in comprehensions. Currently there is no support for return or break in comprehensions. However, `return` works in if-statements, while-statements and function-bodies. `break` works in while statements and has functionality beyond normal JavaScript: it can take a value to return.

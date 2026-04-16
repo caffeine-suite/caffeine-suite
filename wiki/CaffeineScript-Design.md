@@ -1,10 +1,13 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 Related:
-* [[Good Design and Programming Languages]]
-* [[Static Typing]]
-* [[Graphic Design for Languages]]
-* [[Productivity by Design]]
+* [Good Design and Programming Languages](./Good-Design-and-Programming-Languages.md)
+* [Static Typing](./Static-Typing.md)
+* [Graphic Design for Languages](./Graphic-Design-for-Languages.md)
+* [Productivity by Design](./Productivity-by-Design.md)
 
 TODO: Lots of redundancy in this section; clean it up!
+
 
 ### CaffeineScript's Design
 
@@ -44,7 +47,7 @@ In practice, to meet my lofty goals, CaffeineScript's improvements fall into com
 
 #### Syntax Errors Suggest Opportunities
 
-While using CoffeeScript for many years I've often found places where I thought my code was logically consistent with the language, and yet the compiler reported a syntax error. This suggests to me an opportunity for a more expressive language. You can read about my CoffeeScript specific inspirations [here](https://github.com/shanebdavis/caffeine-script/wiki/Coming%20from%20CoffeeScript#should-be-legal-in-coffeescript). I've also found, while writing CaffeineScript, that my own language's syntax errors sometimes suggest even more opportunities for increased expressiveness.
+While using CoffeeScript for many years I've often found places where I thought my code was logically consistent with the language, and yet the compiler reported a syntax error. This suggests to me an opportunity for a more expressive language. You can read about my CoffeeScript specific inspirations [here](./Coming%20from%20CoffeeScript.md#should-be-legal-in-coffeescript). I've also found, while writing CaffeineScript, that my own language's syntax errors sometimes suggest even more opportunities for increased expressiveness.
 
 ## Priorities
 
@@ -74,7 +77,7 @@ My overriding programming goal is therefore intentionally simple:
 
 > Write less code.
 
-See: [[Counting Tokens]]
+See: [Counting Tokens](./Counting-Tokens.md)
 
 ### "Stay Beginner" - Steve Jobs
 

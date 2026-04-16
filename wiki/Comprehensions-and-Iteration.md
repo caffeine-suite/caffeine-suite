@@ -1,4 +1,7 @@
-Related: [[Control Structures]] ('while' and 'until' loops are described there)
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Control Structures](./Control-Structures.md) ('while' and 'until' loops are described there)
+
 
 ### Keywords
 

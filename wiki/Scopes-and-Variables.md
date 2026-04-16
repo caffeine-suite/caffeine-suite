@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 # Auto Variable Declaration (Auto-Lets)
 
 Variables are automatically declared in the top-most scope where they are assigned.
@@ -39,10 +41,10 @@ Math.max(1, global.b);
 
 Each of these constructs define a scope:
 
-* [[Function Definition]]
-* [[Class Definition]]
-* [[Comprehensions and Iteration]] (`when` and `with/do` blocks define scopes, `from/in` and `into/returning` are evaluated before and outside the comprehension and thus do not)
-* [[Control Structures]] (`while` and `until` loops bodies define scopes, `if` and `unless` do not)
+* [Function Definition](./Function-Definition.md)
+* [Class Definition](./Class-Definition.md)
+* [Comprehensions and Iteration](./Comprehensions-and-Iteration.md) (`when` and `with/do` blocks define scopes, `from/in` and `into/returning` are evaluated before and outside the comprehension and thus do not)
+* [Control Structures](./Control-Structures.md) (`while` and `until` loops bodies define scopes, `if` and `unless` do not)
 
 # Compared with CoffeeScript
 

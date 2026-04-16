@@ -1,4 +1,7 @@
-Related: [[Semantic Changes]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Semantic Changes](./Semantic-Changes.md)
+
 
 ### Caffeine Truth (coming soon)
 

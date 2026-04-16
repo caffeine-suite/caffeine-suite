@@ -1,4 +1,7 @@
-Related: [[Dynamic Typing]], [[One Size Fits All Fallacy]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Dynamic Typing](./Dynamic-Typing.md), [One Size Fits All Fallacy](./One-Size-Fits-All-Fallacy.md)
+
 
 # CaffeineScript and Dynamic/Static Typing
 

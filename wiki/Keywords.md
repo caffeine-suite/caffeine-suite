@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ### Modules
 
 * [import](Smart-Import)
@@ -29,7 +31,7 @@
 * instanceof
 * [is | isnt](is-operator)
 
-### [[Control Structures]]
+### [Control Structures](./Control-Structures.md)
 
 * switch
 * when

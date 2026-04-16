@@ -1,4 +1,6 @@
-Related: [[Blocks-Instead-of-Brackets]], [[Significant-Whitespace-Design]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Blocks-Instead-of-Brackets](./Blocks-Instead-of-Brackets.md), [Significant-Whitespace-Design](./Significant-Whitespace-Design.md)
 
 CaffeineScript is founded on the idea that it is possible to do Indent-Block parsing consistently and universally throughout the language. Other indent-based languages (Python, CoffeeScript) do a pre-pass where they essentially insert "{" and "}" brackets around any detected block. The problem is the parser doesn't actually understand indents, and the pre-pass doesn't understand grammatical structure. I found this approach complex and error-prone, particularly for grammars such as string-blocks with interpolation.
 
@@ -10,6 +12,7 @@ It took me several months to figure out how to achieve "complete indent-block pa
 Subparsing Example:
 
 ```coffeescript
+
 # input:
 if foo
   bar()

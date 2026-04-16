@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ### To-EOL Comments
 
 The standard comment in many 'scripting' langauges, hashtag-to-EOL (end-of-line), are supported with one caveat: they must be followed by whitespace(s).

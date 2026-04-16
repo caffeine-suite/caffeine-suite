@@ -1,4 +1,7 @@
-This is one of CaffeineScript's primary strategies for [[eliminating bracket-matching]].
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+This is one of CaffeineScript's primary strategies for [eliminating bracket-matching](./Eliminating-Bracket-Matching.md).
+
 
 ### Examples
 

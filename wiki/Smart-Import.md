@@ -1,6 +1,9 @@
-Related: [[Modules and CommonJs]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Modules and CommonJs](./Modules-and-CommonJs.md)
 
 CaffeineScript has a different version of `import`. It automatically imports any unassigned variable references from the specified library-objects, and, failing that, from the global namespace:
+
 
 ### Example
 
@@ -38,7 +41,7 @@ React = require "art-react"
 } = React
 ```
 
-(*) see [[CommonJs]] for more about the `&Foo` syntax
+(*) see [CommonJs](./CommonJs.md) for more about the `&Foo` syntax
 
 ### Motivation
 
@@ -77,4 +80,4 @@ merge(a, b);
 ### Vs Javascript 'with'
 
 `import` looks a bit like the maligned Javascript 'with', but there are significant differences:
-[[Comparing Import and With]]
+[Comparing Import and With](./Comparing-Import-and-With.md)

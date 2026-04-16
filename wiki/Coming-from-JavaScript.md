@@ -1,8 +1,11 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ES6 EcmaScript6 added a lot of nice things to JavaScript, but didn't address JavaScript's three biggest shortcomings:
 
 * [syntax](#javascript-syntax)
 * [everything should return a value](#Everything-Should-Return-a-Value)
 * [sharp edges](#javascripts-sharp-edges)
+
 
 #### CaffeineScript is a Human Language
 
@@ -54,4 +57,4 @@ It's hard to overestimate the negative impact on a language built on first-class
 
 ### JavaScript's Dangerous Semantics
 
-Read more about how CaffeineScript addresses JavaScript's dangerous [[Semantics]].
+Read more about how CaffeineScript addresses JavaScript's dangerous [Semantics](./Semantics.md).

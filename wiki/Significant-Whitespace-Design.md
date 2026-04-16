@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ## Guiding Principle
 
 If comparing two possible interpretations, compare the two under the lens if common code edits and use the principle of least surprise (POLS).
@@ -104,7 +106,7 @@ a =
 ```
 
 Options:
-* `a = [[1, 2]];`
+* `a = [1, 2](./1,-2.md);`
 * `a = [1, 2];`
 
 My answer, based on my own POLS, is the second one - the one with just one array. 

@@ -1,4 +1,7 @@
-Related: [[Comprehensions and Iteration]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Comprehensions and Iteration](./Comprehensions-and-Iteration.md)
+
 
 ### Single Test: `if` and `unless`
 ```coffeescript
@@ -60,7 +63,7 @@ Switch statements return-values work just like if-statements: If one of the swit
 
 These give you direct access to JavaScript's basic looping construct: `while`.
 
-COMING SOON: These blocks will define scopes, just like the Caffeine-Specific [[Comprehensions and Iteration]]. See also: [[Scopes and Variables]].
+COMING SOON: These blocks will define scopes, just like the Caffeine-Specific [Comprehensions and Iteration](./Comprehensions-and-Iteration.md). See also: [Scopes and Variables](./Scopes-and-Variables.md).
 
 ```coffeescript
 while foo do bar

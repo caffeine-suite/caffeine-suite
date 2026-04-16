@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ### Why Count Tokens?
 
 Tokens are the smallest meaningful element in code. Tokens are a more objective measure of code size since lines can have any number of tokens. Measuring tokens also ignores white-space and comments. Last, measuring tokens doesn't penalize using clear names. ‘Occupations’ is just as good a name under the token metrics as ‘occus’ or other hard to understand abbreviations.
@@ -110,7 +112,7 @@ To keep things simple, I generally count tokens using the guidelines above. Howe
 
 #### Token-Cost Accounting
 
-TODO: merge with [[Counting Tokens]]
+TODO: merge with [Counting Tokens](./Counting-Tokens.md)
 
 I measure code size in tokens. It is an objective measure that is roughly proportional to the semantic complexity of the code - unlike line counts. It enables us to make objective choices, and have objective conversations about code quality. The qualification 'without sacrificing clarity' *is* subjective, though. How much reduction is too much is a question of language-brain-fit, and it'll be different for everyone. That's OK. Choose the language that fits your brain.
 

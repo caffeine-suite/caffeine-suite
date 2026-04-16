@@ -1,4 +1,6 @@
-Related: [[Why CaffeineScript over CoffeeScript?]], [[Converting from CoffeeScript]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Why CaffeineScript over CoffeeScript?](./Why-CaffeineScript-over-CoffeeScript?.md), [Converting from CoffeeScript](./Converting-from-CoffeeScript.md)
 
 I love CoffeeScript. I just want CoffeeScript to be more. I am a visual person, and two aspects of CoffeeScript bugged me from day one:
 
@@ -8,6 +10,7 @@ Block-method function invocation only works if the first parameter (function arg
 parameter order and it breaks:
 
 ```coffeescript
+
 # OK in CoffeeScript (and CaffeineScript)
 myFunction 
   prop1: 123
@@ -71,8 +74,8 @@ CaffeineScript improvements over CoffeeScript:
 * [ES6 Support](#es6-support)
 * [Should Be Legal and Consistent](#should-be-legal-and-consistent)
 * Better Literals
-  * implicit, implicit-block and explicit-block [[array literals]]
-  * block and unquoted [[strings]]
+  * implicit, implicit-block and explicit-block [array literals](./Array-Literals.md)
+  * block and unquoted [strings](./strings.md)
 * Using a Runtime
   * reduces code-generation, increases flexibility
 * Eliminating more JavaScript rough-edges (WIP Work In Progress)
@@ -87,7 +90,7 @@ CaffeineScript improvements over CoffeeScript:
 * Streamlined CommonJS (NPM Node Package Manager) module support
 * automatic this-binding
 * comprehension-block-scoping
-* improved object and array [[structuring]] and [[destructuring]]
+* improved object and array [structuring](./Structuring.md) and [destructuring](./Destructuring.md)
 
 ### ES6 EcmaScript6 Support
 

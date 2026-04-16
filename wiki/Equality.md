@@ -1,4 +1,7 @@
-Related: [[Semantics]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Semantics](./Semantics.md)
+
 
 ### Never use JavaScript's '=='
 
@@ -21,4 +24,4 @@ a != b
 
 However, JavaScript does NOT have an equivalent set of inequality operators.
 
-CaffeineScript has plans to fix this, though it is more challenging. See: [[Operator Overloading]] 
+CaffeineScript has plans to fix this, though it is more challenging. See: [Operator Overloading](./Operator-Overloading.md) 

@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 ![SpaceQuest 3 Death](https://raw.githubusercontent.com/wiki/caffeine-suite/caffeine-script/space_quest_3_death.png)
 
 Does programming JavaScript feel like living a [SpaceQuest Adventure](https://www.youtube.com/watch?v=z2fmsXzXYA4)? CaffeineScript follows CoffeeScript's lead and takes it one step further: almost all of JavaScript's nasty little surprises, mostly due to type and value coercion, are prevented with CaffeineScript.
@@ -6,22 +8,23 @@ I'm not the only one to notice this ;). Here is a good list from Oreilly.com's J
   * [Awful-Parts](http://archive.oreilly.com/pub/a/javascript/excerpts/javascript-good-parts/awful-parts.html)
   * [Bad-Parts](http://archive.oreilly.com/pub/a/javascript/excerpts/javascript-good-parts/bad-parts.html)
 
+
 ### Changes from JavaScript's Semantics
 
 CaffeineScript's semantics are mostly the same as JavaScript's. However, one of CaffeineScript's main goals is to address JavaScript's many dangerous semantics. As of 2018 some have already been addressed, with more to follow. Below are the existing and planned semantic changes in CaffeineScript compared to JavaScript:
 
-* [[Globals]]
-* [[Equality]]
-* [[String Interpolation]] (done!)
-* [[Caffeine Truth]] (coming soon)
-* [[Operator Overloading]] (coming soon - if it performs well at runtime)
+* [Globals](./Globals.md)
+* [Equality](./Equality.md)
+* [String Interpolation](./String-Interpolation.md) (done!)
+* [Caffeine Truth](./Caffeine-Truth.md) (coming soon)
+* [Operator Overloading](./Operator-Overloading.md) (coming soon - if it performs well at runtime)
 
 ### Dangerous Semantics Eliminated in CaffeineScript
 
 
 - '==' means JavaScript's '===' (and '!=' is '!==')
-- [[Caffeine Truth]] is Ruby-style: only false, null and undefined are falsy (COMING SOON)
-- [[String Interpolation]] converts arrays, null and undefined to useful strings:
+- [Caffeine Truth](./Caffeine-Truth.md) is Ruby-style: only false, null and undefined are falsy (COMING SOON)
+- [String Interpolation](./String-Interpolation.md) converts arrays, null and undefined to useful strings:
   - "#{[1,2,3]}" == "123"
   - "#{undefined}" == ""
   - "#{null}" == ""
@@ -32,7 +35,7 @@ CaffeineScript's semantics are mostly the same as JavaScript's. However, one of 
   - No implied globals
   - Loops, comprehensions as well as functions define scopes.
   - Variables are automatically declared with "let" in the most-specific scope in which they are assigned.
-- [[is Operator]] and [[instanceof Operator]], a sane replacement for `typeof`
+- [is Operator](./is-Operator.md) and [instanceof Operator](./instanceof-Operator.md), a sane replacement for `typeof`
 - All switch-cases are all automatically terminated with 'break'.
 - No function hoisting; all functions are defined in expression-form, not statement-form.
 - "class Foo {constructor() {super()})" - inconsistent, 'super' is invalid if you aren't extending something. In this case, class Foo actually extends Function, which is odd in its own right. It CLEARLY should extend Object, right? Right?!? So, that's what CaffeineScript does - a class definition without an 'extends' clause defaults to extending Object. Consequently, this makes using 'super' work just fine, even if you aren't extending anything.
@@ -51,8 +54,8 @@ CaffeineScript's semantics are mostly the same as JavaScript's. However, one of 
 
 - undefined vs null
   - Undefined is an unfortunate concept. The semantic difference between 'undefined' and 'null' is negligible. Having two values for non-values is confusing and causes subtle bugs.
-  - I'd like to reduce the usage of undefined, but unless we have [[Operator Overloading]], using 'null' everywhere may cause as many new bugs as we fix. For example: "null >= 0" is, incorrectly, true in JavaScript, but "undefined >= 0" is, correctly, false.  Until we can efficiently overload the meaning of >=, CaffeineScript will return undefined in all the places CoffeeScript does.
-- Efficient [[Operator Overloading]] may be possible. If so, we can fix all the surprising, overloaded arithmetic operators and comparison operators:
+  - I'd like to reduce the usage of undefined, but unless we have [Operator Overloading](./Operator-Overloading.md), using 'null' everywhere may cause as many new bugs as we fix. For example: "null >= 0" is, incorrectly, true in JavaScript, but "undefined >= 0" is, correctly, false.  Until we can efficiently overload the meaning of >=, CaffeineScript will return undefined in all the places CoffeeScript does.
+- Efficient [Operator Overloading](./Operator-Overloading.md) may be possible. If so, we can fix all the surprising, overloaded arithmetic operators and comparison operators:
   - "2" + 1 == 2 + "1" == "21"
   - "2" > 1 == true
   - null >= 0 == true

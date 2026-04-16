@@ -1,5 +1,8 @@
-See [[Destructuring]] for an overview.
-See also: [[Extract-Destructuring]], [[Structuring]] and [[Restructuring]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+See [Destructuring](./Destructuring.md) for an overview.
+See also: [Extract-Destructuring](./Extract-Destructuring.md), [Structuring](./Structuring.md) and [Restructuring](./Restructuring.md)
+
 
 ## Destructuring-Assignment (with Brackets) - JavaScript-Style and CoffeeScript-Style
 

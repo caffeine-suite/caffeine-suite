@@ -1,8 +1,11 @@
-Related: [[Smart Import]], [[Auto Export]], [[Modules and CommonJs]]
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
+Related: [Smart Import](./Smart-Import.md), [Auto Export](./Auto-Export.md), [Modules and CommonJs](./Modules-and-CommonJs.md)
 
 Requiring a lot of things? Having to edit your require statements a lot when you refactor? 
 
 Smart-require reduces syntax, and does a compile-time-search for the file you are requesting to generate the actual require-string. This makes moving files around in your project much easier. 
+
 
 
 #### Requiring Local Modules

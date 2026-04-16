@@ -1,4 +1,7 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 All [JavaScript ES6 (EcmaScript6) Number Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Numbers_and_dates) are accepted:
+
 
 ### Decimal
 

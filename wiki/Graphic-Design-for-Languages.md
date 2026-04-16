@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 I'm a very visual person. My first attempt at writing a programming language was 100% visual - with flow-chart-like diagrams. The reality, though, is nothing is more concise than language for expressing code. However, I still believe strongly in the visual design of a language. We read 100 times more code than we write. Therefore, designing a language to be read is extremely important. One aspect of achieving that, is using the principles of graphic design:
 
 * alignment
@@ -8,6 +10,7 @@ I'm a very visual person. My first attempt at writing a programming language was
 
 > source: [
 5 Basic Principles Of Graphic Design You Take For Granted Everyday](http://www.makeuseof.com/tag/5-basic-principles-graphic-design-take-granted-everyday/)
+
 
 ### Example
 
@@ -47,7 +50,7 @@ fields =
 ```
 #### Alignment
 
-Alignment-oriented features enhance both reading and editing. Together with editors that let you do column-based editing (like SublimeText), CaffeineScript's [[optional-commas]] make it trivial to add the extra "index" field to the end of every item in the `fields` object.
+Alignment-oriented features enhance both reading and editing. Together with editors that let you do column-based editing (like SublimeText), CaffeineScript's [optional-commas](./Optional-Commas.md) make it trivial to add the extra "index" field to the end of every item in the `fields` object.
 
 #### Contrast and Noise
 
@@ -69,6 +72,6 @@ Inconsistent Repetition Example: From the Alignment example above: In JavaScript
 TODO - thoughts:
 
 * CaffeineScript white-space has meaning, but it is designed to be structured, simple and consistent
-  * [[Blocks instead of Brackets]]
-  * [[Binary Line Starts]]
+  * [Blocks instead of Brackets](./Blocks-Instead-of-Brackets.md)
+  * [Binary Line Starts](./Binary-Line-Starts.md)
 * Less symbol-noise, means white-space has more gravity - by contrast. Therefore, a few extra spaces can go much further to contrast two parts of code by creating some separation - via whitespace.

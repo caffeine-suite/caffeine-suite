@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 #### JavaScript's `with`
 
 My concept of `import` is similar to JavaScript's built-in `with`. I know `with` is maligned, but I think `with` can be rehabilitated with slightly different semantics:

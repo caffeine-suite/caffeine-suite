@@ -1,3 +1,5 @@
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
+
 * smart function @ binding (select -> or => automatically)
 * enhanced blocks
   * array blocks
@@ -47,6 +49,7 @@
 * CoffeeScript compiler errors suggests language features
   - I run into this a lot in CoffeeScript. Something I think makes perfect logical sense is illegal because, in my opinion, the compile is incomplete.
   - In general, whenever there is a compiler error for something which is logically consistent with the rest of the language (and parsing rules), that suggests an opportunity for a more expressive language.
+
 
 # related projects
 

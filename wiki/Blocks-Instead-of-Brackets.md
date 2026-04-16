@@ -1,6 +1,9 @@
-This is one of CaffeineScript's primary strategies for [[eliminating bracket-matching]].
+[Home](./Home.md) - [Table of Contents](./contents.md) - [Github](https://github.com/caffeine-suite/caffeine-suite)
 
-Related: [[Complete Indent-Block Parsing]]
+This is one of CaffeineScript's primary strategies for [eliminating bracket-matching](./Eliminating-Bracket-Matching.md).
+
+Related: [Complete Indent-Block Parsing](./Complete-Indent-Block-Parsing.md)
+
 
 ## Definitions: What is an Indent-Block? ('Block' for short)
 
@@ -51,16 +54,16 @@ Back to the root.
 ```
 
 ## CaffeineScript Features Using Blocks
-* [[String Literals]]
-* [[Object Literals]]
-* [[Array Literals]]
-* [[Comments]]
-* [[Function Invocation]]
-* [[Comprehensions and Iteration]]
-* [[Control Structures]]
+* [String Literals](./String-Literals.md)
+* [Object Literals](./Object-Literals.md)
+* [Array Literals](./Array-Literals.md)
+* [Comments](./Comments.md)
+* [Function Invocation](./Function-Invocation.md)
+* [Comprehensions and Iteration](./Comprehensions-and-Iteration.md)
+* [Control Structures](./Control-Structures.md)
 
 ### New Block-Types in CaffeineScript
-#### Block [[Function Invocation]]
+#### Block [Function Invocation](./Function-Invocation.md)
 ```coffeescript
 Div
   'Click this link to learn about an awesome language: '
@@ -68,7 +71,7 @@ Div
 ```
 
   
-#### Block [[String Literals]]
+#### Block [String Literals](./String-Literals.md)
 ```coffeescript
 log ""
   The rest of this indented area is in the string.
@@ -76,7 +79,7 @@ log ""
   Because it is indented, almost nothing needs to be escaped.
 ```
 
-#### Block [[Array Literals]]
+#### Block [Array Literals](./Array-Literals.md)
 ```coffeescript
 log []
   1
